@@ -1,0 +1,261 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0
+}
+
+body {
+    font-family: Inter, Segoe UI, Arial, sans-serif;
+    background: #0b0f19;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white
+}
+
+/* LAYOUT */
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    padding: 40px 20px;
+    display: grid;
+    grid-template-columns:1fr 1fr;
+    gap: 25px
+}
+
+/* CARD */
+
+.fuel-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 35px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5)
+}
+
+/* HEADER */
+
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 25px
+}
+
+.header h1 {
+    font-size: 28px;
+    font-weight: 600
+}
+
+/* LIVE STATUS */
+
+.live-status {
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    color: #9ca3af
+}
+
+.live-dot {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    margin-right: 8px;
+    animation: pulse 1.8s infinite
+}
+
+@keyframes pulse {
+    0% {
+        opacity: 1
+    }
+    50% {
+        opacity: 0.4
+    }
+    100% {
+        opacity: 1
+    }
+}
+
+/* WIDGET */
+
+.widget-container {
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    justify-content: center;
+    align-items: center
+}
+
+/* FOOTER */
+
+.footer {
+    margin-top: 20px;
+    font-size: 13px;
+    color: #9ca3af
+}
+
+/* HOVER */
+
+.fuel-card:hover {
+    border-color: #2563eb
+}
+
+/* FORM CARD */
+
+.submit-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5)
+}
+
+.submit-card h2 {
+    font-size: 22px;
+    margin-bottom: 20px
+}
+
+/* FORM */
+
+#fuel-form {
+    display: grid;
+    gap: 18px
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px
+}
+
+.form-group label {
+    font-size: 13px;
+    color: #9ca3af
+}
+
+/* INPUT */
+
+input {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: white;
+    font-size: 14px;
+    outline: none;
+    transition: .2s
+}
+
+input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25)
+}
+
+/* BUTTON */
+
+button {
+    margin-top: 10px;
+    background: #2563eb;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: .2s
+}
+
+button:hover {
+    background: #1d4ed8
+}
+
+/* SUCCESS MESSAGE */
+
+.success-message {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #1ec773;
+    color: white;
+    padding: 16px 22px;
+    border-radius: 8px;
+    font-size: 15px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: .3s;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2)
+}
+
+.success-message.error {
+    background: #e74c3c
+}
+
+.success-message.show {
+    opacity: 1;
+    transform: translateY(0)
+}
+
+/* RADIO GROUP */
+
+.radio-group {
+    display: grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap: 8px;
+    margin-top: 6px
+}
+
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 900px) {
+    .container {
+        grid-template-columns:1fr
+    }
+}
+
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 22px
+    }
+
+    .fuel-card {
+        padding: 25px
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 20px 10px
+    }
+
+    .fuel-card {
+        padding: 20px
+    }
+
+    .header h1 {
+        font-size: 20px
+    }
+
+    .submit-card {
+        padding: 20px
+    }
+
+    button {
+        padding: 11px
+    }
+}

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="bg">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Цени на горивата</title>
+
+    <script src="//fuelo.net/js/widget-bg.min.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+
+<body>
+
+<div class="background"></div>
+
+<div class="container">
+
+    <div class="fuel-card">
+
+        <div class="header">
+
+            <h1>Текущи средни цени на горивата</h1>
+
+            <div class="live-status">
+                <span class="live-dot"></span>
+                Актуални данни в реално време
+            </div>
+
+            <div class="date" id="current-date"></div>
+
+        </div>
+
+        <div class="widget-container">
+            <div id="fuelo-widget-container"></div>
+        </div>
+
+        <div class="footer">
+            Цените се обновяват автоматично
+        </div>
+
+    </div>
+
+
+    <!-- Форма за въвеждане -->
+
+    <div class="submit-card">
+
+        <h2>Сподели цена на гориво</h2>
+
+        <form id="fuel-form">
+
+            <div class="form-group">
+
+                <label for="city">Град</label>
+
+                <input
+                        type="text"
+                        id="city"
+                        placeholder="Например София"
+                        required>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="station">Бензиностанция</label>
+
+                <select id="station" required>
+
+                    <option value="">Избери</option>
+
+                    <option>Petrol</option>
+                    <option>Lukoil</option>
+                    <option>Shell</option>
+                    <option>Eko</option>
+                    <option>OMV</option>
+                    <option>Rompetrol</option>
+                    <option>Круиз</option>
+                    <option>Eko Петрол</option>
+                    <option>Dieselor</option>
+
+                </select>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label>Гориво</label>
+
+                <div class="radio-group">
+
+                    <label>
+                        <input type="radio" name="fuel" value="Бензин A95" required>
+                        Бензин A95
+                    </label>
+
+                    <label>
+                        <input type="radio" name="fuel" value="Бензин A98">
+                        Бензин A98
+                    </label>
+
+                    <label>
+                        <input type="radio" name="fuel" value="Дизел">
+                        Дизел
+                    </label>
+
+                    <label>
+                        <input type="radio" name="fuel" value="Газ">
+                        Газ
+                    </label>
+
+                    <label>
+                        <input type="radio" name="fuel" value="Метан">
+                        Метан
+                    </label>
+
+                </div>
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="price">Цена (€/литър)</label>
+
+                <input
+                        type="number"
+                        step="0.01"
+                        id="price"
+                        placeholder="1.65"
+                        required>
+
+            </div>
+
+
+            <button type="submit">Изпрати цена</button>
+
+        </form>
+
+    </div>
+
+
+    <div id="success-message" class="success-message"></div>
+
+</div>
+<script src="fuelo.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
