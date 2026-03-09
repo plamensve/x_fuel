@@ -259,3 +259,31 @@ button:hover {
         padding: 11px
     }
 }
+
+/* FOLLOW CARD */
+
+.follow-card {
+    grid-column: 1 / -1;
+    background: rgba(37, 99, 235, 0.12);
+    border: 1px solid rgba(37, 99, 235, 0.3);
+    border-radius: 12px;
+    padding: 18px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 15px;
+}
+
+.follow-card a {
+    background: #2563eb;
+    padding: 8px 14px;
+    border-radius: 6px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    transition: .2s;
+}
+
+.follow-card a:hover {
+    background: #1d4ed8;
+}
