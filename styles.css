@@ -107,9 +107,11 @@ body{
 }
 
 .best-price-row{
-    display:flex;
-    justify-content:space-between;
-    padding:6px 0;
+    display:grid;
+    grid-template-columns:140px 1fr 70px;
+    align-items:center;
+    gap:12px;
+    padding:10px 0;
     font-size:14px;
 }
 
@@ -427,4 +429,8 @@ select option{
 .table-wrapper::-webkit-scrollbar-thumb{
     background:#2563eb;
     border-radius:10px;
+}
+
+.best-price-row:not(:last-child){
+    border-bottom:1px solid rgba(255,255,255,0.05);
 }
