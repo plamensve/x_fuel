@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* CITIES */
 
-    function populateCities(data) {
+    function populateCities(data, selectedCity = "all") {
 
         let cities = [...new Set(data.map(r => r.city))].sort()
 
@@ -99,6 +99,11 @@ document.addEventListener("DOMContentLoaded", function () {
             let option = document.createElement("option")
             option.value = city
             option.textContent = city
+
+            if (city === selectedCity) {
+                option.selected = true
+            }
+
             citySelect.appendChild(option)
 
         })
@@ -161,12 +166,12 @@ document.addEventListener("DOMContentLoaded", function () {
             filtered = filtered.filter(r => r.region === region)
         }
 
-        populateCities(filtered)
+        let selectedCity = citySelect.value
 
-        let city = citySelect.value
+        populateCities(filtered, selectedCity)
 
-        if (city !== "all") {
-            filtered = filtered.filter(r => r.city === city)
+        if (selectedCity !== "all") {
+            filtered = filtered.filter(r => r.city === selectedCity)
         }
 
         let grouped = {}
