@@ -10,9 +10,14 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     let dateElement = document.getElementById("current-date")
+    let pricesDate = document.getElementById("prices-date")
 
     if (dateElement) {
         dateElement.textContent = today.toLocaleDateString("bg-BG", options)
+    }
+
+    if (pricesDate) {
+        pricesDate.textContent = " (" + today.toLocaleDateString("bg-BG") + ")"
     }
 
     const form = document.getElementById("fuel-form")
