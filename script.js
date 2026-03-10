@@ -20,7 +20,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const regionSelect = document.getElementById("region-select")
     const citySelect = document.getElementById("city-select")
-    const regionForm = document.getElementById("region")
 
     let allPrices = []
 
@@ -69,19 +68,14 @@ document.addEventListener("DOMContentLoaded", function () {
         let regions = [...new Set(allPrices.map(r => r.region))].sort()
 
         regionSelect.innerHTML = `<option value="all">Всички области</option>`
-        regionForm.innerHTML = `<option value="">Избери област</option>`
 
         regions.forEach(region => {
 
-            let option1 = document.createElement("option")
-            option1.value = region
-            option1.textContent = region
-            regionSelect.appendChild(option1)
+            let option = document.createElement("option")
+            option.value = region
+            option.textContent = region
 
-            let option2 = document.createElement("option")
-            option2.value = region
-            option2.textContent = region
-            regionForm.appendChild(option2)
+            regionSelect.appendChild(option)
 
         })
 
