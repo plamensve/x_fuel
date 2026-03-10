@@ -1,9 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    console.log("Fuel price widget loaded")
-
-    /* текуща дата */
-
     let today = new Date()
 
     let options = {
@@ -19,19 +15,19 @@ document.addEventListener("DOMContentLoaded", function () {
         dateElement.textContent = today.toLocaleDateString("bg-BG", options)
     }
 
-    /* форма */
-
     const form = document.getElementById("fuel-form")
     const message = document.getElementById("success-message")
-    const submitBtn = form.querySelector("button")
+
+    const regionSelect = document.getElementById("region-select")
+    const citySelect = document.getElementById("city-select")
+
+    let allPrices = []
+
 
     function showMessage(text, type) {
 
-        if (!message) return
-
         message.textContent = text
         message.className = "success-message " + type
-
         message.classList.add("show")
 
         setTimeout(function () {
@@ -40,28 +36,246 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    /* countdown */
 
-    function startCountdown() {
+    /* LOAD DATA */
 
-        let seconds = 3
+    function loadPrices() {
 
-        submitBtn.disabled = true
-        submitBtn.textContent = "Изпращане... " + seconds
+        fetch("https://eaqvhxfvozhzatrnbkvx.supabase.co/rest/v1/fuel_prices?select=*&order=created_at.desc&limit=200", {
 
-        let timer = setInterval(function () {
-
-            seconds--
-
-            if (seconds > 0) {
-                submitBtn.textContent = "Изпращане... " + seconds
-            } else {
-                clearInterval(timer)
+            headers: {
+                apikey: "sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH",
+                Authorization: "Bearer sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH"
             }
 
-        }, 1000)
+        })
+            .then(res => res.json())
+            .then(data => {
+
+                allPrices = data
+
+                populateRegions()
+                renderPrices()
+
+            })
 
     }
+
+
+    /* POPULATE REGIONS */
+
+    function populateRegions() {
+
+        let regions = [...new Set(allPrices.map(r => r.region))].sort()
+
+        if (regionSelect.options.length === 1) {
+
+            regions.forEach(region => {
+
+                let option = document.createElement("option")
+                option.value = region
+                option.textContent = region
+
+                regionSelect.appendChild(option)
+
+            })
+
+        }
+
+    }
+
+
+    /* POPULATE CITIES */
+
+    function populateCities(filteredData) {
+
+        let selectedCity = citySelect.value
+
+        let cities = [...new Set(filteredData.map(r => r.city))].sort()
+
+        citySelect.innerHTML = `<option value="all">Всички градове</option>`
+
+        cities.forEach(city => {
+
+            let option = document.createElement("option")
+            option.value = city
+            option.textContent = city
+
+            citySelect.appendChild(option)
+
+        })
+
+        citySelect.value = selectedCity
+
+    }
+
+
+    /* BEST PRICES ANALYSIS */
+
+    function calculateBestPrices(data) {
+
+        let fuels = {}
+
+        data.forEach(row => {
+
+            if (!fuels[row.fuel]) {
+                fuels[row.fuel] = row
+                return
+            }
+
+            if (row.price < fuels[row.fuel].price) {
+                fuels[row.fuel] = row
+            }
+
+        })
+
+        let container = document.getElementById("best-prices-container")
+
+        if (!container) return
+
+        container.innerHTML = ""
+
+        Object.values(fuels).forEach(row => {
+
+            let div = document.createElement("div")
+
+            div.className = "best-price-row"
+
+            div.innerHTML = `
+<span class="best-price-fuel">${row.fuel}</span>
+<span>${row.station} – ${row.city}</span>
+<span class="best-price-value">${Number(row.price).toFixed(2)} €</span>
+`
+
+            container.appendChild(div)
+
+        })
+
+    }
+
+
+    /* MAIN RENDER */
+
+    function renderPrices() {
+
+        let body = document.getElementById("prices-body")
+
+        body.innerHTML = ""
+
+        let latest = {}
+
+        allPrices.forEach(row => {
+
+            let key = row.region + "_" + row.city + "_" + row.station + "_" + row.fuel
+
+            if (!latest[key]) {
+                latest[key] = row
+                return
+            }
+
+            let current = new Date(row.created_at)
+            let stored = new Date(latest[key].created_at)
+
+            if (current > stored) {
+                latest[key] = row
+            }
+
+        })
+
+        let filtered = Object.values(latest)
+
+
+        /* REGION FILTER */
+
+        let selectedRegion = regionSelect.value
+
+        if (selectedRegion !== "all") {
+            filtered = filtered.filter(r => r.region === selectedRegion)
+        }
+
+
+        /* POPULATE CITIES */
+
+        populateCities(filtered)
+
+
+        /* CITY FILTER */
+
+        let selectedCity = citySelect.value
+
+        if (selectedCity !== "all") {
+            filtered = filtered.filter(r => r.city === selectedCity)
+        }
+
+
+        /* GROUP BY STATION */
+
+        let grouped = {}
+
+        filtered.forEach(row => {
+
+            if (!grouped[row.station]) {
+
+                grouped[row.station] = {
+                    "A95": "-",
+                    "A98": "-",
+                    "Дизел": "-",
+                    "Газ": "-",
+                    "Метан": "-"
+                }
+
+            }
+
+            if (row.fuel === "Бензин A95") grouped[row.station]["A95"] = Number(row.price).toFixed(2)
+            if (row.fuel === "Бензин A98") grouped[row.station]["A98"] = Number(row.price).toFixed(2)
+            if (row.fuel === "Дизел") grouped[row.station]["Дизел"] = Number(row.price).toFixed(2)
+            if (row.fuel === "Газ") grouped[row.station]["Газ"] = Number(row.price).toFixed(2)
+            if (row.fuel === "Метан") grouped[row.station]["Метан"] = Number(row.price).toFixed(2)
+
+        })
+
+
+        /* RENDER TABLE */
+
+        Object.keys(grouped).forEach(station => {
+
+            let fuels = grouped[station]
+
+            let row = document.createElement("tr")
+
+            row.innerHTML = `
+<td>${station}</td>
+<td>${fuels["A95"]}</td>
+<td>${fuels["A98"]}</td>
+<td>${fuels["Дизел"]}</td>
+<td>${fuels["Газ"]}</td>
+<td>${fuels["Метан"]}</td>
+`
+
+            body.appendChild(row)
+
+        })
+
+
+        /* CALCULATE BEST PRICES */
+
+        calculateBestPrices(filtered)
+
+    }
+
+
+    /* EVENTS */
+
+    if (regionSelect) {
+        regionSelect.addEventListener("change", renderPrices)
+    }
+
+    if (citySelect) {
+        citySelect.addEventListener("change", renderPrices)
+    }
+
+
+    /* FORM SUBMIT */
 
     if (form) {
 
@@ -69,9 +283,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
             e.preventDefault()
 
+            let region = document.getElementById("region").value
             let city = document.getElementById("city").value.trim()
-
-            /* форматиране на града */
 
             city = city
                 .toLowerCase()
@@ -83,37 +296,25 @@ document.addEventListener("DOMContentLoaded", function () {
             let fuelElement = document.querySelector('input[name="fuel"]:checked')
             let price = parseFloat(document.getElementById("price").value)
 
-            /* проверки */
-
-            if (city.length < 2) {
-                showMessage("Моля въведете валиден град", "error")
+            if (!region || !station || !fuelElement || !price) {
+                showMessage("Моля попълнете всички полета.", "error")
                 return
             }
-
-            if (!station) {
-                showMessage("Моля изберете бензиностанция", "error")
-                return
-            }
-
-            if (!fuelElement) {
-                showMessage("Моля изберете гориво", "error")
-                return
-            }
-
-            if (isNaN(price) || price < 0.5 || price > 5) {
-                showMessage("Моля въведете цена между 0.50 € и 5.00 €", "error")
-                return
-            }
-
-            startCountdown()
 
             let fuel = fuelElement.value
 
-            fetch("https://script.google.com/macros/s/AKfycbzMB6w-4YD1eHH3_fRxdmKwkNJZnO0jqZ7Mh76cOpi8Erz7_vwbdLZPWLGd1nGwYAnc/exec", {
+            fetch("https://eaqvhxfvozhzatrnbkvx.supabase.co/rest/v1/fuel_prices", {
 
                 method: "POST",
 
+                headers: {
+                    "Content-Type": "application/json",
+                    apikey: "sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH",
+                    Authorization: "Bearer sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH"
+                },
+
                 body: JSON.stringify({
+                    region: region,
                     city: city,
                     station: station,
                     fuel: fuel,
@@ -121,30 +322,21 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
 
             })
-                .then(response => response.json())
-                .then(data => {
+                .then(() => {
 
                     showMessage("✔ Благодарим! Цената беше записана.", "success")
 
-                    submitBtn.disabled = false
-                    submitBtn.textContent = "Изпрати цена"
-
                     form.reset()
 
-                })
-                .catch(error => {
-
-                    console.error(error)
-
-                    showMessage("⚠ Възникна грешка при изпращането.", "error")
-
-                    submitBtn.disabled = false
-                    submitBtn.textContent = "Изпрати цена"
+                    loadPrices()
 
                 })
 
         })
 
     }
+
+
+    loadPrices()
 
 })

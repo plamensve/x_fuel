@@ -21,201 +21,250 @@
     <meta property="og:type" content="website">
     <meta property="og:locale" content="bg_BG">
 
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Текущи цени на горивата в България">
-    <meta name="twitter:description" content="Виж актуалните средни цени на бензин, дизел и газ в реално време.">
-    <meta name="twitter:image" content="https://plamensve.github.io/x_fuel/images/fuels.jpg">
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6YJNGGFR2"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
-        gtag('js', new Date());
-
-        gtag('config', 'G-F6YJNGGFR2');
-    </script>
-
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6YJNGGFR2"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
-        gtag('js', new Date());
-
-        gtag('config', 'G-F6YJNGGFR2');
-    </script>
-
 </head>
-
 <body>
 
 <div class="background"></div>
-<div class="container">
-    <div class="follow-card">
 
-    <span class="follow-text">
+<header class="header-bar">
 
-        Последвайте ни във Facebook за актуални цени и анализи на горивата
+    <div class="header-container">
 
-    </span>
+        <div class="header-text">
+            <strong>Цени на горивата в България</strong>
+            <span>Следете актуални цени и споделяйте информация от бензиностанции в цялата страна</span>
+        </div>
 
-        <a href="https://www.facebook.com/groups/960591129738525" target="_blank">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
-                 viewBox="0 0 16 16">
-                <path d="M16 8.049c0-4.446-3.582-8.049-8-8.049S0 3.603 0 8.049c0 4.017
-            2.926 7.347 6.75 7.951v-5.625H4.718V8.049H6.75V6.275
-            c0-2.017 1.195-3.131 3.022-3.131.876 0
-            1.791.156 1.791.156v1.98h-1.009
-            c-.994 0-1.304.617-1.304 1.25v1.519h2.218l-.354
-            2.326H9.25V16c3.824-.604 6.75-3.934
-            6.75-7.951z"/>
+        <a
+            class="facebook-button"
+            href="https://www.facebook.com/groups/960591129738525"
+            target="_blank">
 
-            </svg>
             Facebook група
+
         </a>
 
     </div>
 
-    <div class="fuel-card">
-
-        <div class="header">
-
-            <h1>Текущи средни цени на горивата</h1>
-
-            <div class="live-status">
-                <span class="live-dot"></span>
-                Актуални данни в реално време
-            </div>
-
-            <div class="date" id="current-date"></div>
-
-        </div>
-
-        <div class="widget-container">
-            <div id="fuelo-widget-container"></div>
-        </div>
-
-        <div class="footer">
-            Цените се обновяват автоматично
-        </div>
-
-    </div>
+</header>
 
 
-    <!-- Форма за въвеждане -->
+<main class="container">
 
-    <div class="submit-card">
+    <!-- BEST PRICES -->
 
-        <h2>Сподели цена на гориво</h2>
+    <section class="best-prices-card">
 
-        <form id="fuel-form">
+        <h3>Най-ниски цени в момента</h3>
 
-            <div class="form-group">
+        <div id="best-prices-container"></div>
 
-                <label for="city">Град</label>
-
-                <input
-                        type="text"
-                        id="city"
-                        placeholder="Например София"
-                        required>
-
-            </div>
+    </section>
 
 
-            <div class="form-group">
+    <!-- MAIN GRID -->
 
-                <label for="station">Бензиностанция</label>
+    <section class="main-grid">
 
-                <select id="station" required>
+        <!-- FORM -->
 
-                    <option value="">Избери</option>
+        <div class="submit-card">
 
-                    <option>Petrol</option>
-                    <option>Lukoil</option>
-                    <option>Shell</option>
-                    <option>Eko</option>
-                    <option>OMV</option>
-                    <option>Rompetrol</option>
-                    <option>Круиз</option>
-                    <option>Eko Петрол</option>
-                    <option>Dieselor</option>
+            <h2>Сподели цена на гориво</h2>
 
-                </select>
+            <form id="fuel-form">
 
-            </div>
+                <div class="form-group">
 
+                    <label for="region">Област</label>
 
-            <div class="form-group">
-
-                <label>Гориво</label>
-
-                <div class="radio-group">
-
-                    <label>
-                        <input type="radio" name="fuel" value="Бензин A95" required>
-                        Бензин A95
-                    </label>
-
-                    <label>
-                        <input type="radio" name="fuel" value="Бензин A98">
-                        Бензин A98
-                    </label>
-
-                    <label>
-                        <input type="radio" name="fuel" value="Дизел">
-                        Дизел
-                    </label>
-
-                    <label>
-                        <input type="radio" name="fuel" value="Газ">
-                        Газ
-                    </label>
-
-                    <label>
-                        <input type="radio" name="fuel" value="Метан">
-                        Метан
-                    </label>
+                    <select id="region" name="region" required>
+                        <option value="">Избери област</option>
+                    </select>
 
                 </div>
 
+
+                <div class="form-group">
+
+                    <label for="city">Град</label>
+
+                    <input
+                            type="text"
+                            id="city"
+                            name="city"
+                            placeholder="Например София"
+                            required>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="station">Бензиностанция</label>
+
+                    <select id="station" name="station" required>
+
+                        <option value="">Избери</option>
+
+                        <option value="Petrol">Petrol</option>
+                        <option value="Lukoil">Lukoil</option>
+                        <option value="Shell">Shell</option>
+                        <option value="Eko">Eko</option>
+                        <option value="OMV">OMV</option>
+                        <option value="Rompetrol">Rompetrol</option>
+                        <option value="Круиз">Круиз</option>
+                        <option value="Eko Петрол">Eko Петрол</option>
+                        <option value="Dieselor">Dieselor</option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>Гориво</label>
+
+                    <div class="radio-group">
+
+                        <label>
+                            <input type="radio" name="fuel" value="Бензин A95" required>
+                            Бензин A95
+                        </label>
+
+                        <label>
+                            <input type="radio" name="fuel" value="Бензин A98">
+                            Бензин A98
+                        </label>
+
+                        <label>
+                            <input type="radio" name="fuel" value="Дизел">
+                            Дизел
+                        </label>
+
+                        <label>
+                            <input type="radio" name="fuel" value="Газ">
+                            Газ
+                        </label>
+
+                        <label>
+                            <input type="radio" name="fuel" value="Метан">
+                            Метан
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="price">Цена (€/литър)</label>
+
+                    <input
+                            type="number"
+                            id="price"
+                            name="price"
+                            step="0.01"
+                            min="0.50"
+                            max="5"
+                            placeholder="1.65"
+                            required>
+
+                </div>
+
+                <button type="submit">Изпрати цена</button>
+
+            </form>
+
+        </div>
+
+
+        <!-- WIDGET -->
+
+        <div class="fuel-card">
+
+            <div class="header">
+
+                <h1>Текущи средни цени на горивата</h1>
+
+                <div class="live-status">
+                    <span class="live-dot"></span>
+                    Актуални данни в реално време
+                </div>
+
+                <div class="date" id="current-date"></div>
+
             </div>
 
-
-            <div class="form-group">
-
-                <label for="price">Цена (€/литър)</label>
-
-                <input
-                        type="number"
-                        step="0.01"
-                        id="price"
-                        placeholder="1.65"
-                        required>
-
+            <div class="widget-container">
+                <div id="fuelo-widget-container"></div>
             </div>
 
+            <div class="footer">
+                Цените се обновяват автоматично
+            </div>
 
-            <button type="submit">Изпрати цена</button>
+        </div>
 
-        </form>
-
-    </div>
+    </section>
 
 
-    <div id="success-message" class="success-message"></div>
+    <!-- TABLE -->
 
-</div>
-<script src="fuelo.js"></script>
+    <section class="prices-card">
+
+        <h2>Днешни цени по области и градове</h2>
+
+        <div class="city-filter">
+
+            <label for="region-select">Област</label>
+
+            <select id="region-select">
+                <option value="all">Всички области</option>
+            </select>
+
+            <label for="city-select">Град</label>
+
+            <select id="city-select">
+                <option value="all">Всички градове</option>
+            </select>
+
+        </div>
+
+
+        <div id="prices-container">
+
+            <table class="price-table">
+
+                <thead>
+
+                <tr>
+                    <th>Бензиностанция</th>
+                    <th>A95</th>
+                    <th>A98</th>
+                    <th>Дизел</th>
+                    <th>Газ</th>
+                    <th>Метан</th>
+                </tr>
+
+                </thead>
+
+                <tbody id="prices-body"></tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</main>
+
+
+<div id="success-message" class="success-message"></div>
+
 <script src="script.js"></script>
+
 </body>
 </html>
