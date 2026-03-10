@@ -20,9 +20,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const regionSelect = document.getElementById("region-select")
     const citySelect = document.getElementById("city-select")
+    const regionForm = document.getElementById("region")
 
     let allPrices = []
 
+    /* MESSAGE */
 
     function showMessage(text, type) {
 
@@ -35,7 +37,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 3000)
 
     }
-
 
     /* LOAD DATA */
 
@@ -61,37 +62,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
-    /* POPULATE REGIONS */
+    /* REGIONS */
 
     function populateRegions() {
 
         let regions = [...new Set(allPrices.map(r => r.region))].sort()
 
-        if (regionSelect.options.length === 1) {
+        regionSelect.innerHTML = `<option value="all">Всички области</option>`
+        regionForm.innerHTML = `<option value="">Избери област</option>`
 
-            regions.forEach(region => {
+        regions.forEach(region => {
 
-                let option = document.createElement("option")
-                option.value = region
-                option.textContent = region
+            let option1 = document.createElement("option")
+            option1.value = region
+            option1.textContent = region
+            regionSelect.appendChild(option1)
 
-                regionSelect.appendChild(option)
+            let option2 = document.createElement("option")
+            option2.value = region
+            option2.textContent = region
+            regionForm.appendChild(option2)
 
-            })
-
-        }
+        })
 
     }
 
+    /* CITIES */
 
-    /* POPULATE CITIES */
+    function populateCities(data) {
 
-    function populateCities(filteredData) {
-
-        let selectedCity = citySelect.value
-
-        let cities = [...new Set(filteredData.map(r => r.city))].sort()
+        let cities = [...new Set(data.map(r => r.city))].sort()
 
         citySelect.innerHTML = `<option value="all">Всички градове</option>`
 
@@ -100,17 +100,13 @@ document.addEventListener("DOMContentLoaded", function () {
             let option = document.createElement("option")
             option.value = city
             option.textContent = city
-
             citySelect.appendChild(option)
 
         })
 
-        citySelect.value = selectedCity
-
     }
 
-
-    /* BEST PRICES ANALYSIS */
+    /* BEST PRICES */
 
     function calculateBestPrices(data) {
 
@@ -130,8 +126,6 @@ document.addEventListener("DOMContentLoaded", function () {
         })
 
         let container = document.getElementById("best-prices-container")
-
-        if (!container) return
 
         container.innerHTML = ""
 
@@ -153,62 +147,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-
-    /* MAIN RENDER */
+    /* RENDER TABLE */
 
     function renderPrices() {
 
         let body = document.getElementById("prices-body")
-
         body.innerHTML = ""
 
-        let latest = {}
+        let filtered = [...allPrices]
 
-        allPrices.forEach(row => {
+        let region = regionSelect.value
 
-            let key = row.region + "_" + row.city + "_" + row.station + "_" + row.fuel
-
-            if (!latest[key]) {
-                latest[key] = row
-                return
-            }
-
-            let current = new Date(row.created_at)
-            let stored = new Date(latest[key].created_at)
-
-            if (current > stored) {
-                latest[key] = row
-            }
-
-        })
-
-        let filtered = Object.values(latest)
-
-
-        /* REGION FILTER */
-
-        let selectedRegion = regionSelect.value
-
-        if (selectedRegion !== "all") {
-            filtered = filtered.filter(r => r.region === selectedRegion)
+        if (region !== "all") {
+            filtered = filtered.filter(r => r.region === region)
         }
-
-
-        /* POPULATE CITIES */
 
         populateCities(filtered)
 
+        let city = citySelect.value
 
-        /* CITY FILTER */
-
-        let selectedCity = citySelect.value
-
-        if (selectedCity !== "all") {
-            filtered = filtered.filter(r => r.city === selectedCity)
+        if (city !== "all") {
+            filtered = filtered.filter(r => r.city === city)
         }
-
-
-        /* GROUP BY STATION */
 
         let grouped = {}
 
@@ -234,9 +194,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         })
 
-
-        /* RENDER TABLE */
-
         Object.keys(grouped).forEach(station => {
 
             let fuels = grouped[station]
@@ -256,26 +213,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         })
 
-
-        /* CALCULATE BEST PRICES */
-
         calculateBestPrices(filtered)
 
     }
 
-
     /* EVENTS */
 
-    if (regionSelect) {
-        regionSelect.addEventListener("change", renderPrices)
-    }
+    regionSelect.addEventListener("change", renderPrices)
+    citySelect.addEventListener("change", renderPrices)
 
-    if (citySelect) {
-        citySelect.addEventListener("change", renderPrices)
-    }
-
-
-    /* FORM SUBMIT */
+    /* FORM */
 
     if (form) {
 
@@ -286,19 +233,15 @@ document.addEventListener("DOMContentLoaded", function () {
             let region = document.getElementById("region").value
             let city = document.getElementById("city").value.trim()
 
-            city = city
-                .toLowerCase()
-                .split(" ")
-                .map(word => word.charAt(0).toUpperCase() + word.slice(1))
-                .join(" ")
-
             let station = document.getElementById("station").value
             let fuelElement = document.querySelector('input[name="fuel"]:checked')
             let price = parseFloat(document.getElementById("price").value)
 
             if (!region || !station || !fuelElement || !price) {
+
                 showMessage("Моля попълнете всички полета.", "error")
                 return
+
             }
 
             let fuel = fuelElement.value
@@ -335,7 +278,6 @@ document.addEventListener("DOMContentLoaded", function () {
         })
 
     }
-
 
     loadPrices()
 
