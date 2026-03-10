@@ -410,3 +410,21 @@ select option{
     }
 
 }
+
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
+}
+
+.price-table{
+    min-width:520px;
+}
+
+.table-wrapper::-webkit-scrollbar{
+    height:6px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb{
+    background:#2563eb;
+    border-radius:10px;
+}
