@@ -472,25 +472,23 @@ select option {
 /* GRID */
 
 .footer-container{
-
     max-width:1200px;
     margin:auto;
-
     padding:40px 20px;
-
     display:grid;
     grid-template-columns:2fr 1fr 1fr 1fr;
-
     gap:40px;
+    justify-content:space-between;
 
+    align-items:start;
 }
 
 /* BRAND */
 
 .footer-logo{
-    height:200px;
-    margin-bottom:14px;
+    height:250px;
 }
+
 
 .footer-brand p{
     color:#9aa3b2;
