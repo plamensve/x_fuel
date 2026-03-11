@@ -15,6 +15,10 @@ body{
     color:white;
 }
 
+.header-logo{
+    height:130px;
+    margin-bottom: -20px;
+}
 /* GLOBAL CONTAINER */
 
 .container{
@@ -382,9 +386,18 @@ select option{
 
     .header-container{
         flex-direction:column;
-        align-items:flex-start;
-        gap:10px;
+        align-items:center;      /* центрира елементите */
+        text-align:center;       /* центрира текста */
+        gap:12px;
     }
+
+}
+
+@media (max-width:410px){
+
+.container{
+    padding:20px 18px;
+}
 
 }
 
