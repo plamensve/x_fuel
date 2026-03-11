@@ -46,7 +46,7 @@
     </script>
 
     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3478773231642095"
-     crossorigin="anonymous"></script>
+            crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-3478773231642095">
 </head>
 
@@ -225,10 +225,13 @@
                             id="price"
                             name="price"
                             step="0.01"
-                            min="0.50"
+                            min="0.20"
                             max="5"
                             placeholder="1.65"
-                            required>
+                            required
+                            oninvalid="this.setCustomValidity('Моля въведете цена между 0.20 и 5.00 €')"
+                            oninput="this.setCustomValidity('')"
+                    >
 
                 </div>
 

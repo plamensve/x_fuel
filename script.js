@@ -246,15 +246,26 @@ document.addEventListener("DOMContentLoaded", function () {
             e.preventDefault()
 
             let region = document.getElementById("region").value
-            let city = document.getElementById("city").value.trim()
+            let city = document.getElementById("city").value.trim().toUpperCase()
 
             let station = document.getElementById("station").value
             let fuelElement = document.querySelector('input[name="fuel"]:checked')
-            let price = parseFloat(document.getElementById("price").value)
 
-            if (!region || !station || !fuelElement || !price) {
+            let rawPrice = document.getElementById("price").value.trim()
+            rawPrice = rawPrice.replace(",", ".")
+
+            let price = parseFloat(rawPrice)
+
+            if (!region || !station || !fuelElement || isNaN(price)) {
 
                 showMessage("Моля попълнете всички полета.", "error")
+                return
+
+            }
+
+            if (price < 0.2 || price > 5) {
+
+                showMessage("Моля въведете валидна цена.", "error")
                 return
 
             }
