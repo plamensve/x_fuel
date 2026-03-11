@@ -1,7 +1,26 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     let today = new Date()
-    let todayISO = today.toISOString().slice(0, 10)
+
+    let todayISO =
+        today.getFullYear() + "-" +
+        String(today.getMonth() + 1).padStart(2, "0") + "-" +
+        String(today.getDate()).padStart(2, "0")
+
+    function isToday(row) {
+
+        if (!row.created_at) return false
+
+        let rowDate = new Date(row.created_at)
+
+        let rowDateLocal =
+            rowDate.getFullYear() + "-" +
+            String(rowDate.getMonth() + 1).padStart(2, "0") + "-" +
+            String(rowDate.getDate()).padStart(2, "0")
+
+        return rowDateLocal === todayISO
+
+    }
 
     let options = {
         weekday: "long",
@@ -71,9 +90,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function populateRegions() {
 
-        let todayData = allPrices.filter(row =>
-            row.created_at && row.created_at.slice(0, 10) === todayISO
-        )
+        let todayData = allPrices.filter(isToday)
 
         let regions = [...new Set(todayData.map(r => r.region))].sort()
 
@@ -165,11 +182,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let filtered = [...allPrices]
 
-        /* ПЪРВО ФИЛТЪР ПО ДАТА */
+        /* ФИЛТЪР ПО ДАТА */
 
-        filtered = filtered.filter(row =>
-            row.created_at && row.created_at.slice(0, 10) === todayISO
-        )
+        filtered = filtered.filter(isToday)
 
         let region = regionSelect.value
 
