@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     "A95": "-",
                     "A98": "-",
                     "Дизел": "-",
-                    "Газ": "-",
+                    "Пропан Бутан": "-",
                     "Метан": "-"
                 }
 
@@ -204,7 +204,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (row.fuel === "Бензин A95") grouped[row.station]["A95"] = Number(row.price).toFixed(2)
             if (row.fuel === "Бензин A98") grouped[row.station]["A98"] = Number(row.price).toFixed(2)
             if (row.fuel === "Дизел") grouped[row.station]["Дизел"] = Number(row.price).toFixed(2)
-            if (row.fuel === "Газ") grouped[row.station]["Газ"] = Number(row.price).toFixed(2)
+            if (row.fuel === "Пропан Бутан") grouped[row.station]["Пропан Бутан"] = Number(row.price).toFixed(2)
             if (row.fuel === "Метан") grouped[row.station]["Метан"] = Number(row.price).toFixed(2)
 
         })
@@ -220,7 +220,7 @@ document.addEventListener("DOMContentLoaded", function () {
 <td>${fuels["A95"]}</td>
 <td>${fuels["A98"]}</td>
 <td>${fuels["Дизел"]}</td>
-<td>${fuels["Газ"]}</td>
+<td>${fuels["Пропан Бутан"]}</td>
 <td>${fuels["Метан"]}</td>
 `
 
