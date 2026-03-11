@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", function () {
 
     let today = new Date()
+    let todayISO = today.toISOString().slice(0,10)
 
     let options = {
         weekday: "long",
@@ -54,15 +55,15 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
         })
-            .then(res => res.json())
-            .then(data => {
+        .then(res => res.json())
+        .then(data => {
 
-                allPrices = data
+            allPrices = data
 
-                populateRegions()
-                renderPrices()
+            populateRegions()
+            renderPrices()
 
-            })
+        })
 
     }
 
@@ -70,7 +71,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function populateRegions() {
 
-        let regions = [...new Set(allPrices.map(r => r.region))].sort()
+        let todayData = allPrices.filter(row =>
+            row.created_at && row.created_at.slice(0,10) === todayISO
+        )
+
+        let regions = [...new Set(todayData.map(r => r.region))].sort()
 
         regionSelect.innerHTML = `<option value="all">Всички области</option>`
 
@@ -174,6 +179,12 @@ document.addEventListener("DOMContentLoaded", function () {
             filtered = filtered.filter(r => r.city === selectedCity)
         }
 
+        /* ФИЛТЪР САМО ЗА ДНЕШНИ ЗАПИСИ */
+
+        filtered = filtered.filter(row =>
+            row.created_at && row.created_at.slice(0,10) === todayISO
+        )
+
         let grouped = {}
 
         filtered.forEach(row => {
@@ -269,15 +280,15 @@ document.addEventListener("DOMContentLoaded", function () {
                 })
 
             })
-                .then(() => {
+            .then(() => {
 
-                    showMessage("✔ Благодарим! Цената беше записана.", "success")
+                showMessage("✔ Благодарим! Цената беше записана.", "success")
 
-                    form.reset()
+                form.reset()
 
-                    loadPrices()
+                loadPrices()
 
-                })
+            })
 
         })
 
