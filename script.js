@@ -355,29 +355,36 @@ document.addEventListener("DOMContentLoaded", function () {
 
 
 
-let toggle = document.getElementById("theme-toggle")
+let themeToggle = document.getElementById("theme-toggle")
 
 if(localStorage.getItem("theme") === "light"){
     document.body.classList.add("light")
-    toggle.textContent = "☀️"
+    themeToggle.textContent = "☀️"
 }else{
-    toggle.textContent = "🌙"
+    themeToggle.textContent = "🌙"
 }
 
-toggle.addEventListener("click", function(){
+themeToggle.addEventListener("click", function(){
 
     document.body.classList.toggle("light")
 
     if(document.body.classList.contains("light")){
 
         localStorage.setItem("theme","light")
-        toggle.textContent = "☀️"
+        themeToggle.textContent = "☀️"
 
     }else{
 
         localStorage.setItem("theme","dark")
-        toggle.textContent = "🌙"
+        themeToggle.textContent = "🌙"
 
     }
 
+})
+
+let menuToggle = document.querySelector(".menu-toggle")
+let nav = document.querySelector(".nav-container")
+
+menuToggle.addEventListener("click", function(){
+    nav.classList.toggle("active")
 })

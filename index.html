@@ -76,11 +76,12 @@
 
 <nav class="main-nav">
 
+    <button class="menu-toggle">☰</button>
+
     <div class="nav-container">
         <button id="theme-toggle">🌙</button>
         <a href="index.html">Начало</a>
         <a href="pages/rules.html">Общи условия</a>
-
     </div>
 
 </nav>
@@ -256,7 +257,7 @@
 
             <div class="header">
 
-                <h1>Текущи средни цени на горивата</h1>
+                <h2>Текущи средни цени на горивата</h2>
 
                 <div class="live-status">
                     <span class="live-dot"></span>
@@ -283,21 +284,26 @@
     <section class="prices-card">
 
         <h2>Днешни цени по области и градове <span id="prices-date" style="color: palegoldenrod"></span></h2>
-        <p class="info-helper">Посочените цени са изчислени като средна стойност на информацията, подадена от потребителите.</p>
+        <p class="info-helper">Посочените цени са изчислени като средна стойност на информацията, подадена от
+            потребителите.</p>
 
         <div class="city-filter">
 
-            <label for="region-select">Област</label>
+            <div class="filt">
+                <label for="region-select">Област</label>
 
-            <select id="region-select">
-                <option value="all">Всички области</option>
-            </select>
+                <select id="region-select">
+                    <option value="all">Всички области</option>
+                </select>
+            </div>
 
-            <label for="city-select">Град</label>
+            <div class="filt">
+                <label for="city-select">Град</label>
 
-            <select id="city-select">
-                <option value="all">Всички градове</option>
-            </select>
+                <select id="city-select">
+                    <option value="all">Всички градове</option>
+                </select>
+            </div>
 
         </div>
 
@@ -334,7 +340,6 @@
 <div id="success-message" class="success-message"></div>
 
 
-
 <footer class="site-footer">
 
     <div class="footer-container">
@@ -354,7 +359,7 @@
 
             <ul class="footer-links">
                 <li><a href="#top">Начало</a></li>
-                <a href="pages/rules.html">Общи условия</a>
+                <li><a href="pages/rules.html">Общи условия</a></li>
             </ul>
 
         </div>
@@ -366,29 +371,25 @@
 
             <h4>Контакти</h4>
 
-            <div class="contact-item">
+            <div class="footer-contact">
 
-                <span class="contact-icon">📞</span>
+                <div class="contact-item">
+                    <span class="contact-icon">📞</span>
+                    <a href="tel:+359883427273">+359 883 427 273</a>
+                </div>
 
-                <a href="tel:+359883427273">
-                    +359 883 427 273
-                </a>
+                <div class="contact-item">
+                    <span class="contact-icon">✉️</span>
+                    <a href="mailto:svetoslavov.plamen@gmail.com">
+                        svetoslavov.plamen@gmail.com
+                    </a>
+                </div>
 
-            </div>
+                <div class="contact-item">
+                    <span class="contact-icon">👤</span>
+                    <span>Пламен Светославов</span>
+                </div>
 
-            <div class="contact-item">
-
-                <span class="contact-icon">✉️</span>
-
-                <a href="mailto:svetoslavov.plamen@gmail.com">
-                    svetoslavov.plamen@gmail.com
-                </a>
-
-            </div>
-
-            <div class="contact-item">
-                <span class="contact-icon">👤</span>
-                Пламен Светославов
             </div>
 
         </div>
@@ -397,6 +398,7 @@
         <!-- SOCIAL -->
 
         <div class="footer-column">
+
             <h4>Социални мрежи</h4>
 
             <div class="social-icons">
@@ -421,9 +423,11 @@
 
 
     <div class="footer-bottom">
+
         <span>© 2026 goriva.online</span>
         <span class="footer-separator">•</span>
         <span>Цени на горивата в България</span>
+
     </div>
 
 </footer>

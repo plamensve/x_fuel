@@ -99,3 +99,46 @@ main h2:first-of-type{
     }
 
 }
+
+/* =========================
+   MENU BUTTON
+========================= */
+
+.menu-toggle{
+
+    display:none;
+    font-size:26px;
+    background:none;
+    border:none;
+    color:var(--text-color);
+    cursor:pointer;
+
+}
+
+/* mobile nav */
+
+@media (max-width:750px){
+
+    .menu-toggle{
+
+        display:block;
+        margin:auto;
+        padding:10px;
+
+    }
+
+    .nav-container{
+
+        display:none;
+        flex-direction:column;
+        align-items:center;
+        gap:12px;
+        padding:15px 0;
+
+    }
+
+    .nav-container.active{
+        display:flex;
+    }
+
+}

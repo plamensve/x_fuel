@@ -6,6 +6,10 @@
     padding:0;
 }
 
+h1,h2,h3{
+    margin-bottom:20px;
+}
+
 /* =========================
    THEME VARIABLES
 ========================= */
@@ -38,10 +42,13 @@ body.light{
 ========================= */
 
 body{
+
     font-family:Inter,Segoe UI,Arial,sans-serif;
     background:var(--bg-color);
     min-height:100vh;
     color:var(--text-color);
+    overflow-x:hidden;
+
 }
 
 html{
@@ -70,7 +77,8 @@ html{
 
     max-width:1200px;
     margin:auto;
-    padding:18px 20px;
+
+    padding:18px clamp(16px,4vw,32px);
 
     display:flex;
     justify-content:space-between;
@@ -102,7 +110,6 @@ html{
 
     background:#2563eb;
     padding:10px 16px;
-
     border-radius:8px;
 
     color:white;
@@ -130,7 +137,7 @@ html{
 
     margin:auto;
 
-    padding:40px 20px;
+    padding:40px clamp(16px,4vw,32px);
 
 }
 
@@ -142,10 +149,7 @@ html{
 
     display:grid;
     grid-template-columns:1fr 1fr;
-
     gap:30px;
-
-    margin-top:30px;
 
 }
 
@@ -159,37 +163,71 @@ html{
 .best-prices-card{
 
     background:var(--card-bg);
-
     backdrop-filter:blur(12px);
-
     border-radius:16px;
-
     border:1px solid var(--border-color);
 
-    box-shadow:0 10px 40px rgba(0,0,0,0.5);
+    padding:30px;
 
+    width:100%;
+    margin-bottom:40px;
+
+}
+
+.fuel-card{
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    padding:35px;
+
+}
+
+.live-status{
+    justify-content:center;
+    margin-bottom:5px;
+}
+
+.date{
+    margin-bottom:20px;
+}
+
+.footer{
+    margin-top:10px;
+}
+
+.info-helper{
+    margin-bottom:20px;
+}
+
+/* =========================
+   FILTER
+========================= */
+
+.city-filter{
+    display:flex;
+    gap:20px;
+    flex-wrap:wrap;
+}
+
+.filt{
+    display:flex;
+    align-items:center;
+    gap:12px;
 }
 
 /* =========================
    BEST PRICES
 ========================= */
 
-.best-prices-card{
-
-    padding:20px;
-    margin-top:20px;
-
-}
-
 .best-price-row{
 
     display:grid;
     grid-template-columns:140px 1fr 70px;
-
     align-items:center;
 
     gap:12px;
-
     padding:10px 0;
 
     font-size:14px;
@@ -201,136 +239,28 @@ html{
 }
 
 .best-price-value{
-
     color:#22c55e;
     font-weight:600;
-
-}
-
-/* =========================
-   FUEL CARD
-========================= */
-
-.fuel-card{
-    padding:35px;
-}
-
-.fuel-card:hover{
-    border-color:#2563eb;
-}
-
-/* =========================
-   HEADER SECTION
-========================= */
-
-.header{
-
-    display:flex;
-    flex-direction:column;
-
-    gap:10px;
-
-    margin-bottom:25px;
-
-}
-
-.header h1{
-
-    font-size:28px;
-    font-weight:600;
-
-}
-
-/* =========================
-   LIVE DOT
-========================= */
-
-.live-status{
-
-    display:flex;
-    align-items:center;
-
-    font-size:14px;
-    color:#9ca3af;
-
-}
-
-.live-dot{
-
-    width:8px;
-    height:8px;
-
-    background:#22c55e;
-
-    border-radius:50%;
-
-    margin-right:8px;
-
-    animation:pulse 1.8s infinite;
-
-}
-
-@keyframes pulse{
-
-    0%{opacity:1}
-    50%{opacity:.4}
-    100%{opacity:1}
-
-}
-
-/* =========================
-   WIDGET
-========================= */
-
-.widget-container{
-
-    background:var(--widget-bg);
-
-    border-radius:12px;
-
-    padding:20px;
-
-    border:1px solid var(--border-color);
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
-
 }
 
 /* =========================
    FORM
 ========================= */
 
-.submit-card{
-    padding:30px;
-}
-
-.submit-card h2{
-    font-size:22px;
-    margin-bottom:20px;
-}
-
 #fuel-form{
-
     display:grid;
     gap:18px;
-
 }
 
 .form-group{
-
     display:flex;
     flex-direction:column;
-    gap:6px;
-
+    gap:8px;
 }
 
 .form-group label{
-
     font-size:13px;
     color:#9ca3af;
-
 }
 
 /* INPUTS */
@@ -339,135 +269,95 @@ input,
 select{
 
     background:var(--input-bg);
-
     border:1px solid var(--border-color);
-
     border-radius:8px;
 
     padding:10px 12px;
 
     color:var(--text-color);
-
     font-size:14px;
-
-    outline:none;
-
-    transition:.2s;
 
 }
 
-input:focus,
-select:focus{
+select option{
+    color:black;
+    font-weight:bold;
+    background:white;
+}
 
-    border-color:#2563eb;
+/* =========================
+   RADIO GROUP
+========================= */
 
-    box-shadow:0 0 0 2px rgba(37,99,235,0.25);
+.radio-group{
 
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    gap:10px;
+
+}
+
+.radio-group label{
+
+    display:flex;
+    align-items:center;
+    gap:8px;
+
+    padding:8px 10px;
+    border-radius:6px;
+
+    background:var(--widget-bg);
+
+    cursor:pointer;
+    font-size:14px;
+
+}
+
+.radio-group input{
+    cursor:pointer;
 }
 
 /* =========================
    BUTTON
 ========================= */
+
 .submit-button{
 
     width:100%;
 
     background:#2563eb;
-
     border:none;
 
     padding:12px;
-
     border-radius:8px;
 
     font-size:14px;
     font-weight:600;
 
     color:white;
-
     cursor:pointer;
-
-    transition:0.2s;
 
 }
 
 .submit-button:hover{
-
     background:#1d4ed8;
-
-}
-
-
-
-#theme-toggle{
-
-    width:42px;
-    height:42px;
-
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-    font-size:18px;
-
-    border-radius:10px;
-
-    background:var(--widget-bg);
-    border:1px solid var(--border-color);
-
-    cursor:pointer;
-
-    transition:0.2s;
-
-}
-
-#theme-toggle:hover{
-
-    background:#2563eb;
-    color:white;
-    transform:scale(1.05);
-
 }
 
 /* =========================
    TABLE
 ========================= */
 
-.prices-card{
-
-    padding:30px;
-    margin-top:30px;
-
-}
-
-.prices-card h2{
-
-    margin-bottom:20px;
-
-    font-size:22px;
-
-}
-
-.city-filter{
-
-    display:flex;
-
-    align-items:center;
-
-    gap:12px;
-
-    margin-bottom:20px;
-
-    flex-wrap:wrap;
-
+.table-wrapper{
+    width:100%;
+    overflow-x:auto;
 }
 
 .price-table{
 
     width:100%;
+    min-width:600px;
 
     border-collapse:collapse;
-
     margin-top:15px;
 
 }
@@ -475,37 +365,21 @@ select:focus{
 .price-table th{
 
     background:var(--table-header);
-
     padding:12px;
-
     text-align:center;
-
-    font-weight:600;
 
 }
 
 .price-table td{
 
     padding:10px;
-
     border-bottom:1px solid var(--border-color);
-
     text-align:center;
 
 }
 
-.price-table td:first-child{
-
-    text-align:left;
-
-    font-weight:600;
-
-}
-
 .price-table tr:hover{
-
     background:var(--widget-bg);
-
 }
 
 /* =========================
@@ -515,42 +389,32 @@ select:focus{
 .main-nav{
 
     width:100%;
-
     border-bottom:1px solid var(--border-color);
-
     background:var(--card-bg);
-
-    backdrop-filter:blur(10px);
 
 }
 
 .nav-container{
 
     max-width:1200px;
-
     margin:auto;
 
-    padding:12px 20px;
+    padding:14px clamp(16px,4vw,32px);
 
     display:flex;
-
-    gap:26px;
-
+    justify-content:center;
     align-items:center;
+    gap:30px;
 
 }
 
 .nav-container a{
 
     font-size:14px;
-
     color:#9aa3b2;
 
     text-decoration:none;
-
     font-weight:500;
-
-    transition:.2s;
 
 }
 
@@ -565,9 +429,7 @@ select:focus{
 .site-footer{
 
     margin-top:60px;
-
     border-top:1px solid var(--border-color);
-
     background:var(--card-bg);
 
 }
@@ -575,184 +437,294 @@ select:focus{
 .footer-container{
 
     max-width:1200px;
-
     margin:auto;
 
-    padding:40px 20px;
+    padding:50px clamp(16px,4vw,32px);
 
     display:grid;
-
-    grid-template-columns:2fr 1fr 1fr 1fr;
+    grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
 
     gap:40px;
 
 }
 
 .footer-logo{
-    height:250px;
+    height:180px;
 }
 
 .footer-column h4{
     margin-bottom:12px;
-    font-size:15px;
 }
 
 .footer-links{
     list-style:none;
 }
 
+.footer-links li{
+    margin-bottom:8px;
+}
+
 .footer-links a{
-
     color:#9aa3b2;
-
     text-decoration:none;
-
-    transition:.2s;
-
 }
 
 .footer-links a:hover{
     color:var(--text-color);
 }
 
-.contact-item{
-
-    margin-bottom:8px;
-
-    display:flex;
-
-    gap:8px;
-
-    align-items:center;
-
-    color:#9aa3b2;
-
-}
-
-.contact-item a{
-
-    color:#9aa3b2;
-
-    text-decoration:none;
-
-}
-
-.contact-item a:hover{
-    color:var(--text-color);
-}
-
 .footer-bottom{
 
     border-top:1px solid var(--border-color);
-
     padding:16px;
 
     text-align:center;
-
     font-size:13px;
-
     color:#9aa3b2;
 
 }
 
 /* =========================
-   SOCIAL ICONS FIX
+   SOCIAL
 ========================= */
 
 .social-icons{
 
     display:flex;
-    gap:12px;
-    flex-wrap:wrap;
+    gap:10px;
+    margin-top:10px;
 
 }
 
 .social-icons a{
 
-    width:38px;
-    height:38px;
+    width:32px;
+    height:32px;
 
     display:flex;
     align-items:center;
     justify-content:center;
 
-    border-radius:8px;
-
+    border-radius:6px;
     background:var(--widget-bg);
 
-    transition:.2s;
-
-}
-
-.social-icons a:hover{
-    background:#2563eb;
 }
 
 .social-icons img{
 
-    width:18px;
-    height:18px;
-
+    width:16px;
+    height:16px;
     filter:invert(1);
 
 }
 
-.radio-group{
+/* =========================
+   RESPONSIVE
+========================= */
 
-    display:grid;
+@media (max-width:1200px){
+    .footer-container {
+        display: flex;
+        flex-direction: row;
+    }
+}
 
-    grid-template-columns:repeat(3, 1fr);
+@media (max-width:920px){
+    .footer-container {
+        display: flex;
+        flex-direction: column;
+    }
+}
 
-    gap:10px;
+@media (max-width:900px){
 
-    margin-top:6px;
+    .main-grid{
+        grid-template-columns:1fr;
+    }
 
 }
 
-.radio-group label{
+@media (max-width:768px){
 
-    display:flex;
-    align-items:center;
-    gap:6px;
+    .header-logo{
+        height:150px;
+    }
 
-    font-size:14px;
+    .header-container{
+        flex-direction:column;
+        text-align:center;
+    }
+
+    .header-text{
+        align-items:center;
+    }
+
+}
+
+@media (max-width:750px){
+
+    .menu-toggle{
+        display:block;
+        margin:auto;
+        font-size:26px;
+        background:none;
+        border:none;
+        color:var(--text-color);
+        cursor:pointer;
+        padding:10px;
+    }
+
+    .nav-container{
+        display:none;
+        flex-direction:column;
+        align-items:center;
+        gap:12px;
+        padding:15px 0;
+    }
+
+    .nav-container.active{
+        display:flex;
+    }
 
 }
 
 @media (max-width:600px){
 
-.radio-group{
-    grid-template-columns:1fr 1fr;
-}
+    .header-logo{
+        height:150px;
+    }
+
+    .city-filter{
+        flex-direction:column;
+    }
 
 }
 
-.info-helper {
-    padding-bottom: 30px;
+@media (max-width:480px){
+
+    .header-logo{
+        height:150px;
+    }
+
+    .facebook-button{
+        width:100%;
+        text-align:center;
+    }
+
+}
+
+@media (max-width:360px){
+
+    .container{
+        padding:25px clamp(12px,4vw,20px);
+    }
+
+    .header-logo{
+        height:70px;
+    }
+
+}
+
+/* =========================
+   MENU BUTTON
+========================= */
+
+.menu-toggle{
+
+    display:none;
+    font-size:26px;
+    background:none;
+    border:none;
+    color:var(--text-color);
+    cursor:pointer;
+
+}
+
+/* mobile nav */
+
+@media (max-width:750px){
+
+    .menu-toggle{
+        display:block;
+        margin:auto;
+        padding:10px;
+    }
+
+    .nav-container{
+        display:none;
+        flex-direction:column;
+        align-items:center;
+        gap:12px;
+        padding:15px 0;
+    }
+
+    .nav-container.active{
+        display:flex;
+    }
+
 }
 
 
-#city-select option,
-#region-select option{
-    color:black;
-    background:white;
-    font-weight: bold;
+
+/* =========================
+   THEME TOGGLE BUTTON
+========================= */
+
+#theme-toggle{
+
+    width:42px;
+    height:42px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    border-radius:10px;
+
+    background:var(--widget-bg);
+    border:1px solid var(--border-color);
+
+    font-size:18px;
+    color:var(--text-color);
+
+    cursor:pointer;
+
+    transition:all .25s ease;
+
 }
 
+/* hover */
 
+#theme-toggle:hover{
 
+    background:rgba(255,255,255,0.08);
+    transform:translateY(-1px);
 
+}
 
+/* click */
 
+#theme-toggle:active{
+    transform:scale(.95);
+}
 
+.footer-contact{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
 
+.contact-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+}
 
+.contact-item a{
+    color:#9aa3b2;
+    text-decoration:none;
+}
 
-
-
-
-
-
-
-
-
+.contact-item a:hover{
+    color:var(--text-color);
+}
