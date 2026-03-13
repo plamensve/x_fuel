@@ -677,3 +677,85 @@ select option {
 }
 
 
+/* =========================
+   NAVIGATION
+========================= */
+
+.main-nav{
+
+    width:100%;
+
+    border-bottom:1px solid rgba(255,255,255,0.08);
+
+    background:rgba(255,255,255,0.02);
+
+    backdrop-filter:blur(10px);
+
+}
+
+.nav-container{
+
+    max-width:1200px;
+
+    margin:auto;
+
+    padding:12px 20px;
+
+    display:flex;
+
+    gap:26px;
+
+    align-items:center;
+
+}
+
+.nav-container a{
+
+    font-size:14px;
+
+    color:#9aa3b2;
+
+    text-decoration:none;
+
+    font-weight:500;
+
+    transition:.2s;
+
+}
+
+.nav-container a:hover{
+
+    color:white;
+
+}
+
+/* =========================
+   NAV RESPONSIVE
+========================= */
+
+@media (max-width:900px){
+
+    .nav-container{
+
+        justify-content:center;
+
+        flex-wrap:wrap;
+
+        gap:16px;
+
+    }
+
+}
+
+@media (max-width:420px){
+
+    .nav-container{
+
+        font-size:13px;
+
+        gap:14px;
+
+    }
+
+}
+

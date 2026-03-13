@@ -1,0 +1,101 @@
+/* =========================
+   TERMS PAGE
+========================= */
+
+main.container {
+    max-width: 900px;
+}
+
+/* TITLE */
+
+main h1 {
+
+    font-size: 32px;
+
+    margin-bottom: 30px;
+
+    font-weight: 600;
+
+}
+
+/* SECTIONS */
+
+main h2 {
+
+    margin-top: 35px;
+
+    margin-bottom: 10px;
+
+    font-size: 20px;
+
+    font-weight: 600;
+
+    color: white;
+
+}
+
+/* PARAGRAPHS */
+
+main p {
+
+    font-size: 15px;
+
+    line-height: 1.7;
+
+    color: #cbd5e1;
+
+    margin-bottom: 14px;
+
+}
+
+/* LINKS */
+
+main a {
+
+    color: #2563eb;
+
+    text-decoration: none;
+
+}
+
+main a:hover {
+
+    text-decoration: underline;
+
+}
+
+/* STRONG */
+
+main strong {
+
+    color: white;
+
+}
+
+/* SECTION SPACING */
+
+main h2:first-of-type {
+
+    margin-top: 10px;
+
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 768px) {
+
+    main h1 {
+        font-size: 26px;
+    }
+
+    main h2 {
+        font-size: 18px;
+    }
+
+    main p {
+        font-size: 14px;
+    }
+
+}
