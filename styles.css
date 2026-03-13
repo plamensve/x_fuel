@@ -137,7 +137,7 @@ html{
 
     margin:auto;
 
-    padding:40px clamp(16px,4vw,32px);
+    padding:40px clamp(16px,4vw,32px) 5px;
 
 }
 
@@ -728,3 +728,4 @@ select option{
 .contact-item a:hover{
     color:var(--text-color);
 }
+
