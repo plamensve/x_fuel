@@ -48,8 +48,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let allPrices = []
 
-    /* MESSAGE */
-
     function showMessage(text, type) {
 
         message.textContent = text
@@ -61,8 +59,6 @@ document.addEventListener("DOMContentLoaded", function () {
         }, 3000)
 
     }
-
-    /* LOAD DATA */
 
     function loadPrices() {
 
@@ -86,8 +82,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    /* REGIONS */
-
     function populateRegions() {
 
         let todayData = allPrices.filter(isToday)
@@ -107,8 +101,6 @@ document.addEventListener("DOMContentLoaded", function () {
         })
 
     }
-
-    /* CITIES */
 
     function populateCities(data, selectedCity = "all") {
 
@@ -132,8 +124,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    /* BEST PRICES */
-
     function calculateBestPrices(data) {
 
         let fuels = {}
@@ -145,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 return
             }
 
-            if (row.price < fuels[row.fuel].price) {
+            if (Number(row.avg_price) < Number(fuels[row.fuel].avg_price)) {
                 fuels[row.fuel] = row
             }
 
@@ -164,7 +154,7 @@ document.addEventListener("DOMContentLoaded", function () {
             div.innerHTML = `
 <span class="best-price-fuel">${row.fuel}</span>
 <span>${row.station} – ${row.city}</span>
-<span class="best-price-value">${Number(row.price).toFixed(2)} €</span>
+<span class="best-price-value">${row.avg_price} €</span>
 `
 
             container.appendChild(div)
@@ -173,7 +163,48 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    /* RENDER TABLE */
+    function calculateAveragePrices(data) {
+
+        let groups = {}
+
+        data.forEach(row => {
+
+            let key = row.city + "_" + row.station + "_" + row.fuel
+
+            if (!groups[key]) {
+                groups[key] = {
+                    city: row.city,
+                    station: row.station,
+                    fuel: row.fuel,
+                    sum: 0,
+                    count: 0
+                }
+            }
+
+            let price = Number(row.price)
+
+            if (!isNaN(price)) {
+                groups[key].sum += price
+                groups[key].count += 1
+            }
+
+        })
+
+        let averages = []
+
+        Object.values(groups).forEach(g => {
+
+            averages.push({
+                city: g.city,
+                station: g.station,
+                fuel: g.fuel,
+                avg_price: (g.sum / g.count).toFixed(2)
+            })
+
+        })
+
+        return averages
+    }
 
     function renderPrices() {
 
@@ -181,8 +212,6 @@ document.addEventListener("DOMContentLoaded", function () {
         body.innerHTML = ""
 
         let filtered = [...allPrices]
-
-        /* ФИЛТЪР ПО ДАТА */
 
         filtered = filtered.filter(isToday)
 
@@ -200,13 +229,19 @@ document.addEventListener("DOMContentLoaded", function () {
             filtered = filtered.filter(r => r.city === selectedCity)
         }
 
+        let averages = calculateAveragePrices(filtered)
+
         let grouped = {}
 
-        filtered.forEach(row => {
+        averages.forEach(row => {
 
-            if (!grouped[row.station]) {
+            let key = row.city + "_" + row.station
 
-                grouped[row.station] = {
+            if (!grouped[key]) {
+
+                grouped[key] = {
+                    city: row.city,
+                    station: row.station,
                     "A95": "-",
                     "A98": "-",
                     "Дизел": "-",
@@ -216,43 +251,37 @@ document.addEventListener("DOMContentLoaded", function () {
 
             }
 
-            if (row.fuel === "Бензин A95") grouped[row.station]["A95"] = Number(row.price).toFixed(2)
-            if (row.fuel === "Бензин A98") grouped[row.station]["A98"] = Number(row.price).toFixed(2)
-            if (row.fuel === "Дизел") grouped[row.station]["Дизел"] = Number(row.price).toFixed(2)
-            if (row.fuel === "Пропан Бутан") grouped[row.station]["Пропан Бутан"] = Number(row.price).toFixed(2)
-            if (row.fuel === "Метан") grouped[row.station]["Метан"] = Number(row.price).toFixed(2)
+            if (row.fuel === "Бензин A95") grouped[key]["A95"] = row.avg_price
+            if (row.fuel === "Бензин A98") grouped[key]["A98"] = row.avg_price
+            if (row.fuel === "Дизел") grouped[key]["Дизел"] = row.avg_price
+            if (row.fuel === "Пропан Бутан") grouped[key]["Пропан Бутан"] = row.avg_price
+            if (row.fuel === "Метан") grouped[key]["Метан"] = row.avg_price
 
         })
 
-        Object.keys(grouped).forEach(station => {
-
-            let fuels = grouped[station]
+        Object.values(grouped).forEach(item => {
 
             let row = document.createElement("tr")
 
             row.innerHTML = `
-<td>${station}</td>
-<td>${fuels["A95"]}</td>
-<td>${fuels["A98"]}</td>
-<td>${fuels["Дизел"]}</td>
-<td>${fuels["Пропан Бутан"]}</td>
-<td>${fuels["Метан"]}</td>
+<td>${item.station} – ${item.city}</td>
+<td>${item["A95"]}</td>
+<td>${item["A98"]}</td>
+<td>${item["Дизел"]}</td>
+<td>${item["Пропан Бутан"]}</td>
+<td>${item["Метан"]}</td>
 `
 
             body.appendChild(row)
 
         })
 
-        calculateBestPrices(filtered)
+        calculateBestPrices(averages)
 
     }
 
-    /* EVENTS */
-
     regionSelect.addEventListener("change", renderPrices)
     citySelect.addEventListener("change", renderPrices)
-
-    /* FORM */
 
     if (form) {
 
