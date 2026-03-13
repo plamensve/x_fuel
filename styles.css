@@ -670,6 +670,10 @@ select option {
         width:34px;
         height:34px;
     }
-
 }
+
+.info-helper {
+    padding-bottom: 30px;
+}
+
 
