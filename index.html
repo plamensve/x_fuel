@@ -28,17 +28,17 @@
 
     <meta name="description"
           content="Актуални цени на бензин, дизел, пропан бутан и метан в България. Проверете цените по бензиностанции във вашия град и споделете информация за най-евтиното гориво.">
+
     <link rel="canonical" href="https://goriva.online/">
     <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css">
 
-
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6YJNGGFR2"></script>
+
     <script>
         window.dataLayer = window.dataLayer || [];
 
@@ -50,18 +50,26 @@
         gtag('config', 'G-F6YJNGGFR2');
     </script>
 
-    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3478773231642095"
+    <script async
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3478773231642095"
             crossorigin="anonymous"></script>
+
     <meta name="google-adsense-account" content="ca-pub-3478773231642095">
+
 </head>
+
 
 <body id="top">
 
 <div class="background"></div>
 
+
 <header class="header-bar">
+
     <div class="header-container">
+
         <img src="media/2logo.png" alt="goriva.online logo" class="header-logo">
+
         <div class="header-text">
             <strong>Цени на горивата в България</strong>
             <span>Следете актуални цени и споделяйте информация от бензиностанции в цялата страна</span>
@@ -74,58 +82,77 @@
             Facebook група
         </a>
 
-
     </div>
 
 </header>
+
 
 <nav class="main-nav">
 
     <button class="menu-toggle">☰</button>
 
     <div class="nav-container">
+
         <button id="theme-toggle">🌙</button>
+
         <a href="index.html">Начало</a>
         <a href="pages/rules.html">Общи условия</a>
+
     </div>
 
 </nav>
 
+
 <section class="station-map-section">
 
-            <h2 class="section-title">
-                Карта на бензиностанциите
-            </h2>
+    <h2 class="section-title">
+        Карта на бензиностанциите
+    </h2>
 
-            <div id="station-map"></div>
+    <div id="station-map"></div>
 
-        </section>
+</section>
+
 
 <main class="container">
 
     <section class="prices-card">
 
-        <h2>Днешни цени по области и градове <span id="prices-date" style="color: #2563eb"></span></h2>
-        <p class="info-helper">Посочените цени са изчислени като средна стойност на информацията, подадена от
-            потребителите.</p>
-        <p class="info-helper">Изберете област и град от падащото меню за да разберете какви са цените на горивта</p>
+        <h2>
+            Днешни цени по области и градове
+            <span id="prices-date" style="color:#2563eb"></span>
+        </h2>
+
+        <p class="info-helper">
+            Посочените цени са изчислени като средна стойност на информацията, подадена от потребителите.
+        </p>
+
+        <p class="info-helper">
+            Изберете област и град от падащото меню за да разберете какви са цените на горивта
+        </p>
+
 
         <div class="city-filter">
 
             <div class="filt">
+
                 <label for="region-select">Област</label>
 
                 <select id="region-select">
                     <option value="all">Всички области</option>
                 </select>
+
             </div>
 
+
             <div class="filt">
+
                 <label for="city-select">Град</label>
 
                 <select id="city-select">
                     <option value="all">Всички градове</option>
                 </select>
+
             </div>
 
         </div>
@@ -138,6 +165,7 @@
                 <table class="price-table">
 
                     <thead>
+
                     <tr>
                         <th>Бензиностанция</th>
                         <th>A95</th>
@@ -146,6 +174,7 @@
                         <th>Пропан Бутан</th>
                         <th>Метан</th>
                     </tr>
+
                     </thead>
 
                     <tbody id="prices-body"></tbody>
@@ -160,6 +189,7 @@
 
 
         <section class="main-grid">
+
 
             <div class="submit-card">
 
@@ -302,12 +332,13 @@
                                 placeholder="1.65"
                                 required
                                 oninvalid="this.setCustomValidity('Моля въведете цена между 0.20 и 5.00 €')"
-                                oninput="this.setCustomValidity('')"
-                        >
+                                oninput="this.setCustomValidity('')">
 
                     </div>
 
-                    <button type="submit" class="submit-button">Изпрати цена</button>
+                    <button type="submit" class="submit-button">
+                        Изпрати цена
+                    </button>
 
                 </form>
 
@@ -316,22 +347,16 @@
 
             <div class="fuel-card">
 
-                <div class="header">
+                <h2>Текущи средни цени на горивата</h2>
 
-                    <h2>Текущи средни цени на горивата</h2>
-
-                    <div class="live-status">
-                        <span class="live-dot"></span>
-                        Актуални данни в реално време
-                    </div>
-
-                    <div class="date" id="current-date"></div>
-
+                <div class="live-status">
+                    <span class="live-dot"></span>
+                    Актуални данни в реално време
                 </div>
 
-                <div class="widget-container">
-                    <div id="fuelo-widget-container"></div>
-                </div>
+                <div class="date" id="current-date"></div>
+
+                <div id="fuelo-widget-container"></div>
 
                 <div class="footer">
                     Цените се обновяват автоматично
@@ -341,21 +366,20 @@
 
         </section>
 
-<div id="success-message" class="success-message"></div>
+        <div id="success-message" class="success-message"></div>
+
+    </section>
+
+</main>
 
 
 <footer class="site-footer">
 
     <div class="footer-container">
 
-        <!-- BRAND -->
-
         <div class="footer-column footer-brand">
             <img src="media/footer-logo.png" alt="goriva.online logo" class="footer-logo">
         </div>
-
-
-        <!-- NAVIGATION -->
 
         <div class="footer-column">
 
@@ -368,38 +392,28 @@
 
         </div>
 
-
-        <!-- CONTACT -->
-
         <div class="footer-column">
 
             <h4>Контакти</h4>
 
-            <div class="footer-contact">
+            <div class="contact-item">
+                <span>📞</span>
+                <a href="tel:+359883427273">+359 883 427 273</a>
+            </div>
 
-                <div class="contact-item">
-                    <span class="contact-icon">📞</span>
-                    <a href="tel:+359883427273">+359 883 427 273</a>
-                </div>
+            <div class="contact-item">
+                <span>✉️</span>
+                <a href="mailto:svetoslavov.plamen@gmail.com">
+                    svetoslavov.plamen@gmail.com
+                </a>
+            </div>
 
-                <div class="contact-item">
-                    <span class="contact-icon">✉️</span>
-                    <a href="mailto:svetoslavov.plamen@gmail.com">
-                        svetoslavov.plamen@gmail.com
-                    </a>
-                </div>
-
-                <div class="contact-item">
-                    <span class="contact-icon">👤</span>
-                    <span>Пламен Светославов</span>
-                </div>
-
+            <div class="contact-item">
+                <span>👤</span>
+                Пламен Светославов
             </div>
 
         </div>
-
-
-        <!-- SOCIAL -->
 
         <div class="footer-column">
 
@@ -408,15 +422,15 @@
             <div class="social-icons">
 
                 <a href="https://www.facebook.com/plamen.sve" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg" alt="facebook-contact">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg">
                 </a>
 
                 <a href="https://www.linkedin.com/in/plamen-svetoslavov/" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt="linkedin-contact">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg">
                 </a>
 
                 <a href="https://wa.me/359883427273" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg" alt="whatsapp-contact">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg">
                 </a>
 
             </div>
@@ -425,18 +439,18 @@
 
     </div>
 
-
     <div class="footer-bottom">
-
         <span>© 2026 goriva.online</span>
         <span class="footer-separator">•</span>
         <span>Цени на горивата в България</span>
-
     </div>
 
 </footer>
+
+
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 <script src="script.js"></script>
+
 </body>
 </html>
