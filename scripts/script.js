@@ -207,6 +207,9 @@ document.addEventListener("DOMContentLoaded", function () {
     function renderPrices() {
 
         let body = document.getElementById("prices-body")
+
+        if (!body) return
+
         body.innerHTML = ""
 
         let filtered = [...allPrices]
@@ -287,7 +290,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         })
 
-        renderPagination(totalPages)
+        if (typeof renderPagination === "function") {
+            renderPagination(totalPages)
+        }
 
     }
 
@@ -311,21 +316,29 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    regionSelect.addEventListener("change", renderPrices)
+    if (regionSelect) {
+        regionSelect.addEventListener("change", renderPrices)
+    }
 
-    citySelect.addEventListener("change", function () {
+    if (citySelect) {
 
-        renderPrices()
+        citySelect.addEventListener("change", function () {
 
-        let city = citySelect.value
+            renderPrices()
 
-        if (city !== "all") {
-            updateMap(city)
-        }
+            let city = citySelect.value
 
-    })
+            if (city !== "all") {
+                updateMap(city)
+            }
 
-    loadPrices()
+        })
+
+    }
+
+    if (regionSelect && citySelect) {
+        loadPrices()
+    }
 
     if (form) {
 
@@ -464,6 +477,19 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 themeButton.textContent = "🌙"
             }
+
+        })
+
+    }
+
+    let menuButton = document.getElementById("menu-toggle")
+    let menu = document.getElementById("nav-menu")
+
+    if (menuButton && menu) {
+
+        menuButton.addEventListener("click", function () {
+
+            menu.classList.toggle("open")
 
         })
 
