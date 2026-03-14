@@ -245,7 +245,9 @@ document.addEventListener("DOMContentLoaded", function () {
                     station: row.station,
                     "A95": "-",
                     "A98": "-",
+                    "A100": "-",
                     "Дизел": "-",
+                    "Дизел +": "-",
                     "Пропан Бутан": "-",
                     "Метан": "-"
                 }
@@ -254,7 +256,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (row.fuel === "Бензин A95") grouped[key]["A95"] = row.avg_price
             if (row.fuel === "Бензин A98") grouped[key]["A98"] = row.avg_price
+            if (row.fuel === "Бензин A100") grouped[key]["A100"] = row.avg_price
             if (row.fuel === "Дизел") grouped[key]["Дизел"] = row.avg_price
+            if (row.fuel === "Дизел премиум") grouped[key]["Дизел +"] = row.avg_price
             if (row.fuel === "Пропан Бутан") grouped[key]["Пропан Бутан"] = row.avg_price
             if (row.fuel === "Метан") grouped[key]["Метан"] = row.avg_price
 
@@ -277,11 +281,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
             let row = document.createElement("tr")
 
-            row.innerHTML = `
+row.innerHTML = `
 <td>${item.station} – ${item.city}</td>
 <td>${item["A95"]}</td>
 <td>${item["A98"]}</td>
+<td>${item["A100"]}</td>
 <td>${item["Дизел"]}</td>
+<td>${item["Дизел +"]}</td>
 <td>${item["Пропан Бутан"]}</td>
 <td>${item["Метан"]}</td>
 `
