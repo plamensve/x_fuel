@@ -51,10 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let allPrices = []
 
-    /* CITY COORDINATES */
-
     let cityCoords = {
-
         "БЛАГОЕВГРАД": [42.0209, 23.0943],
         "БУРГАС": [42.5048, 27.4626],
         "ВАРНА": [43.2141, 27.9147],
@@ -83,7 +80,6 @@ document.addEventListener("DOMContentLoaded", function () {
         "ХАСКОВО": [41.9344, 25.5550],
         "ШУМЕН": [43.2712, 26.9361],
         "ЯМБОЛ": [42.4840, 26.5030]
-
     }
 
     function showMessage(text, type) {
@@ -162,45 +158,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    function calculateBestPrices(data) {
-
-        let fuels = {}
-
-        data.forEach(row => {
-
-            if (!fuels[row.fuel]) {
-                fuels[row.fuel] = row
-                return
-            }
-
-            if (Number(row.avg_price) < Number(fuels[row.fuel].avg_price)) {
-                fuels[row.fuel] = row
-            }
-
-        })
-
-        let container = document.getElementById("best-prices-container")
-
-        container.innerHTML = ""
-
-        Object.values(fuels).forEach(row => {
-
-            let div = document.createElement("div")
-
-            div.className = "best-price-row"
-
-            div.innerHTML = `
-<span class="best-price-fuel">${row.fuel}</span>
-<span>${row.station} – ${row.city}</span>
-<span class="best-price-value">${row.avg_price} €</span>
-`
-
-            container.appendChild(div)
-
-        })
-
-    }
-
     function calculateAveragePrices(data) {
 
         let groups = {}
@@ -267,16 +224,6 @@ document.addEventListener("DOMContentLoaded", function () {
             filtered = filtered.filter(r => r.city === selectedCity)
         }
 
-        let title = document.getElementById("best-prices-title")
-
-        if (selectedCity !== "all") {
-            title.textContent = "Най-ниски цени в " + selectedCity
-        } else if (region !== "all") {
-            title.textContent = "Най-ниски цени в област " + region
-        } else {
-            title.textContent = "Най-ниски цени в момента"
-        }
-
         let averages = calculateAveragePrices(filtered)
 
         let grouped = {}
@@ -306,8 +253,6 @@ document.addEventListener("DOMContentLoaded", function () {
             if (row.fuel === "Метан") grouped[key]["Метан"] = row.avg_price
 
         })
-
-        /* PAGINATION */
 
         let items = Object.values(grouped)
 
@@ -339,8 +284,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
         })
 
-        calculateBestPrices(averages)
-
         renderPagination(totalPages)
 
     }
@@ -359,40 +302,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             marker.bindPopup("Цени на горивата в " + city).openPopup()
 
-        } else {
-
-            let coords = await getCityCoordinates(city)
-
-            if (coords) {
-
-                map.setView([coords.lat, coords.lon], 12)
-
-                marker.setLatLng([coords.lat, coords.lon])
-
-                marker.bindPopup("Цени на горивата в " + city).openPopup()
-
-            }
-
-        }
-
-    }
-
-    async function getCityCoordinates(city) {
-
-        let url = "https://nominatim.openstreetmap.org/search?format=json&q="
-            + encodeURIComponent(city + " Bulgaria")
-
-        let response = await fetch(url)
-
-        let data = await response.json()
-
-        if (data.length === 0) {
-            return null
-        }
-
-        return {
-            lat: parseFloat(data[0].lat),
-            lon: parseFloat(data[0].lon)
         }
 
     }
@@ -411,75 +320,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     })
 
-    if (form) {
-
-        form.addEventListener("submit", function (e) {
-
-            e.preventDefault()
-
-            let region = document.getElementById("region").value
-            let city = document.getElementById("city").value.trim().toUpperCase()
-
-            let station = document.getElementById("station").value
-            let fuelElement = document.querySelector('input[name="fuel"]:checked')
-
-            let rawPrice = document.getElementById("price").value.trim()
-            rawPrice = rawPrice.replace(",", ".")
-
-            let price = parseFloat(rawPrice)
-
-            if (!region || !station || !fuelElement || isNaN(price)) {
-
-                showMessage("Моля попълнете всички полета.", "error")
-                return
-
-            }
-
-            if (price < 0.2 || price > 5) {
-
-                showMessage("Моля въведете валидна цена.", "error")
-                return
-
-            }
-
-            let fuel = fuelElement.value
-
-            fetch("https://eaqvhxfvozhzatrnbkvx.supabase.co/rest/v1/fuel_prices", {
-
-                method: "POST",
-
-                headers: {
-                    "Content-Type": "application/json",
-                    apikey: "sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH",
-                    Authorization: "Bearer sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH"
-                },
-
-                body: JSON.stringify({
-                    region: region,
-                    city: city,
-                    station: station,
-                    fuel: fuel,
-                    price: price
-                })
-
-            })
-                .then(() => {
-
-                    showMessage("✔ Благодарим! Цената беше записана.", "success")
-
-                    form.reset()
-
-                    loadPrices()
-
-                })
-
-        })
-
-    }
-
     loadPrices()
 
-    /* MAP */
+    /* MAP (първа страница) */
 
     let map = L.map('fuel-map').setView([42.7339, 25.4858], 7)
 
@@ -491,72 +334,74 @@ document.addEventListener("DOMContentLoaded", function () {
 
     marker.bindPopup("Изберете град за да видите цените")
 
-})
+    /* STATION MAP */
 
-let themeToggle = document.getElementById("theme-toggle")
+    let stationMapElement = document.getElementById("station-map")
 
-if (localStorage.getItem("theme") === "light") {
-    document.body.classList.add("light")
-    themeToggle.textContent = "☀️"
-} else {
-    themeToggle.textContent = "🌙"
-}
+    if (stationMapElement) {
 
-themeToggle.addEventListener("click", function () {
+        let stationMap = L.map("station-map").setView([42.7339, 25.4858], 7)
 
-    document.body.classList.toggle("light")
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: "&copy; OpenStreetMap contributors"
+        }).addTo(stationMap)
 
-    if (document.body.classList.contains("light")) {
+        fetch("../data/export.geojson")
+            .then(response => response.json())
+            .then(data => {
 
-        localStorage.setItem("theme", "light")
-        themeToggle.textContent = "☀️"
+                L.geoJSON(data, {
 
-    } else {
+                    pointToLayer: function (feature, latlng) {
 
-        localStorage.setItem("theme", "dark")
-        themeToggle.textContent = "🌙"
+                        return L.circleMarker(latlng, {
+                            radius: 5,
+                            color: "#ff3b3b",
+                            weight: 1,
+                            fillColor: "#ff3b3b",
+                            fillOpacity: 0.9
+                        })
+
+                    },
+
+                    onEachFeature: function (feature, layer) {
+
+                        let name = feature.properties.name || "Бензиностанция"
+
+                        layer.bindPopup(name)
+
+                    }
+
+                }).addTo(stationMap)
+
+            })
 
     }
 
 })
 
-let menuToggle = document.querySelector(".menu-toggle")
-let nav = document.querySelector(".nav-container")
+let stationMap = L.map("station-map", {
+    preferCanvas: true
+}).setView([42.7339, 25.4858], 7)
 
-if (menuToggle && nav) {
-    menuToggle.addEventListener("click", function () {
-        nav.classList.toggle("active")
-    })
-}
+L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "&copy; OpenStreetMap contributors"
+}).addTo(stationMap)
 
-function renderPagination(totalPages){
+fetch("../data/export.geojson")
+    .then(res => res.json())
+    .then(data => {
 
-    let container = document.getElementById("pagination")
+        let markers = L.markerClusterGroup()
 
-    if(!container) return
-
-    container.innerHTML = ""
-
-    for(let i = 1; i <= totalPages; i++){
-
-        let btn = document.createElement("button")
-
-        btn.textContent = i
-
-        if(i === currentPage){
-            btn.classList.add("active-page")
-        }
-
-        btn.addEventListener("click", function(){
-
-            currentPage = i
-
-            renderPrices()
-
+        let geo = L.geoJSON(data, {
+            pointToLayer: function (feature, latlng) {
+                return L.marker(latlng)
+            }
         })
 
-        container.appendChild(btn)
+        markers.addLayer(geo)
 
-    }
+        stationMap.addLayer(markers)
 
-}
+    })

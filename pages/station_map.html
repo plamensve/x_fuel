@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="bg">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Цени на горивата</title>
+
+    <script src="//fuelo.net/js/widget-bg.min.js"></script>
+
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="styles/station_map.css">
+
+    <meta property="og:title" content="Текущи цени на горивата в България">
+    <meta property="og:description" content="Виж актуалните средни цени на бензин, дизел и газ в реално време.">
+    <meta property="og:image" content="https://goriva.online/media/og-3.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:url" content="https://goriva.online/">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="bg_BG">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Текущи цени на горивата в България">
+    <meta name="twitter:description" content="Виж актуалните средни цени на бензин, дизел и газ в реално време.">
+    <meta name="twitter:image" content="https://goriva.online/media/og-3.png">
+
+    <meta name="description"
+          content="Актуални цени на бензин, дизел, пропан бутан и метан в България. Проверете цените по бензиностанции във вашия град и споделете информация за най-евтиното гориво.">
+    <link rel="canonical" href="https://goriva.online/">
+    <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
+
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css">
+
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6YJNGGFR2"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+        gtag('config', 'G-F6YJNGGFR2');
+    </script>
+
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3478773231642095"
+            crossorigin="anonymous"></script>
+    <meta name="google-adsense-account" content="ca-pub-3478773231642095">
+</head>
+
+<body id="top">
+
+<div class="background"></div>
+
+<header class="header-bar">
+    <div class="header-container">
+        <img src="../media/2logo.png" alt="goriva.online logo" class="header-logo">
+        <div class="header-text">
+            <strong>Цени на горивата в България</strong>
+            <span>Следете актуални цени и споделяйте информация от бензиностанции в цялата страна</span>
+            <span>Цените в сайта са подадени от потребителите. Разчитаме на коретно изпратена информация.</span>
+        </div>
+
+        <a class="facebook-button"
+           href="https://www.facebook.com/groups/960591129738525"
+           target="_blank">
+            Facebook група
+        </a>
+
+
+    </div>
+
+</header>
+
+<nav class="main-nav">
+
+    <button class="menu-toggle">☰</button>
+
+    <div class="nav-container">
+        <button id="theme-toggle">🌙</button>
+        <a href="../index.html">Начало</a>
+        <a href="rules.html">Общи условия</a>
+        <a href="station_map.html">Карта на Бензиностанциите</a>
+    </div>
+
+</nav>
+
+<main class="container">
+    <section class="station-map-section">
+
+        <h1 class="section-title">
+            Карта на бензиностанциите в България
+        </h1>
+
+        <div id="station-map"></div>
+
+    </section>
+
+</main>
+
+<footer class="site-footer">
+
+    <div class="footer-container">
+
+        <div class="footer-column footer-brand">
+            <img src="../media/footer-logo.png" alt="goriva.online logo" class="footer-logo">
+        </div>
+
+        <div class="footer-column">
+
+            <h4>Навигация</h4>
+
+            <ul class="footer-links">
+                <li><a href="#top">Начало</a></li>
+                <li><a href="rules.html">Общи условия</a></li>
+            </ul>
+
+        </div>
+
+        <div class="footer-column">
+
+            <h4>Контакти</h4>
+
+            <div class="contact-item">
+                <span class="contact-icon">📞</span>
+                <a href="tel:+359883427273">+359 883 427 273</a>
+            </div>
+
+            <div class="contact-item">
+                <span class="contact-icon">✉️</span>
+                <a href="mailto:svetoslavov.plamen@gmail.com">svetoslavov.plamen@gmail.com</a>
+            </div>
+
+            <div class="contact-item">
+                <span class="contact-icon">👤</span>
+                Пламен Светославов
+            </div>
+
+        </div>
+
+        <div class="footer-column">
+
+            <h4>Социални мрежи</h4>
+
+            <div class="social-icons">
+
+                <a href="https://www.facebook.com/plamen.sve" target="_blank">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg" alt="facebook-contact">
+                </a>
+
+                <a href="https://www.linkedin.com/in/plamen-svetoslavov/" target="_blank">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt="linkedin-contact">
+                </a>
+
+                <a href="https://wa.me/359883427273" target="_blank">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg" alt="whatsapp-contact">
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <span>© 2026 goriva.online</span>
+        <span class="footer-separator">•</span>
+        <span>Цени на горивата в България</span>
+    </div>
+
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+<script src="../script.js"></script>
+</body>
+</html>
