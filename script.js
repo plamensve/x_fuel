@@ -1,6 +1,9 @@
 let currentPage = 1
 let rowsPerPage = 5
 
+let map
+let marker
+
 document.addEventListener("DOMContentLoaded", function () {
 
     let today = new Date()
@@ -288,7 +291,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
-    async function updateMap(city) {
+    function updateMap(city) {
+
+        if (!map || !marker) return
 
         let cityUpper = city.toUpperCase()
 
@@ -322,17 +327,23 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loadPrices()
 
-    /* MAP (първа страница) */
+    /* FUEL MAP */
 
-    let map = L.map('fuel-map').setView([42.7339, 25.4858], 7)
+    let fuelMapElement = document.getElementById("fuel-map")
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map)
+    if (fuelMapElement) {
 
-    let marker = L.marker([42.7339, 25.4858]).addTo(map)
+        map = L.map('fuel-map').setView([42.7339, 25.4858], 7)
 
-    marker.bindPopup("Изберете град за да видите цените")
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map)
+
+        marker = L.marker([42.7339, 25.4858]).addTo(map)
+
+        marker.bindPopup("Изберете град за да видите цените")
+
+    }
 
     /* STATION MAP */
 
@@ -340,68 +351,32 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (stationMapElement) {
 
-        let stationMap = L.map("station-map").setView([42.7339, 25.4858], 7)
+        let stationMap = L.map("station-map", {
+            preferCanvas: true
+        }).setView([42.7339, 25.4858], 7)
 
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
             attribution: "&copy; OpenStreetMap contributors"
         }).addTo(stationMap)
 
-        fetch("../data/export.geojson")
-            .then(response => response.json())
+        fetch("data/export.geojson")
+            .then(res => res.json())
             .then(data => {
 
-                L.geoJSON(data, {
+                let markers = L.markerClusterGroup()
 
+                let geo = L.geoJSON(data, {
                     pointToLayer: function (feature, latlng) {
-
-                        return L.circleMarker(latlng, {
-                            radius: 5,
-                            color: "#ff3b3b",
-                            weight: 1,
-                            fillColor: "#ff3b3b",
-                            fillOpacity: 0.9
-                        })
-
-                    },
-
-                    onEachFeature: function (feature, layer) {
-
-                        let name = feature.properties.name || "Бензиностанция"
-
-                        layer.bindPopup(name)
-
+                        return L.marker(latlng)
                     }
+                })
 
-                }).addTo(stationMap)
+                markers.addLayer(geo)
+
+                stationMap.addLayer(markers)
 
             })
 
     }
 
 })
-
-let stationMap = L.map("station-map", {
-    preferCanvas: true
-}).setView([42.7339, 25.4858], 7)
-
-L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "&copy; OpenStreetMap contributors"
-}).addTo(stationMap)
-
-fetch("../data/export.geojson")
-    .then(res => res.json())
-    .then(data => {
-
-        let markers = L.markerClusterGroup()
-
-        let geo = L.geoJSON(data, {
-            pointToLayer: function (feature, latlng) {
-                return L.marker(latlng)
-            }
-        })
-
-        markers.addLayer(geo)
-
-        stationMap.addLayer(markers)
-
-    })
