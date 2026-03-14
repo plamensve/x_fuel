@@ -327,6 +327,76 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loadPrices()
 
+    if (form) {
+
+    form.addEventListener("submit", function (e) {
+
+        e.preventDefault()
+
+        let region = document.getElementById("region").value
+        let city = document.getElementById("city").value.trim().toUpperCase()
+        let station = document.getElementById("station").value
+
+        let fuelElement = document.querySelector('input[name="fuel"]:checked')
+
+        let price = parseFloat(
+            document.getElementById("price").value.replace(",", ".")
+        )
+
+        if (!region || !city || !station || !fuelElement || !price) {
+
+            showMessage("Моля попълнете всички полета.", "error")
+            return
+
+        }
+
+        let fuel = fuelElement.value
+
+        fetch("https://eaqvhxfvozhzatrnbkvx.supabase.co/rest/v1/fuel_prices", {
+
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json",
+                apikey: "sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH",
+                Authorization: "Bearer sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH",
+                Prefer: "return=minimal"
+            },
+
+            body: JSON.stringify({
+                region: region,
+                city: city,
+                station: station,
+                fuel: fuel,
+                price: price
+            })
+
+        })
+
+        .then(res => {
+
+            if (!res.ok) {
+                throw new Error("Insert failed")
+            }
+
+            showMessage("Цената беше изпратена успешно.", "success")
+
+            form.reset()
+
+            loadPrices()
+
+        })
+
+        .catch(err => {
+
+            showMessage("Грешка при изпращане.", "error")
+
+        })
+
+    })
+
+}
+
     /* FUEL MAP */
 
     let fuelMapElement = document.getElementById("fuel-map")

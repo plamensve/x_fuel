@@ -667,7 +667,6 @@ select option{
     .nav-container.active{
         display:flex;
     }
-
 }
 
 
@@ -736,7 +735,7 @@ select option{
 }
 
 #station-map{
-    width:100%;
+    width:60%;
     height:50vh;
 
     border-radius:16px;
@@ -750,6 +749,8 @@ select option{
         0 0 0 1px rgba(255,255,255,0.03) inset;
 
     background:#111827;
+
+    margin: auto;
 }
 
 .station-map-section{
