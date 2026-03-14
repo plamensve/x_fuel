@@ -31,6 +31,8 @@
     <link rel="canonical" href="https://goriva.online/">
     <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6YJNGGFR2"></script>
@@ -89,9 +91,67 @@
 
 <main class="container">
 
+    <section class="prices-card">
+
+        <h2>Днешни цени по области и градове <span id="prices-date" style="color: green"></span></h2>
+        <p class="info-helper">Посочените цени са изчислени като средна стойност на информацията, подадена от
+            потребителите.</p>
+
+        <div class="city-filter">
+
+            <div class="filt">
+                <label for="region-select">Област</label>
+
+                <select id="region-select">
+                    <option value="all">Всички области</option>
+                </select>
+            </div>
+
+            <div class="filt">
+                <label for="city-select">Град</label>
+
+                <select id="city-select">
+                    <option value="all">Всички градове</option>
+                </select>
+            </div>
+
+        </div>
+
+
+        <div id="prices-container">
+
+            <div class="table-wrapper">
+
+                <table class="price-table">
+
+                    <thead>
+                    <tr>
+                        <th>Бензиностанция</th>
+                        <th>A95</th>
+                        <th>A98</th>
+                        <th>Дизел</th>
+                        <th>Пропан Бутан</th>
+                        <th>Метан</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="prices-body"></tbody>
+
+                </table>
+
+            </div>
+
+            <div id="pagination"></div>
+
+        </div>
+
+    </section>
+
+    <div id="fuel-map"></div>
+
     <section class="best-prices-card">
 
-        <h3>Най-ниски цени в момента</h3>
+        <h3 id="best-prices-title">Най-ниски цени в момента</h3>
 
         <div id="best-prices-container"></div>
 
@@ -280,61 +340,6 @@
 
     </section>
 
-
-    <section class="prices-card">
-
-        <h2>Днешни цени по области и градове <span id="prices-date" style="color: palegoldenrod"></span></h2>
-        <p class="info-helper">Посочените цени са изчислени като средна стойност на информацията, подадена от
-            потребителите.</p>
-
-        <div class="city-filter">
-
-            <div class="filt">
-                <label for="region-select">Област</label>
-
-                <select id="region-select">
-                    <option value="all">Всички области</option>
-                </select>
-            </div>
-
-            <div class="filt">
-                <label for="city-select">Град</label>
-
-                <select id="city-select">
-                    <option value="all">Всички градове</option>
-                </select>
-            </div>
-
-        </div>
-
-
-        <div id="prices-container">
-
-            <div class="table-wrapper">
-
-                <table class="price-table">
-
-                    <thead>
-                    <tr>
-                        <th>Бензиностанция</th>
-                        <th>A95</th>
-                        <th>A98</th>
-                        <th>Дизел</th>
-                        <th>Пропан Бутан</th>
-                        <th>Метан</th>
-                    </tr>
-                    </thead>
-
-                    <tbody id="prices-body"></tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </section>
-
 </main>
 
 <div id="success-message" class="success-message"></div>
@@ -431,7 +436,7 @@
     </div>
 
 </footer>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="script.js"></script>
-
 </body>
 </html>
