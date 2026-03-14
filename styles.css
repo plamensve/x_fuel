@@ -811,7 +811,7 @@ select option{
 
 #pagination button.active-page{
 
-    background: green;
+    background: #002aff;
     color:#000;
     border:none;
     font-weight:700;
