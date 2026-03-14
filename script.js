@@ -1,3 +1,6 @@
+let currentPage = 1
+let rowsPerPage = 5
+
 document.addEventListener("DOMContentLoaded", function () {
 
     let today = new Date()
@@ -47,6 +50,41 @@ document.addEventListener("DOMContentLoaded", function () {
     const citySelect = document.getElementById("city-select")
 
     let allPrices = []
+
+    /* CITY COORDINATES */
+
+    let cityCoords = {
+
+        "БЛАГОЕВГРАД": [42.0209, 23.0943],
+        "БУРГАС": [42.5048, 27.4626],
+        "ВАРНА": [43.2141, 27.9147],
+        "ВЕЛИКО ТЪРНОВО": [43.0757, 25.6172],
+        "ВИДИН": [43.9900, 22.8725],
+        "ВРАЦА": [43.2102, 23.5626],
+        "ГАБРОВО": [42.8747, 25.3342],
+        "ДОБРИЧ": [43.5667, 27.8333],
+        "КЪРДЖАЛИ": [41.6500, 25.3667],
+        "КЮСТЕНДИЛ": [42.2833, 22.6833],
+        "ЛОВЕЧ": [43.1360, 24.7140],
+        "МОНТАНА": [43.4083, 23.2250],
+        "ПАЗАРДЖИК": [42.1928, 24.3336],
+        "ПЕРНИК": [42.6050, 23.0340],
+        "ПЛЕВЕН": [43.4170, 24.6067],
+        "ПЛОВДИВ": [42.1354, 24.7453],
+        "РАЗГРАД": [43.5333, 26.5167],
+        "РУСЕ": [43.8356, 25.9657],
+        "СИЛИСТРА": [44.1167, 27.2667],
+        "СЛИВЕН": [42.6818, 26.3220],
+        "СМОЛЯН": [41.5774, 24.7128],
+        "СОФИЯ": [42.6977, 23.3219],
+        "СОФИЯ ОБЛАСТ": [42.6977, 23.3219],
+        "СТАРА ЗАГОРА": [42.4258, 25.6345],
+        "ТЪРГОВИЩЕ": [43.2512, 26.5721],
+        "ХАСКОВО": [41.9344, 25.5550],
+        "ШУМЕН": [43.2712, 26.9361],
+        "ЯМБОЛ": [42.4840, 26.5030]
+
+    }
 
     function showMessage(text, type) {
 
@@ -229,6 +267,16 @@ document.addEventListener("DOMContentLoaded", function () {
             filtered = filtered.filter(r => r.city === selectedCity)
         }
 
+        let title = document.getElementById("best-prices-title")
+
+        if (selectedCity !== "all") {
+            title.textContent = "Най-ниски цени в " + selectedCity
+        } else if (region !== "all") {
+            title.textContent = "Най-ниски цени в област " + region
+        } else {
+            title.textContent = "Най-ниски цени в момента"
+        }
+
         let averages = calculateAveragePrices(filtered)
 
         let grouped = {}
@@ -259,7 +307,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
         })
 
-        Object.values(grouped).forEach(item => {
+        /* PAGINATION */
+
+        let items = Object.values(grouped)
+
+        let totalPages = Math.ceil(items.length / rowsPerPage)
+
+        if (currentPage > totalPages) {
+            currentPage = 1
+        }
+
+        let start = (currentPage - 1) * rowsPerPage
+        let end = start + rowsPerPage
+
+        let pageItems = items.slice(start, end)
+
+        pageItems.forEach(item => {
 
             let row = document.createElement("tr")
 
@@ -278,10 +341,75 @@ document.addEventListener("DOMContentLoaded", function () {
 
         calculateBestPrices(averages)
 
+        renderPagination(totalPages)
+
+    }
+
+    async function updateMap(city) {
+
+        let cityUpper = city.toUpperCase()
+
+        if (cityCoords[cityUpper]) {
+
+            let coords = cityCoords[cityUpper]
+
+            map.setView(coords, 12)
+
+            marker.setLatLng(coords)
+
+            marker.bindPopup("Цени на горивата в " + city).openPopup()
+
+        } else {
+
+            let coords = await getCityCoordinates(city)
+
+            if (coords) {
+
+                map.setView([coords.lat, coords.lon], 12)
+
+                marker.setLatLng([coords.lat, coords.lon])
+
+                marker.bindPopup("Цени на горивата в " + city).openPopup()
+
+            }
+
+        }
+
+    }
+
+    async function getCityCoordinates(city) {
+
+        let url = "https://nominatim.openstreetmap.org/search?format=json&q="
+            + encodeURIComponent(city + " Bulgaria")
+
+        let response = await fetch(url)
+
+        let data = await response.json()
+
+        if (data.length === 0) {
+            return null
+        }
+
+        return {
+            lat: parseFloat(data[0].lat),
+            lon: parseFloat(data[0].lon)
+        }
+
     }
 
     regionSelect.addEventListener("change", renderPrices)
-    citySelect.addEventListener("change", renderPrices)
+
+    citySelect.addEventListener("change", function () {
+
+        renderPrices()
+
+        let city = citySelect.value
+
+        if (city !== "all") {
+            updateMap(city)
+        }
+
+    })
 
     if (form) {
 
@@ -351,31 +479,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
     loadPrices()
 
+    /* MAP */
+
+    let map = L.map('fuel-map').setView([42.7339, 25.4858], 7)
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map)
+
+    let marker = L.marker([42.7339, 25.4858]).addTo(map)
+
+    marker.bindPopup("Изберете град за да видите цените")
+
 })
-
-
 
 let themeToggle = document.getElementById("theme-toggle")
 
-if(localStorage.getItem("theme") === "light"){
+if (localStorage.getItem("theme") === "light") {
     document.body.classList.add("light")
     themeToggle.textContent = "☀️"
-}else{
+} else {
     themeToggle.textContent = "🌙"
 }
 
-themeToggle.addEventListener("click", function(){
+themeToggle.addEventListener("click", function () {
 
     document.body.classList.toggle("light")
 
-    if(document.body.classList.contains("light")){
+    if (document.body.classList.contains("light")) {
 
-        localStorage.setItem("theme","light")
+        localStorage.setItem("theme", "light")
         themeToggle.textContent = "☀️"
 
-    }else{
+    } else {
 
-        localStorage.setItem("theme","dark")
+        localStorage.setItem("theme", "dark")
         themeToggle.textContent = "🌙"
 
     }
@@ -385,6 +523,40 @@ themeToggle.addEventListener("click", function(){
 let menuToggle = document.querySelector(".menu-toggle")
 let nav = document.querySelector(".nav-container")
 
-menuToggle.addEventListener("click", function(){
-    nav.classList.toggle("active")
-})
+if (menuToggle && nav) {
+    menuToggle.addEventListener("click", function () {
+        nav.classList.toggle("active")
+    })
+}
+
+function renderPagination(totalPages){
+
+    let container = document.getElementById("pagination")
+
+    if(!container) return
+
+    container.innerHTML = ""
+
+    for(let i = 1; i <= totalPages; i++){
+
+        let btn = document.createElement("button")
+
+        btn.textContent = i
+
+        if(i === currentPage){
+            btn.classList.add("active-page")
+        }
+
+        btn.addEventListener("click", function(){
+
+            currentPage = i
+
+            renderPrices()
+
+        })
+
+        container.appendChild(btn)
+
+    }
+
+}
