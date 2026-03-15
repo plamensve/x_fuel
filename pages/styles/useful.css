@@ -1,0 +1,144 @@
+/* =========================
+   NEAREST STATIONS
+========================= */
+
+.nearest-stations-section{
+    margin-top:40px;
+    margin-bottom:60px;
+    text-align:center;
+}
+
+.nearest-description{
+    opacity:0.8;
+    margin-bottom:20px;
+}
+
+.nearest-btn{
+
+    background:#2563eb;
+    border:none;
+
+    padding:12px 22px;
+
+    border-radius:8px;
+
+    color:white;
+
+    font-size:14px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:all .25s ease;
+
+}
+
+.nearest-btn:hover{
+    background:#1d4ed8;
+}
+
+.nearest-stations-wrapper{
+    margin-top:35px;
+}
+
+/* grid */
+
+.nearest-stations-list{
+
+    display:grid;
+
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+
+    gap:22px;
+
+}
+
+/* station card */
+
+.station-card{
+
+    background:var(--card-bg);
+    backdrop-filter:blur(12px);
+
+    border:1px solid var(--border-color);
+
+    border-radius:16px;
+
+    padding:24px;
+
+    text-align:center;
+
+    transition:all .25s ease;
+
+}
+
+.station-card:hover{
+
+    transform:translateY(-4px);
+
+    box-shadow:
+        0 10px 25px rgba(0,0,0,0.35),
+        0 0 0 1px rgba(255,255,255,0.03) inset;
+
+}
+
+.station-name{
+    font-size:16px;
+    font-weight:600;
+    margin-bottom:8px;
+}
+
+.station-distance{
+    font-size:14px;
+    color:#22c55e;
+    font-weight:600;
+}
+
+.station-address{
+    font-size:13px;
+    opacity:0.75;
+    margin-top:6px;
+}
+
+.nearest-map-wrapper{
+    margin-top:40px;
+}
+
+#nearest-map{
+
+    width:100%;
+    height:420px;
+
+    border-radius:16px;
+
+    border:1px solid var(--border-color);
+
+    overflow:hidden;
+
+    margin-top:40px;
+
+}
+
+#station-map{
+
+    width:100%;
+    height:50vh;
+
+    border-radius:16px;
+
+    border:1px solid rgba(255,255,255,0.08);
+
+    overflow:hidden;
+
+}
+
+.station-header{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+}
+
+.station-logo{
+    height:22px;
+}
