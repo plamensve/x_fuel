@@ -8,17 +8,17 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let button = document.getElementById("find-nearest-btn")
 
-    if(button){
+    if (button) {
         button.addEventListener("click", getUserLocation)
     }
 
 })
 
-function initMap(){
+function initMap() {
 
     let mapElement = document.getElementById("nearest-map")
 
-    if(!mapElement) return
+    if (!mapElement) return
 
     nearestMap = L.map("nearest-map").setView([42.7339, 25.4858], 7)
 
@@ -28,7 +28,7 @@ function initMap(){
 
 }
 
-function loadStations(){
+function loadStations() {
 
     fetch("../data/export.geojson")
         .then(response => response.json())
@@ -52,9 +52,9 @@ function loadStations(){
 
 }
 
-function getUserLocation(){
+function getUserLocation() {
 
-    if(!navigator.geolocation){
+    if (!navigator.geolocation) {
 
         alert("Вашият браузър не поддържа геолокация.")
         return
@@ -68,7 +68,7 @@ function getUserLocation(){
 
 }
 
-function locationSuccess(position){
+function locationSuccess(position) {
 
     let latitude = position.coords.latitude
     let longitude = position.coords.longitude
@@ -91,9 +91,9 @@ function locationSuccess(position){
 
     })
 
-    stationsWithDistance.sort((a,b)=>a.distance-b.distance)
+    stationsWithDistance.sort((a, b) => a.distance - b.distance)
 
-    let nearest = stationsWithDistance.slice(0,5)
+    let nearest = stationsWithDistance.slice(0, 5)
 
     renderStations(nearest)
 
@@ -109,96 +109,96 @@ function locationSuccess(position){
 
 }
 
-function locationError(){
+function locationError() {
 
     alert("Не успяхме да получим вашата локация.")
 
 }
 
-function getStationIcon(name){
+function getStationIcon(name) {
 
     let lower = name.toLowerCase()
 
-    if(
+    if (
         lower.includes("lukoil") ||
         lower.includes("лукойл")
-    ){
+    ) {
 
         return L.icon({
             iconUrl: "../images/station_logos/lukoil.svg",
-            iconSize: [40,26],
-            iconAnchor: [20,26],
-            popupAnchor: [0,-26]
+            iconSize: [40, 26],
+            iconAnchor: [20, 26],
+            popupAnchor: [0, -26]
         })
 
     }
 
-    if(
+    if (
         lower.includes("omv") ||
         lower.includes("омв")
-    ){
+    ) {
 
         return L.icon({
             iconUrl: "../images/station_logos/omv.svg",
-            iconSize: [36,36],
-            iconAnchor: [18,36],
-            popupAnchor: [0,-36]
+            iconSize: [36, 36],
+            iconAnchor: [18, 36],
+            popupAnchor: [0, -36]
         })
 
     }
 
-    if(
+    if (
         lower.includes("petrol") ||
         lower.includes("петрол")
-    ){
+    ) {
 
         return L.icon({
             iconUrl: "../images/station_logos/petrol.svg",
-            iconSize: [40,26],
-            iconAnchor: [20,26],
-            popupAnchor: [0,-26]
+            iconSize: [40, 26],
+            iconAnchor: [20, 26],
+            popupAnchor: [0, -26]
         })
 
     }
 
-    if(
+    if (
         lower.includes("eko") ||
         lower.includes("еко")
-    ){
+    ) {
 
         return L.icon({
             iconUrl: "../images/station_logos/eko.svg",
-            iconSize: [40,26],
-            iconAnchor: [20,26],
-            popupAnchor: [0,-26]
+            iconSize: [40, 26],
+            iconAnchor: [20, 26],
+            popupAnchor: [0, -26]
         })
 
     }
 
-    if(
+    if (
         lower.includes("rompetrol") ||
         lower.includes("ромпетрол")
-    ){
+    ) {
 
         return L.icon({
             iconUrl: "../images/station_logos/rompetrol.svg",
-            iconSize: [40,26],
-            iconAnchor: [20,26],
-            popupAnchor: [0,-26]
+            iconSize: [40, 26],
+            iconAnchor: [20, 26],
+            popupAnchor: [0, -26]
         })
 
     }
 
     return L.icon({
         iconUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png",
-        iconSize: [25,41],
-        iconAnchor: [12,41],
-        popupAnchor: [1,-34]
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34]
     })
 
 }
 
-function getDistance(lat1, lon1, lat2, lon2){
+function getDistance(lat1, lon1, lat2, lon2) {
 
     let R = 6371
 
@@ -206,56 +206,56 @@ function getDistance(lat1, lon1, lat2, lon2){
     let dLon = (lon2 - lon1) * Math.PI / 180
 
     let a =
-        Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.sin(dLat / 2) * Math.sin(dLat / 2) +
         Math.cos(lat1 * Math.PI / 180) *
         Math.cos(lat2 * Math.PI / 180) *
-        Math.sin(dLon/2) * Math.sin(dLon/2)
+        Math.sin(dLon / 2) * Math.sin(dLon / 2)
 
-    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a))
+    let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 
     return R * c
 
 }
 
-function getStationLogo(name){
+function getStationLogo(name) {
 
     let lower = name.toLowerCase()
 
-    if(
+    if (
         lower.includes("lukoil") ||
         lower.includes("лукойл")
-    ){
+    ) {
         return "../images/station_logos/lukoil.svg"
     }
-    if(
+    if (
         lower.includes("omv") ||
         lower.includes("омв")
-    ){
+    ) {
         return "../images/station_logos/omv.svg"
     }
-    if(
+    if (
         lower.includes("petrol") ||
         lower.includes("петрол")
-    ){
+    ) {
         return "../images/station_logos/petrol.svg"
     }
-    if(
+    if (
         lower.includes("eko") ||
         lower.includes("еко")
-    ){
+    ) {
         return "../images/station_logos/eko.svg"
     }
-    if(
+    if (
         lower.includes("rompetrol") ||
         lower.includes("ромпетрол")
-    ){
+    ) {
         return "../images/station_logos/rompetrol.svg"
     }
 
     return null
 }
 
-function renderStations(stations){
+function renderStations(stations) {
 
     let container = document.getElementById("nearest-stations-list")
 
@@ -285,3 +285,89 @@ function renderStations(stations){
     })
 
 }
+
+let calculateBtn = document.getElementById("calculate-btn")
+
+if (calculateBtn) {
+
+    calculateBtn.addEventListener("click", function () {
+
+        let consumption = parseFloat(document.getElementById("consumption").value)
+        let price = parseFloat(document.getElementById("fuel-price").value)
+        let distance = parseFloat(document.getElementById("distance").value)
+
+        if (isNaN(consumption) || isNaN(price) || isNaN(distance)) return
+
+        let fuelUsed = (distance * consumption) / 100
+        let totalCost = fuelUsed * price
+
+        let pricePer100 = consumption * price
+        let pricePerKm = pricePer100 / 100
+
+        let resultBox = document.getElementById("fuel-result")
+
+        resultBox.innerHTML = `
+        Гориво необходимо: <strong>${fuelUsed.toFixed(2)} Л.</strong><br>
+        Цена на пътуването: <strong>${totalCost.toFixed(2)} €</strong><br><br>
+
+        Цена за 100 км: <strong>${pricePer100.toFixed(2)} €</strong><br>
+        Цена за 1 км: <strong>${pricePerKm.toFixed(2)} €</strong>
+        `
+
+        resultBox.classList.add("show")
+
+    })
+
+}
+
+
+async function geocode(city) {
+
+    let url =
+        `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=bg&q=${city}`
+
+    let response = await fetch(url, {
+        headers: {
+            "Accept": "application/json"
+        }
+    })
+
+    let data = await response.json()
+
+    return {
+        lat: parseFloat(data[0].lat),
+        lon: parseFloat(data[0].lon)
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

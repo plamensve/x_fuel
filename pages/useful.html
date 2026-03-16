@@ -106,6 +106,7 @@
 
 <main class="container">
 
+
     <section class="nearest-stations-section">
 
         <h2 class="section-title">
@@ -128,6 +129,80 @@
 
             <div class="nearest-map-wrapper">
                 <div id="nearest-map"></div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <section class="tools-section">
+
+        <!-- КАЛКУЛАТОР -->
+
+        <div class="tool-card">
+
+            <h2 class="section-title">
+                Калкулатор за разход на гориво
+            </h2>
+
+            <p class="calculator-description">
+                Изчислете колко ще струва вашето пътуване.
+            </p>
+
+            <div class="calculator-grid">
+
+                <div class="input-group">
+                    <label>Разход (Л. / 100 km)</label>
+                    <input type="number" id="consumption" placeholder="7.5">
+                </div>
+
+                <div class="input-group">
+                    <label>Цена (€ / Л.)</label>
+                    <input type="number" id="fuel-price" placeholder="1.5">
+                </div>
+
+                <div class="input-group">
+                    <label>Километри</label>
+                    <input type="number" id="distance" placeholder="120">
+                </div>
+
+            </div>
+
+            <button id="calculate-btn" class="nearest-btn">
+                Изчисли
+            </button>
+
+            <div id="fuel-result" class="fuel-result"></div>
+
+        </div>
+
+
+        <!-- ПРОВЕРКИ -->
+
+        <div class="tool-card">
+
+            <h2 class="section-title">
+                Проверка на автомобил
+            </h2>
+
+            <p class="calculator-description">
+                Бърза проверка за винетка и гражданска отговорност.
+            </p>
+
+            <div class="check-links">
+
+                <a class="check-card"
+                   href="https://check.bgtoll.bg/"
+                   target="_blank">
+                    Проверка за винетка
+                </a>
+
+                <a class="check-card"
+                   href="https://www.guaranteefund.org/bg/%D0%B8%D0%BD%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%B5%D0%BD-%D1%86%D0%B5%D0%BD%D1%82%D1%8A%D1%80-%D0%B8-%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B8/%D1%83%D1%81%D0%BB%D1%83%D0%B3%D0%B8/%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%B7%D0%B0-%D0%B2%D0%B0%D0%BB%D0%B8%D0%B4%D0%BD%D0%B0-%D0%B7%D0%B0%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B3%D1%80a%D0%B6%D0%B4a%D0%BD%D1%81%D0%BAa-%D0%BE%D1%82%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%D0%BD%D0%BE%D1%81%D1%82-%D0%BD%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%BE%D0%B1%D0%B8%D0%BB%D0%B8%D1%81%D1%82%D0%B8%D1%82%D0%B5"
+                   target="_blank">
+                    Проверка за гражданска отговорност
+                </a>
+
             </div>
 
         </div>
