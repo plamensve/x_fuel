@@ -291,35 +291,40 @@
 
 /* MOBILE */
 
+/* ===== MOBILE FIX CALENDAR HEADER ===== */
+
 @media (max-width:768px){
 
-    .filters{
+    .fc .fc-toolbar{
         flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
     }
 
-    .filters select{
+    .fc .fc-toolbar-chunk{
         width:100%;
-        font-size:16px;
-        padding:14px;
+        display:flex;
+        justify-content: space-between;
+        align-items:center;
     }
 
-    .fc-daygrid-event .fc-event-main{
-        width:10px;
-        height:10px;
+    .fc-toolbar-title{
+        font-size:18px;
+        line-height:1.2;
+        word-break: break-word;
+        max-width: 100%;
     }
 
-    .day-count{
-        font-size:10px;
-        bottom:2px;
-        left:4px;
+    .fc-button{
+        padding:6px 8px;
+        font-size:12px;
     }
-}
 
-.chart-description{
-    max-width:700px;
-    margin:0 auto 20px auto;
-    text-align:center;
-    color:rgba(255,255,255,0.7);
-    font-size:14px;
-    line-height:1.6;
+    #calendar{
+        overflow:hidden;
+    }
+
+    .chart-description{
+        margin-bottom: 25px;
+    }
 }
