@@ -17,50 +17,22 @@
     <meta property="og:title" content="Текущи цени на горивата в България">
     <meta property="og:description" content="Виж актуалните средни цени на бензин, дизел и газ в реално време.">
     <meta property="og:image" content="https://goriva.online/media/og-3.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://goriva.online/">
     <meta property="og:type" content="website">
-    <meta property="og:locale" content="bg_BG">
-
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Текущи цени на горивата в България">
-    <meta name="twitter:description" content="Виж актуалните средни цени на бензин, дизел и газ в реално време.">
-    <meta name="twitter:image" content="https://goriva.online/media/og-3.png">
 
     <meta name="description"
-          content="Актуални цени на бензин, дизел, пропан бутан и метан в България. Проверете цените по бензиностанции във вашия град и споделете информация за най-евтиното гориво.">
+          content="Актуални цени на горивата в България. Проверете цените по бензиностанции във вашия град.">
 
     <link rel="canonical" href="https://goriva.online/">
     <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
 
+    <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css">
 
     <!-- Calendar -->
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/locales/bg.js" defer></script>
-
-    <!-- Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6YJNGGFR2"></script>
-
-    <script>
-        window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
-        gtag('js', new Date());
-        gtag('config', 'G-F6YJNGGFR2');
-    </script>
-
-    <script async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3478773231642095"
-            crossorigin="anonymous"></script>
-
-    <meta name="google-adsense-account" content="ca-pub-3478773231642095">
 
 </head>
 
@@ -68,17 +40,14 @@
 
 <div class="background"></div>
 
-
 <header class="header-bar">
-
     <div class="header-container">
 
         <img src="../media/2logo.png" alt="goriva.online logo" class="header-logo">
 
         <div class="header-text">
             <strong>Цени на горивата в България</strong>
-            <span>Следете актуални цени и споделяйте информация от бензиностанции в цялата страна</span>
-            <span>Цените в сайта са подадени от потребителите. Разчитаме на коретно изпратена информация.</span>
+            <span>Следете актуални цени и споделяйте информация</span>
         </div>
 
         <a class="facebook-button"
@@ -88,39 +57,36 @@
         </a>
 
     </div>
-
 </header>
-
 
 <nav class="main-nav">
 
     <button id="menu-toggle" class="menu-toggle">☰</button>
 
     <div id="nav-menu" class="nav-container">
-
         <button id="theme-toggle">🌙</button>
 
         <a href="../index.html">Начало</a>
         <a href="../pages/useful.html">Полезно</a>
-        <a href="../pages/trends.html">История на цени</a>
+        <a href="../pages/trends.html">История на цените</a>
         <a href="../pages/rules.html">Общи условия</a>
-
     </div>
 
 </nav>
 
-
 <main class="container">
+
     <section class="trends-section">
 
         <h2 class="section-title">Трендове на цените</h2>
+
         <p class="trends-description">
-            Тази страница показва средните цени на горивата по дни, базирани на подадените от потребители данни.
-            Можете да филтрирате по вид гориво, област, град и бензиностанция.
-            При клик върху конкретен ден ще видите всички подадени цени за него, подредени от най-ниската.
+            Виж движението на цените по дни. Кликни върху ден за детайли.
         </p>
 
+        <!-- FILTERS -->
         <div class="filters">
+
             <select id="fuel-filter">
                 <option value="all">Всички горива</option>
                 <option value="Бензин A95">A95</option>
@@ -143,105 +109,71 @@
             <select id="station-filter">
                 <option value="all">Всички бензиностанции</option>
             </select>
+
         </div>
 
+        <!-- LEGEND -->
+        <div class="legend">
+            <span><span class="dot fuel-a95"></span> A95</span>
+            <span><span class="dot fuel-a98"></span> A98</span>
+            <span><span class="dot fuel-a100"></span> A100</span>
+            <span><span class="dot fuel-diesel"></span> Дизел</span>
+            <span><span class="dot fuel-diesel-plus"></span> Дизел+</span>
+            <span><span class="dot fuel-gas"></span> Газ</span>
+            <span><span class="dot fuel-methane"></span> Метан</span>
+        </div>
+
+        <!-- CALENDAR -->
         <div id="calendar"></div>
 
     </section>
 
-    <!-- POPUP -->
-    <div id="day-modal" class="modal">
-        <div class="modal-content">
-            <span id="close-modal">&times;</span>
-            <h3 id="modal-date"></h3>
-            <div id="modal-list"></div>
-            <div id="pagination" class="pagination"></div>
-        </div>
-    </div>
-
-
 </main>
 
+<!-- MODAL -->
+<div id="day-modal" class="modal">
+    <div class="modal-content">
+        <span id="close-modal">&times;</span>
+        <h3 id="modal-date"></h3>
+        <div id="modal-list"></div>
+        <div id="pagination" class="pagination"></div>
+    </div>
+</div>
 
 <footer class="site-footer">
 
     <div class="footer-container">
 
         <div class="footer-column footer-brand">
-            <img src="../media/footer-logo.png" alt="goriva.online logo" class="footer-logo">
+            <img src="../media/footer-logo.png" class="footer-logo">
         </div>
 
         <div class="footer-column">
-
             <h4>Навигация</h4>
-
             <ul class="footer-links">
                 <li><a href="#top">Начало</a></li>
                 <li><a href="../pages/rules.html">Общи условия</a></li>
             </ul>
-
         </div>
 
         <div class="footer-column">
-
             <h4>Контакти</h4>
-
-            <div class="contact-item">
-                <span>📞</span>
-                <a href="tel:+359883427273">+359 883 427 273</a>
-            </div>
-
-            <div class="contact-item">
-                <span>✉️</span>
-                <a href="mailto:svetoslavov.plamen@gmail.com">
-                    svetoslavov.plamen@gmail.com
-                </a>
-            </div>
-
-            <div class="contact-item">
-                <span>👤</span>
-                Пламен Светославов
-            </div>
-
-        </div>
-
-        <div class="footer-column">
-
-            <h4>Социални мрежи</h4>
-
-            <div class="social-icons">
-
-                <a href="https://www.facebook.com/plamen.sve" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg" alt="facebook">
-                </a>
-
-                <a href="https://www.linkedin.com/in/plamen-svetoslavov/" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt="linkedin">
-                </a>
-
-                <a href="https://wa.me/359883427273" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg" alt="whatsapp">
-                </a>
-
-            </div>
-
+            <a href="tel:+359883427273">+359 883 427 273</a><br>
+            <a href="mailto:svetoslavov.plamen@gmail.com">Email</a>
         </div>
 
     </div>
 
     <div class="footer-bottom">
-        <span>© 2026 goriva.online</span>
-        <span class="footer-separator">•</span>
-        <span>Цени на горивата в България</span>
+        © 2026 goriva.online
     </div>
 
 </footer>
 
-
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+<!-- SCRIPTS -->
 <script src="../scripts/script.js" defer></script>
 <script src="../scripts/useful.js" defer></script>
 <script src="../scripts/trends.js" defer></script>
+
 </body>
 </html>

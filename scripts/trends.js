@@ -5,6 +5,8 @@ let modalList
 let paginationEl
 let calendar
 
+let dayCounts = {}
+
 document.addEventListener("DOMContentLoaded", function () {
 
     let allData = []
@@ -23,18 +25,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     closeModal.onclick = () => modal.classList.remove("show")
 
-    window.onclick = function (e) {
-        if (e.target === modal) modal.classList.remove("show")
-    }
-
-    document.addEventListener("keydown", function (e) {
-        if (e.key === "Escape") modal.classList.remove("show")
-    })
-
     let calendarEl = document.getElementById("calendar")
 
     if (!calendarEl) {
-        console.error("Calendar element not found")
+        console.error("Calendar not found")
         return
     }
 
@@ -43,20 +37,21 @@ document.addEventListener("DOMContentLoaded", function () {
         height: 650,
         locale: 'bg',
 
-        eventColor: '#2563eb',
+        dayMaxEvents: 3,
 
-        buttonText: {
-            today: 'Днес',
-            month: 'Месец'
-        },
+        dateClick: (info) => showDayData(info.dateStr),
 
-        dateClick: function (info) {
-            showDayData(info.dateStr)
-        },
-
-        eventClick: function (info) {
+        eventClick: (info) => {
             info.jsEvent.stopPropagation()
             showDayData(info.event.startStr)
+        },
+
+        datesSet: () => {
+            setTimeout(injectCounts, 0)
+        },
+
+        dayCellDidMount: () => {
+            setTimeout(injectCounts, 0)
         }
     })
 
@@ -74,65 +69,30 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(res => res.json())
             .then(data => {
                 allData = data
-                populateRegions()
                 render()
             })
-            .catch(err => console.error("Fetch error:", err))
+            .catch(err => console.error(err))
     }
 
-    function populateRegions() {
-        let regions = [...new Set(allData.map(r => r.region))].sort()
+    function getFuelClass(fuel) {
 
-        regionFilter.innerHTML = `<option value="all">Всички области</option>`
+        if (fuel === "Бензин A95") return "fuel-a95"
+        if (fuel === "Бензин A98") return "fuel-a98"
+        if (fuel === "Бензин A100") return "fuel-a100"
 
-        regions.forEach(r => {
-            let option = document.createElement("option")
-            option.value = r
-            option.textContent = r
-            regionFilter.appendChild(option)
-        })
-    }
+        if (fuel === "Дизел") return "fuel-diesel"
+        if (fuel === "Дизел премиум") return "fuel-diesel-plus"
 
-    function populateCities(filtered) {
-        let selected = cityFilter.value
-        let cities = [...new Set(filtered.map(r => r.city))].sort()
+        if (fuel === "Пропан Бутан") return "fuel-gas"
+        if (fuel === "Метан") return "fuel-methane"
 
-        if (!cities.includes(selected)) selected = "all"
-
-        cityFilter.innerHTML = `<option value="all">Всички градове</option>`
-
-        cities.forEach(c => {
-            let option = document.createElement("option")
-            option.value = c
-            option.textContent = c
-            if (c === selected) option.selected = true
-            cityFilter.appendChild(option)
-        })
-    }
-
-    function populateStations(filtered) {
-        let selected = stationFilter.value
-        let stations = [...new Set(filtered.map(r => r.station))].sort()
-
-        if (!stations.includes(selected)) selected = "all"
-
-        stationFilter.innerHTML = `<option value="all">Всички бензиностанции</option>`
-
-        stations.forEach(s => {
-            let option = document.createElement("option")
-            option.value = s
-            option.textContent = s
-            if (s === selected) option.selected = true
-            stationFilter.appendChild(option)
-        })
+        return "fuel-default"
     }
 
     function groupByDate(data) {
 
         let groups = {}
-
-        let citySelected = cityFilter.value !== "all"
-        let stationSelected = stationFilter.value !== "all"
+        dayCounts = {}
 
         data.forEach(row => {
 
@@ -143,52 +103,33 @@ document.addEventListener("DOMContentLoaded", function () {
 
             let date = dateObj.toISOString().split("T")[0]
 
-            let fuel = row.fuel
-            let price = parseFloat(row.price)
-
-            if (isNaN(price)) return
-
-            if (!groups[date]) groups[date] = {}
-            if (!groups[date][fuel]) groups[date][fuel] = {}
-
-            let key = stationSelected
-                ? row.station
-                : citySelected
-                    ? row.city
-                    : row.city + "_" + row.station
-
-            if (!groups[date][fuel][key]) {
-                groups[date][fuel][key] = { sum: 0, count: 0 }
+            if (!groups[date]) {
+                groups[date] = {
+                    fuels: new Set(),
+                    count: 0
+                }
             }
 
-            groups[date][fuel][key].sum += price
-            groups[date][fuel][key].count++
+            groups[date].count++
+            groups[date].fuels.add(row.fuel)
         })
 
         let events = []
 
         Object.keys(groups).forEach(date => {
 
-            Object.keys(groups[date]).forEach(fuel => {
+            let day = groups[date]
+            dayCounts[date] = day.count
 
-                let entries = groups[date][fuel]
+            day.fuels.forEach(fuel => {
 
-                let totalSum = 0
-                let totalCount = 0
-
-                Object.values(entries).forEach(e => {
-                    totalSum += (e.sum / e.count)
-                    totalCount++
-                })
-
-                if (totalCount === 0) return
-
-                let avg = totalSum / totalCount
+                let className = getFuelClass(fuel)
 
                 events.push({
-                    title: `${fuel}: ${avg.toFixed(2)} €`,
+                    title: " ",
                     start: date,
-                    allDay: true
+                    allDay: true,
+                    classNames: [className]
                 })
             })
         })
@@ -196,7 +137,31 @@ document.addEventListener("DOMContentLoaded", function () {
         return events
     }
 
+function injectCounts() {
+
+    document.querySelectorAll('.fc-daygrid-day').forEach(cell => {
+
+        let date = cell.getAttribute('data-date')
+        let frame = cell.querySelector('.fc-daygrid-day-frame')
+
+        if (!frame) return
+
+        let old = frame.querySelector('.day-count')
+        if (old) old.remove()
+
+        if (dayCounts[date]) {
+
+            let div = document.createElement('div')
+            div.className = 'day-count'
+            div.textContent = "Общо " + dayCounts[date] + "+"
+
+            frame.appendChild(div)
+        }
+    })
+}
+
     function getFilteredData() {
+
         let filtered = [...allData]
 
         if (fuelFilter.value !== "all")
@@ -216,29 +181,15 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function render() {
 
-        let filtered = [...allData]
-
-        if (fuelFilter.value !== "all")
-            filtered = filtered.filter(r => r.fuel === fuelFilter.value)
-
-        if (regionFilter.value !== "all")
-            filtered = filtered.filter(r => r.region === regionFilter.value)
-
-        populateCities(filtered)
-
-        if (cityFilter.value !== "all")
-            filtered = filtered.filter(r => r.city === cityFilter.value)
-
-        populateStations(filtered)
-
-        if (stationFilter.value !== "all")
-            filtered = filtered.filter(r => r.station === stationFilter.value)
+        let filtered = getFilteredData()
 
         let events = groupByDate(filtered)
 
         calendar.removeAllEvents()
 
         events.forEach(e => calendar.addEvent(e))
+
+        setTimeout(injectCounts, 0)
     }
 
     function showDayData(dateStr) {
@@ -253,7 +204,6 @@ document.addEventListener("DOMContentLoaded", function () {
             : "Няма данни за " + dateStr
 
         let flatList = []
-
         let grouped = {}
 
         filtered.forEach(row => {
@@ -265,7 +215,7 @@ document.addEventListener("DOMContentLoaded", function () {
             grouped[fuel].sort((a, b) => a.price - b.price)
 
             grouped[fuel].forEach(row => {
-                flatList.push({ fuel, row })
+                flatList.push({fuel, row})
             })
         })
 
