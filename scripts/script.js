@@ -281,7 +281,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             let row = document.createElement("tr")
 
-row.innerHTML = `
+            row.innerHTML = `
 <td>${item.station} – ${item.city}</td>
 <td>${item["A95"]}</td>
 <td>${item["A98"]}</td>
@@ -501,4 +501,26 @@ row.innerHTML = `
 
     }
 
+    let cityInput = document.getElementById("city")
+
+    if (cityInput) {
+        cityInput.addEventListener("input", function () {
+
+            let value = cityInput.value
+
+            // auto-clean
+            cityInput.value = value.replace(/[^А-Яа-я\s\-]/g, "")
+
+            let regex = /^[А-Яа-я\s\-]+$/
+
+            if (!regex.test(cityInput.value)) {
+                cityInput.setCustomValidity("Моля използвайте само български букви")
+            } else {
+                cityInput.setCustomValidity("")
+            }
+
+        })
+    }
 })
+
+

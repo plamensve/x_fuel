@@ -12,6 +12,7 @@
 
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="styles/useful.css">
+    <link rel="stylesheet" href="styles/trends.css">
 
     <meta property="og:title" content="Текущи цени на горивата в България">
     <meta property="og:description" content="Виж актуалните средни цени на бензин, дизел и газ в реално време.">
@@ -35,7 +36,11 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css">
+
+    <!-- Calendar -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/locales/bg.js" defer></script>
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6YJNGGFR2"></script>
@@ -97,7 +102,7 @@
 
         <a href="../index.html">Начало</a>
         <a href="../pages/useful.html">Полезно</a>
-        <a href="../pages/trends.html">История на цените</a>
+        <a href="../pages/trends.html">История на цени</a>
         <a href="../pages/rules.html">Общи условия</a>
 
     </div>
@@ -106,109 +111,54 @@
 
 
 <main class="container">
+    <section class="trends-section">
 
-
-    <section class="nearest-stations-section">
-
-        <h2 class="section-title">
-            Най-близки бензиностанции
-        </h2>
-
-        <p class="nearest-description">
-            Разрешете достъп до вашата локация, за да покажем най-близките бензиностанции.
+        <h2 class="section-title">Трендове на цените</h2>
+        <p class="trends-description">
+            Тази страница показва средните цени на горивата по дни, базирани на подадените от потребители данни.
+            Можете да филтрирате по вид гориво, област, град и бензиностанция.
+            При клик върху конкретен ден ще видите всички подадени цени за него, подредени от най-ниската.
         </p>
 
-        <button id="find-nearest-btn" class="nearest-btn">
-            Покажи най-близките бензиностанции
-        </button>
+        <div class="filters">
+            <select id="fuel-filter">
+                <option value="all">Всички горива</option>
+                <option value="Бензин A95">A95</option>
+                <option value="Бензин A98">A98</option>
+                <option value="Бензин A100">A100</option>
+                <option value="Дизел">Дизел</option>
+                <option value="Дизел премиум">Дизел +</option>
+                <option value="Пропан Бутан">Газ</option>
+                <option value="Метан">Метан</option>
+            </select>
 
-        <div class="nearest-stations-wrapper">
+            <select id="region-filter">
+                <option value="all">Всички области</option>
+            </select>
 
-            <div id="nearest-stations-list" class="nearest-stations-list">
-                <!-- JS ще рендерира станциите тук -->
-            </div>
+            <select id="city-filter">
+                <option value="all">Всички градове</option>
+            </select>
 
-            <div class="nearest-map-wrapper">
-                <div id="nearest-map"></div>
-            </div>
-
+            <select id="station-filter">
+                <option value="all">Всички бензиностанции</option>
+            </select>
         </div>
+
+        <div id="calendar"></div>
 
     </section>
 
-    <section class="tools-section">
-
-        <!-- КАЛКУЛАТОР -->
-
-        <div class="tool-card">
-
-            <h2 class="section-title">
-                Калкулатор за разход на гориво
-            </h2>
-
-            <p class="calculator-description">
-                Изчислете колко ще струва вашето пътуване.
-            </p>
-
-            <div class="calculator-grid">
-
-                <div class="input-group">
-                    <label>Разход (Л. / 100 km)</label>
-                    <input type="number" id="consumption" placeholder="7.5">
-                </div>
-
-                <div class="input-group">
-                    <label>Цена (€ / Л.)</label>
-                    <input type="number" id="fuel-price" placeholder="1.5">
-                </div>
-
-                <div class="input-group">
-                    <label>Километри</label>
-                    <input type="number" id="distance" placeholder="120">
-                </div>
-
-            </div>
-
-            <button id="calculate-btn" class="nearest-btn">
-                Изчисли
-            </button>
-
-            <div id="fuel-result" class="fuel-result"></div>
-
+    <!-- POPUP -->
+    <div id="day-modal" class="modal">
+        <div class="modal-content">
+            <span id="close-modal">&times;</span>
+            <h3 id="modal-date"></h3>
+            <div id="modal-list"></div>
+            <div id="pagination" class="pagination"></div>
         </div>
+    </div>
 
-
-        <!-- ПРОВЕРКИ -->
-
-        <div class="tool-card">
-
-            <h2 class="section-title">
-                Проверка на автомобил
-            </h2>
-
-            <p class="calculator-description">
-                Бърза проверка за винетка и гражданска отговорност.
-            </p>
-
-            <div class="check-links">
-
-                <a class="check-card"
-                   href="https://web.bgtoll.bg/TollProduct"
-                   target="_blank">
-                    Проверка за винетка
-                </a>
-
-                <a class="check-card"
-                   href="https://www.guaranteefund.org/bg/%D0%B8%D0%BD%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%B5%D0%BD-%D1%86%D0%B5%D0%BD%D1%82%D1%8A%D1%80-%D0%B8-%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B8/%D1%83%D1%81%D0%BB%D1%83%D0%B3%D0%B8/%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%B7%D0%B0-%D0%B2%D0%B0%D0%BB%D0%B8%D0%B4%D0%BD%D0%B0-%D0%B7%D0%B0%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B3%D1%80a%D0%B6%D0%B4a%D0%BD%D1%81%D0%BAa-%D0%BE%D1%82%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%D0%BD%D0%BE%D1%81%D1%82-%D0%BD%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%BE%D0%B1%D0%B8%D0%BB%D0%B8%D1%81%D1%82%D0%B8%D1%82%D0%B5"
-                   target="_blank">
-                    Проверка за гражданска отговорност
-                </a>
-
-            </div>
-
-        </div>
-
-    </section>
 
 </main>
 
@@ -290,7 +240,8 @@
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-<script src="../scripts/script.js"></script>
-<script src="../scripts/useful.js"></script>
+<script src="../scripts/script.js" defer></script>
+<script src="../scripts/useful.js" defer></script>
+<script src="../scripts/trends.js" defer></script>
 </body>
 </html>
