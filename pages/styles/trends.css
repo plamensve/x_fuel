@@ -327,4 +327,25 @@
     .chart-description{
         margin-bottom: 25px;
     }
+
+
+    .fc-daygrid-day-frame{
+        padding-bottom:16px;
+    }
+
+
+    .fc-daygrid-event .fc-event-main{
+        transform: translateY(-6px);
+    }
+
+
+    .day-count{
+        position:absolute;
+        bottom:2px;
+        left:4px;
+        font-size:10px;
+        background:rgba(0,0,0,0.4);
+        padding:1px 4px;
+        border-radius:4px;
+    }
 }
