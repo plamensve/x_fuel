@@ -7,5 +7,6 @@
     <orderEntry type="library" name="widget-bg" level="application" />
     <orderEntry type="library" name="leaflet" level="application" />
     <orderEntry type="library" name="leaflet.markercluster" level="application" />
+    <orderEntry type="library" name="fullcalendar" level="application" />
   </component>
 </module>
