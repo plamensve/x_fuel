@@ -85,27 +85,27 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // ✅ НОВО
-    function populateFilters(data, regionFilter, cityFilter, stationFilter){
+    function populateFilters(data, regionFilter, cityFilter, stationFilter) {
 
         let regions = new Set()
         let cities = new Set()
         let stations = new Set()
 
         data.forEach(row => {
-            if(row.region) regions.add(row.region)
-            if(row.city) cities.add(row.city)
-            if(row.station) stations.add(row.station)
+            if (row.region) regions.add(row.region)
+            if (row.city) cities.add(row.city)
+            if (row.station) stations.add(row.station)
         })
 
-        fillSelect(regionFilter, regions)
-        fillSelect(cityFilter, cities)
-        fillSelect(stationFilter, stations)
+        fillSelect(regionFilter, regions, "Всички области")
+        fillSelect(cityFilter, cities, "Всички градове")
+        fillSelect(stationFilter, stations, "Всички бензиностанции")
     }
 
-    // ✅ НОВО
-    function fillSelect(select, values){
+    //
+    function fillSelect(select, values, label) {
 
-        select.innerHTML = '<option value="all">Всички</option>'
+        select.innerHTML = `<option value="all">${label}</option>`
 
         values = [...values].sort()
 
@@ -140,7 +140,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let date = new Date(row.created_at).toISOString().split("T")[0]
 
             if (!groups[date]) {
-                groups[date] = { fuels: new Set(), count: 0 }
+                groups[date] = {fuels: new Set(), count: 0}
             }
 
             groups[date].count++
@@ -258,7 +258,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let buttons = document.querySelectorAll(".chart-filters button")
 
     buttons.forEach(btn => {
-        btn.addEventListener("click", function(){
+        btn.addEventListener("click", function () {
 
             selectedFuel = this.dataset.fuel
 
@@ -334,7 +334,7 @@ function renderPagination(totalItems) {
     }
 }
 
-function buildChartData(data){
+function buildChartData(data) {
 
     let grouped = {}
 
@@ -345,8 +345,8 @@ function buildChartData(data){
 
         let date = new Date(row.created_at).toISOString().split("T")[0]
 
-        if(!grouped[date]){
-            grouped[date] = {sum:0, count:0}
+        if (!grouped[date]) {
+            grouped[date] = {sum: 0, count: 0}
         }
 
         grouped[date].sum += Number(row.price)
@@ -363,14 +363,14 @@ function buildChartData(data){
     return {labels, values}
 }
 
-function renderChart(data){
+function renderChart(data) {
 
     let ctx = document.getElementById("price-chart")
-    if(!ctx) return
+    if (!ctx) return
 
     let {labels, values} = buildChartData(data)
 
-    if(chart) chart.destroy()
+    if (chart) chart.destroy()
 
     chart = new Chart(ctx, {
         type: 'line',
@@ -383,9 +383,9 @@ function renderChart(data){
             }]
         },
         options: {
-            responsive:true,
-            plugins:{
-                legend:{display:true}
+            responsive: true,
+            plugins: {
+                legend: {display: true}
             }
         }
     })
