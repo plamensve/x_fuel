@@ -34,6 +34,9 @@
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/locales/bg.js" defer></script>
 
+    <!-- Chart -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </head>
 
 <body id="top">
@@ -125,7 +128,30 @@
 
         <!-- CALENDAR -->
         <div id="calendar"></div>
+        <div class="chart-section">
 
+            <h3 class="chart-title">Динамика на цената</h3>
+            <p class="chart-description">
+                Графиката показва средната цена на избраното гориво по дни, базирана на всички подадени данни.
+                Използвайте бутоните, за да превключвате между различните видове горива и да проследите тенденцията във
+                времето.
+            </p>
+
+            <div class="chart-filters">
+                <button data-fuel="Бензин A95">A95</button>
+                <button data-fuel="Бензин A98">A98</button>
+                <button data-fuel="Бензин A100">A100</button>
+                <button data-fuel="Дизел">Дизел</button>
+                <button data-fuel="Дизел премиум">Дизел+</button>
+                <button data-fuel="Пропан Бутан">Газ</button>
+                <button data-fuel="Метан">Метан</button>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="price-chart"></canvas>
+            </div>
+
+        </div>
     </section>
 
 </main>
@@ -145,27 +171,73 @@
     <div class="footer-container">
 
         <div class="footer-column footer-brand">
-            <img src="../media/footer-logo.png" class="footer-logo">
+            <img src="../media/footer-logo.png" alt="goriva.online logo" class="footer-logo">
         </div>
 
         <div class="footer-column">
+
             <h4>Навигация</h4>
+
             <ul class="footer-links">
                 <li><a href="#top">Начало</a></li>
-                <li><a href="../pages/rules.html">Общи условия</a></li>
+                <li><a href="useful.html">Полезно</a></li>
+                <li><a href="trends.html">История на цените</a></li>
+                <li><a href="rules.html">Общи условия</a></li>
             </ul>
+
         </div>
 
         <div class="footer-column">
+
             <h4>Контакти</h4>
-            <a href="tel:+359883427273">+359 883 427 273</a><br>
-            <a href="mailto:svetoslavov.plamen@gmail.com">Email</a>
+
+            <div class="contact-item">
+                <span>📞</span>
+                <a href="tel:+359883427273">+359 883 427 273</a>
+            </div>
+
+            <div class="contact-item">
+                <span>✉️</span>
+                <a href="mailto:svetoslavov.plamen@gmail.com">
+                    svetoslavov.plamen@gmail.com
+                </a>
+            </div>
+
+            <div class="contact-item">
+                <span>👤</span>
+                Пламен Светославов
+            </div>
+
+        </div>
+
+        <div class="footer-column">
+
+            <h4>Социални мрежи</h4>
+
+            <div class="social-icons">
+
+                <a href="https://www.facebook.com/plamen.sve" target="_blank">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg">
+                </a>
+
+                <a href="https://www.linkedin.com/in/plamen-svetoslavov/" target="_blank">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg">
+                </a>
+
+                <a href="https://wa.me/359883427273" target="_blank">
+                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg">
+                </a>
+
+            </div>
+
         </div>
 
     </div>
 
     <div class="footer-bottom">
-        © 2026 goriva.online
+        <span>© 2026 goriva.online</span>
+        <span class="footer-separator">•</span>
+        <span>Цени на горивата в България</span>
     </div>
 
 </footer>

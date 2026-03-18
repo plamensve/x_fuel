@@ -4,6 +4,9 @@ let itemsPerPageTrend = 10
 let modalList
 let paginationEl
 let calendar
+let chart
+
+let selectedFuel = "Бензин A95"
 
 let dayCounts = {}
 
@@ -25,6 +28,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
     closeModal.onclick = () => modal.classList.remove("show")
 
+    window.onclick = function (e) {
+        if (e.target === modal) modal.classList.remove("show")
+    }
+
+    document.addEventListener("keydown", function (e) {
+        if (e.key === "Escape") modal.classList.remove("show")
+    })
+
     let calendarEl = document.getElementById("calendar")
 
     if (!calendarEl) {
@@ -36,23 +47,18 @@ document.addEventListener("DOMContentLoaded", function () {
         initialView: 'dayGridMonth',
         height: 650,
         locale: 'bg',
-
         dayMaxEvents: 3,
 
         dateClick: (info) => showDayData(info.dateStr),
 
         eventClick: (info) => {
+            info.jsEvent.preventDefault()
             info.jsEvent.stopPropagation()
             showDayData(info.event.startStr)
         },
 
-        datesSet: () => {
-            setTimeout(injectCounts, 0)
-        },
-
-        dayCellDidMount: () => {
-            setTimeout(injectCounts, 0)
-        }
+        datesSet: () => setTimeout(injectCounts, 0),
+        dayCellDidMount: () => setTimeout(injectCounts, 0)
     })
 
     calendar.render()
@@ -75,17 +81,13 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     function getFuelClass(fuel) {
-
         if (fuel === "Бензин A95") return "fuel-a95"
         if (fuel === "Бензин A98") return "fuel-a98"
         if (fuel === "Бензин A100") return "fuel-a100"
-
         if (fuel === "Дизел") return "fuel-diesel"
         if (fuel === "Дизел премиум") return "fuel-diesel-plus"
-
         if (fuel === "Пропан Бутан") return "fuel-gas"
         if (fuel === "Метан") return "fuel-methane"
-
         return "fuel-default"
     }
 
@@ -98,16 +100,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
             if (!row.created_at) return
 
-            let dateObj = new Date(row.created_at)
-            if (isNaN(dateObj)) return
-
-            let date = dateObj.toISOString().split("T")[0]
+            let date = new Date(row.created_at).toISOString().split("T")[0]
 
             if (!groups[date]) {
-                groups[date] = {
-                    fuels: new Set(),
-                    count: 0
-                }
+                groups[date] = { fuels: new Set(), count: 0 }
             }
 
             groups[date].count++
@@ -118,18 +114,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         Object.keys(groups).forEach(date => {
 
-            let day = groups[date]
-            dayCounts[date] = day.count
+            dayCounts[date] = groups[date].count
 
-            day.fuels.forEach(fuel => {
-
-                let className = getFuelClass(fuel)
-
+            groups[date].fuels.forEach(fuel => {
                 events.push({
                     title: " ",
                     start: date,
                     allDay: true,
-                    classNames: [className]
+                    classNames: [getFuelClass(fuel)]
                 })
             })
         })
@@ -137,28 +129,26 @@ document.addEventListener("DOMContentLoaded", function () {
         return events
     }
 
-function injectCounts() {
+    function injectCounts() {
 
-    document.querySelectorAll('.fc-daygrid-day').forEach(cell => {
+        document.querySelectorAll('.fc-daygrid-day').forEach(cell => {
 
-        let date = cell.getAttribute('data-date')
-        let frame = cell.querySelector('.fc-daygrid-day-frame')
+            let date = cell.getAttribute('data-date')
+            let frame = cell.querySelector('.fc-daygrid-day-frame')
 
-        if (!frame) return
+            if (!frame) return
 
-        let old = frame.querySelector('.day-count')
-        if (old) old.remove()
+            let old = frame.querySelector('.day-count')
+            if (old) old.remove()
 
-        if (dayCounts[date]) {
-
-            let div = document.createElement('div')
-            div.className = 'day-count'
-            div.textContent = "Общо " + dayCounts[date] + "+"
-
-            frame.appendChild(div)
-        }
-    })
-}
+            if (dayCounts[date]) {
+                let div = document.createElement('div')
+                div.className = 'day-count'
+                div.textContent = "Общо " + dayCounts[date] + "+"
+                frame.appendChild(div)
+            }
+        })
+    }
 
     function getFilteredData() {
 
@@ -183,13 +173,12 @@ function injectCounts() {
 
         let filtered = getFilteredData()
 
-        let events = groupByDate(filtered)
-
         calendar.removeAllEvents()
-
-        events.forEach(e => calendar.addEvent(e))
+        groupByDate(filtered).forEach(e => calendar.addEvent(e))
 
         setTimeout(injectCounts, 0)
+
+        renderChart(filtered)
     }
 
     function showDayData(dateStr) {
@@ -213,10 +202,7 @@ function injectCounts() {
 
         Object.keys(grouped).forEach(fuel => {
             grouped[fuel].sort((a, b) => a.price - b.price)
-
-            grouped[fuel].forEach(row => {
-                flatList.push({fuel, row})
-            })
+            grouped[fuel].forEach(row => flatList.push({fuel, row}))
         })
 
         window.currentModalData = flatList
@@ -231,6 +217,21 @@ function injectCounts() {
     regionFilter.addEventListener("change", render)
     cityFilter.addEventListener("change", render)
     stationFilter.addEventListener("change", render)
+
+    // ✅ FIX: buttons трябва да са вътре тук
+    let buttons = document.querySelectorAll(".chart-filters button")
+
+    buttons.forEach(btn => {
+        btn.addEventListener("click", function(){
+
+            selectedFuel = this.dataset.fuel
+
+            buttons.forEach(b => b.classList.remove("active"))
+            this.classList.add("active")
+
+            render()
+        })
+    })
 })
 
 function renderPage() {
@@ -286,9 +287,7 @@ function renderPagination(totalItems) {
         let btn = document.createElement("button")
         btn.textContent = i
 
-        if (i === currentPageTrend) {
-            btn.classList.add("active")
-        }
+        if (i === currentPageTrend) btn.classList.add("active")
 
         btn.onclick = () => {
             currentPageTrend = i
@@ -297,4 +296,61 @@ function renderPagination(totalItems) {
 
         paginationEl.appendChild(btn)
     }
+}
+
+function buildChartData(data){
+
+    let grouped = {}
+
+    data.forEach(row => {
+
+        if (!row.created_at || !row.price) return
+        if (row.fuel !== selectedFuel) return
+
+        let date = new Date(row.created_at).toISOString().split("T")[0]
+
+        if(!grouped[date]){
+            grouped[date] = {sum:0, count:0}
+        }
+
+        grouped[date].sum += Number(row.price)
+        grouped[date].count++
+    })
+
+    let labels = Object.keys(grouped).sort()
+
+    let values = labels.map(date => {
+        let g = grouped[date]
+        return g.sum / g.count
+    })
+
+    return {labels, values}
+}
+
+function renderChart(data){
+
+    let ctx = document.getElementById("price-chart")
+    if(!ctx) return
+
+    let {labels, values} = buildChartData(data)
+
+    if(chart) chart.destroy()
+
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: selectedFuel,
+                data: values,
+                tension: 0.3
+            }]
+        },
+        options: {
+            responsive:true,
+            plugins:{
+                legend:{display:true}
+            }
+        }
+    })
 }
