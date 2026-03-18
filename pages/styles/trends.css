@@ -362,3 +362,22 @@
         padding:15px;
     }
 }
+
+body.light-theme .chart-filters button{
+    color: #1a1a1a;
+    background: rgba(0,0,0,0.05);
+}
+
+body.light-theme .chart-filters button:hover{
+    background: rgba(0,0,0,0.1);
+    color: #000;
+}
+
+body.light-theme .chart-filters button.active{
+    color: white;
+}
+
+/* FIX: border да е по-видим */
+body.light-theme .chart-filters button{
+    border-color: rgba(0,0,0,0.15);
+}
