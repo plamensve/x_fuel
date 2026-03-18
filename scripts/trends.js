@@ -75,9 +75,46 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(res => res.json())
             .then(data => {
                 allData = data
+
+                // ✅ добавено
+                populateFilters(data, regionFilter, cityFilter, stationFilter)
+
                 render()
             })
             .catch(err => console.error(err))
+    }
+
+    // ✅ НОВО
+    function populateFilters(data, regionFilter, cityFilter, stationFilter){
+
+        let regions = new Set()
+        let cities = new Set()
+        let stations = new Set()
+
+        data.forEach(row => {
+            if(row.region) regions.add(row.region)
+            if(row.city) cities.add(row.city)
+            if(row.station) stations.add(row.station)
+        })
+
+        fillSelect(regionFilter, regions)
+        fillSelect(cityFilter, cities)
+        fillSelect(stationFilter, stations)
+    }
+
+    // ✅ НОВО
+    function fillSelect(select, values){
+
+        select.innerHTML = '<option value="all">Всички</option>'
+
+        values = [...values].sort()
+
+        values.forEach(v => {
+            let option = document.createElement("option")
+            option.value = v
+            option.textContent = v
+            select.appendChild(option)
+        })
     }
 
     function getFuelClass(fuel) {
@@ -218,7 +255,6 @@ document.addEventListener("DOMContentLoaded", function () {
     cityFilter.addEventListener("change", render)
     stationFilter.addEventListener("change", render)
 
-    // ✅ FIX: buttons трябва да са вътре тук
     let buttons = document.querySelectorAll(".chart-filters button")
 
     buttons.forEach(btn => {
