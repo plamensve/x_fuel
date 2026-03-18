@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function () {
         initialView: 'dayGridMonth',
         height: 650,
         locale: 'bg',
-        dayMaxEvents: 3,
+        dayMaxEvents: false,
 
         dateClick: (info) => showDayData(info.dateStr),
 

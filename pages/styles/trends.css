@@ -381,3 +381,20 @@ body.light-theme .chart-filters button.active{
 body.light-theme .chart-filters button{
     border-color: rgba(0,0,0,0.15);
 }
+
+.fc-daygrid-day-events {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 3px;
+}
+
+.fc-daygrid-event {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.fc-daygrid-event .fc-event-main {
+    width: 10px;
+    height: 10px;
+}
