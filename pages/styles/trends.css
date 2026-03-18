@@ -356,4 +356,9 @@
     .filters select{
         width:100%;
     }
+
+      .chart-container{
+        height:260px;
+        padding:15px;
+    }
 }
