@@ -161,13 +161,47 @@ document.addEventListener("DOMContentLoaded", function () {
 
     }
 
+    function normalizeLocation(loc) {
+    return (loc || "")
+        .toUpperCase()
+        .replace(/[.,]/g, "")
+        .replace(/\s+/g, " ")
+        .replace(/^КВАРТАЛ\s*/, "")
+        .replace(/^КВ\s*/, "")
+        .replace(/^УЛИЦА\s*/, "")
+        .replace(/^УЛ\s*/, "")
+        .replace(/^БУЛЕВАРД\s*/, "")
+        .replace(/^БУЛ\s*/, "")
+        .replace(/ЦЕНТЪР|CENTER/g, "")
+        .replace(/БЕНЗИНОСТАНЦИЯ|БЕНЗ\.?/g, "")
+        .replace(/ОМВ|OMV/g, "OMV")
+        .replace(/ЛУКОЙЛ|LUKOIL/g, "LUKOIL")
+        .replace(/ШЕЛ|SHELL/g, "SHELL")
+        .replace(/(.)\1+/g, "$1")
+        .replace(/К\.?С\.?|ЖК|Ж\.К\.?/g, "")
+        .replace(/\d+/g, "")
+        .replace(/[-–—]/g, " ")
+        .replace(/\bГР\.?\b/g, "")
+        .replace(/ДО|СРЕЩУ|БЛИЗО|НА|СЛЕД|ПРЕД/g, "")
+        .replace(/ПЪТ\s*I{1,3}-?\d+/g, "")
+        .replace(/E\d+/g, "")
+        .replace(/\bДО|СРЕЩУ|БЛИЗО|НА|СЛЕД|ПРЕД|ЗАД|ОТ|В\b/g, "")
+        .replace(/ПЪТ\s*I{1,3}-?\d+/g, "")
+        .replace(/E\d+/g, "")
+        .replace(/ГАЗСТАНЦИЯ|ГАЗ\s*СТАНЦИЯ/g, "")
+        .replace(/МАГИСТРАЛА|АВТОМАГИСТРАЛА/g, "")
+        .replace(/[\/\\]/g, " ")
+        .replace(/\s{2,}/g, " ")
+        .trim()
+}
+
     function calculateAveragePrices(data) {
 
         let groups = {}
 
         data.forEach(row => {
 
-            let loc = (row.location || "").trim().toUpperCase()
+            let loc = normalizeLocation(row.location)
 
             let key = row.city + "_" + row.station + "_" + row.fuel + "_" + loc
 
@@ -240,7 +274,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         averages.forEach(row => {
 
-            let loc = (row.location || "").trim().toUpperCase()
+            let loc = normalizeLocation(row.location)
 
             let key = row.city + "_" + row.station + "_" + loc
 
