@@ -214,6 +214,107 @@ document.addEventListener("DOMContentLoaded", function () {
         return averages
     }
 
+    function renderPagination(totalPages) {
+
+        let container = document.getElementById("pagination")
+        if (!container) return
+
+        container.innerHTML = ""
+
+        // PREV
+        let prev = document.createElement("button")
+        prev.textContent = "←"
+        prev.disabled = currentPage === 1
+
+        prev.addEventListener("click", function () {
+            currentPage--
+            renderPrices()
+        })
+
+        container.appendChild(prev)
+
+        let maxVisible = 5
+        let start = Math.max(1, currentPage - 2)
+        let end = Math.min(totalPages, currentPage + 2)
+
+        // fix when near edges
+        if (currentPage <= 3) {
+            start = 1
+            end = Math.min(5, totalPages)
+        }
+
+        if (currentPage >= totalPages - 2) {
+            start = Math.max(1, totalPages - 4)
+            end = totalPages
+        }
+
+        // FIRST + ...
+        if (start > 1) {
+
+            let first = document.createElement("button")
+            first.textContent = 1
+
+            first.addEventListener("click", function () {
+                currentPage = 1
+                renderPrices()
+            })
+
+            container.appendChild(first)
+
+            let dots = document.createElement("span")
+            dots.textContent = "..."
+            container.appendChild(dots)
+        }
+
+        // MIDDLE PAGES
+        for (let i = start; i <= end; i++) {
+
+            let btn = document.createElement("button")
+            btn.textContent = i
+
+            if (i === currentPage) {
+                btn.classList.add("active-page")
+            }
+
+            btn.addEventListener("click", function () {
+                currentPage = i
+                renderPrices()
+            })
+
+            container.appendChild(btn)
+        }
+
+        // ... + LAST
+        if (end < totalPages) {
+
+            let dots = document.createElement("span")
+            dots.textContent = "..."
+            container.appendChild(dots)
+
+            let last = document.createElement("button")
+            last.textContent = totalPages
+
+            last.addEventListener("click", function () {
+                currentPage = totalPages
+                renderPrices()
+            })
+
+            container.appendChild(last)
+        }
+
+        // NEXT
+        let next = document.createElement("button")
+        next.textContent = "→"
+        next.disabled = currentPage === totalPages
+
+        next.addEventListener("click", function () {
+            currentPage++
+            renderPrices()
+        })
+
+        container.appendChild(next)
+    }
+
     function renderPrices() {
 
         let body = document.getElementById("prices-body")
