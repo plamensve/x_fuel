@@ -167,14 +167,16 @@ document.addEventListener("DOMContentLoaded", function () {
 
         data.forEach(row => {
 
-            let key = row.city + "_" + row.station + "_" + row.fuel
+            let loc = (row.location || "").trim().toUpperCase()
+
+            let key = row.city + "_" + row.station + "_" + row.fuel + "_" + loc
 
             if (!groups[key]) {
                 groups[key] = {
                     city: row.city,
                     station: row.station,
                     fuel: row.fuel,
-                    location: row.location || null,
+                    location: loc || null,
                     sum: 0,
                     count: 0
                 }
@@ -247,7 +249,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 grouped[key] = {
                     city: row.city,
                     station: row.station,
-                    location: row.location || "-",
+                    location: loc || "-",
                     "A95": "-",
                     "A98": "-",
                     "A100": "-",
