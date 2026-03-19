@@ -238,7 +238,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
         averages.forEach(row => {
 
-            let key = row.city + "_" + row.station
+            let loc = (row.location || "").trim().toUpperCase()
+
+            let key = row.city + "_" + row.station + "_" + loc
 
             if (!grouped[key]) {
 
@@ -372,7 +374,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("price").value.replace(",", ".")
             )
 
-            let location = document.getElementById("location").value.trim()
+            let location = document.getElementById("location").value.trim().toUpperCase()
 
             if (!region || !city || !station || !fuelElement || !price) {
 
