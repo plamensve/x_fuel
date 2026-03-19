@@ -174,6 +174,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     city: row.city,
                     station: row.station,
                     fuel: row.fuel,
+                    location: row.location || null,
                     sum: 0,
                     count: 0
                 }
@@ -196,6 +197,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 city: g.city,
                 station: g.station,
                 fuel: g.fuel,
+                location: g.location,
                 avg_price: (g.sum / g.count).toFixed(2)
             })
 
@@ -243,6 +245,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 grouped[key] = {
                     city: row.city,
                     station: row.station,
+                    location: row.location || "-",
                     "A95": "-",
                     "A98": "-",
                     "A100": "-",
@@ -250,6 +253,12 @@ document.addEventListener("DOMContentLoaded", function () {
                     "Дизел +": "-",
                     "Пропан Бутан": "-",
                     "Метан": "-"
+                }
+
+            } else {
+
+                if (!grouped[key].location && row.location) {
+                    grouped[key].location = row.location
                 }
 
             }
@@ -283,6 +292,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             row.innerHTML = `
 <td>${item.station} – ${item.city}</td>
+<td>${item.location || "-"}</td>
 <td>${item["A95"]}</td>
 <td>${item["A98"]}</td>
 <td>${item["A100"]}</td>
@@ -362,6 +372,8 @@ document.addEventListener("DOMContentLoaded", function () {
                 document.getElementById("price").value.replace(",", ".")
             )
 
+            let location = document.getElementById("location").value.trim()
+
             if (!region || !city || !station || !fuelElement || !price) {
 
                 showMessage("Моля попълнете всички полета.", "error")
@@ -387,7 +399,8 @@ document.addEventListener("DOMContentLoaded", function () {
                     city: city,
                     station: station,
                     fuel: fuel,
-                    price: price
+                    price: price,
+                    location: location || null
                 })
 
             })
