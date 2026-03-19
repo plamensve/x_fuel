@@ -164,7 +164,6 @@ document.addEventListener("DOMContentLoaded", function () {
     function normalizeLocation(loc) {
         return (loc || "")
             .toUpperCase()
-            .replace(/[.,]/g, "")
             .trim()
     }
 
