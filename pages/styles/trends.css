@@ -2,6 +2,16 @@
     margin-top: 40px;
 }
 
+.filters,
+.section-title-trend,
+.trends-description-trend,
+.chart-section{
+    background: rgb(33, 52, 72);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+
 /* FILTERS */
 
 .filters {
@@ -29,6 +39,8 @@
     border: 1px solid var(--border-color);
     min-height: 650px;
 }
+
+
 
 /* HEADER */
 
@@ -183,7 +195,12 @@
     margin-bottom:15px;
     font-size:13px;
     flex-wrap:wrap;
+    background: rgb(33, 52, 72);
+    border-radius: 30px;
+    padding: 1em;
 }
+
+
 
 .legend span{
     display:flex;
@@ -221,10 +238,6 @@
     margin-top:80px;
 }
 
-.chart-title{
-    text-align:center;
-    margin-bottom:20px;
-}
 
 /* BUTTONS */
 
@@ -234,6 +247,9 @@
     gap:10px;
     flex-wrap:wrap;
     margin-bottom:20px;
+    background: rgb(33, 52, 72);
+    border-radius: 30px;
+    padding: 1em;
 }
 
 .chart-filters button{

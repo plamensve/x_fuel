@@ -1,40 +1,46 @@
-/* =========================
-   TERMS PAGE
-========================= */
-
 main.container{
-    max-width:900px;
-}
 
-/* TITLE */
+    max-width:900px;
+
+    margin:40px auto;
+
+    padding:30px;
+
+    border-radius:18px;
+
+    background:var(--card-bg);
+
+    border:1px solid var(--border-color);
+
+    backdrop-filter:blur(14px);
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.4),
+        0 0 0 1px rgba(255,255,255,0.03) inset;
+
+    color:#e2e8f0;
+}
 
 main h1{
 
     font-size:32px;
-
     margin-bottom:30px;
 
     font-weight:600;
 
+    color:#f1f5f9;
 }
-
-/* SECTIONS */
 
 main h2{
 
     margin-top:35px;
-
     margin-bottom:10px;
 
     font-size:20px;
-
     font-weight:600;
 
-    color:var(--text-color);
-
+    color:#e2e8f0;
 }
-
-/* PARAGRAPHS */
 
 main p{
 
@@ -42,103 +48,22 @@ main p{
 
     line-height:1.7;
 
-    color:#9ca3af;
+    color:#cbd5f5; /* вместо #9ca3af */
 
     margin-bottom:14px;
-
 }
-
-/* LINKS */
 
 main a{
 
-    color:#2563eb;
+    color:#3b82f6;
 
     text-decoration:none;
-
 }
 
 main a:hover{
-
     text-decoration:underline;
-
 }
-
-/* STRONG */
 
 main strong{
-
-    color:var(--text-color);
-
-}
-
-/* SECTION SPACING */
-
-main h2:first-of-type{
-
-    margin-top:10px;
-
-}
-
-/* =========================
-   RESPONSIVE
-========================= */
-
-@media (max-width:768px){
-
-    main h1{
-        font-size:26px;
-    }
-
-    main h2{
-        font-size:18px;
-    }
-
-    main p{
-        font-size:14px;
-    }
-
-}
-
-/* =========================
-   MENU BUTTON
-========================= */
-
-.menu-toggle{
-
-    display:none;
-    font-size:26px;
-    background:none;
-    border:none;
-    color:var(--text-color);
-    cursor:pointer;
-
-}
-
-/* mobile nav */
-
-@media (max-width:750px){
-
-    .menu-toggle{
-
-        display:block;
-        margin:auto;
-        padding:10px;
-
-    }
-
-    .nav-container{
-
-        display:none;
-        flex-direction:column;
-        align-items:center;
-        gap:12px;
-        padding:15px 0;
-
-    }
-
-    .nav-container.active{
-        display:flex;
-    }
-
+    color:#f1f5f9;
 }
