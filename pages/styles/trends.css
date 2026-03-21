@@ -639,3 +639,38 @@ body.light-theme .chart-filters button{
         font-size:18px;
     }
 }
+
+/* ONLINE DOT */
+
+.best-prices-section h3{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.best-prices-section h3::after{
+    content:"";
+    width:10px;
+    height:10px;
+    border-radius:50%;
+    background:#22c55e;
+    box-shadow:0 0 8px #22c55e;
+    animation:pulseDot 1.5s infinite;
+}
+
+/* пулсиращ ефект */
+
+@keyframes pulseDot{
+    0%{
+        transform:scale(1);
+        box-shadow:0 0 6px #22c55e;
+    }
+    50%{
+        transform:scale(1.4);
+        box-shadow:0 0 12px #22c55e;
+    }
+    100%{
+        transform:scale(1);
+        box-shadow:0 0 6px #22c55e;
+    }
+}
