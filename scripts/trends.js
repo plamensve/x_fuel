@@ -14,11 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let allData = []
 
-    let fuelFilter = document.getElementById("fuel-filter")
-    let regionFilter = document.getElementById("region-filter")
-    let cityFilter = document.getElementById("city-filter")
-    let stationFilter = document.getElementById("station-filter")
-
     let modal = document.getElementById("day-modal")
     modalList = document.getElementById("modal-list")
     paginationEl = document.getElementById("pagination")
@@ -63,6 +58,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     calendar.render()
 
+    injectFiltersIntoCalendar()
+
     loadData()
 
     function loadData() {
@@ -76,15 +73,69 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
                 allData = data
 
-                // ✅ добавено
+                let regionFilter = document.getElementById("region-filter")
+                let cityFilter = document.getElementById("city-filter")
+                let stationFilter = document.getElementById("station-filter")
+
                 populateFilters(data, regionFilter, cityFilter, stationFilter)
 
                 render()
+
+                let today = new Date().toISOString().split("T")[0]
+
+                let todayData = data.filter(row => {
+                    if (!row.created_at) return false
+                    let d = new Date(row.created_at).toISOString().split("T")[0]
+                    return d === today
+                })
+
+                renderBestPrices(todayData)
+
+                let title = document.querySelector(".best-prices-section h3")
+                if (title) {
+                    title.textContent = "Най-ниски цени за днес (" + today + ")"
+                }
             })
             .catch(err => console.error(err))
     }
 
-    // ✅ НОВО
+    function renderBestPrices(data){
+
+    let container = document.getElementById("best-prices")
+    if(!container) return
+
+    if(!data.length){
+        container.innerHTML = `<div class="empty">Няма данни за днес</div>`
+        return
+    }
+
+    let grouped = {}
+
+    data.forEach(row => {
+        if(!grouped[row.fuel]) grouped[row.fuel] = []
+        grouped[row.fuel].push(row)
+    })
+
+    let html = ""
+
+    Object.keys(grouped).forEach(fuel => {
+
+        let sorted = grouped[fuel].sort((a,b)=>a.price - b.price)
+        let best = sorted[0]
+
+        html += `
+            <div class="best-price-card">
+                <div class="fuel">${fuel}</div>
+                <div class="price">${Number(best.price).toFixed(2)} €</div>
+                <div class="station">${best.station}</div>
+                <div class="city">${best.city}</div>
+            </div>
+        `
+    })
+
+    container.innerHTML = html
+}
+
     function populateFilters(data, regionFilter, cityFilter, stationFilter) {
 
         let regions = new Set()
@@ -102,7 +153,6 @@ document.addEventListener("DOMContentLoaded", function () {
         fillSelect(stationFilter, stations, "Всички бензиностанции")
     }
 
-    //
     function fillSelect(select, values, label) {
 
         select.innerHTML = `<option value="all">${label}</option>`
@@ -166,28 +216,62 @@ document.addEventListener("DOMContentLoaded", function () {
         return events
     }
 
-    function injectCounts() {
+    function injectFiltersIntoCalendar() {
 
-        document.querySelectorAll('.fc-daygrid-day').forEach(cell => {
+        let toolbar = document.querySelector('.fc-toolbar-chunk:nth-child(2)')
+        if (!toolbar) return
 
-            let date = cell.getAttribute('data-date')
-            let frame = cell.querySelector('.fc-daygrid-day-frame')
+        let filters = document.createElement("div")
+        filters.className = "calendar-filters"
 
-            if (!frame) return
+        filters.innerHTML = `
+            <select id="region-filter">
+                <option value="all">Област</option>
+            </select>
 
-            let old = frame.querySelector('.day-count')
-            if (old) old.remove()
+            <select id="city-filter">
+                <option value="all">Град</option>
+            </select>
 
-            if (dayCounts[date]) {
-                let div = document.createElement('div')
-                div.className = 'day-count'
-                div.textContent = "Общо " + dayCounts[date] + "+"
-                frame.appendChild(div)
-            }
-        })
+            <select id="fuel-filter">
+                <option value="all">Гориво</option>
+                <option value="Бензин A95">A95</option>
+                <option value="Бензин A100">A100</option>
+                <option value="Дизел">Дизел</option>
+                <option value="Дизел премиум">Дизел +</option>
+                <option value="Пропан Бутан">Газ</option>
+                <option value="Метан">Метан</option>
+            </select>
+
+            <select id="station-filter">
+                <option value="all">Бензиностанция</option>
+            </select>
+        `
+
+        toolbar.appendChild(filters)
+
+        rebindFilters()
+    }
+
+    function rebindFilters() {
+
+        let fuelFilter = document.getElementById("fuel-filter")
+        let regionFilter = document.getElementById("region-filter")
+        let cityFilter = document.getElementById("city-filter")
+        let stationFilter = document.getElementById("station-filter")
+
+        fuelFilter.addEventListener("change", render)
+        regionFilter.addEventListener("change", render)
+        cityFilter.addEventListener("change", render)
+        stationFilter.addEventListener("change", render)
     }
 
     function getFilteredData() {
+
+        let fuelFilter = document.getElementById("fuel-filter")
+        let regionFilter = document.getElementById("region-filter")
+        let cityFilter = document.getElementById("city-filter")
+        let stationFilter = document.getElementById("station-filter")
 
         let filtered = [...allData]
 
@@ -250,10 +334,26 @@ document.addEventListener("DOMContentLoaded", function () {
         modal.classList.add("show")
     }
 
-    fuelFilter.addEventListener("change", render)
-    regionFilter.addEventListener("change", render)
-    cityFilter.addEventListener("change", render)
-    stationFilter.addEventListener("change", render)
+    function injectCounts() {
+
+        document.querySelectorAll('.fc-daygrid-day').forEach(cell => {
+
+            let date = cell.getAttribute('data-date')
+            let frame = cell.querySelector('.fc-daygrid-day-frame')
+
+            if (!frame) return
+
+            let old = frame.querySelector('.day-count')
+            if (old) old.remove()
+
+            if (dayCounts[date]) {
+                let div = document.createElement('div')
+                div.className = 'day-count'
+                div.textContent = "Общо " + dayCounts[date] + "+"
+                frame.appendChild(div)
+            }
+        })
+    }
 
     let buttons = document.querySelectorAll(".chart-filters button")
 

@@ -37,7 +37,7 @@
     padding: 20px;
     border-radius: 16px;
     border: 1px solid var(--border-color);
-    min-height: 650px;
+    min-height: 820px;
 }
 
 
@@ -345,7 +345,7 @@
     }
 
     .fc-daygrid-day-frame{
-        padding-bottom:16px;
+        padding-bottom:30px;
     }
 
 
@@ -356,7 +356,7 @@
 
     .day-count{
         position:absolute;
-        bottom:2px;
+        bottom: 1px;
         left:4px;
         font-size:10px;
         background:rgba(0,0,0,0.4);
@@ -413,4 +413,229 @@ body.light-theme .chart-filters button{
 .fc-daygrid-event .fc-event-main {
     width: 10px;
     height: 10px;
+}
+
+/* ===== FILTERS IN CALENDAR ===== */
+
+.calendar-filters{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap; /* важно */
+}
+
+/* desktop */
+.calendar-filters select{
+    padding:6px 10px;
+    border-radius:8px;
+    border:1px solid var(--border-color);
+    background:var(--input-bg);
+    color:var(--text-color);
+    font-size:12px;
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width:768px){
+
+    .calendar-filters{
+        flex-direction:column;
+        align-items:stretch;
+        width:100%;
+        margin-top:8px;
+    }
+
+    .calendar-filters select{
+        width:100%;
+    }
+
+    .fc .fc-toolbar{
+        flex-direction:column;
+        align-items:stretch;
+        gap:10px;
+    }
+
+    .fc .fc-toolbar-chunk{
+        width:100%;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        flex-wrap:wrap;
+    }
+}
+
+.best-prices-section{
+    margin-bottom:30px;
+    background:linear-gradient(135deg, #1f2937, #213448);
+    padding:20px;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+.best-prices-section h3{
+    margin-bottom:15px;
+    font-size:18px;
+}
+
+/* ===== BEST PRICES SECTION ===== */
+
+.best-prices-section{
+    margin-bottom:30px;
+    padding:20px;
+    border-radius:16px;
+    background:linear-gradient(135deg, #1f2937, #213448);
+    border:1px solid rgba(255,255,255,0.08);
+    box-shadow:0 10px 25px rgba(0,0,0,0.3);
+    position:relative;
+    overflow:hidden;
+}
+
+/* subtle animated glow */
+.best-prices-section::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.05), transparent);
+    opacity:0;
+    transition:0.6s;
+}
+
+.best-prices-section:hover::before{
+    opacity:1;
+}
+
+/* title */
+
+.best-prices-section h3{
+    margin-bottom:15px;
+    font-size:18px;
+    font-weight:600;
+}
+
+/* LIST */
+
+.best-prices-list{
+    display:flex;
+    flex-wrap:wrap;
+    gap:14px;
+}
+
+/* CARD */
+
+.best-price-card{
+    flex:1 1 160px;
+    background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:14px;
+    padding:14px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+    transition:all 0.25s ease;
+}
+
+/* 🔥 hover interaction */
+
+.best-price-card:hover{
+    transform:translateY(-6px) scale(1.02);
+    box-shadow:0 15px 30px rgba(0,0,0,0.4);
+    border-color:rgba(255,255,255,0.2);
+}
+
+/* glow line on hover */
+
+.best-price-card::after{
+    content:"";
+    position:absolute;
+    top:0;
+    left:-100%;
+    width:100%;
+    height:100%;
+    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition:0.6s;
+}
+
+.best-price-card:hover::after{
+    left:100%;
+}
+
+/* fuel */
+
+.best-price-card .fuel{
+    font-size:13px;
+    opacity:0.75;
+    margin-bottom:6px;
+}
+
+/* price (pulse effect) */
+
+.best-price-card .price{
+    font-size:22px;
+    font-weight:700;
+    margin-bottom:6px;
+    transition:0.2s;
+}
+
+.best-price-card:hover .price{
+    transform:scale(1.1);
+}
+
+/* station */
+
+.best-price-card .station{
+    font-size:13px;
+    font-weight:500;
+}
+
+/* city */
+
+.best-price-card .city{
+    font-size:12px;
+    opacity:0.6;
+}
+
+/* empty */
+
+.best-prices-list .empty{
+    opacity:0.6;
+    text-align:center;
+    padding:10px;
+}
+
+/* ===== ANIMATION ON LOAD ===== */
+
+.best-price-card{
+    opacity:0;
+    transform:translateY(10px);
+    animation:fadeInUp 0.4s ease forwards;
+}
+
+.best-price-card:nth-child(1){ animation-delay:0.05s; }
+.best-price-card:nth-child(2){ animation-delay:0.1s; }
+.best-price-card:nth-child(3){ animation-delay:0.15s; }
+.best-price-card:nth-child(4){ animation-delay:0.2s; }
+.best-price-card:nth-child(5){ animation-delay:0.25s; }
+
+@keyframes fadeInUp{
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+/* ===== MOBILE ===== */
+
+@media (max-width:768px){
+
+    .best-prices-section{
+        padding:15px;
+    }
+
+    .best-price-card{
+        flex:1 1 100%;
+    }
+
+    .best-price-card .price{
+        font-size:18px;
+    }
 }
