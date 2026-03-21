@@ -99,31 +99,31 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(err => console.error(err))
     }
 
-    function renderBestPrices(data){
+    function renderBestPrices(data) {
 
-    let container = document.getElementById("best-prices")
-    if(!container) return
+        let container = document.getElementById("best-prices")
+        if (!container) return
 
-    if(!data.length){
-        container.innerHTML = `<div class="empty">Няма данни за днес</div>`
-        return
-    }
+        if (!data.length) {
+            container.innerHTML = `<div class="empty">Няма данни за днес</div>`
+            return
+        }
 
-    let grouped = {}
+        let grouped = {}
 
-    data.forEach(row => {
-        if(!grouped[row.fuel]) grouped[row.fuel] = []
-        grouped[row.fuel].push(row)
-    })
+        data.forEach(row => {
+            if (!grouped[row.fuel]) grouped[row.fuel] = []
+            grouped[row.fuel].push(row)
+        })
 
-    let html = ""
+        let html = ""
 
-    Object.keys(grouped).forEach(fuel => {
+        Object.keys(grouped).forEach(fuel => {
 
-        let sorted = grouped[fuel].sort((a,b)=>a.price - b.price)
-        let best = sorted[0]
+            let sorted = grouped[fuel].sort((a, b) => a.price - b.price)
+            let best = sorted[0]
 
-        html += `
+            html += `
             <div class="best-price-card">
                 <div class="fuel">${fuel}</div>
                 <div class="price">${Number(best.price).toFixed(2)} €</div>
@@ -131,26 +131,58 @@ document.addEventListener("DOMContentLoaded", function () {
                 <div class="city">${best.city}</div>
             </div>
         `
-    })
+        })
 
-    container.innerHTML = html
-}
+        container.innerHTML = html
+    }
 
     function populateFilters(data, regionFilter, cityFilter, stationFilter) {
 
-        let regions = new Set()
-        let cities = new Set()
+        let regionCityMap = {}
         let stations = new Set()
 
         data.forEach(row => {
-            if (row.region) regions.add(row.region)
-            if (row.city) cities.add(row.city)
+
+            if (row.region && row.city) {
+
+                if (!regionCityMap[row.region]) {
+                    regionCityMap[row.region] = new Set()
+                }
+
+                regionCityMap[row.region].add(row.city)
+            }
+
             if (row.station) stations.add(row.station)
         })
 
-        fillSelect(regionFilter, regions, "Всички области")
-        fillSelect(cityFilter, cities, "Всички градове")
-        fillSelect(stationFilter, stations, "Всички бензиностанции")
+        // региони
+        fillSelect(regionFilter, Object.keys(regionCityMap), "ВСИЧКИ ОБЛАСТИ")
+
+        // първоначално всички градове
+        let allCities = new Set()
+        Object.values(regionCityMap).forEach(set => {
+            set.forEach(c => allCities.add(c))
+        })
+
+        fillSelect(cityFilter, allCities, "ВСИЧКИ ГРАДОВЕ")
+
+        // станции
+        fillSelect(stationFilter, stations, "ВСИЧКИ БЕНЗИНОСТАНЦИИ")
+
+
+        regionFilter.addEventListener("change", function () {
+
+            let selectedRegion = this.value
+
+            if (selectedRegion === "all") {
+                fillSelect(cityFilter, allCities, "ВСИЧКИ ГРАДОВЕ")
+            } else {
+                fillSelect(cityFilter, regionCityMap[selectedRegion], "ВСИЧКИ ГРАДОВЕ")
+            }
+
+            cityFilter.value = "all"
+            render()
+        })
     }
 
     function fillSelect(select, values, label) {
@@ -234,7 +266,7 @@ document.addEventListener("DOMContentLoaded", function () {
             </select>
 
             <select id="fuel-filter">
-                <option value="all">Гориво</option>
+                <option value="all">ВСИЧКИ ГОРИВА</option>
                 <option value="Бензин A95">A95</option>
                 <option value="Бензин A100">A100</option>
                 <option value="Дизел">Дизел</option>
