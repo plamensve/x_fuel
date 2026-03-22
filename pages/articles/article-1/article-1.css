@@ -1,0 +1,155 @@
+/* =========================
+   ARTICLE PAGE (FORCE DARK TEXT)
+========================= */
+
+.article-page {
+    width: 100%;
+    max-width: 1100px;
+    margin: 40px auto;
+    padding: 0 20px;
+
+    color: #111827; /* основен тъмен текст */
+}
+
+/* TITLE */
+
+.article-title {
+    font-size: clamp(26px, 4vw, 34px);
+    font-weight: 700;
+    margin-bottom: 10px;
+
+    color: #0f172a; /* тъмно */
+}
+
+/* META */
+
+.article-meta {
+    font-size: 14px;
+    color: #6b7280;
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+/* IMAGE */
+
+.article-image-main {
+    width: 100%;
+    height: 320px;
+    border-radius: 12px;
+
+    background-size: cover;
+    background-position: center;
+
+    margin-bottom: 30px;
+}
+
+/* CONTENT */
+
+.article-content-full {
+    font-size: 16px;
+    line-height: 1.75;
+
+    color: #1f2937; /* тъмен текст */
+}
+
+/* PARAGRAPHS */
+
+.article-content-full p {
+    margin-bottom: 18px;
+    color: #1f2937;
+}
+
+/* HEADINGS */
+
+.article-content-full h2 {
+    font-size: 22px;
+    margin: 30px 0 15px;
+
+    color: #0f172a;
+}
+
+/* LIST */
+
+.article-content-full ul {
+    margin: 15px 0 20px 20px;
+}
+
+.article-content-full li {
+    margin-bottom: 10px;
+    color: #1f2937;
+}
+
+/* LINKS */
+
+.article-content-full a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.article-content-full a:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   SHARE BUTTONS
+========================= */
+
+.share-section-1 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.share-section-2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.share-label {
+    font-weight: 600;
+    color: #374151;
+}
+
+/* BUTTON */
+
+.share-btn {
+    padding: 8px 14px;
+    border-radius: 8px;
+
+    font-size: 14px;
+    text-decoration: none;
+    color: white;
+
+    transition: 0.2s ease;
+}
+
+/* COLORS */
+
+.share-btn.facebook {
+    background: #1877f2;
+}
+
+.share-btn.twitter {
+    background: #1da1f2;
+}
+
+.share-btn.linkedin {
+    background: #0a66c2;
+}
+
+/* hover */
+
+.share-btn:hover {
+    opacity: 0.85;
+    transform: translateY(-1px);
+}

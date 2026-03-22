@@ -11,8 +11,8 @@
     <script src="//fuelo.net/js/widget-bg.min.js"></script>
 
     <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="styles/useful.css">
-    <link rel="stylesheet" href="styles/trends.css">
+    <link rel="stylesheet" href="styles/news.css">
+
 
     <meta property="og:title" content="Текущи цени на горивата в България">
     <meta property="og:description" content="Виж актуалните средни цени на бензин, дизел и газ в реално време.">
@@ -80,51 +80,38 @@
 </nav>
 
 <main class="container">
-    <div class="best-prices-section">
+    <section class="articles-section">
 
-        <h3>Най-ниски цени за избрания ден</h3>
+        <h1 class="section-title">Новини и статии</h1>
 
-        <div id="best-prices" class="best-prices-list"></div>
+        <p class="info-helper" style="text-align:center;">
+            Анализи, новини и полезна информация за цените на горивата в България
+        </p>
 
-    </div>
+        <div class="articles-grid">
 
-    <section class="trends-section">
+            <!-- CARD -->
+            <a href="articles/article-1/article-1.html" class="article-card">
 
-        <!-- LEGEND -->
-        <div class="legend">
-            <span><span class="dot fuel-a95"></span> A95</span>
-            <span><span class="dot fuel-diesel"></span> Дизел</span>
-            <span><span class="dot fuel-gas"></span> Газ</span>
-            <span><span class="dot fuel-a100"></span> A100</span>
-            <span><span class="dot fuel-diesel-plus"></span> Дизел+</span>
-            <span><span class="dot fuel-methane"></span> Метан</span>
-        </div>
+                <div class="article-image"
+                     style="background-image:url('../media/2logo.png')"></div>
 
-        <!-- CALENDAR -->
-        <div id="calendar"></div>
-        <div class="chart-section">
+                <div class="article-content">
 
-            <h2 class="chart-title">Динамика на цената</h2>
-            <p class="chart-description">
-                Графиката показва средната цена на избраното гориво по дни, базирана на всички подадени данни.
-                Използвайте бутоните, за да превключвате между различните видове горива и да проследите тенденцията във
-                времето.
-            </p>
+                    <h3>Как се променят цените на горивата</h3>
 
-            <div class="chart-filters">
-                <button data-fuel="Бензин A95">A95</button>
-                <button data-fuel="Дизел">Дизел</button>
-                <button data-fuel="Пропан Бутан">Газ</button>
-                <button data-fuel="Бензин A100">A100</button>
-                <button data-fuel="Дизел премиум">Дизел+</button>
-                <button data-fuel="Метан">Метан</button>
-            </div>
+                    <p>
+                        Основните фактори, които влияят върху цените в България.
+                    </p>
 
-            <div class="chart-container">
-                <canvas id="price-chart"></canvas>
-            </div>
+                    <span class="article-date">Март 2026</span>
+
+                </div>
+
+            </a>
 
         </div>
+
     </section>
 
 </main>
@@ -155,6 +142,7 @@
                 <li><a href="#top">Начало</a></li>
                 <li><a href="useful.html">Полезно</a></li>
                 <li><a href="trends.html">История на цените</a></li>
+                <li><a href="news.html">Новини</a></li>
                 <li><a href="rules.html">Общи условия</a></li>
             </ul>
 
