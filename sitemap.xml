@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+    <url>
+        <loc>https://goriva.online/</loc>
+        <lastmod>2026-03-22</lastmod>
+        <priority>1.0</priority>
+    </url>
+
+    <url>
+        <loc>https://goriva.online/index.html</loc>
+    </url>
+
+    <url>
+        <loc>https://goriva.online/pages/trends.html</loc>
+    </url>
+
+    <url>
+        <loc>https://goriva.online/pages/useful.html</loc>
+    </url>
+
+    <url>
+        <loc>https://goriva.online/pages/article-1.html</loc>
+    </url>
+
+    <url>
+        <loc>https://goriva.online/pages/terms.html</loc>
+    </url>
+
+</urlset>
