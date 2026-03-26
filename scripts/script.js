@@ -51,6 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const regionSelect = document.getElementById("region-select")
     const citySelect = document.getElementById("city-select")
+    const stationSelect = document.getElementById("station-select")
 
     let allPrices = []
 
@@ -156,6 +157,28 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             citySelect.appendChild(option)
+
+        })
+
+    }
+
+    function populateStations(data, selectedStation = "all") {
+
+        let stations = [...new Set(data.map(r => r.station))].sort()
+
+        stationSelect.innerHTML = `<option value="all">Всички бензиностанции</option>`
+
+        stations.forEach(st => {
+
+            let option = document.createElement("option")
+            option.value = st
+            option.textContent = st
+
+            if (st === selectedStation) {
+                option.selected = true
+            }
+
+            stationSelect.appendChild(option)
 
         })
 
@@ -341,6 +364,14 @@ document.addEventListener("DOMContentLoaded", function () {
             filtered = filtered.filter(r => r.city === selectedCity)
         }
 
+        populateStations(filtered)
+
+        let selectedStation = stationSelect.value
+
+        if (selectedStation !== "all") {
+            filtered = filtered.filter(r => r.station === selectedStation)
+        }
+
         let averages = calculateAveragePrices(filtered)
 
         let grouped = {}
@@ -458,6 +489,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
         })
 
+    }
+    if (stationSelect) {
+        stationSelect.addEventListener("change", function () {
+            currentPage = 1
+            renderPrices()
+        })
     }
 
     if (regionSelect && citySelect) {
