@@ -1,0 +1,165 @@
+/* =========================
+   HERO ABOUT SECTION
+========================= */
+
+.about-project {
+    text-align: center;
+    padding: 60px 20px 30px;
+    color: #111;
+}
+
+.about-inner {
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+/* TITLE */
+
+.about-title {
+    font-size: clamp(30px, 5vw, 48px);
+    font-weight: 700;
+    margin-bottom: 20px;
+    line-height: 1.2;
+    /* subtle premium effect */
+    letter-spacing: -0.5px;
+}
+
+.about-project .about-title {
+    color: rgb(39, 62, 89);
+}
+
+/* DESCRIPTION */
+
+.about-desc {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+    color: #333;
+}
+
+/* POINTS */
+
+.about-points {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.about-points span {
+    background: rgba(0,0,0,0.04);
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,0.08);
+    color: #222;
+    transition: 0.2s;
+}
+
+.about-points span:hover {
+    background: rgba(0,0,0,0.07);
+}
+
+/* CTA */
+
+.about-cta {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* PRIMARY BUTTON */
+
+.cta-primary {
+    background: linear-gradient(135deg, #2e7d32, #66bb6a);
+    color: white;
+    padding: 12px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: 0.25s;
+}
+
+.cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(76,175,80,0.25);
+}
+
+/* SECONDARY BUTTON */
+
+.cta-secondary {
+    background: transparent;
+    color: #111;
+    padding: 12px 22px;
+    border-radius: 10px;
+    text-decoration: none;
+    border: 1px solid rgba(0,0,0,0.15);
+    transition: 0.25s;
+}
+
+.cta-secondary:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+#fuel-form,
+#prices-container {
+    scroll-margin-top: 800px; /* настрой си стойността */
+}
+
+/* =========================
+   FACEBOOK CTA BUTTON
+========================= */
+
+.facebook-button-1 {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 12px 22px;
+    border-radius: 10px;
+
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 14px;
+
+    color: white;
+    background: linear-gradient(135deg, #1877f2, #3b5998);
+
+    transition: 0.25s;
+}
+
+/* HOVER */
+
+.facebook-button-1:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(24,119,242,0.3);
+}
+
+/* ACTIVE */
+
+.facebook-button-1:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .about-desc {
+        font-size: 16px;
+    }
+
+    .about-title {
+        font-size: 28px;
+    }
+
+    .about-points {
+        gap: 10px;
+    }
+
+}
