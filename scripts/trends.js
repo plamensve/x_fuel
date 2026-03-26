@@ -109,9 +109,37 @@ document.addEventListener("DOMContentLoaded", function () {
             return
         }
 
-        let grouped = {}
+        let stationGroups = {}
 
         data.forEach(row => {
+
+            let key = row.fuel + "|" + row.station + "|" + row.city
+
+            if (!stationGroups[key]) {
+                stationGroups[key] = {
+                    fuel: row.fuel,
+                    station: row.station,
+                    city: row.city,
+                    sum: 0,
+                    count: 0
+                }
+            }
+
+            stationGroups[key].sum += Number(row.price)
+            stationGroups[key].count++
+        })
+
+
+        let averages = Object.values(stationGroups).map(s => ({
+            fuel: s.fuel,
+            station: s.station,
+            city: s.city,
+            avg: s.sum / s.count
+        }))
+
+        let grouped = {}
+
+        averages.forEach(row => {
             if (!grouped[row.fuel]) grouped[row.fuel] = []
             grouped[row.fuel].push(row)
         })
@@ -120,13 +148,14 @@ document.addEventListener("DOMContentLoaded", function () {
 
         Object.keys(grouped).forEach(fuel => {
 
-            let sorted = grouped[fuel].sort((a, b) => a.price - b.price)
+            let sorted = grouped[fuel].sort((a, b) => a.avg - b.avg)
+            if (!sorted.length) return
             let best = sorted[0]
 
             html += `
             <div class="best-price-card">
                 <div class="fuel">${fuel}</div>
-                <div class="price">${Number(best.price).toFixed(2)} €</div>
+                <div class="price">${best.avg.toFixed(2)} €</div>
                 <div class="station">${best.station}</div>
                 <div class="city">${best.city}</div>
             </div>

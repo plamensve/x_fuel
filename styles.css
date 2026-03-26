@@ -1170,10 +1170,6 @@ select option{
 
 }
 
-
-
-
-
 #pagination {
     margin-bottom: 30px;
 }
@@ -1191,4 +1187,75 @@ body.light-theme #pagination button:hover {
 body.light-theme #pagination button.active-page {
     background: #2563eb;
     color: white;
+}
+
+/* CONTAINER */
+.ticker {
+    width: 100%;
+    overflow: hidden;
+    background: linear-gradient(90deg, #0f172a, #1e293b);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    position: relative;
+}
+
+/* FADE EDGES */
+.ticker::before,
+.ticker::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    width: 80px;
+    height: 100%;
+    z-index: 2;
+}
+
+.ticker::before {
+    left: 0;
+    background: linear-gradient(to right, #0f172a, transparent);
+}
+
+.ticker::after {
+    right: 0;
+    background: linear-gradient(to left, #0f172a, transparent);
+}
+
+/* CONTENT AREA */
+#ticker-content {
+    position: relative;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* ❗ КОГАТО НЯМА ДАННИ */
+.ticker-empty {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 15px;
+    font-weight: 500;
+    color: #e2e8f0;
+}
+
+.ticker-track {
+    display: flex;
+    gap: 40px;
+    white-space: nowrap;
+    position: absolute;
+    left: 0;
+    will-change: transform;
+}
+
+/* ITEMS */
+.ticker-item {
+    color: #e2e8f0;
+    font-size: 14px;
+}
+
+.ticker-item strong {
+    color: #22c55e;
 }

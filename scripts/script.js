@@ -1,5 +1,7 @@
 let currentPage = 1
 let rowsPerPage = 5
+let tickerSpeed = 0.3
+let tickerAnimationId = null
 
 let map
 let marker
@@ -112,6 +114,10 @@ document.addEventListener("DOMContentLoaded", function () {
             .then(data => {
 
                 allPrices = data
+
+                let todayData = data.filter(isToday)
+
+                renderTicker(todayData)
 
                 populateRegions()
                 renderPrices()
@@ -499,6 +505,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (regionSelect && citySelect) {
         loadPrices()
+    } else {
+        renderTicker([])
     }
 
     if (form) {
@@ -686,4 +694,119 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 })
 
+function renderTicker(data) {
 
+    let container = document.getElementById("ticker-content")
+    if (!container) return
+
+    if (!data || data.length === 0) {
+
+        if (tickerAnimationId) {
+            cancelAnimationFrame(tickerAnimationId)
+            tickerAnimationId = null
+        }
+
+        container.innerHTML = `
+            <div class="ticker-empty">
+                Все още няма подадени цени за днес
+            </div>
+        `
+        return
+    }
+
+    let stationGroups = {}
+
+    data.forEach(row => {
+
+        let key = row.fuel + "|" + row.station + "|" + row.city
+
+        if (!stationGroups[key]) {
+            stationGroups[key] = {
+                fuel: row.fuel,
+                station: row.station,
+                city: row.city,
+                sum: 0,
+                count: 0
+            }
+        }
+
+        stationGroups[key].sum += Number(row.price)
+        stationGroups[key].count++
+    })
+
+    let averages = Object.values(stationGroups).map(s => ({
+        fuel: s.fuel,
+        station: s.station,
+        city: s.city,
+        avg: s.sum / s.count
+    }))
+
+    let grouped = {}
+
+    averages.forEach(row => {
+        if (!grouped[row.fuel]) grouped[row.fuel] = []
+        grouped[row.fuel].push(row)
+    })
+
+    let items = []
+
+    Object.keys(grouped).forEach(fuel => {
+
+        let sorted = grouped[fuel].sort((a, b) => a.avg - b.avg)
+        if (!sorted.length) return
+
+        let best = sorted[0]
+
+        items.push(`
+            <span class="ticker-item">
+                ${fuel}: <strong>${best.avg.toFixed(2)}€</strong>
+                (${best.station}, ${best.city})
+            </span>
+        `)
+    })
+
+    container.innerHTML = `
+        <div class="ticker-track">
+            ${items.join("").repeat(10)}
+        </div>
+    `
+
+    startTickerLoop()
+}
+
+let tickerOffset = 0
+
+function startTickerLoop() {
+
+    let track = document.querySelector(".ticker-track")
+    if (!track) return
+
+    // СПИРА стария loop
+    if (tickerAnimationId) {
+        cancelAnimationFrame(tickerAnimationId)
+    }
+
+    tickerOffset = 0
+
+    function step() {
+
+        tickerOffset += tickerSpeed
+        track.style.transform = `translateX(-${tickerOffset}px)`
+
+        let first = track.firstElementChild
+
+        if (first) {
+
+            let firstWidth = first.offsetWidth + 50
+
+            if (tickerOffset >= firstWidth) {
+                tickerOffset -= firstWidth
+                track.appendChild(first)
+            }
+        }
+
+        tickerAnimationId = requestAnimationFrame(step)
+    }
+
+    step()
+}
