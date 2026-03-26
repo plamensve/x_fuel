@@ -364,9 +364,9 @@ document.addEventListener("DOMContentLoaded", function () {
             filtered = filtered.filter(r => r.city === selectedCity)
         }
 
-        populateStations(filtered)
-
         let selectedStation = stationSelect.value
+
+        populateStations(filtered, selectedStation)
 
         if (selectedStation !== "all") {
             filtered = filtered.filter(r => r.station === selectedStation)
