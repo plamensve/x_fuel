@@ -145,6 +145,171 @@
 }
 
 /* =========================
+   HOW IT WORKS - UPGRADE
+========================= */
+
+/* =========================
+   HOW IT WORKS - FINAL
+========================= */
+
+.how-it-works {
+    margin: 100px 0;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.how-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.how-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 999px;
+
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+
+    background: rgba(37,99,235,0.1);
+    color: #2563eb;
+
+    margin-bottom: 10px;
+}
+
+/* 🔥 PREMIUM TITLE */
+
+.how-title {
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 10px;
+
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    letter-spacing: -0.5px;
+}
+
+.how-title::after {
+    content: "";
+    display: block;
+    width: 80px;
+    height: 4px;
+    margin: 12px auto 0;
+
+    border-radius: 999px;
+
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+    opacity: 0.8;
+}
+
+.how-subtitle {
+    color: #555;
+    font-size: 14px;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 28px;
+}
+
+/* =========================
+   CARD
+========================= */
+
+.step {
+    padding: 30px 24px;
+    border-radius: 16px;
+
+    background: rgb(33, 52, 72);
+    border: 1px solid rgba(255,255,255,0.1);
+
+    text-align: center;
+
+    transition: 0.2s;
+
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.step:hover {
+    transform: translateY(-5px);
+    border-color: rgba(255,255,255,0.2);
+}
+
+/* =========================
+   ICON
+========================= */
+
+.step-icon {
+    width: 56px;
+    height: 56px;
+
+    margin: 0 auto 16px auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 26px;
+
+    border-radius: 12px;
+
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    color: white;
+}
+
+.step:nth-child(2) .step-icon {
+    background: linear-gradient(135deg, #22c55e, #4ade80);
+}
+
+.step:nth-child(3) .step-icon {
+    background: linear-gradient(135deg, #f59e0b, #fbbf24);
+}
+
+/* =========================
+   TEXT
+========================= */
+
+.step h3 {
+    font-size: 17px;
+    margin-bottom: 8px;
+    color: #e2e8f0;
+}
+
+.step p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(226,232,240,0.7);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 900px) {
+    .steps {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .steps {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* =========================
    MOBILE
 ========================= */
 
