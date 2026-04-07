@@ -1230,6 +1230,15 @@ body.light-theme #pagination button.active-page {
     overflow: hidden;
 }
 
+#prices-date {
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    font-weight: 700;
+}
+
 /* КОГАТО НЯМА ДАННИ */
 .ticker-empty {
     position: absolute;
