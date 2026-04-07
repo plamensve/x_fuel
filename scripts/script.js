@@ -6,6 +6,25 @@ let tickerAnimationId = null
 let map
 let marker
 
+function getStationLogo(name) {
+
+    let lower = (name || "").toLowerCase()
+
+    if (lower.includes("бенита")) return "../images/station_logos/benita.svg"
+    if (lower.includes("еко петрол") || lower.includes("екопетрол")) return "../images/station_logos/ecopetrol.svg"
+    if (lower.includes("лукойл")) return "../images/station_logos/lukoil.svg"
+    if (lower.includes("омв")) return "../images/station_logos/omv.svg"
+    if (lower.includes("шел")) return "../images/station_logos/shell.svg"
+    if (lower.includes("ромпетрол")) return "../images/station_logos/rompetrol.svg"
+    if (lower.includes("инса")) return "../images/station_logos/insa.svg"
+    if (lower.includes("круиз")) return "../images/station_logos/kruiz.svg"
+    if (lower.includes("булмаркет")) return "../images/station_logos/bulmarket.svg"
+    if (lower.includes("петрол")) return "../images/station_logos/petrol.svg"
+    if (lower.includes("еко")) return "../images/station_logos/eko.svg"
+
+    return null
+}
+
 document.addEventListener("DOMContentLoaded", function () {
 
         let today = new Date()
@@ -436,8 +455,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 let row = document.createElement("tr")
 
-                row.innerHTML = `
-<td>${item.station} – ${item.city}</td>
+let logo = getStationLogo(item.station)
+
+row.innerHTML = `
+<td>
+    ${logo ? `<img src="${logo}" style="height:20px; vertical-align:middle; margin-right:6px;">` : ""}
+    ${item.station} – ${item.city}
+</td>
 <td>${item.location || "-"}</td>
 <td>${item["A95"]}</td>
 <td>${item["A100"]}</td>
