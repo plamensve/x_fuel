@@ -11,42 +11,42 @@ document.addEventListener("DOMContentLoaded", () => {
             Authorization: `Bearer ${apiKey}`
         }
     })
-    .then(res => {
-        if (!res.ok) {
-            throw new Error("Request failed: " + res.status);
-        }
-        return res.json();
-    })
-    .then(data => {
+        .then(res => {
+            if (!res.ok) {
+                throw new Error("Request failed: " + res.status);
+            }
+            return res.json();
+        })
+        .then(data => {
 
-        console.log("DATA:", data);
+            console.log("DATA:", data);
 
-        data.forEach(st => {
+            data.forEach(st => {
 
-            let slug = (st.station_slug || "").trim().toLowerCase();
+                let slug = (st.station_slug || "").trim().toLowerCase();
 
-            fuels.forEach(fuel => {
+                fuels.forEach(fuel => {
 
-                let id = `${fuel}-${slug}`;
-                let el = document.getElementById(id);
+                    let id = `${fuel}-${slug}`;
+                    let el = document.getElementById(id);
 
-                if (!el) {
-                    console.log("Missing element:", id);
-                    return;
-                }
+                    if (!el) {
+                        console.log("Missing element:", id);
+                        return;
+                    }
 
-                let value = st[fuel];
+                    let value = st[fuel];
 
-                el.textContent = value !== null && value !== undefined
-                    ? value + "€"
-                    : "-";
+                    el.textContent = value !== null && value !== undefined
+                        ? Number(value).toFixed(2) + "€"
+                        : "-";
+                });
+
             });
 
+        })
+        .catch(err => {
+            console.error("Supabase error:", err);
         });
-
-    })
-    .catch(err => {
-        console.error("Supabase error:", err);
-    });
 
 });
