@@ -443,9 +443,14 @@
     <section class="eco-section">
         <h2 class="section-title how-title">ECO Petrol – Бензиностанции и цени 08.04.2026</h2>
         <p class="eco-subtitle"> Актуални цени и адреси на бензиностанции ECO Petrol в България </p>
-
+        <div class="eco-filters" data-filter-group data-target=".eco-card">
+            <button class="filter-btn is-active" data-filter="all">Всички</button>
+            <button class="filter-btn" data-filter="sofia">София</button>
+            <button class="filter-btn" data-filter="elin_pelin">Елин Пелин</button>
+            <button class="filter-btn" data-filter="haskovo">Хасково</button>
+        </div>
         <!-- ЦАРИГРАДСКО ШОСЕ -->
-        <div class="eco-grid">
+        <div class="eco-grid" data-cat="sofia">
 
             <div class="eco-card">
 
@@ -482,7 +487,7 @@
 
 
             <!-- ЦАРИГРАДСКО ШОСЕ 2 -->
-            <div class="eco-card reverse">
+            <div class="eco-card reverse" data-cat="sofia">
                 <div class="eco-info">
                     <h3>ECO Petrol – Цариградско шосе 2</h3>
                     <p class="eco-address">
@@ -493,10 +498,9 @@
                         🕒 Работно време: 24/7 (денонощно)
                     </p>
                     <div class="eco-prices">
-                        <span>Дизел: <strong id="dizel-carigradsko_shose_karaulkata">1.73€</strong></span>
-                        <span>Бензин A95: <strong id="benzin95-carigradsko_shose_karaulkata">1.44€</strong></span>
-                        <span>Бензин A100: <strong id="benzin100-carigradsko_shose_karaulkata">1.57€</strong></span>
-                        <span>Газ: <strong id="lpg-carigradsko_shose_karaulkata">0.75€</strong></span>
+                        <span>Дизел: <strong id="dizel-carigradsko_shose_karaulkata">1.71€</strong></span>
+                        <span>Бензин A95: <strong id="benzin95-carigradsko_karaulkata">1.40€</strong></span>
+                        <span>AdBlue: <strong id="adblue-carigradsko_karaulkata">0.69€</strong></span>
                     </div>
                     <a href="https://www.google.com/maps/search/?api=1&query=бул.+Цариградско+шосе+местност+Караулката+София"
                        target="_blank"
@@ -510,7 +514,7 @@
             </div>
 
             <!-- ЕЛИН ПЕЛИН -->
-            <div class="eco-card">
+            <div class="eco-card" data-cat="elin_pelin">
                 <div class="eco-info">
                     <h3>ECO Petrol – Елин Пелин</h3>
                     <p class="eco-address">
@@ -628,6 +632,7 @@
 <script src="scripts/station-icons.js"></script>
 <script src="scripts/script.js"></script>
 <script src="scripts/ecopetrol_prices.js"></script>
+<script src="scripts/eco_filter.js"></script>
 
 </body>
 </html>
