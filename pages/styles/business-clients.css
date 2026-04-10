@@ -2,11 +2,11 @@
    PAGE BACKGROUND
 ========================= */
 .business-page {
-    background: #f5efe6; /* бежов фон */
+    background: #f8fafc;
 }
 
 .gradient-text {
-    background: linear-gradient(#2563eb, #22c55e);
+    background: linear-gradient(90deg, #2563eb, #22c55e);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -18,20 +18,6 @@
     max-width: 1100px;
     margin: 0 auto;
     padding: 0 20px;
-}
-
-.step img {
-    display: block;
-    margin: 10px auto 0;
-
-    max-width: 120%;   /* вместо 70% */
-    width: 240px;      /* гарантира минимум размер */
-    height: auto;
-
-    object-fit: contain;
-
-    background: transparent;
-    border: none;
 }
 
 /* =========================
@@ -48,125 +34,193 @@
     text-align: center;
 }
 
-.business-hero h1 {
-    font-size: 2.3rem;
-    margin-bottom: 10px;
-}
-
-.business-hero p {
-    opacity: 0.9;
-    margin-bottom: 25px;
-}
-
-/* BUTTON */
-.btn-primary {
-    background: white;
-    color: #1e3a8a;
-    padding: 12px 26px;
-    border-radius: 10px;
-    font-weight: 600;
-    text-decoration: none;
-    transition: 0.25s;
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-}
-
 /* =========================
-   SECTIONS
+   SECTIONS (CLEAN STYLE)
 ========================= */
 .business-steps,
 .business-benefits,
 .business-target,
 .business-contact {
-    padding: 70px 20px;
+    padding: 80px 20px;
+    margin: 0 20px;
+
+    background: white;
+
+    border-top: 1px solid #e5e7eb;
 }
 
-/* TITLES */
+/* първата секция да няма линия */
+.business-steps {
+    border-top: none;
+}
+
+/* леко редуване */
+.business-benefits {
+    background: #f9fafb;
+}
+
+.business-contact {
+    background: #f9fafb;
+}
+
+/* =========================
+   TITLES
+========================= */
 h2 {
     font-size: 1.7rem;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
     color: #111827;
 }
 
 /* =========================
-   STEPS
+   GRID
 ========================= */
 .steps-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
     gap: 25px;
 }
 
+/* =========================
+   BENEFITS GRID
+========================= */
+.business-benefits .steps-grid {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* =========================
+   HOW IT WORKS
+========================= */
+.business-steps .step {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
+    padding: 35px 25px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    min-height: 300px;
+
+    transition: 0.2s;
+}
+
+.business-steps .step:hover {
+    border-color: #2563eb;
+    transform: translateY(-4px);
+}
+
+/* NUMBER */
+.business-steps .step span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 46px;
+    height: 46px;
+
+    margin: 0 auto 15px;
+
+    font-size: 15px;
+    border-radius: 12px;
+
+    background: linear-gradient(135deg, #2563eb, #22c55e);
+    color: white;
+}
+
+/* TEXT */
+.business-steps .step h3 {
+    font-size: 17px;
+    margin-bottom: 6px;
+}
+
+.business-steps .step p {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 15px;
+}
+
+.business-steps .step img {
+    margin-top: auto;
+
+    width: 180px;
+    max-width: none;
+
+    object-fit: contain;
+}
+
+/* =========================
+   STEP (GLOBAL)
+========================= */
 .step {
-    background: #f1f5f9; /* ключовият цвят */
-    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: 16px;
 
     padding: 30px 25px;
 
-    transition: 0.25s;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+
+    min-height: 260px;
+
+    transition: 0.2s;
+}
+
+/* BENEFITS BAR */
+.business-benefits .step::before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 4px;
+
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+
+    border-radius: 2px;
+    margin-bottom: 12px;
 }
 
 .step:hover {
-    transform: translateY(-6px);
     border-color: #2563eb;
 }
 
-.step span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 42px;
-    height: 42px;
-
-    background: linear-gradient(135deg, #2563eb, #22c55e);
-    color: white;
-
-    border-radius: 10px;
-    font-weight: 700;
-
-    margin-bottom: 15px;
+/* IMAGE */
+.step img {
+    width: 250px;
+    object-fit: contain;
+    margin-top: auto;
+    align-self: center;
 }
 
+/* TEXT */
 .step h3 {
-    margin-bottom: 8px;
+    margin-bottom: 6px;
     color: #111827;
+    font-size: 16px;
 }
 
 .step p {
     color: #6b7280;
-    font-size: 0.95rem;
+    font-size: 13px;
 }
 
 /* =========================
    BENEFITS
 ========================= */
-.benefits-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 20px;
+.business-benefits .step {
+    min-height: 220px;
+    align-items: center;
+    text-align: center;
 }
 
-.benefit {
-    background: #f1f5f9;
-    border: 1px solid #e2e8f0;
-
-    padding: 20px;
-    border-radius: 14px;
-
-    font-weight: 500;
-    color: #1f2937;
-
-    transition: 0.25s;
-}
-
-.benefit:hover {
-    border-color: #22c55e;
-    transform: translateY(-4px);
+.business-benefits .step img {
+    width: 90px;
+    margin-bottom: 10px;
 }
 
 /* =========================
@@ -179,8 +233,8 @@ h2 {
 }
 
 .target-grid div {
-    background: #f1f5f9;
-    border: 1px solid #e2e8f0;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
 
     padding: 14px;
     border-radius: 10px;
@@ -188,11 +242,7 @@ h2 {
     font-size: 0.95rem;
     color: #374151;
 
-    transition: 0.2s;
-}
-
-.target-grid div:hover {
-    border-color: #2563eb;
+    text-align: center;
 }
 
 /* =========================
@@ -228,14 +278,214 @@ h2 {
 }
 
 /* =========================
-   MOBILE
+   BUTTONS (FINAL STYLE)
 ========================= */
-@media (max-width: 600px) {
+.btn-primary {
+    display: inline-block;
+
+    padding: 12px 28px;
+
+    background: linear-gradient(135deg, #2563eb, #22c55e);
+    color: white;
+
+    font-weight: 600;
+    font-size: 14px;
+
+    border: none;
+    border-radius: 10px;
+
+    text-decoration: none;
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+    margin-top: 30px;
+}
+
+/* hover */
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+}
+
+/* click */
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}
+
+/* focus (accessibility) */
+.btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+}
+
+.business-target .steps-grid {
+    grid-template-columns: repeat(2, 2fr);
+}
+
+/* =========================
+   TARGET TEXT (ENHANCED)
+========================= */
+.business-target .step h3 {
+    font-size: 18px;
+    font-weight: 600;
+
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    margin-bottom: 15px;
+
+    position: relative;
+    display: inline-block;
+}
+
+/* underline accent */
+.business-target .step h3::after {
+    content: "";
+    display: block;
+
+    width: 40%;
+    height: 3px;
+
+    margin: 6px auto 0;
+
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+    border-radius: 2px;
+
+    transition: 0.3s;
+}
+
+/* hover ефект */
+.business-target .step:hover h3::after {
+    width: 70%;
+}
+
+
+/* =========================
+   SECTION TITLES (PRO)
+========================= */
+h2.gradient-text {
+    font-size: 32px;
+    font-weight: 700;
+
+    text-align: center;
+
+    margin-bottom: 50px;
+
+    position: relative;
+    display: inline-block;
+}
+
+/* wrapper за центриране */
+.business-steps h2,
+.business-benefits h2,
+.business-target h2,
+.business-contact h2 {
+    text-align: center;
+}
+
+/* underline accent */
+h2.gradient-text::after {
+    content: "";
+
+    display: block;
+    width: 60px;
+    height: 4px;
+
+    margin: 12px auto 0;
+
+    border-radius: 3px;
+
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+
+    transition: 0.3s;
+}
+
+/* hover ефект */
+section:hover h2.gradient-text::after {
+    width: 100px;
+}
+
+/* допълнителен subtle ефект */
+h2.gradient-text:hover {
+    transform: translateY(-1px);
+}
+
+/* =========================
+   MOBILE / TABLET FIX
+========================= */
+
+/* Tablet */
+@media (max-width: 900px) {
+
+    /* benefits */
+    .business-benefits .steps-grid {
+        grid-template-columns: repeat(2, 1fr); /* 🔥 FIX */
+    }
+
+    /* target */
+    .business-target .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    /* hero */
     .business-hero {
         padding: 50px 20px;
     }
 
     .business-hero h1 {
         font-size: 1.6rem;
+    }
+}
+
+/* Mobile */
+@media (max-width: 750px) {
+
+    /* benefits */
+    .business-benefits .steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* target */
+    .business-target .steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* cards */
+    .business-target .step {
+        min-height: 240px;
+        padding: 25px 15px;
+    }
+
+    /* images */
+    .business-target .step img {
+        width: 130px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+    /* benefits */
+    .business-benefits .steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* target */
+    .business-target .steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* cards */
+    .business-target .step {
+        min-height: 240px;
+        padding: 25px 15px;
+    }
+
+    /* images */
+    .business-target .step img {
+        width: 130px;
     }
 }
