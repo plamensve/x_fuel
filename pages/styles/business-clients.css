@@ -1,0 +1,789 @@
+/* =========================
+   PAGE BACKGROUND
+========================= */
+.business-page {
+    background: #f8fafc;
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+.container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* =========================
+   HERO
+========================= */
+.business-hero {
+    margin: 40px 20px;
+    padding: 70px 40px;
+
+    background: linear-gradient(120deg, rgb(33, 52, 72) 55%, #2563eb, #22c55e);
+    border-radius: 20px;
+
+    color: white;
+    text-align: center;
+}
+
+/* =========================
+   SECTIONS (CLEAN STYLE)
+========================= */
+.business-steps,
+.business-benefits,
+.business-target,
+.business-contact {
+    padding: 80px 20px;
+    margin: 0 20px;
+
+    background: white;
+
+    border-top: 1px solid #e5e7eb;
+}
+
+/* първата секция да няма линия */
+.business-steps {
+    border-top: none;
+}
+
+/* леко редуване */
+.business-benefits {
+    background: #f9fafb;
+}
+
+.business-contact {
+    background: #f9fafb;
+}
+
+/* =========================
+   TITLES
+========================= */
+h2 {
+    font-size: 1.7rem;
+    margin-bottom: 35px;
+    color: #111827;
+}
+
+/* =========================
+   GRID
+========================= */
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 25px;
+}
+
+/* =========================
+   BENEFITS GRID
+========================= */
+.business-benefits .steps-grid {
+    grid-template-columns: repeat(4, 1fr);
+}
+
+/* =========================
+   HOW IT WORKS
+========================= */
+.business-steps .step {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
+    padding: 35px 25px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    min-height: 300px;
+
+    transition: 0.2s;
+}
+
+.business-steps .step:hover {
+    border-color: #2563eb;
+    transform: translateY(-4px);
+}
+
+/* NUMBER */
+.business-steps .step span {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 46px;
+    height: 46px;
+
+    margin: 0 auto 15px;
+
+    font-size: 15px;
+    border-radius: 12px;
+
+    background: linear-gradient(135deg, #2563eb, #22c55e);
+    color: white;
+}
+
+/* TEXT */
+.business-steps .step h3 {
+    font-size: 17px;
+    margin-bottom: 6px;
+}
+
+.business-steps .step p {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 15px;
+}
+
+.business-steps .step img {
+    margin-top: auto;
+
+    width: 180px;
+    max-width: none;
+
+    object-fit: contain;
+}
+
+/* =========================
+   STEP (GLOBAL)
+========================= */
+.step {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 16px;
+
+    padding: 30px 25px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+
+    min-height: 260px;
+
+    transition: 0.2s;
+}
+
+/* BENEFITS BAR */
+.business-benefits .step::before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 4px;
+
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+
+    border-radius: 2px;
+    margin-bottom: 12px;
+}
+
+.step:hover {
+    border-color: #2563eb;
+}
+
+/* IMAGE */
+.step img {
+    width: 250px;
+    object-fit: contain;
+    margin-top: auto;
+    align-self: center;
+}
+
+/* TEXT */
+.step h3 {
+    margin-bottom: 6px;
+    color: #111827;
+    font-size: 16px;
+}
+
+.step p {
+    color: #6b7280;
+    font-size: 13px;
+}
+
+/* =========================
+   BENEFITS
+========================= */
+.business-benefits .step {
+    min-height: 220px;
+    align-items: center;
+    text-align: center;
+}
+
+.business-benefits .step img {
+    width: 90px;
+    margin-bottom: 10px;
+}
+
+/* =========================
+   TARGET
+========================= */
+.target-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.target-grid div {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+
+    padding: 14px;
+    border-radius: 10px;
+
+    font-size: 0.95rem;
+    color: #374151;
+
+    text-align: center;
+}
+
+/* =========================
+   CONTACT
+========================= */
+.contact-form {
+    max-width: 500px;
+    margin: 0 auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.contact-form input {
+    padding: 13px;
+    border-radius: 10px;
+
+    border: 1px solid #d1d5db;
+    background: white;
+
+    font-size: 14px;
+}
+
+.contact-form input:focus {
+    border-color: #2563eb;
+    outline: none;
+}
+
+.contact-form button {
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+/* =========================
+   BUTTONS (FINAL STYLE)
+========================= */
+.btn-primary {
+    display: inline-block;
+
+    padding: 12px 28px;
+
+    background: linear-gradient(135deg, #2563eb, #22c55e);
+    color: white;
+
+    font-weight: 600;
+    font-size: 14px;
+
+    border: none;
+    border-radius: 10px;
+
+    text-decoration: none;
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+    margin-top: 30px;
+}
+
+/* hover */
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+}
+
+/* click */
+.btn-primary:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
+}
+
+/* focus (accessibility) */
+.btn-primary:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
+}
+
+.business-target .steps-grid {
+    grid-template-columns: repeat(2, 2fr);
+}
+
+/* =========================
+   TARGET TEXT (ENHANCED)
+========================= */
+.business-target .step h3 {
+    font-size: 18px;
+    font-weight: 600;
+
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    margin-bottom: 15px;
+
+    position: relative;
+    display: inline-block;
+}
+
+/* underline accent */
+.business-target .step h3::after {
+    content: "";
+    display: block;
+
+    width: 40%;
+    height: 3px;
+
+    margin: 6px auto 0;
+
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+    border-radius: 2px;
+
+    transition: 0.3s;
+}
+
+/* hover ефект */
+.business-target .step:hover h3::after {
+    width: 70%;
+}
+
+
+/* =========================
+   SECTION TITLES (PRO)
+========================= */
+h2.gradient-text {
+    font-size: 32px;
+    font-weight: 700;
+
+    text-align: center;
+
+    margin-bottom: 50px;
+
+    position: relative;
+    display: inline-block;
+}
+
+/* wrapper за центриране */
+.business-steps h2,
+.business-benefits h2,
+.business-target h2,
+.business-contact h2 {
+    text-align: center;
+}
+
+/* underline accent */
+h2.gradient-text::after {
+    content: "";
+
+    display: block;
+    width: 60px;
+    height: 4px;
+
+    margin: 12px auto 0;
+
+    border-radius: 3px;
+
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+
+    transition: 0.3s;
+}
+
+/* hover ефект */
+section:hover h2.gradient-text::after {
+    width: 100px;
+}
+
+/* допълнителен subtle ефект */
+h2.gradient-text:hover {
+    transform: translateY(-1px);
+}
+
+/* =========================
+   MOBILE / TABLET FIX
+========================= */
+
+/* Tablet */
+@media (max-width: 900px) {
+
+    /* benefits */
+    .business-benefits .steps-grid {
+        grid-template-columns: repeat(2, 1fr); /* 🔥 FIX */
+    }
+
+    /* target */
+    .business-target .steps-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    /* hero */
+    .business-hero {
+        padding: 50px 20px;
+    }
+
+    .business-hero h1 {
+        font-size: 1.6rem;
+    }
+}
+
+/* WRAPPER */
+.contact-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    align-items: center;
+}
+
+/* FORM */
+.contact-form-box {
+    width: 100%;
+}
+
+/* TEXTAREA */
+.contact-form textarea {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    resize: vertical;
+    font-family: inherit;
+}
+
+/* IMAGE */
+.contact-image img {
+    width: 100%;
+    max-width: 420px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
+
+.contact-form input,
+.contact-form textarea {
+    color: #111827; /* черен текст */
+}
+
+/* placeholder-а (сив текст вътре) */
+.contact-form input::placeholder,
+.contact-form textarea::placeholder {
+    color: #9ca3af;
+}
+
+.form-success {
+    margin-top: 15px;
+    padding: 12px 16px;
+
+    background: linear-gradient(90deg, #22c55e, #16a34a);
+    color: white;
+
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+
+    opacity: 0;
+    transform: translateY(10px);
+    transition: 0.3s;
+
+    display: none;
+}
+
+/* показване */
+.form-success.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* =========================
+   INTRO TEXT (MAIN HERO COPY)
+========================= */
+.business-intro {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.business-intro p {
+    max-width: 850px;
+    margin: 0 auto 20px;
+
+    font-size: 20px;
+    line-height: 1.8;
+
+    color: #1f2937;
+    font-weight: 400;
+}
+
+/* lead paragraph */
+.business-intro p:first-child {
+    font-size: 22px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* =========================
+   SECTION SPACING (FIX)
+========================= */
+.business-intro,
+.business-text-block,
+.business-cta-text {
+    position: relative;
+
+    margin: 30px 20px;          /* 🔥 spacing между секциите */
+    padding: 40px 35px;         /* вътрешен spacing */
+
+    border-radius: 16px;
+
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(6px);
+
+    border: 1px solid #e5e7eb;
+}
+
+/* лек hover ефект */
+.business-intro:hover,
+.business-text-block:hover,
+.business-cta-text:hover {
+    border-color: #2563eb33;
+    transform: translateY(-2px);
+    transition: 0.25s;
+}
+
+/* =========================
+   CONTENT
+========================= */
+.intro-content,
+.text-block-content,
+.cta-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================
+   TEXT STYLE
+========================= */
+.business-intro p,
+.business-text-block p,
+.business-cta-text p {
+    max-width: 760px;
+    margin: 0 auto 12px;
+
+    text-align: left;
+    line-height: 1.65;
+}
+
+/* intro */
+.intro-lead {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.business-intro p {
+    font-size: 17px;
+    color: #374151;
+}
+
+/* middle */
+.business-text-block p {
+    font-size: 16px;
+    color: #4b5563;
+}
+
+.text-highlight {
+    font-weight: 500;
+    color: #111827;
+}
+
+/* CTA */
+.business-cta-text p {
+    font-size: 17px;
+    color: #1f2937;
+}
+
+.cta-main {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* highlight */
+.cta-highlight {
+    font-size: 19px;
+    font-weight: 700;
+
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* =========================
+   BG SHAPES (SUBTLE)
+========================= */
+.bg-shapes {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.bg-shapes svg {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+
+    filter: blur(70px);
+    opacity: 0.35;   /* 🔥 по subtle */
+}
+
+/* позиции */
+.business-intro .bg-shapes svg {
+    top: -120px;
+    left: -80px;
+}
+
+.business-text-block .bg-shapes svg {
+    top: -80px;
+    left: -60px;
+}
+
+.business-cta-text .bg-shapes svg {
+    top: -100px;
+    left: -60px;
+}
+
+/* втори shape */
+.shape-2 {
+    bottom: -100px;
+    right: -80px;
+    top: auto;
+    left: auto;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 900px) {
+    .business-intro,
+    .business-text-block,
+    .business-cta-text {
+        margin: 20px 15px;
+        padding: 30px 20px;
+    }
+
+    .bg-shapes svg {
+        width: 280px;
+        height: 280px;
+        filter: blur(50px);
+    }
+}
+
+@media (max-width: 600px) {
+    .business-intro,
+    .business-text-block,
+    .business-cta-text {
+        margin: 15px 10px;
+        padding: 25px 15px;
+    }
+
+    .business-intro p {
+        font-size: 15px;
+    }
+
+    .business-text-block p {
+        font-size: 14px;
+    }
+
+    .business-cta-text p {
+        font-size: 15px;
+    }
+
+    .bg-shapes svg {
+        width: 200px;
+        height: 200px;
+        filter: blur(40px);
+    }
+}
+
+/* highlight */
+.cta-highlight {
+    font-size: 18px;
+    font-weight: 600;
+
+    color: #111827;
+
+    margin-top: 10px;
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+    .contact-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-image {
+        order: -1;
+    }
+}
+
+/* Mobile */
+@media (max-width: 750px) {
+
+    /* benefits */
+    .business-benefits .steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* target */
+    .business-target .steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* cards */
+    .business-target .step {
+        min-height: 240px;
+        padding: 25px 15px;
+    }
+
+    /* images */
+    .business-target .step img {
+        width: 130px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+
+    /* benefits */
+    .business-benefits .steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* target */
+    .business-target .steps-grid {
+        grid-template-columns: 1fr;
+    }
+
+    /* cards */
+    .business-target .step {
+        min-height: 240px;
+        padding: 25px 15px;
+    }
+
+    /* images */
+    .business-target .step img {
+        width: 130px;
+    }
+}
