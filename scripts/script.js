@@ -455,9 +455,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 let row = document.createElement("tr")
 
-let logo = getStationLogo(item.station)
+                let logo = getStationLogo(item.station)
 
-row.innerHTML = `
+                row.innerHTML = `
 <td>
     ${logo ? `<img src="${logo}" style="height:20px; vertical-align:middle; margin-right:6px;">` : ""}
     ${item.station} – ${item.city}
@@ -881,3 +881,17 @@ function startTickerLoop() {
 
     step()
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    let dateElement = document.getElementById("eco-date");
+
+    let today = new Date();
+
+    dateElement.textContent = today.toLocaleDateString("bg-BG", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric"
+    });
+
+});

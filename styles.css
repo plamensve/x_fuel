@@ -1448,6 +1448,23 @@ body.light-theme #pagination button.active-page {
     box-shadow: 0 6px 20px rgba(37, 99, 235, 0.25);
 }
 
+.eco-date {
+    display: block;
+    margin: 20px auto 20px auto; /* центрира хоризонтално */
+
+    width: fit-content;
+
+    padding: 4px 12px;
+    border-radius: 8px;
+
+    background: linear-gradient(90deg, #22c55e, #2563eb);
+    color: white;
+    font-weight: 600;
+    font-size: 1.2em;
+
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
 
 @media (max-width: 600px) {
 
@@ -1462,6 +1479,7 @@ body.light-theme #pagination button.active-page {
         padding: 10px 12px;
     }
 }
+
 
 /* MOBILE */
 @media (max-width: 768px) {
