@@ -193,19 +193,35 @@
 
     <!-- CTA / CONTACT -->
     <section id="contact" class="business-contact">
-        <div class="container">
-            <h2>Попитайте за оферта</h2>
+        <div class="container contact-wrapper">
 
-            <form class="contact-form">
-                <input type="text" placeholder="Фирма" required>
-                <input type="text" placeholder="Телефон" required>
-                <input type="email" placeholder="Имейл" required>
-                <input type="number" placeholder="Брой автомобили">
+            <!-- FORM -->
+            <div class="contact-form-box">
+                <h2 class="gradient-text">Попитайте за оферта</h2>
 
-                <button type="submit" class="btn-primary">
-                    Изпрати запитване
-                </button>
-            </form>
+                <form class="contact-form">
+
+                    <input type="text" name="company" placeholder="Фирма" required>
+                    <input type="text" name="phone" placeholder="Телефон" required>
+                    <input type="email" name="email" placeholder="Имейл" required>
+                    <input type="number" name="cars" placeholder="Брой автомобили">
+
+                    <textarea name="message" placeholder="Вашето запитване..." rows="5"></textarea>
+
+                    <button type="submit" class="btn-primary">
+                        Изпрати запитване
+                    </button>
+                    <div id="form-success" class="form-success">
+                        ✅ Запитването е изпратено успешно!
+                    </div>
+                </form>
+            </div>
+
+            <!-- IMAGE -->
+            <div class="contact-image">
+                <img src="../images/business_clients_imgs/ask.png" alt="търговски-компании">
+            </div>
+
         </div>
     </section>
 
@@ -298,6 +314,42 @@
 
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+<!-- INIT -->
+<script>
+    (function () {
+        emailjs.init("zAtar-Za0527zclfl");
+    })();
+</script>
 
+<!-- SUBMIT -->
+<script>
+let form = document.querySelector(".contact-form");
+
+form.addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    emailjs.sendForm(
+        "service_lyvrr1e",
+        "template_5gvdt6p",
+        this
+    ).then(function () {
+
+        let successMsg = document.getElementById("form-success");
+
+        successMsg.classList.add("show");
+
+        form.reset();
+
+        setTimeout(() => {
+            successMsg.classList.remove("show");
+        }, 4000);
+
+    }, function (error) {
+        alert("Грешка при изпращане...");
+        console.log(error);
+    });
+});
+</script>
 </body>
 </html>
