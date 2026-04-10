@@ -6,13 +6,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>История на цените</title>
+    <title>Бизнес клиенти</title>
 
     <script src="//fuelo.net/js/widget-bg.min.js"></script>
 
     <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="styles/useful.css">
-    <link rel="stylesheet" href="styles/trends.css">
+    <link rel="stylesheet" href="styles/business-clients.css">
+
 
     <meta property="og:title" content="Текущи цени на горивата в България">
     <meta property="og:description" content="Виж актуалните средни цени на бензин, дизел и газ в реално време.">
@@ -26,16 +26,7 @@
     <link rel="canonical" href="https://goriva.online/">
     <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
 
-    <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 
-    <!-- Calendar -->
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/locales/bg.js" defer></script>
-
-    <!-- Chart -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
     <!-- Hotjar Tracking Code for goriva.online -->
     <script>
@@ -64,9 +55,8 @@
         <img src="../media/2logo.png" alt="goriva.online logo" class="header-logo">
 
         <div class="header-text">
-            <strong>Цени на горивата в България</strong>
-            <span>Следете актуални цени и споделяйте информация от бензиностанции в цялата страна</span>
-            <span>Цените в сайта са подадени от потребителите. Разчитаме на коретно изпратена информация.</span>
+            <strong>Картови зареждания с по-ниски цени</strong>
+            <span>Достъп до преференциални цени на горивата в мрежата на нашите партньори</span>
         </div>
 
         <a class="facebook-button"
@@ -95,51 +85,92 @@
 
 </nav>
 
+<!--<div class="ticker">-->
+<!--    <div id="ticker-content" class="ticker-content"></div>-->
+<!--</div>-->
+
 <main class="container">
-    <div class="best-prices-section">
-
-        <h3>Най-ниски цени за избрания ден</h3>
-
-        <div id="best-prices" class="best-prices-list"></div>
-
-    </div>
-
-    <section class="trends-section">
-
-        <!-- LEGEND -->
-        <div class="legend">
-            <span><span class="dot fuel-a95"></span> A95</span>
-            <span><span class="dot fuel-diesel"></span> Дизел</span>
-            <span><span class="dot fuel-gas"></span> Газ</span>
-            <span><span class="dot fuel-a100"></span> A100</span>
-            <span><span class="dot fuel-diesel-plus"></span> Дизел+</span>
-            <span><span class="dot fuel-methane"></span> Метан</span>
+    <!-- HERO -->
+    <section class="business-hero">
+        <div class="container">
+            <h1>Горивни карти за бизнес клиенти</h1>
+            <p>Спестете от гориво с преференциални цени в мрежата на ECO Petrol</p>
+            <a href="#contact" class="btn-primary">Изпрати запитване</a>
         </div>
+    </section>
 
-        <!-- CALENDAR -->
-        <div id="calendar"></div>
-        <div class="chart-section">
+    <!-- HOW IT WORKS -->
+    <section class="business-steps">
+        <div class="container">
+            <h2 class="gradient-text">Как работи?</h2>
 
-            <h2 class="chart-title">Динамика на цената</h2>
-            <p class="chart-description">
-                Графиката показва средната цена на избраното гориво по дни, базирана на всички подадени данни.
-                Използвайте бутоните, за да превключвате между различните видове горива и да проследите тенденцията във
-                времето.
-            </p>
+            <div class="steps-grid">
+                <div class="step">
+                    <span>1</span>
+                    <h3 style="font-size: 19px">Сключвате договор</h3>
+                    <p style="font-size: 12px">Договор с ДЖИ ТИ ЕЙ ПЕТРОЛИУМ ООД</p>
+                    <img src="../images/business_clients_imgs/hand_shake.png" alt="">
+                </div>
 
-            <div class="chart-filters">
-                <button data-fuel="Бензин A95">A95</button>
-                <button data-fuel="Дизел">Дизел</button>
-                <button data-fuel="Пропан Бутан">Газ</button>
-                <button data-fuel="Бензин A100">A100</button>
-                <button data-fuel="Дизел премиум">Дизел+</button>
-                <button data-fuel="Метан">Метан</button>
+                <div class="step">
+                    <span>2</span>
+                    <h3>Карти за зареждане</h3>
+                    <p style="font-size: 12px">Издаваме ви карти на нашия партньор</p>
+                    <img src="../images/business_clients_imgs/card_gta.png" alt="">
+                </div>
+
+                <div class="step">
+                    <span>3</span>
+                    <h3>Зареждате</h3>
+                    <p>Ползвате преференциални цени</p>
+                </div>
             </div>
+        </div>
+    </section>
 
-            <div class="chart-container">
-                <canvas id="price-chart"></canvas>
+    <!-- BENEFITS -->
+    <section class="business-benefits">
+        <div class="container">
+            <h2>Вашите предимства</h2>
+
+            <div class="benefits-grid">
+                <div class="benefit">Преференциални цени</div>
+                <div class="benefit">Единна фактура</div>
+                <div class="benefit">Контрол на разходите</div>
+                <div class="benefit">Безкасово плащане</div>
             </div>
+        </div>
+    </section>
 
+    <!-- TARGET -->
+    <section class="business-target">
+        <div class="container">
+            <h2>Подходящо за</h2>
+
+            <div class="target-grid">
+                <div>Транспортни фирми</div>
+                <div>Дистрибуция</div>
+                <div>Строителство</div>
+                <div>Търговски компании</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA / CONTACT -->
+    <section id="contact" class="business-contact">
+        <div class="container">
+            <h2>Попитайте за оферта</h2>
+
+            <form class="contact-form">
+                <input type="text" placeholder="Фирма" required>
+                <input type="text" placeholder="Телефон" required>
+                <input type="email" placeholder="Имейл" required>
+                <input type="number" placeholder="Брой автомобили">
+
+                <button type="submit" class="btn-primary">
+                    Изпрати запитване
+                </button>
+            </form>
         </div>
     </section>
 
@@ -171,6 +202,7 @@
                 <li><a href="#top">Начало</a></li>
                 <li><a href="useful.html">Полезно</a></li>
                 <li><a href="trends.html">История на цените</a></li>
+                <li><a href="news.html">Новини</a></li>
                 <li><a href="rules.html">Общи условия</a></li>
             </ul>
 
@@ -231,10 +263,6 @@
 
 </footer>
 
-<!-- SCRIPTS -->
-<script src="../scripts/script.js" defer></script>
-<script src="../scripts/useful.js" defer></script>
-<script src="../scripts/trends.js" defer></script>
 
 </body>
 </html>
