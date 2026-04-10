@@ -508,6 +508,225 @@ h2.gradient-text:hover {
     transform: translateY(0);
 }
 
+/* =========================
+   INTRO TEXT (MAIN HERO COPY)
+========================= */
+.business-intro {
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.business-intro p {
+    max-width: 850px;
+    margin: 0 auto 20px;
+
+    font-size: 20px;
+    line-height: 1.8;
+
+    color: #1f2937;
+    font-weight: 400;
+}
+
+/* lead paragraph */
+.business-intro p:first-child {
+    font-size: 22px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* =========================
+   SECTION SPACING (FIX)
+========================= */
+.business-intro,
+.business-text-block,
+.business-cta-text {
+    position: relative;
+
+    margin: 30px 20px;          /* 🔥 spacing между секциите */
+    padding: 40px 35px;         /* вътрешен spacing */
+
+    border-radius: 16px;
+
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(6px);
+
+    border: 1px solid #e5e7eb;
+}
+
+/* лек hover ефект */
+.business-intro:hover,
+.business-text-block:hover,
+.business-cta-text:hover {
+    border-color: #2563eb33;
+    transform: translateY(-2px);
+    transition: 0.25s;
+}
+
+/* =========================
+   CONTENT
+========================= */
+.intro-content,
+.text-block-content,
+.cta-content {
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================
+   TEXT STYLE
+========================= */
+.business-intro p,
+.business-text-block p,
+.business-cta-text p {
+    max-width: 760px;
+    margin: 0 auto 12px;
+
+    text-align: left;
+    line-height: 1.65;
+}
+
+/* intro */
+.intro-lead {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.business-intro p {
+    font-size: 17px;
+    color: #374151;
+}
+
+/* middle */
+.business-text-block p {
+    font-size: 16px;
+    color: #4b5563;
+}
+
+.text-highlight {
+    font-weight: 500;
+    color: #111827;
+}
+
+/* CTA */
+.business-cta-text p {
+    font-size: 17px;
+    color: #1f2937;
+}
+
+.cta-main {
+    font-size: 18px;
+    font-weight: 500;
+}
+
+/* highlight */
+.cta-highlight {
+    font-size: 19px;
+    font-weight: 700;
+
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* =========================
+   BG SHAPES (SUBTLE)
+========================= */
+.bg-shapes {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.bg-shapes svg {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+
+    filter: blur(70px);
+    opacity: 0.35;   /* 🔥 по subtle */
+}
+
+/* позиции */
+.business-intro .bg-shapes svg {
+    top: -120px;
+    left: -80px;
+}
+
+.business-text-block .bg-shapes svg {
+    top: -80px;
+    left: -60px;
+}
+
+.business-cta-text .bg-shapes svg {
+    top: -100px;
+    left: -60px;
+}
+
+/* втори shape */
+.shape-2 {
+    bottom: -100px;
+    right: -80px;
+    top: auto;
+    left: auto;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 900px) {
+    .business-intro,
+    .business-text-block,
+    .business-cta-text {
+        margin: 20px 15px;
+        padding: 30px 20px;
+    }
+
+    .bg-shapes svg {
+        width: 280px;
+        height: 280px;
+        filter: blur(50px);
+    }
+}
+
+@media (max-width: 600px) {
+    .business-intro,
+    .business-text-block,
+    .business-cta-text {
+        margin: 15px 10px;
+        padding: 25px 15px;
+    }
+
+    .business-intro p {
+        font-size: 15px;
+    }
+
+    .business-text-block p {
+        font-size: 14px;
+    }
+
+    .business-cta-text p {
+        font-size: 15px;
+    }
+
+    .bg-shapes svg {
+        width: 200px;
+        height: 200px;
+        filter: blur(40px);
+    }
+}
+
+/* highlight */
+.cta-highlight {
+    font-size: 18px;
+    font-weight: 600;
+
+    color: #111827;
+
+    margin-top: 10px;
+}
+
 /* MOBILE */
 @media (max-width: 768px) {
     .contact-wrapper {

@@ -98,6 +98,53 @@
         </div>
     </section>
 
+    <section class="business-intro">
+
+        <!-- BG SHAPES -->
+        <div class="bg-shapes">
+
+            <!-- син -->
+            <svg viewBox="0 0 600 600">
+                <circle cx="300" cy="300" r="200" fill="url(#blueGrad)"/>
+                <defs>
+                    <radialGradient id="blueGrad">
+                        <stop offset="0%" stop-color="#2563eb" stop-opacity="0.35"/>
+                        <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+                    </radialGradient>
+                </defs>
+            </svg>
+
+            <!-- зелен -->
+            <svg class="shape-2" viewBox="0 0 600 600">
+                <circle cx="300" cy="300" r="200" fill="url(#greenGrad)"/>
+                <defs>
+                    <radialGradient id="greenGrad">
+                        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.35"/>
+                        <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+                    </radialGradient>
+                </defs>
+            </svg>
+
+        </div>
+
+        <!-- CONTENT -->
+        <div class="container intro-content">
+
+            <p class="intro-lead">
+                Ако управлявате автопарк или разходите за гориво са значителна част от бизнеса Ви,
+                картите за зареждане са най-ефективният начин да намалите разходите и да получите
+                пълен контрол върху зарежданията.
+            </p>
+
+            <p>
+                Чрез нашата система получавате достъп до преференциални цени, централизирано
+                фактуриране и детайлен отчет за всяко зареждане.
+            </p>
+
+        </div>
+
+    </section>
+
     <!-- HOW IT WORKS -->
     <section class="business-steps">
         <div class="container">
@@ -128,6 +175,50 @@
                 </div>
             </div>
         </div>
+    </section>
+
+    <section class="business-text-block">
+
+        <!-- BG SHAPES -->
+        <div class="bg-shapes">
+
+            <!-- син -->
+            <svg viewBox="0 0 600 600">
+                <circle cx="300" cy="300" r="180" fill="url(#blueGrad2)"/>
+                <defs>
+                    <radialGradient id="blueGrad2">
+                        <stop offset="0%" stop-color="#2563eb" stop-opacity="0.25"/>
+                        <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+                    </radialGradient>
+                </defs>
+            </svg>
+
+            <!-- зелен -->
+            <svg class="shape-2" viewBox="0 0 600 600">
+                <circle cx="300" cy="300" r="180" fill="url(#greenGrad2)"/>
+                <defs>
+                    <radialGradient id="greenGrad2">
+                        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.25"/>
+                        <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+                    </radialGradient>
+                </defs>
+            </svg>
+
+        </div>
+
+        <!-- CONTENT -->
+        <div class="container text-block-content">
+
+            <p class="text-highlight">
+                Процесът е изцяло оптимизиран, така че да започнете работа без излишна административна тежест.
+            </p>
+
+            <p>
+                Нашият екип ще Ви съдейства във всяка стъпка – от издаването на картите до активното им използване.
+            </p>
+
+        </div>
+
     </section>
 
     <section class="business-benefits">
@@ -189,6 +280,51 @@
 
             </div>
         </div>
+    </section>
+
+    <section class="business-cta-text">
+
+        <!-- BG SHAPES -->
+        <div class="bg-shapes">
+
+            <!-- син -->
+            <svg viewBox="0 0 600 600">
+                <circle cx="300" cy="300" r="220" fill="url(#blueGrad3)"/>
+                <defs>
+                    <radialGradient id="blueGrad3">
+                        <stop offset="0%" stop-color="#2563eb" stop-opacity="0.35"/>
+                        <stop offset="100%" stop-color="#2563eb" stop-opacity="0"/>
+                    </radialGradient>
+                </defs>
+            </svg>
+
+            <!-- зелен -->
+            <svg class="shape-2" viewBox="0 0 600 600">
+                <circle cx="300" cy="300" r="220" fill="url(#greenGrad3)"/>
+                <defs>
+                    <radialGradient id="greenGrad3">
+                        <stop offset="0%" stop-color="#22c55e" stop-opacity="0.35"/>
+                        <stop offset="100%" stop-color="#22c55e" stop-opacity="0"/>
+                    </radialGradient>
+                </defs>
+            </svg>
+
+        </div>
+
+        <!-- CONTENT -->
+        <div class="container cta-content">
+
+            <p class="cta-main">
+                Независимо дали управлявате малък автопарк или голяма транспортна компания,
+                можем да предложим индивидуално решение, съобразено с Вашите нужди.
+            </p>
+
+            <p class="cta-highlight">
+                Изпратете запитване и ще получите персонална оферта.
+            </p>
+
+        </div>
+
     </section>
 
     <!-- CTA / CONTACT -->
@@ -253,6 +389,7 @@
                 <li><a href="#top">Начало</a></li>
                 <li><a href="useful.html">Полезно</a></li>
                 <li><a href="trends.html">История на цените</a></li>
+                <li><a href="business-clients.html">Бизнес клиенти</a></li>
                 <li><a href="news.html">Новини</a></li>
                 <li><a href="rules.html">Общи условия</a></li>
             </ul>
@@ -324,32 +461,32 @@
 
 <!-- SUBMIT -->
 <script>
-let form = document.querySelector(".contact-form");
+    let form = document.querySelector(".contact-form");
 
-form.addEventListener("submit", function (e) {
-    e.preventDefault();
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
 
-    emailjs.sendForm(
-        "service_lyvrr1e",
-        "template_5gvdt6p",
-        this
-    ).then(function () {
+        emailjs.sendForm(
+            "service_lyvrr1e",
+            "template_5gvdt6p",
+            this
+        ).then(function () {
 
-        let successMsg = document.getElementById("form-success");
+            let successMsg = document.getElementById("form-success");
 
-        successMsg.classList.add("show");
+            successMsg.classList.add("show");
 
-        form.reset();
+            form.reset();
 
-        setTimeout(() => {
-            successMsg.classList.remove("show");
-        }, 4000);
+            setTimeout(() => {
+                successMsg.classList.remove("show");
+            }, 4000);
 
-    }, function (error) {
-        alert("Грешка при изпращане...");
-        console.log(error);
+        }, function (error) {
+            alert("Грешка при изпращане...");
+            console.log(error);
+        });
     });
-});
 </script>
 </body>
 </html>
