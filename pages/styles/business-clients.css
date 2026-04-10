@@ -421,7 +421,7 @@ h2.gradient-text:hover {
 
     /* benefits */
     .business-benefits .steps-grid {
-        grid-template-columns: repeat(2, 1fr); /* 🔥 FIX */
+        grid-template-columns: repeat(2, 1fr);
     }
 
     /* target */
@@ -529,7 +529,7 @@ h2.gradient-text:hover {
 
 /* lead paragraph */
 .business-intro p:first-child {
-    font-size: 22px;
+    font-size: 16px;
     font-weight: 600;
     color: #111827;
 }
@@ -542,8 +542,8 @@ h2.gradient-text:hover {
 .business-cta-text {
     position: relative;
 
-    margin: 30px 20px;          /* 🔥 spacing между секциите */
-    padding: 40px 35px;         /* вътрешен spacing */
+    margin: 30px 20px;
+    padding: 40px 35px;
 
     border-radius: 16px;
 
@@ -645,7 +645,7 @@ h2.gradient-text:hover {
     height: 400px;
 
     filter: blur(70px);
-    opacity: 0.35;   /* 🔥 по subtle */
+    opacity: 0.35;
 }
 
 /* позиции */
@@ -673,117 +673,237 @@ h2.gradient-text:hover {
 }
 
 /* =========================
-   RESPONSIVE
+   INTRO PREMIUM EFFECT
+========================= */
+
+.business-intro {
+    position: relative;
+    overflow: hidden;
+}
+
+/* gradient border */
+.business-intro::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    padding: 1px;
+
+    border-radius: 16px;
+
+    background: linear-gradient(120deg, #2563eb, #22c55e);
+
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+
+    pointer-events: none;
+
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+/* glow */
+.business-intro::after {
+    content: "";
+    position: absolute;
+
+    width: 300px;
+    height: 300px;
+
+    background: radial-gradient(circle, rgba(37,99,235,0.15), transparent 70%);
+
+    top: -100px;
+    right: -100px;
+
+    filter: blur(40px);
+    opacity: 0.6;
+
+    z-index: 0;
+
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* hover (без смяна на gradient) */
+.business-intro:hover::before {
+    opacity: 1;
+}
+
+.business-intro:hover::after {
+    opacity: 0.9;
+    transform: scale(1.05);
+}
+
+.business-intro:hover {
+    transform: translateY(-3px);
+    transition: transform 0.3s ease;
+}
+
+/* underline */
+.business-intro .intro-lead::after {
+    content: "";
+    display: block;
+
+    width: 80px;
+    height: 3px;
+
+    margin: 15px auto 0;
+
+    background: linear-gradient(90deg, #2563eb, #22c55e);
+    border-radius: 2px;
+
+    opacity: 0.8;
+}
+
+/* =========================
+   RESPONSIVE (TABLET)
 ========================= */
 @media (max-width: 900px) {
+    .container {
+        max-width: 100%;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
     .business-intro,
     .business-text-block,
     .business-cta-text {
-        margin: 20px 15px;
-        padding: 30px 20px;
+        margin: 20px 8px;
+        padding: 22px 14px;
+        text-align: center;
     }
 
     .bg-shapes svg {
-        width: 280px;
-        height: 280px;
-        filter: blur(50px);
+        width: 240px;
+        height: 240px;
+        filter: blur(45px);
     }
 }
 
-@media (max-width: 600px) {
+/* =========================
+   MOBILE (MAIN)
+========================= */
+@media (max-width: 750px) {
+
+    .container {
+        max-width: 100%;
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    /* TEXT BLOCKS */
     .business-intro,
     .business-text-block,
     .business-cta-text {
-        margin: 15px 10px;
-        padding: 25px 15px;
+        margin: 15px 6px;
+        padding: 18px 12px;
+        text-align: center;
     }
 
-    .business-intro p {
-        font-size: 15px;
-    }
-
-    .business-text-block p {
-        font-size: 14px;
-    }
-
+    .business-intro p,
+    .business-text-block p,
     .business-cta-text p {
-        font-size: 15px;
+        font-size: 14px;
+        line-height: 1.6;
+        text-align: center;
     }
 
+    /* HEADINGS */
+    h2.gradient-text {
+        text-align: center;
+        width: 100%;
+    }
+
+    /* GRID FULL WIDTH */
+    .steps-grid {
+        grid-template-columns: 1fr;
+        width: 100%;
+        justify-items: stretch;
+    }
+
+    .business-target .steps-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .business-benefits .steps-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    /* CARDS */
+    .step {
+        width: 100%;
+        min-height: auto;
+        padding: 18px 12px;
+        text-align: center;
+        align-items: center;
+    }
+
+    /* IMAGES */
+    .step img {
+        width: 130px;
+        max-width: 100%;
+        margin-top: 12px;
+    }
+
+    /* CTA */
+    .cta-highlight {
+        text-align: center;
+        margin-top: 12px;
+        font-size: 16px;
+    }
+
+    /* BACKGROUND SHAPES */
     .bg-shapes svg {
-        width: 200px;
-        height: 200px;
-        filter: blur(40px);
+        width: 170px;
+        height: 170px;
+        filter: blur(35px);
     }
 }
 
-/* highlight */
-.cta-highlight {
-    font-size: 18px;
-    font-weight: 600;
-
-    color: #111827;
-
-    margin-top: 10px;
-}
-
-/* MOBILE */
+/* =========================
+   CONTACT MOBILE
+========================= */
 @media (max-width: 768px) {
     .contact-wrapper {
         grid-template-columns: 1fr;
+        text-align: center;
     }
 
     .contact-image {
         order: -1;
+        display: flex;
+        justify-content: center;
     }
 }
 
-/* Mobile */
-@media (max-width: 750px) {
+/* =========================
+   EXTRA SMALL DEVICES
+========================= */
+@media (max-width: 480px) {
 
-    /* benefits */
-    .business-benefits .steps-grid {
-        grid-template-columns: 1fr;
+    .container {
+        padding-left: 8px;
+        padding-right: 8px;
     }
 
-    /* target */
-    .business-target .steps-grid {
-        grid-template-columns: 1fr;
+    .business-intro,
+    .business-text-block,
+    .business-cta-text {
+        margin: 12px 4px;
+        padding: 16px 10px;
     }
 
-    /* cards */
-    .business-target .step {
-        min-height: 240px;
-        padding: 25px 15px;
+    .step {
+        padding: 16px 10px;
     }
 
-    /* images */
-    .business-target .step img {
-        width: 130px;
-    }
-}
-
-/* Mobile */
-@media (max-width: 600px) {
-
-    /* benefits */
-    .business-benefits .steps-grid {
-        grid-template-columns: 1fr;
+    .step img {
+        width: 110px;
     }
 
-    /* target */
-    .business-target .steps-grid {
-        grid-template-columns: 1fr;
-    }
-
-    /* cards */
-    .business-target .step {
-        min-height: 240px;
-        padding: 25px 15px;
-    }
-
-    /* images */
-    .business-target .step img {
-        width: 130px;
+    .cta-highlight {
+        font-size: 15px;
     }
 }
+
