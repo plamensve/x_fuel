@@ -4,36 +4,51 @@
 
     <url>
         <loc>https://goriva.online/</loc>
-        <lastmod>2026-03-22</lastmod>
+        <lastmod>2026-04-11</lastmod>
+        <changefreq>daily</changefreq>
         <priority>1.0</priority>
     </url>
 
     <url>
-        <loc>https://goriva.online/index.html</loc>
-    </url>
-
-    <url>
         <loc>https://goriva.online/pages/trends.html</loc>
+        <lastmod>2026-04-11</lastmod>
+        <changefreq>daily</changefreq>
     </url>
 
     <url>
         <loc>https://goriva.online/pages/useful.html</loc>
+        <lastmod>2026-04-11</lastmod>
+        <changefreq>weekly</changefreq>
     </url>
 
     <url>
-        <loc>https://goriva.online/pages/articles/article-1/article-1.html</loc>
-    </url>
-
-    <url>
-        <loc>https://goriva.online/pages/terms.html</loc>
+        <loc>https://goriva.online/pages/news.html</loc>
+        <lastmod>2026-04-11</lastmod>
+        <changefreq>weekly</changefreq>
     </url>
 
     <url>
         <loc>https://goriva.online/pages/business-clients.html</loc>
+        <lastmod>2026-04-11</lastmod>
+        <changefreq>monthly</changefreq>
+    </url>
+
+    <url>
+        <loc>https://goriva.online/pages/rules.html</loc>
+        <lastmod>2026-04-11</lastmod>
+        <changefreq>yearly</changefreq>
+    </url>
+
+    <url>
+        <loc>https://goriva.online/pages/articles/article-1/article-1.html</loc>
+        <lastmod>2026-03-22</lastmod>
+        <changefreq>yearly</changefreq>
     </url>
 
     <url>
         <loc>https://goriva.online/pages/articles/fuel-cards/art-fuel-cards.html</loc>
+        <lastmod>2026-04-11</lastmod>
+        <changefreq>yearly</changefreq>
     </url>
 
 </urlset>
