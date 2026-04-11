@@ -1,0 +1,254 @@
+/* =========================
+   ARTICLE PAGE
+========================= */
+
+.article-page {
+    padding: clamp(40px, 6vw, 80px) 20px;
+}
+
+/* контейнер */
+.article-container {
+    max-width: 820px;
+    margin: 0 auto;
+}
+
+/* =========================
+   TYPOGRAPHY (FLUID)
+========================= */
+
+.article-container h1 {
+    font-size: clamp(28px, 4vw, 42px);
+    line-height: 1.2;
+    margin-bottom: 30px;
+
+    color: #111827;
+    font-weight: 700;
+}
+
+.article-container h2 {
+    font-size: clamp(22px, 2.5vw, 28px);
+    margin-top: 50px;
+    margin-bottom: 15px;
+
+    color: #111827;
+    font-weight: 600;
+}
+
+.article-container h3 {
+    font-size: clamp(18px, 2vw, 20px);
+    margin-top: 30px;
+    margin-bottom: 10px;
+
+    color: #1f2937;
+    font-weight: 600;
+}
+
+.article-container p {
+    font-size: clamp(15px, 1.4vw, 17px);
+    line-height: 1.75;
+    margin-bottom: 18px;
+
+    color: #374151;
+}
+
+/* intro */
+.article-intro {
+    font-size: clamp(17px, 1.6vw, 19px);
+    font-weight: 500;
+    color: #111827;
+}
+
+/* =========================
+   LISTS
+========================= */
+
+.article-container ul,
+.article-container ol {
+    margin: 20px 0 25px 20px;
+}
+
+.article-container li {
+    margin-bottom: 10px;
+    font-size: clamp(14px, 1.3vw, 16px);
+    line-height: 1.6;
+    color: #374151;
+}
+
+/* =========================
+   LINKS
+========================= */
+
+.article-container a {
+    color: #2563eb;
+    font-weight: 500;
+    text-decoration: none;
+    transition: 0.2s;
+}
+
+.article-container a:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+/* =========================
+   CTA BLOCK
+========================= */
+
+.article-container p:last-of-type {
+    margin-top: 30px;
+    padding: clamp(14px, 2vw, 18px) clamp(16px, 2vw, 20px);
+
+    background: #f8fafc;
+    border-left: 4px solid #2563eb;
+    border-radius: 8px;
+}
+
+/* =========================
+   SPACING IMPROVEMENTS
+========================= */
+
+.article-container h2 + p {
+    margin-top: 5px;
+}
+
+.article-container h3 + p {
+    margin-top: 0;
+}
+
+/* =========================
+   ARTICLE META (FIXED BLACK)
+========================= */
+
+.article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+
+    margin-bottom: 20px;
+
+    font-size: 14px;
+    color: #111827;
+}
+
+.article-meta span {
+    display: flex;
+    align-items: center;
+    color: #111827;
+}
+
+/* =========================
+   SHARE SECTION
+========================= */
+
+.share-section-1 {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+
+    margin-bottom: 40px;
+}
+
+.share-label {
+    font-size: 14px;
+    color: #111827;
+}
+
+/* =========================
+   SHARE BUTTONS (CLEAN)
+========================= */
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 8px 16px;
+    border-radius: 999px;
+
+    font-size: 14px;
+    font-weight: 500;
+
+    text-decoration: none;
+
+    background: white;
+    border: 1px solid #e5e7eb;
+
+    color: #111827;
+
+    transition: all 0.2s ease;
+}
+
+/* hover */
+.share-btn:hover {
+    transform: translateY(-1px);
+}
+
+/* FACEBOOK */
+.share-btn.facebook {
+    border-color: #1877f2;
+}
+
+.share-btn.facebook:hover {
+    background: #1877f2;
+    color: white;
+}
+
+/* TWITTER */
+.share-btn.twitter {
+    border-color: #1da1f2;
+}
+
+.share-btn.twitter:hover {
+    background: #1da1f2;
+    color: white;
+}
+
+/* LINKEDIN */
+.share-btn.linkedin {
+    border-color: #0a66c2;
+}
+
+.share-btn.linkedin:hover {
+    background: #0a66c2;
+    color: white;
+}
+
+/* =========================
+   MAIN ARTICLE IMAGE (WIDE)
+========================= */
+
+.article-main-img {
+    width: 100%;
+    max-width: 1000px;
+    aspect-ratio: 16 / 7;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto 35px;
+    border-radius: 14px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    transition: 0.3s ease;
+}
+
+/* hover */
+.article-main-img:hover {
+    transform: scale(1.01);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* =========================
+   MOBILE
+========================= */
+
+@media (max-width: 600px) {
+
+    .article-meta {
+        font-size: 13px;
+    }
+
+    .share-btn {
+        font-size: 13px;
+        padding: 7px 14px;
+    }
+}
