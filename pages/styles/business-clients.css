@@ -145,11 +145,97 @@ h2 {
 .business-steps .step img {
     margin-top: auto;
 
-    width: 180px;
+    width: 120px;
     max-width: none;
 
     object-fit: contain;
 }
+
+.advantage {
+    position: relative;
+
+    margin: 40px 0;
+    padding: 40px 35px;
+
+    border-radius: 16px;
+
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(6px);
+
+    border: 1px solid #e5e7eb;
+
+    transition: 0.25s;
+
+    overflow: hidden; /* FIX: да не излиза gradient-a */
+}
+
+/* лек hover */
+.advantage:hover {
+    border-color: #2563eb33;
+    transform: translateY(-2px);
+}
+
+/* gradient overlay */
+.advantage::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    border-radius: 16px;
+
+    background: linear-gradient(120deg, #2563eb10, #22c55e10);
+
+    pointer-events: none;
+    z-index: 0; /* FIX */
+}
+
+/* съдържание винаги над overlay */
+.advantage .container {
+    position: relative;
+    z-index: 1;
+}
+
+/* =========================
+   LIST
+========================= */
+.advantage-list {
+    list-style: none;
+    padding-left: 0;
+    max-width: 760px;
+    margin: 0 auto;
+}
+
+.advantage-list li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 14px;
+
+    font-size: 16px;
+    line-height: 1.65;
+
+    color: #111827;
+    font-weight: 500;
+}
+
+/* чек икона */
+.advantage-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 2px;
+
+    color: #22c55e;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+/* hover лек ефект (UX) */
+.advantage-list li:hover {
+    transform: translateX(2px);
+    transition: 0.2s;
+}
+
+
 
 /* =========================
    STEP (GLOBAL)
