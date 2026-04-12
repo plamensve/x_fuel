@@ -13,7 +13,8 @@ function getStationLogo(name) {
     if (lower.includes("бенита")) return "../images/station_logos/benita.svg"
     if (lower.includes("еко петрол") || lower.includes("екопетрол")) return "../images/station_logos/ecopetrol.svg"
     if (lower.includes("лукойл")) return "../images/station_logos/lukoil.svg"
-    if (lower.includes("омв")) return "../images/station_logos/omv.svg"
+    if (lower.includes("омв") || lower.includes("omv"))
+    return "../images/station_logos/omv.svg"
     if (lower.includes("шел")) return "../images/station_logos/shell.svg"
     if (lower.includes("ромпетрол")) return "../images/station_logos/rompetrol.svg"
     if (lower.includes("инса")) return "../images/station_logos/insa.svg"
