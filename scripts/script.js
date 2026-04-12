@@ -1042,8 +1042,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.querySelectorAll(".view-btn")
         .forEach(b => b.classList.remove("active"));
 
-    document.querySelector('.view-btn[data-view="cards"]')
-        .classList.add("active");
+    let defaultBtn = document.querySelector('.view-btn[data-view="cards"]')
+
+    if (defaultBtn) {
+        defaultBtn.classList.add("active")
+    }
 
     generateCards();
 
