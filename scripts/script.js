@@ -1,5 +1,5 @@
 let currentPage = 1
-let rowsPerPage = 5
+let rowsPerPage = 3
 let tickerSpeed = 0.3
 let tickerAnimationId = null
 
@@ -893,5 +893,175 @@ document.addEventListener("DOMContentLoaded", () => {
         month: "2-digit",
         year: "numeric"
     });
+
+});
+
+function generateCards() {
+
+    let rows = document.querySelectorAll("#prices-body tr");
+    let container = document.getElementById("cards-container");
+
+    if (!container) return;
+
+    container.innerHTML = "";
+
+    rows.forEach(row => {
+
+        if (row.style.display === "none") return;
+
+        let cols = row.querySelectorAll("td");
+
+        let rawStationText = cols[0]?.innerText || "-";
+
+        // ВАЖНО: извличаме и station, и city
+        let parts = rawStationText.split("–");
+
+        let station = parts[0]?.trim() || "-";
+        let city = parts[1]?.trim() || "";
+
+        let location = cols[1]?.innerText || "-";
+
+        let fuels = {
+            a95: cols[2]?.innerText,
+            a100: cols[3]?.innerText,
+            diesel: cols[4]?.innerText,
+            dieselPlus: cols[5]?.innerText,
+            lpg: cols[6]?.innerText,
+            methane: cols[7]?.innerText
+        };
+
+        let logo = getStationLogo(station);
+
+        let card = document.createElement("div");
+        card.className = "price-card";
+
+        card.innerHTML = `
+            ${logo ? `<img src="${logo}" class="station-logo" alt="station-logo">` : ""}
+        
+            <div class="price-card-header">
+        
+                <div class="price-card-title">
+                    <h3>${station} – ${city}</h3>
+                </div>
+        
+                <div class="price-card-location">${location}</div>
+        
+            </div>
+            <div class="price-card-status">
+                <span class="status-dot"></span>
+            </div>
+        
+            <div class="price-values">
+                ${fuels.a95 && fuels.a95 !== "-" ? `<div class="price-badge">A95<strong>${fuels.a95}€</strong></div>` : `<div class="price-badge">A95<strong>-</strong></div>`}
+                ${fuels.a100 && fuels.a100 !== "-" ? `<div class="price-badge">A100<strong>${fuels.a100}€</strong></div>` : `<div class="price-badge">A100<strong>-</strong></div>`}
+                ${fuels.diesel && fuels.diesel !== "-" ? `<div class="price-badge">Дизел<strong>${fuels.diesel}€</strong></div>` : `<div class="price-badge">Дизел<strong>-</strong></div>`}
+                ${fuels.dieselPlus && fuels.dieselPlus !== "-" ? `<div class="price-badge">Дизел+<strong>${fuels.dieselPlus}€</strong></div>` : `<div class="price-badge">Дизел+<strong>-</strong></div>`}
+                ${fuels.lpg && fuels.lpg !== "-" ? `<div class="price-badge">LPG<strong>${fuels.lpg}€</strong></div>` : `<div class="price-badge">LPG<strong>-</strong></div>`}
+                ${fuels.methane && fuels.methane !== "-" ? `<div class="price-badge">Метан<strong>${fuels.methane}€</strong></div>` : `<div class="price-badge">Метан<strong>-</strong></div>`}
+            </div>
+            <button class="map-btn"
+                data-station="${station}"
+                data-city="${city}"
+                data-location="${location}">
+                Намери на картата
+            </button>
+        `;
+
+        container.appendChild(card);
+    });
+}
+
+/* =========================
+   VIEW TOGGLE
+========================= */
+
+document.querySelectorAll(".view-btn").forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+        document.querySelectorAll(".view-btn")
+            .forEach(b => b.classList.remove("active"));
+
+        btn.classList.add("active");
+
+        let view = btn.dataset.view;
+        let container = document.getElementById("prices-container");
+
+        if (view === "cards") {
+
+            container.classList.remove("show-table");
+            container.classList.add("show-cards");
+
+            generateCards();
+
+        } else {
+
+            container.classList.remove("show-cards");
+            container.classList.add("show-table");
+
+        }
+
+    });
+
+});
+
+/* =========================
+   AUTO SYNC WITH TABLE (REAL FIX)
+========================= */
+
+const observer = new MutationObserver(() => {
+
+    let container = document.getElementById("prices-container");
+
+    // ако сме в cards режим → обнови
+    if (container && !container.classList.contains("show-table")) {
+        generateCards();
+    }
+
+});
+
+const target = document.getElementById("prices-body");
+
+if (target) {
+    observer.observe(target, {
+        childList: true,
+        subtree: true,
+        attributes: true
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    let container = document.getElementById("prices-container");
+
+
+    container.classList.remove("show-table");
+    container.classList.add("show-cards");
+
+
+    document.querySelectorAll(".view-btn")
+        .forEach(b => b.classList.remove("active"));
+
+    document.querySelector('.view-btn[data-view="cards"]')
+        .classList.add("active");
+
+    generateCards();
+
+});
+
+document.addEventListener("click", function(e) {
+
+    if (!e.target.classList.contains("map-btn")) return;
+
+    let station = e.target.dataset.station || "";
+    let city = e.target.dataset.city || "";
+    let location = e.target.dataset.location || "";
+
+    // сглобяваме query
+    let query = `${station} ${city} ${location} Bulgaria`;
+
+    let url = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(query)}`;
+
+    window.open(url, "_blank");
 
 });

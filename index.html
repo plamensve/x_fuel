@@ -327,51 +327,54 @@
             Избери област, град или бензиностанция за да филтрираш информацията
         </p>
 
+        <!-- VIEW TOGGLE -->
+        <div class="view-toggle">
+            <button class="view-btn active" data-view="cards">Карти</button>
+            <button class="view-btn" data-view="table">Таблица</button>
+        </div>
 
+        <!-- FILTERS -->
         <div class="city-filter">
 
             <div class="filt">
-
                 <label for="region-select">Област</label>
-
                 <select id="region-select">
                     <option value="all">Всички области</option>
                 </select>
-
             </div>
 
-
             <div class="filt">
-
                 <label for="city-select">Град</label>
-
                 <select id="city-select">
                     <option value="all">Всички градове</option>
                 </select>
-
             </div>
 
             <div class="filt">
-
                 <label for="station-select">Бензиностанция</label>
-
                 <select id="station-select">
                     <option value="all">Всички бензиностанции</option>
                 </select>
-
             </div>
 
         </div>
 
+        <!-- =========================
+             DATA SECTION
+        ========================= -->
 
-        <div id="prices-container">
 
+        <div id="prices-container" class="show-table">
+
+            <!-- CARDS -->
+            <div id="cards-container" class="cards-grid"></div>
+
+            <!-- TABLE -->
             <div class="table-wrapper">
 
                 <table class="price-table">
 
                     <thead>
-
                     <tr>
                         <th>Бензиностанция</th>
                         <th>Локация</th>
@@ -382,7 +385,6 @@
                         <th>Пропан Бутан</th>
                         <th>Метан</th>
                     </tr>
-
                     </thead>
 
                     <tbody id="prices-body"></tbody>
@@ -394,6 +396,10 @@
             <div id="pagination"></div>
 
         </div>
+
+        <!-- =========================
+             SUBMIT SECTION
+        ========================= -->
 
         <section class="main-grid">
 
@@ -410,134 +416,99 @@
 
                         <div class="form-group">
                             <label for="region">Област</label>
-
                             <select id="region" name="region" required>
-
                                 <option value="">Избери област</option>
-
-                                <option value="Благоевград">Благоевград</option>
-                                <option value="Бургас">Бургас</option>
-                                <option value="Варна">Варна</option>
-                                <option value="Велико Търново">Велико Търново</option>
-                                <option value="Видин">Видин</option>
-                                <option value="Враца">Враца</option>
-                                <option value="Габрово">Габрово</option>
-                                <option value="Добрич">Добрич</option>
-                                <option value="Кърджали">Кърджали</option>
-                                <option value="Кюстендил">Кюстендил</option>
-                                <option value="Ловеч">Ловеч</option>
-                                <option value="Монтана">Монтана</option>
-                                <option value="Пазарджик">Пазарджик</option>
-                                <option value="Перник">Перник</option>
-                                <option value="Плевен">Плевен</option>
-                                <option value="Пловдив">Пловдив</option>
-                                <option value="Разград">Разград</option>
-                                <option value="Русе">Русе</option>
-                                <option value="Силистра">Силистра</option>
-                                <option value="Сливен">Сливен</option>
-                                <option value="Смолян">Смолян</option>
-                                <option value="София">София</option>
-                                <option value="София област">София област</option>
-                                <option value="Стара Загора">Стара Загора</option>
-                                <option value="Търговище">Търговище</option>
-                                <option value="Хасково">Хасково</option>
-                                <option value="Шумен">Шумен</option>
-                                <option value="Ямбол">Ямбол</option>
-
+                                <option>Благоевград</option>
+                                <option>Бургас</option>
+                                <option>Варна</option>
+                                <option>Велико Търново</option>
+                                <option>Видин</option>
+                                <option>Враца</option>
+                                <option>Габрово</option>
+                                <option>Добрич</option>
+                                <option>Кърджали</option>
+                                <option>Кюстендил</option>
+                                <option>Ловеч</option>
+                                <option>Монтана</option>
+                                <option>Пазарджик</option>
+                                <option>Перник</option>
+                                <option>Плевен</option>
+                                <option>Пловдив</option>
+                                <option>Разград</option>
+                                <option>Русе</option>
+                                <option>Силистра</option>
+                                <option>Сливен</option>
+                                <option>Смолян</option>
+                                <option>София</option>
+                                <option>София област</option>
+                                <option>Стара Загора</option>
+                                <option>Търговище</option>
+                                <option>Хасково</option>
+                                <option>Шумен</option>
+                                <option>Ямбол</option>
                             </select>
                         </div>
 
-
                         <div class="form-group">
                             <label for="city">Град</label>
-
-                            <input
-                                    type="text"
-                                    id="city"
-                                    name="city"
-                                    pattern="[А-Яа-я\s\-]+"
-                                    placeholder="Например София"
-                                    required>
+                            <input type="text" id="city" name="city"
+                                   pattern="[А-Яа-я\s\-]+"
+                                   placeholder="Например София"
+                                   required>
                         </div>
 
                     </div>
 
-
                     <div class="form-group">
-
                         <label for="station">Бензиностанция</label>
-
                         <select id="station" name="station" required>
-
                             <option value="">Избери</option>
-
-                            <option value="ХИМОЙЛ">ХИМОЙЛ</option>
-                            <option value="ПЕТРОЛ">ПЕТРОЛ</option>
-                            <option value="ЛУКОЙЛ">ЛУКОЙЛ</option>
-                            <option value="SHELL">SHELL</option>
-                            <option value="ЕКО">ЕКО</option>
-                            <option value="OMV">OMV</option>
-                            <option value="РОМПЕТРОЛ">РОМПЕТРОЛ</option>
-                            <option value="КРУИЗ">КРУИЗ</option>
-                            <option value="ЕКО ПЕТРОЛ">ЕКО ПЕТРОЛ</option>
-                            <option value="ДИЗЕЛОР">ДИЗЕЛОР</option>
-                            <option value="ИНСА ОЙЛ">ИНСА ОЙЛ</option>
-                            <option value="БУЛМАРКЕТ">БУЛМАРКЕТ</option>
-                            <option value="АНТИМ">АНТИМ</option>
-                            <option value="БЕНИТА">БЕНИТА</option>
-                            <option value="VM PETROLEUM">VM PETROLEUM</option>
-                            <option value="AVIVA">AVIVA</option>
-                            <option value="ТОПЛИВО">ТОПЛИВО</option>
-
+                            <option>ХИМОЙЛ</option>
+                            <option>ПЕТРОЛ</option>
+                            <option>ЛУКОЙЛ</option>
+                            <option>SHELL</option>
+                            <option>ЕКО</option>
+                            <option>OMV</option>
+                            <option>РОМПЕТРОЛ</option>
+                            <option>КРУИЗ</option>
+                            <option>ЕКО ПЕТРОЛ</option>
+                            <option>ДИЗЕЛОР</option>
+                            <option>ИНСА ОЙЛ</option>
+                            <option>БУЛМАРКЕТ</option>
+                            <option>АНТИМ</option>
+                            <option>БЕНИТА</option>
+                            <option>VM PETROLEUM</option>
+                            <option>AVIVA</option>
+                            <option>ТОПЛИВО</option>
                         </select>
-
                     </div>
 
                     <div class="form-group">
                         <label for="location">Локация (по избор)</label>
-
-                        <input
-                                type="text"
-                                id="location"
-                                name="location"
-                                placeholder="Например: кв. Възраждане, АМ Хемус, бул. 3-ти март">
+                        <input type="text" id="location" name="location"
+                               placeholder="Например: кв. Възраждане, АМ Хемус">
                     </div>
 
                     <div class="form-group">
-
                         <label>Вид гориво</label>
 
                         <div class="radio-group">
-
-                            <label><input type="radio" name="fuel" value="Бензин A95" required> Бензин A95</label>
+                            <label><input type="radio" name="fuel" value="Бензин A95" required> A95</label>
                             <label><input type="radio" name="fuel" value="Дизел"> Дизел</label>
-                            <label><input type="radio" name="fuel" value="Пропан Бутан"> Пропан Бутан</label>
-                            <label><input type="radio" name="fuel" value="Бензин A100"> Бензин A100</label>
-                            <label><input type="radio" name="fuel" value="Дизел премиум">Дизел +</label>
+                            <label><input type="radio" name="fuel" value="Пропан Бутан"> LPG</label>
+                            <label><input type="radio" name="fuel" value="Бензин A100"> A100</label>
+                            <label><input type="radio" name="fuel" value="Дизел премиум"> Дизел +</label>
                             <label><input type="radio" name="fuel" value="Метан"> Метан</label>
-
                         </div>
-
                     </div>
 
                     <div class="form-group">
-
                         <label for="price">Цена (€/литър)</label>
-
-                        <input
-                                type="number"
-                                id="price"
-                                name="price"
-                                step="0.01"
-                                min="0.30"
-                                max="2"
-                                placeholder="1.55"
-                                required
-                                oninvalid="this.setCustomValidity('Моля въведете цена между 0.30 и 2.00 €')"
-                                oninput="this.setCustomValidity('')">
-
+                        <input type="number" id="price" name="price"
+                               step="0.01" min="0.30" max="2"
+                               placeholder="1.55"
+                               required>
                     </div>
-
 
                     <button type="submit" class="submit-button">
                         Изпрати цена
