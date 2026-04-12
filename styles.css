@@ -92,7 +92,7 @@ body{
 
     border:1px solid var(--border-color);
 
-    padding:30px;
+    padding:20px;
     margin-bottom:30px;
 
     min-width:400px;
@@ -103,6 +103,9 @@ body{
         0 0 0 1px rgba(255,255,255,0.02) inset;
 }
 
+.main-grid {
+    padding: 0 0;
+}
 
 body.light-theme{
     --bg-color:#f8fafc;
@@ -239,20 +242,20 @@ html{
 
 
 .submit-card{
-    width: 80%;
+    width: 100%;
     min-width: auto;
 }
 
 @media (max-width: 1300px) {
     .submit-card {
-        width: 80%;
+        width: 100%;
         min-width: auto;
     }
 }
 
 @media (max-width: 543px) {
     .submit-card {
-        width: 90%;
+        width: 100%;
         min-width: auto;
     }
 }
@@ -361,12 +364,51 @@ html{
    FILTER
 ========================= */
 
-.city-filter{
-    display:flex;
-    gap:20px;
-    flex-wrap:wrap;
+.city-filter {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+
     margin-bottom: 20px;
     margin-top: 50px;
+}
+
+.filt {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filt select {
+    width: 100%;
+}
+
+@media (max-width: 900px) {
+    .city-filter {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .city-filter {
+        grid-template-columns: 1fr;
+    }
+}
+
+.filt {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; /* ключовото */
+    gap: 6px;
+}
+
+.filt label {
+    width: 100%;
+    text-align: left;
+}
+
+.filt select {
+    width: 100%;
 }
 
 .filt{
