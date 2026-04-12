@@ -1,5 +1,5 @@
 let currentPage = 1
-let rowsPerPage = 3
+let rowsPerPage = 4
 let tickerSpeed = 0.3
 let tickerAnimationId = null
 
@@ -953,10 +953,10 @@ function generateCards() {
             </div>
         
             <div class="price-values">
-                ${fuels.a95 && fuels.a95 !== "-" ? `<div class="price-badge">A95<strong>${fuels.a95}€</strong></div>` : `<div class="price-badge">A95<strong>-</strong></div>`}
-                ${fuels.a100 && fuels.a100 !== "-" ? `<div class="price-badge">A100<strong>${fuels.a100}€</strong></div>` : `<div class="price-badge">A100<strong>-</strong></div>`}
                 ${fuels.diesel && fuels.diesel !== "-" ? `<div class="price-badge">Дизел<strong>${fuels.diesel}€</strong></div>` : `<div class="price-badge">Дизел<strong>-</strong></div>`}
+                ${fuels.a95 && fuels.a95 !== "-" ? `<div class="price-badge">A95<strong>${fuels.a95}€</strong></div>` : `<div class="price-badge">A95<strong>-</strong></div>`}
                 ${fuels.dieselPlus && fuels.dieselPlus !== "-" ? `<div class="price-badge">Дизел+<strong>${fuels.dieselPlus}€</strong></div>` : `<div class="price-badge">Дизел+<strong>-</strong></div>`}
+                ${fuels.a100 && fuels.a100 !== "-" ? `<div class="price-badge">A100<strong>${fuels.a100}€</strong></div>` : `<div class="price-badge">A100<strong>-</strong></div>`}
                 ${fuels.lpg && fuels.lpg !== "-" ? `<div class="price-badge">LPG<strong>${fuels.lpg}€</strong></div>` : `<div class="price-badge">LPG<strong>-</strong></div>`}
                 ${fuels.methane && fuels.methane !== "-" ? `<div class="price-badge">Метан<strong>${fuels.methane}€</strong></div>` : `<div class="price-badge">Метан<strong>-</strong></div>`}
             </div>
