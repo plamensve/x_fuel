@@ -51,4 +51,11 @@
         <changefreq>yearly</changefreq>
     </url>
 
+    <url>
+        <loc>https://goriva.online/pages/weather.html</loc>
+        <lastmod>2026-04-18</lastmod>
+        <changefreq>daily</changefreq>
+        <priority>0.8</priority>
+    </url>
+
 </urlset>
