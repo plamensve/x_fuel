@@ -6,39 +6,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>История на цените на горивата в България</title>
-    <meta name="description" content="Проследи динамиката на цените на бензин, дизел и газ в България по дни и региони.">
+    <!-- TITLE -->
+    <title>Прогноза за времето в България | Актуално време по градове</title>
 
-    <script src="//fuelo.net/js/widget-bg.min.js"></script>
-
-    <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="styles/useful.css">
-    <link rel="stylesheet" href="styles/trends.css">
-
-    <meta property="og:title" content="История и динамика на цените на горивата">
-    <meta property="og:description" content="Виж актуалните средни цени на бензин, дизел и газ в реално време.">
-    <meta property="og:image" content="https://goriva.online/media/og-3.png">
-    <meta property="og:url" content="https://goriva.online/pages/trends.html">
-    <meta property="og:type" content="website">
-
+    <!-- META DESCRIPTION -->
     <meta name="description"
-          content="Актуални цени на горивата в България. Проверете цените по бензиностанции във вашия град.">
+          content="Проверете актуалната прогноза за времето в България по градове. Температура, вятър, влажност и 5-дневна прогноза в реално време.">
 
-    <link rel="canonical" href="https://goriva.online/pages/trends.html">
+    <!-- CANONICAL (КОРИГИРАНО) -->
+    <link rel="canonical" href="https://goriva.online/pages/weather.html">
+
+    <!-- OPEN GRAPH -->
+    <meta property="og:title" content="Прогноза за времето в България | Актуално време по градове">
+    <meta property="og:description"
+          content="Актуална прогноза за времето – температура, вятър и 5-дневна прогноза за всеки град в България.">
+    <meta property="og:image" content="https://goriva.online/media/weather-og.png">
+    <meta property="og:url" content="https://goriva.online/pages/weather.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="bg_BG">
+
+    <!-- TWITTER -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Прогноза за времето в България">
+    <meta name="twitter:description"
+          content="Проверете времето по градове в България – температура, вятър и прогноза.">
+    <meta name="twitter:image" content="https://goriva.online/media/weather-og.png">
+
+    <!-- IMAGE SIZE -->
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+
+    <!-- FAVICON -->
     <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
 
-    <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <!-- STYLES -->
+    <link rel="stylesheet" href="../styles.css">
+    <link rel="stylesheet" href="styles/weather.css">
 
-    <!-- Calendar -->
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/locales/bg.js" defer></script>
-
-    <!-- Chart -->
+    <!-- SCRIPTS -->
+    <script src="//fuelo.net/js/widget-bg.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Hotjar Tracking Code for goriva.online -->
+    <!-- HOTJAR -->
     <script>
         (function (h, o, t, j, a, r) {
             h.hj = h.hj || function () {
@@ -65,9 +74,8 @@
         <img src="../media/2logo.png" alt="goriva.online logo" class="header-logo">
 
         <div class="header-text">
-            <strong>Цени на горивата в България</strong>
-            <span>Следете актуални цени и споделяйте информация от бензиностанции в цялата страна</span>
-            <span>Цените в сайта са подадени от потребителите. Разчитаме на коретно изпратена информация.</span>
+            <strong>Картови зареждания с по-ниски цени</strong>
+            <span>Достъп до преференциални цени на горивата в мрежата на нашите партньори</span>
         </div>
 
         <a class="facebook-button"
@@ -97,53 +105,52 @@
 
 </nav>
 
+<!--<div class="ticker">-->
+<!--    <div id="ticker-content" class="ticker-content"></div>-->
+<!--</div>-->
+
 <main class="container">
-    <div class="best-prices-section">
+<div class="weather-dashboard">
 
-        <h3>Най-ниски цени за избрания ден</h3>
+    <!-- SEARCH -->
+    <div class="weather-top">
+        <input id="city" placeholder="Въведи град">
+        <button onclick="loadWeather()">Търси</button>
+    </div>
 
-        <div id="best-prices" class="best-prices-list"></div>
+    <!-- MAIN GRID -->
+    <div class="weather-layout">
+
+        <!-- LEFT SIDE -->
+        <div class="weather-left">
+
+            <!-- CURRENT -->
+            <div class="current-box" id="weather"></div>
+
+            <!-- DETAILS -->
+            <div class="details-grid" id="weather-details"></div>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="weather-right">
+
+            <!-- MAP -->
+            <div class="map-box">
+                <div id="map"></div>
+            </div>
+
+            <!-- HOURLY -->
+            <div class="hourly-scroll" id="hourly"></div>
+
+        </div>
 
     </div>
 
-    <section class="trends-section">
+    <!-- DAILY (FULL WIDTH) -->
+    <div class="daily-grid" id="daily"></div>
 
-        <!-- LEGEND -->
-        <div class="legend">
-            <span><span class="dot fuel-a95"></span> A95</span>
-            <span><span class="dot fuel-diesel"></span> Дизел</span>
-            <span><span class="dot fuel-gas"></span> Газ</span>
-            <span><span class="dot fuel-a100"></span> A100</span>
-            <span><span class="dot fuel-diesel-plus"></span> Дизел+</span>
-            <span><span class="dot fuel-methane"></span> Метан</span>
-        </div>
-
-        <!-- CALENDAR -->
-        <div id="calendar"></div>
-        <div class="chart-section">
-
-            <h2 class="chart-title">Динамика на цената</h2>
-            <p class="chart-description">
-                Графиката показва средната цена на избраното гориво по дни, базирана на всички подадени данни.
-                Използвайте бутоните, за да превключвате между различните видове горива и да проследите тенденцията във
-                времето.
-            </p>
-
-            <div class="chart-filters">
-                <button data-fuel="Бензин A95">A95</button>
-                <button data-fuel="Дизел">Дизел</button>
-                <button data-fuel="Пропан Бутан">Газ</button>
-                <button data-fuel="Бензин A100">A100</button>
-                <button data-fuel="Дизел премиум">Дизел+</button>
-                <button data-fuel="Метан">Метан</button>
-            </div>
-
-            <div class="chart-container">
-                <canvas id="price-chart"></canvas>
-            </div>
-
-        </div>
-    </section>
+</div>
 
 </main>
 
@@ -235,11 +242,10 @@
     </div>
 
 </footer>
-
-<!-- SCRIPTS -->
-<script src="../scripts/script.js" defer></script>
-<script src="../scripts/useful.js" defer></script>
-<script src="../scripts/trends.js" defer></script>
-
+<!-- LEAFLET -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="../scripts/weather.js"></script>
+<script src="../scripts/script.js"></script>
 </body>
 </html>
