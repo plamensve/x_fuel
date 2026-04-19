@@ -92,7 +92,14 @@ function loadWeather(city = null, lat = null, lon = null) {
             let icon = current.weather[0].icon
 
             weatherEl.innerHTML = `
-                <h2>${current.name}</h2>
+                <h2>
+                    ${current.name} -
+                    <span class="date">${new Date().toLocaleDateString("bg-BG", {
+                        weekday: "long",
+                        day: "numeric",
+                        month: "long"
+                    })}</span>
+                </h2>
                 <img src="https://openweathermap.org/img/wn/${icon}@2x.png">
                 <div class="temp">${Math.round(current.main.temp)}°C</div>
                 <p>${translateWeather(current.weather[0].description)}</p>
@@ -107,13 +114,11 @@ function loadWeather(city = null, lat = null, lon = null) {
 
             initMap(current.coord.lat, current.coord.lon)
 
-            /* FORECAST */
             if (forecast.cod !== "200") return
 
             // HOURLY
-            let hourlyHTML = forecast.list.slice(0, 8).map(x => {
+            hourlyEl.innerHTML = forecast.list.slice(0, 8).map(x => {
                 let date = new Date(x.dt_txt)
-
                 return `
                     <div class="hourly-item">
                         <div>${date.getHours()}:00</div>
@@ -123,19 +128,15 @@ function loadWeather(city = null, lat = null, lon = null) {
                 `
             }).join("")
 
-            hourlyEl.innerHTML = hourlyHTML
-
             // DAILY
             let daily = {}
-
             forecast.list.forEach(x => {
                 let date = x.dt_txt.split(" ")[0]
                 if (!daily[date]) daily[date] = x
             })
 
-            let dailyHTML = Object.values(daily).slice(0, 5).map(x => {
+            dailyEl.innerHTML = Object.values(daily).slice(0, 5).map(x => {
                 let date = new Date(x.dt_txt)
-
                 return `
                     <div class="daily-item">
                         <div>${date.toLocaleDateString("bg-BG",{weekday:"short"})}</div>
@@ -145,27 +146,26 @@ function loadWeather(city = null, lat = null, lon = null) {
                 `
             }).join("")
 
-            dailyEl.innerHTML = dailyHTML
-
             // CHART
             let dailyAvg = {}
-
             forecast.list.forEach(x => {
                 let date = x.dt_txt.split(" ")[0]
                 if (!dailyAvg[date]) dailyAvg[date] = []
                 dailyAvg[date].push(x.main.temp)
             })
 
-            let labels = Object.keys(dailyAvg).map(d => {
-                let date = new Date(d)
-                return date.toLocaleDateString("bg-BG",{weekday:"short"})
-            })
+            let labels = Object.keys(dailyAvg).map(d =>
+                new Date(d).toLocaleDateString("bg-BG",{weekday:"short"})
+            )
 
-            let temps = Object.values(dailyAvg).map(arr => {
-                return (arr.reduce((a,b)=>a+b,0) / arr.length).toFixed(1)
-            })
+            let temps = Object.values(dailyAvg).map(arr =>
+                (arr.reduce((a,b)=>a+b,0) / arr.length).toFixed(1)
+            )
 
             drawChart(labels, temps)
+
+            // ✅ ТУК Е ФИКСЪТ
+            setStats(forecast)
         })
         .catch(() => {
             weatherEl.innerHTML = "Грешка при зареждане"
@@ -208,12 +208,6 @@ function drawChart(labels, temps) {
                 borderWidth: 2,
                 tension: 0.3
             }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: true }
-            }
         }
     })
 }
@@ -222,16 +216,76 @@ function drawChart(labels, temps) {
    INIT
 ========================= */
 document.addEventListener("DOMContentLoaded", () => {
-
-    let cityInput = document.getElementById("city")
-
-    if (cityInput) {
-        cityInput.addEventListener("keypress", function(e){
-            if (e.key === "Enter") {
-                loadWeather()
-            }
-        })
-    }
-
     loadByLocation()
+    loadPopularCities()
 })
+
+/* =========================
+   STATS (FIXED DATE)
+========================= */
+let setStats = (forecast) => {
+
+    let today = new Date()
+    let todayStr =
+        today.getFullYear() + "-" +
+        String(today.getMonth() + 1).padStart(2, "0") + "-" +
+        String(today.getDate()).padStart(2, "0")
+
+    let todayData = forecast.list.filter(x => x.dt_txt.startsWith(todayStr))
+
+    if (todayData.length === 0) return
+
+    let avg = arr => arr.reduce((a,b)=>a+b,0) / arr.length
+
+    document.getElementById("avg-temp").textContent =
+        avg(todayData.map(x => x.main.temp)).toFixed(1) + "°C"
+
+    document.getElementById("avg-wind").textContent =
+        avg(todayData.map(x => x.wind.speed)).toFixed(1) + " m/s"
+
+    document.getElementById("avg-humidity").textContent =
+        avg(todayData.map(x => x.main.humidity)).toFixed(0) + "%"
+}
+
+
+/* =========================
+   POPULAR CITIES
+========================= */
+let cities = ["Sofia", "Plovdiv", "Varna", "Burgas", "Ruse"]
+
+let loadPopularCities = async () => {
+
+    let container = document.getElementById("city-grid")
+    if (!container) return // ✅ защита
+
+    container.innerHTML = "Loading..."
+
+    try {
+        let requests = cities.map(city =>
+            fetch(`https://eaqvhxfvozhzatrnbkvx.supabase.co/functions/v1/weather?city=${city}`)
+                .then(res => res.json())
+        )
+
+        let results = await Promise.all(requests)
+
+        let html = results.map((data, i) => {
+
+            let city = cities[i]
+            let temp = Math.round(data.current.main.temp)
+            let icon = data.current.weather[0].icon
+
+            return `
+                <div class="city-card" onclick="loadWeather('${city}')">
+                    <div class="city-name">${city}</div>
+                    <img src="https://openweathermap.org/img/wn/${icon}.png">
+                    <div class="city-temp">${temp}°C</div>
+                </div>
+            `
+        }).join("")
+
+        container.innerHTML = html
+
+    } catch {
+        container.innerHTML = "Грешка при зареждане"
+    }
+}
