@@ -91,8 +91,17 @@ function getStationIcon(name) {
         })
     }
 
+    if (lower.includes("diselor") || lower.includes("дизелор")) {
+        return L.icon({
+            iconUrl: "../images/station_logos/diselor.svg",
+            ...defaultConfig
+        })
+    }
+
     return L.icon({
         iconUrl: "../images/station_logos/unknown.svg",
         ...defaultConfig
     })
+
+
 }
