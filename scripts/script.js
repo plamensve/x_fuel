@@ -788,55 +788,18 @@ function renderTicker(data) {
         return
     }
 
-    let stationGroups = {}
+    // 👉 директно показваме ВСЕКИ запис
+    let items = data.map(row => {
 
-    data.forEach(row => {
+        let price = Number(row.price)
 
-        let key = row.fuel + "|" + row.station + "|" + row.city
-
-        if (!stationGroups[key]) {
-            stationGroups[key] = {
-                fuel: row.fuel,
-                station: row.station,
-                city: row.city,
-                sum: 0,
-                count: 0
-            }
-        }
-
-        stationGroups[key].sum += Number(row.price)
-        stationGroups[key].count++
-    })
-
-    let averages = Object.values(stationGroups).map(s => ({
-        fuel: s.fuel,
-        station: s.station,
-        city: s.city,
-        avg: s.sum / s.count
-    }))
-
-    let grouped = {}
-
-    averages.forEach(row => {
-        if (!grouped[row.fuel]) grouped[row.fuel] = []
-        grouped[row.fuel].push(row)
-    })
-
-    let items = []
-
-    Object.keys(grouped).forEach(fuel => {
-
-        let sorted = grouped[fuel].sort((a, b) => a.avg - b.avg)
-        if (!sorted.length) return
-
-        let best = sorted[0]
-
-        items.push(`
+        return `
             <span class="ticker-item">
-                ${fuel}: <strong>${best.avg.toFixed(2)}€</strong>
-                (${best.station}, ${best.city})
+                ${row.fuel}: 
+                <strong>${price.toFixed(2)}€</strong>
+                (${row.station}, ${row.city})
             </span>
-        `)
+        `
     })
 
     container.innerHTML = `
