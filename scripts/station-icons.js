@@ -98,6 +98,13 @@ function getStationIcon(name) {
         })
     }
 
+    if (lower.includes("chimoil") || lower.includes("химойл") || lower.includes("himoil")) {
+        return L.icon({
+            iconUrl: "../images/station_logos/diselor.svg",
+            ...defaultConfig
+        })
+    }
+
     return L.icon({
         iconUrl: "../images/station_logos/unknown.svg",
         ...defaultConfig

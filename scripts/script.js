@@ -23,6 +23,7 @@ function getStationLogo(name) {
     if (lower.includes("петрол")) return "../images/station_logos/petrol.svg"
     if (lower.includes("еко")) return "../images/station_logos/eko.svg"
     if (lower.includes("дизелор")) return "../images/station_logos/diselor.svg"
+    if (lower.includes("химойл")) return "../images/station_logos/himoil.svg"
 
     return null
 }
