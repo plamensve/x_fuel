@@ -14,7 +14,7 @@ function getStationLogo(name) {
     if (lower.includes("еко петрол") || lower.includes("екопетрол")) return "../images/station_logos/ecopetrol.svg"
     if (lower.includes("лукойл")) return "../images/station_logos/lukoil.svg"
     if (lower.includes("омв") || lower.includes("omv"))
-    return "../images/station_logos/omv.svg"
+        return "../images/station_logos/omv.svg"
     if (lower.includes("шел")) return "../images/station_logos/shell.svg"
     if (lower.includes("ромпетрол")) return "../images/station_logos/rompetrol.svg"
     if (lower.includes("инса")) return "../images/station_logos/insa.svg"
@@ -788,7 +788,6 @@ function renderTicker(data) {
         return
     }
 
-    // 👉 директно показваме ВСЕКИ запис
     let items = data.map(row => {
 
         let price = Number(row.price)
@@ -867,6 +866,13 @@ function generateCards() {
     let rows = document.querySelectorAll("#prices-body tr");
     let container = document.getElementById("cards-container");
 
+    const addDate = new Date();
+
+    let day = addDate.getDate();
+    let month = String(addDate.getMonth() + 1).padStart(2, '0');
+    let year = addDate.getFullYear();
+    let currentDate = `${day}-${month}-${year}`;
+
     if (!container) return;
 
     container.innerHTML = "";
@@ -931,6 +937,9 @@ function generateCards() {
                 data-location="${location}">
                 Намери на картата
             </button>
+          <div style="font-size: 15px; margin-top: 10px;">
+                Добавен на дата ${currentDate}
+          </div>
         `;
 
         container.appendChild(card);
@@ -1018,7 +1027,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 });
 
-document.addEventListener("click", function(e) {
+document.addEventListener("click", function (e) {
 
     if (!e.target.classList.contains("map-btn")) return;
 
