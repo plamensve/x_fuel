@@ -868,7 +868,7 @@ function generateCards() {
 
     const addDate = new Date();
 
-    let day = addDate.getDate();
+    let day = String(addDate.getDate() + 1).padStart(2, '0');
     let month = String(addDate.getMonth() + 1).padStart(2, '0');
     let year = addDate.getFullYear();
     let currentDate = `${day}-${month}-${year}`;
