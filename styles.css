@@ -225,7 +225,7 @@ html{
     width:100%;
     max-width:1600px;
     margin:auto;
-    padding:40px clamp(16px,4vw,32px) 5px;
+    padding: 30px clamp(5px,1.5vw,16px) 5px;
 
 }
 
