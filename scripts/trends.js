@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
 function loadData(startDate, endDate) {
 
     fetch(
-        `https://eaqvhxfvozhzatrnbkvx.supabase.co/rest/v1/fuel_prices?select=*&created_at=gte.${startDate}&created_at=lt.${endDate}&order=created_at.asc`,
+        `https://eaqvhxfvozhzatrnbkvx.supabase.co/rest/v1/fuel_prices?select=*&created_at=gte.${startDate}&created_at=lt.${endDate}&order=created_at.desc&limit=1000`,
         {
             headers: {
                 apikey: "sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH",
@@ -189,60 +189,37 @@ function renderBestPrices(data) {
         return
     }
 
-    let stationGroups = {}
+    let bestByFuel = {}
 
     data.forEach(row => {
 
-        let key = `${row.fuel}|${row.station}|${row.city}`
+        if (!row.fuel || !row.price) return
 
-        if (!stationGroups[key]) {
+        let price = Number(row.price)
 
-            stationGroups[key] = {
+        if (Number.isNaN(price)) return
+
+        if (
+            !bestByFuel[row.fuel] ||
+            price < bestByFuel[row.fuel].price
+        ) {
+            bestByFuel[row.fuel] = {
                 fuel: row.fuel,
                 station: row.station,
                 city: row.city,
-                sum: 0,
-                count: 0
+                price: price
             }
         }
-
-        stationGroups[key].sum += Number(row.price)
-        stationGroups[key].count++
-    })
-
-    let averages = Object.values(stationGroups).map(s => ({
-        fuel: s.fuel,
-        station: s.station,
-        city: s.city,
-        avg: s.sum / s.count
-    }))
-
-    let grouped = {}
-
-    averages.forEach(row => {
-
-        if (!grouped[row.fuel]) {
-            grouped[row.fuel] = []
-        }
-
-        grouped[row.fuel].push(row)
     })
 
     let html = ""
 
-    Object.keys(grouped).forEach(fuel => {
-
-        let sorted = grouped[fuel]
-            .sort((a, b) => a.avg - b.avg)
-
-        if (!sorted.length) return
-
-        let best = sorted[0]
+    Object.values(bestByFuel).forEach(best => {
 
         html += `
             <div class="best-price-card">
-                <div class="fuel">${fuel}</div>
-                <div class="price">${best.avg.toFixed(2)} €</div>
+                <div class="fuel">${best.fuel}</div>
+                <div class="price">${best.price.toFixed(2)} €</div>
                 <div class="station">${best.station}</div>
                 <div class="city">${best.city}</div>
             </div>
