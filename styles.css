@@ -1882,3 +1882,133 @@ body.light-theme #pagination button.active-page {
     }
 }
 
+
+
+/* =========================================
+   BUSINESS CLIENTS BANNER
+========================================= */
+
+.business-promo {
+    width: 100%;
+    margin: 120px auto;
+    padding: 40px;
+
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    align-items: center;
+    gap: 40px;
+
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 24px;
+
+    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    box-sizing: border-box;
+}
+
+.business-promo-content {
+    padding: 20px;
+}
+
+.business-promo-label {
+    display: inline-block;
+    margin-bottom: 14px;
+
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+
+    color: #16a34a;
+}
+
+.business-promo h2 {
+    margin: 0;
+
+    font-size: clamp(1.8rem, 3vw, 2.8rem);
+    line-height: 1.15;
+
+    color: #0f172a;
+}
+
+.business-promo p {
+    margin: 18px 0 26px;
+
+    font-size: 1rem;
+    line-height: 1.7;
+
+    color: #475569;
+}
+
+.business-promo-button {
+    display: inline-block;
+    padding: 13px 24px;
+
+    color: #ffffff;
+    background: #16a34a;
+
+    border-radius: 10px;
+    text-decoration: none;
+    font-weight: 700;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+.business-promo-button:hover {
+    background: #15803d;
+    transform: translateY(-2px);
+}
+
+.business-promo-image {
+    overflow: hidden;
+    border-radius: 16px;
+}
+
+.business-promo-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+@media (max-width: 900px) {
+    .business-promo {
+        margin: 90px auto;
+        padding: 28px;
+
+        grid-template-columns: 1fr;
+        gap: 28px;
+    }
+
+    .business-promo-content {
+        padding: 8px;
+        text-align: center;
+    }
+}
+
+@media (max-width: 600px) {
+    .business-promo {
+        margin: 65px auto;
+        padding: 20px 14px;
+        border-radius: 16px;
+    }
+
+    .business-promo h2 {
+        font-size: 1.7rem;
+    }
+
+    .business-promo p {
+        font-size: 0.95rem;
+    }
+
+    .business-promo-button {
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+}
+
+
+
+
+
