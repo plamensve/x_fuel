@@ -2008,6 +2008,16 @@ body.light-theme #pagination button.active-page {
     }
 }
 
+.business-promo-link {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.business-promo-link img {
+    display: block;
+}
+
 
 
 
