@@ -2118,3 +2118,88 @@ html,
 body {
     overflow-x: hidden;
 }
+
+/* =========================================
+   FLEET IMAGE
+========================================= */
+
+.impact-fleet-image {
+    position: relative;
+
+    width: 100%;
+    margin: 64px 0;
+
+    border-radius: 26px;
+    overflow: hidden;
+
+    background: #f1f5f9;
+
+    box-shadow:
+        0 22px 55px rgba(15, 23, 42, 0.14),
+        0 6px 18px rgba(15, 23, 42, 0.08);
+}
+
+.impact-fleet-image::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+
+    background:
+        linear-gradient(
+            90deg,
+            rgba(15, 23, 42, 0.18) 0%,
+            transparent 38%,
+            transparent 70%,
+            rgba(15, 23, 42, 0.12) 100%
+        );
+
+    pointer-events: none;
+}
+
+.impact-fleet-image img {
+    display: block;
+
+    width: 100%;
+    height: 460px;
+
+    object-fit: cover;
+    object-position: center;
+
+    transition:
+        transform 0.6s ease,
+        filter 0.6s ease;
+}
+
+.impact-fleet-image:hover img {
+    transform: scale(1.025);
+    filter: contrast(1.04) saturate(1.06);
+}
+
+@media (max-width: 992px) {
+
+    .impact-fleet-image {
+        margin: 50px 0;
+        border-radius: 22px;
+    }
+
+    .impact-fleet-image img {
+        height: 360px;
+    }
+
+}
+
+@media (max-width: 640px) {
+
+    .impact-fleet-image {
+        margin: 38px 0;
+        border-radius: 18px;
+    }
+
+    .impact-fleet-image img {
+        height: 240px;
+        object-position: center;
+    }
+
+}
