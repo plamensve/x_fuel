@@ -1889,125 +1889,367 @@ body.light-theme #pagination button.active-page {
 ========================================= */
 
 .business-promo {
+    position: relative;
     width: 100%;
     margin: 120px auto;
-    padding: 40px;
+    padding: 48px;
 
     display: grid;
     grid-template-columns: 1fr 1.4fr;
     align-items: center;
-    gap: 40px;
+    gap: 48px;
 
-    background: #f8fafc;
-    border: 1px solid #e2e8f0;
+    background:
+        radial-gradient(
+            circle at 10% 20%,
+            rgba(37, 99, 235, 0.10),
+            transparent 34%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(34, 197, 94, 0.10),
+            transparent 34%
+        ),
+        #f8fafc;
+
+    border: 1px solid rgba(37, 99, 235, 0.16);
     border-radius: 24px;
 
-    box-shadow: 0 14px 40px rgba(15, 23, 42, 0.08);
+    box-shadow:
+        0 18px 50px rgba(15, 23, 42, 0.10),
+        0 0 0 1px rgba(255, 255, 255, 0.7) inset;
+
     box-sizing: border-box;
+    overflow: hidden;
 }
 
+/* Декоративен градиент в горната част */
+.business-promo::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 5px;
+
+    background: linear-gradient(
+        90deg,
+        #2563eb,
+        #22c55e
+    );
+}
+
+/* Лек glow ефект */
+.business-promo::after {
+    content: "";
+    position: absolute;
+    top: -130px;
+    right: -130px;
+
+    width: 320px;
+    height: 320px;
+
+    background: radial-gradient(
+        circle,
+        rgba(37, 99, 235, 0.15),
+        transparent 70%
+    );
+
+    pointer-events: none;
+}
+
+/* =========================================
+   CONTENT
+========================================= */
+
 .business-promo-content {
+    position: relative;
+    z-index: 2;
+
     padding: 20px;
 }
 
+/* Малък етикет над заглавието */
 .business-promo-label {
-    display: inline-block;
-    margin-bottom: 14px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 
-    font-size: 0.78rem;
+    margin-bottom: 18px;
+    padding: 8px 14px;
+
+    font-size: 0.76rem;
     font-weight: 800;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
 
-    color: #16a34a;
+    color: #1d4ed8;
+
+    background: linear-gradient(
+        135deg,
+        rgba(37, 99, 235, 0.10),
+        rgba(34, 197, 94, 0.12)
+    );
+
+    border: 1px solid rgba(37, 99, 235, 0.16);
+    border-radius: 999px;
 }
+
+/* Малка точка пред етикета */
+.business-promo-label::before {
+    content: "";
+    width: 8px;
+    height: 8px;
+
+    background: linear-gradient(
+        135deg,
+        #2563eb,
+        #22c55e
+    );
+
+    border-radius: 50%;
+
+    box-shadow: 0 0 0 5px rgba(34, 197, 94, 0.10);
+}
+
+/* =========================================
+   HEADING
+========================================= */
 
 .business-promo h2 {
     margin: 0;
 
-    font-size: clamp(1.8rem, 3vw, 2.8rem);
-    line-height: 1.15;
+    font-size: clamp(2rem, 3.4vw, 3.2rem);
+    line-height: 1.08;
+    letter-spacing: -0.035em;
 
     color: #0f172a;
+    font-weight: 800;
 }
+
+/* Акцент в заглавието */
+.business-promo h2 strong,
+.business-promo h2 span {
+    background: linear-gradient(
+        90deg,
+        #2563eb,
+        #22c55e
+    );
+
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+
+    font-weight: 900;
+}
+
+/* Декоративна линия под заглавието */
+.business-promo h2::after {
+    content: "";
+    display: block;
+
+    width: 74px;
+    height: 5px;
+
+    margin-top: 18px;
+
+    background: linear-gradient(
+        90deg,
+        #2563eb,
+        #22c55e
+    );
+
+    border-radius: 999px;
+
+    box-shadow: 0 5px 14px rgba(37, 99, 235, 0.20);
+}
+
+/* =========================================
+   TEXT
+========================================= */
 
 .business-promo p {
-    margin: 18px 0 26px;
+    max-width: 560px;
+    margin: 24px 0 30px;
 
-    font-size: 1rem;
-    line-height: 1.7;
+    font-size: 1.04rem;
+    line-height: 1.75;
 
     color: #475569;
+    font-weight: 400;
 }
 
+/* Акцентни думи в параграфа */
+.business-promo p strong {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.business-promo p span {
+    color: #16a34a;
+    font-weight: 700;
+}
+
+/* =========================================
+   BUTTON
+========================================= */
+
 .business-promo-button {
-    display: inline-block;
-    padding: 13px 24px;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    min-height: 52px;
+    padding: 14px 28px;
 
     color: #ffffff;
-    background: #16a34a;
 
-    border-radius: 10px;
+    background: linear-gradient(
+        135deg,
+        #2563eb 0%,
+        #1d77d0 45%,
+        #22c55e 100%
+    );
+
+    border: 1px solid rgba(255, 255, 255, 0.20);
+    border-radius: 12px;
+
     text-decoration: none;
-    font-weight: 700;
+    font-size: 0.98rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+
+    box-shadow:
+        0 12px 28px rgba(37, 99, 235, 0.28),
+        0 3px 8px rgba(15, 23, 42, 0.14);
 
     transition:
-        transform 0.2s ease,
-        background 0.2s ease;
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        filter 0.25s ease;
+}
+
+/* Стрелка */
+.business-promo-button::after {
+    content: "→";
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 28px;
+
+    color: #2563eb;
+    background: #ffffff;
+
+    border-radius: 50%;
+
+    font-size: 18px;
+    line-height: 1;
+
+    transition:
+        transform 0.25s ease,
+        background 0.25s ease;
+}
+
+/* Светлинен sweep */
+.business-promo-button::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+
+    width: 70%;
+    height: 100%;
+
+    z-index: -1;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.28),
+        transparent
+    );
+
+    transform: skewX(-20deg);
+    transition: left 0.55s ease;
 }
 
 .business-promo-button:hover {
-    background: #15803d;
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+
+    box-shadow:
+        0 18px 38px rgba(37, 99, 235, 0.35),
+        0 6px 14px rgba(15, 23, 42, 0.16);
+
+    filter: saturate(1.12);
 }
 
+.business-promo-button:hover::before {
+    left: 140%;
+}
+
+.business-promo-button:hover::after {
+    transform: translateX(4px);
+    background: #f8fafc;
+}
+
+.business-promo-button:active {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 18px rgba(37, 99, 235, 0.25);
+}
+
+.business-promo-button:focus-visible {
+    outline: none;
+
+    box-shadow:
+        0 0 0 4px rgba(37, 99, 235, 0.20),
+        0 14px 30px rgba(37, 99, 235, 0.30);
+}
+
+/* =========================================
+   IMAGE
+========================================= */
+
 .business-promo-image {
+    position: relative;
+    z-index: 2;
+
     overflow: hidden;
-    border-radius: 16px;
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 18px 40px rgba(15, 23, 42, 0.14),
+        0 0 0 1px rgba(37, 99, 235, 0.10);
 }
 
 .business-promo-image img {
     display: block;
     width: 100%;
     height: auto;
+
+    transition:
+        transform 0.45s ease,
+        filter 0.45s ease;
 }
 
-@media (max-width: 900px) {
-    .business-promo {
-        margin: 90px auto;
-        padding: 28px;
-
-        grid-template-columns: 1fr;
-        gap: 28px;
-    }
-
-    .business-promo-content {
-        padding: 8px;
-        text-align: center;
-    }
+.business-promo:hover .business-promo-image img {
+    transform: scale(1.015);
+    filter: contrast(1.03) saturate(1.04);
 }
 
-@media (max-width: 600px) {
-    .business-promo {
-        margin: 65px auto;
-        padding: 20px 14px;
-        border-radius: 16px;
-    }
-
-    .business-promo h2 {
-        font-size: 1.7rem;
-    }
-
-    .business-promo p {
-        font-size: 0.95rem;
-    }
-
-    .business-promo-button {
-        width: 100%;
-        box-sizing: border-box;
-        text-align: center;
-    }
-}
-
+/* Цялата снимка може да бъде линк */
 .business-promo-link {
     display: block;
     text-decoration: none;
@@ -2016,6 +2258,99 @@ body.light-theme #pagination button.active-page {
 
 .business-promo-link img {
     display: block;
+}
+
+/* =========================================
+   TABLET
+========================================= */
+
+@media (max-width: 900px) {
+    .business-promo {
+        margin: 90px auto;
+        padding: 34px 28px;
+
+        grid-template-columns: 1fr;
+        gap: 32px;
+    }
+
+    .business-promo-content {
+        padding: 8px;
+        text-align: center;
+    }
+
+    .business-promo-label {
+        justify-content: center;
+    }
+
+    .business-promo h2::after {
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .business-promo p {
+        max-width: 680px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .business-promo-button {
+        margin: 0 auto;
+    }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+    .business-promo {
+        margin: 65px auto;
+        padding: 26px 16px;
+
+        border-radius: 18px;
+        gap: 26px;
+    }
+
+    .business-promo-content {
+        padding: 4px;
+    }
+
+    .business-promo-label {
+        padding: 7px 11px;
+
+        font-size: 0.68rem;
+        letter-spacing: 0.09em;
+    }
+
+    .business-promo h2 {
+        font-size: 1.85rem;
+        line-height: 1.12;
+    }
+
+    .business-promo h2::after {
+        width: 58px;
+        height: 4px;
+        margin-top: 14px;
+    }
+
+    .business-promo p {
+        margin: 20px 0 24px;
+
+        font-size: 0.95rem;
+        line-height: 1.65;
+    }
+
+    .business-promo-button {
+        width: 100%;
+        box-sizing: border-box;
+
+        padding: 14px 18px;
+        text-align: center;
+    }
+
+    .business-promo-image {
+        border-radius: 14px;
+    }
 }
 
 
