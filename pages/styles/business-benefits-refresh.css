@@ -1,0 +1,199 @@
+/* Business clients — refreshed benefits section */
+body .business-benefits {
+    position: relative;
+    margin: 44px 0 38px !important;
+    padding: 54px 10px 62px !important;
+    overflow: hidden;
+    border: 0 !important;
+    border-radius: 28px;
+    background:
+        radial-gradient(circle at 94% 8%, rgba(96, 165, 250, .10), transparent 23%),
+        linear-gradient(180deg, #f8fbff 0%, #f3f7fc 100%) !important;
+}
+
+body .business-benefits::after {
+    content: "";
+    position: absolute;
+    top: 20px;
+    right: 24px;
+    width: 120px;
+    height: 120px;
+    opacity: .33;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #bfdbfe 1.4px, transparent 1.5px);
+    background-size: 13px 13px;
+}
+
+body .business-benefits > .container {
+    position: relative;
+    z-index: 1;
+    max-width: 1120px !important;
+}
+
+body .business-benefits h2.gradient-text {
+    margin: 0 0 10px !important;
+    color: #0f172a !important;
+    font-size: clamp(34px, 4vw, 46px) !important;
+    font-weight: 850 !important;
+    line-height: 1.05 !important;
+    letter-spacing: -.035em !important;
+    text-align: left !important;
+}
+
+body .business-benefits h2.gradient-text::after {
+    content: "Инструменти и възможности, които Ви помагат да оптимизирате разходите за гориво и да управлявате автопарка по-ефективно." !important;
+    display: block !important;
+    max-width: 760px !important;
+    margin: 18px 0 34px !important;
+    color: #52647d !important;
+    background: none !important;
+    font-size: 17px !important;
+    font-weight: 450 !important;
+    line-height: 1.75 !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+}
+
+body .business-benefits .steps-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 18px !important;
+}
+
+body .business-benefits .step {
+    position: relative !important;
+    min-height: 465px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 38px 24px 30px !important;
+    overflow: hidden !important;
+    border: 1px solid #dde5ef !important;
+    border-radius: 20px !important;
+    background: rgba(255, 255, 255, .96) !important;
+    box-shadow: 0 14px 34px rgba(15, 23, 42, .055) !important;
+    text-align: center !important;
+    transform: none !important;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease !important;
+}
+
+body .business-benefits .step:hover {
+    transform: translateY(-4px) !important;
+    border-color: #cbd8e8 !important;
+    box-shadow: 0 20px 42px rgba(15, 23, 42, .09) !important;
+}
+
+body .business-benefits .step img {
+    display: none !important;
+}
+
+body .business-benefits .step::before {
+    content: "" !important;
+    width: 142px !important;
+    height: 142px !important;
+    flex: 0 0 142px !important;
+    display: block !important;
+    margin: 0 auto 28px !important;
+    border-radius: 50% !important;
+    background-color: #eef5ff !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 84px 84px !important;
+    box-shadow: 0 12px 28px rgba(59, 130, 246, .08) !important;
+}
+
+body .business-benefits .step:nth-child(1)::before {
+    background-color: #edf5ff !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Cpath d='M22 22h38l14 14-29 38H22L8 60Z' fill='none' stroke='%233b82f6' stroke-width='5' stroke-linejoin='round'/%3E%3Ccircle cx='31' cy='36' r='5' fill='none' stroke='%233b82f6' stroke-width='5'/%3E%3Cpath d='M40 48h20M50 38v20' stroke='%233b82f6' stroke-width='5' stroke-linecap='round'/%3E%3Cpath d='M66 58v18M58 68l8 8 8-8' fill='none' stroke='%232563eb' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+}
+
+body .business-benefits .step:nth-child(2)::before {
+    background-color: #ecfbf4 !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect x='20' y='14' width='50' height='62' rx='6' fill='none' stroke='%2310b981' stroke-width='5'/%3E%3Cpath d='M31 29h29M31 42h29M31 55h18' stroke='%2310b981' stroke-width='5' stroke-linecap='round'/%3E%3Ccircle cx='69' cy='68' r='16' fill='%2310b981'/%3E%3Cpath d='m61 68 5 5 10-11' fill='none' stroke='white' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+}
+
+body .business-benefits .step:nth-child(3)::before {
+    background-color: #f0f1ff !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Crect x='20' y='15' width='47' height='58' rx='6' fill='none' stroke='%234f76e8' stroke-width='5'/%3E%3Cpath d='M33 58V45M44 58V36M55 58V28' stroke='%234f76e8' stroke-width='6' stroke-linecap='round'/%3E%3Cpath d='M56 67h22l5 11H51Z' fill='none' stroke='%232f5abf' stroke-width='4.5' stroke-linejoin='round'/%3E%3Ccircle cx='59' cy='79' r='4' fill='%232f5abf'/%3E%3Ccircle cx='76' cy='79' r='4' fill='%232f5abf'/%3E%3C/svg%3E") !important;
+}
+
+body .business-benefits .step:nth-child(4)::before {
+    background-color: #fff3e8 !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'%3E%3Cpath d='M14 36 31 22l15 9 13-9 23 18-17 18-17-8-16 9Z' fill='none' stroke='%23fb923c' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='m37 42 11 9c4 3 9 3 13 0l7-6M27 57l8 8M36 52l8 8M44 60l8 8M52 57l8 8' fill='none' stroke='%23fb923c' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E") !important;
+}
+
+body .business-benefits .step h3 {
+    position: relative !important;
+    width: 100% !important;
+    min-height: 62px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    margin: 0 0 34px !important;
+    padding: 0 4px 18px !important;
+    color: #0f172a !important;
+    font-size: 21px !important;
+    font-weight: 800 !important;
+    line-height: 1.18 !important;
+    letter-spacing: -.02em !important;
+    text-align: center !important;
+}
+
+body .business-benefits .step h3::after {
+    content: "" !important;
+    position: absolute !important;
+    left: 50% !important;
+    bottom: 0 !important;
+    width: 42px !important;
+    height: 3px !important;
+    transform: translateX(-50%) !important;
+    border-radius: 999px !important;
+    background: #2563eb !important;
+}
+
+body .business-benefits .step:nth-child(2) h3::after { background: #10b981 !important; }
+body .business-benefits .step:nth-child(3) h3::after { background: #4f76e8 !important; }
+body .business-benefits .step:nth-child(4) h3::after { background: #fb923c !important; }
+
+body .business-benefits .step p {
+    max-width: 225px !important;
+    margin: 0 auto !important;
+    color: #52647d !important;
+    font-size: 14px !important;
+    line-height: 1.75 !important;
+    text-align: center !important;
+}
+
+@media (max-width: 980px) {
+    body .business-benefits .steps-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    }
+    body .business-benefits .step { min-height: 410px !important; }
+}
+
+@media (max-width: 620px) {
+    body .business-benefits {
+        margin-top: 34px !important;
+        padding: 38px 14px 42px !important;
+        border-radius: 20px !important;
+    }
+    body .business-benefits h2.gradient-text { font-size: 32px !important; }
+    body .business-benefits h2.gradient-text::after {
+        margin-top: 14px !important;
+        margin-bottom: 26px !important;
+        font-size: 15px !important;
+        line-height: 1.6 !important;
+    }
+    body .business-benefits .steps-grid { grid-template-columns: 1fr !important; }
+    body .business-benefits .step {
+        min-height: 0 !important;
+        padding: 30px 22px 28px !important;
+    }
+    body .business-benefits .step::before {
+        width: 118px !important;
+        height: 118px !important;
+        flex-basis: 118px !important;
+        background-size: 70px 70px !important;
+    }
+}
