@@ -15,11 +15,18 @@ const FUEL_ALIASES = {
 }
 
 const FUEL_ORDER = ["A95", "Дизел", "LPG", "A100", "Дизел +", "Метан"]
+const FUEL_COLORS = {
+    "A95": "#3b82f6",
+    "Дизел": "#22c55e",
+    "LPG": "#facc15",
+    "A100": "#8b5cf6",
+    "Дизел +": "#94a3b8",
+    "Метан": "#06b6d4"
+}
 
 let currentPageTrend = 1
-let itemsPerPageTrend = 12
+const itemsPerPageTrend = 12
 let currentModalData = []
-let currentModalDate = null
 
 let modalList
 let paginationEl
@@ -41,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
     paginationEl = document.getElementById("pagination")
     paginationInfoEl = document.getElementById("pagination-info")
 
-    closeModal?.addEventListener("click", () => closeDayModal())
+    closeModal?.addEventListener("click", closeDayModal)
 
     modal?.addEventListener("click", event => {
         if (event.target === modal) closeDayModal()
@@ -51,8 +58,12 @@ document.addEventListener("DOMContentLoaded", () => {
         if (event.key === "Escape") closeDayModal()
     })
 
+    injectFiltersIntoCalendar()
+    bindChartFilters()
+    setOverviewMetrics([])
+
     const calendarEl = document.getElementById("calendar")
-    if (!calendarEl) return
+    if (!calendarEl || typeof FullCalendar === "undefined") return
 
     calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: "dayGridMonth",
@@ -84,8 +95,6 @@ document.addEventListener("DOMContentLoaded", () => {
     })
 
     calendar.render()
-    injectFiltersIntoCalendar()
-    bindChartFilters()
 })
 
 function canonicalFuel(value) {
@@ -99,6 +108,7 @@ function toDateOnly(date) {
 function formatDateBg(dateStr) {
     if (!dateStr) return ""
     const [year, month, day] = dateStr.split("-").map(Number)
+
     return new Intl.DateTimeFormat("bg-BG", {
         day: "2-digit",
         month: "long",
@@ -117,10 +127,11 @@ function normalizeRow(row) {
 
 async function loadData(startDate, endDate) {
     setCalendarSummary("Зареждане на данните…")
+    setMetricLoadingState()
 
     const pageSize = 1000
     let offset = 0
-    let rows = []
+    const rows = []
 
     try {
         while (true) {
@@ -143,7 +154,9 @@ async function loadData(startDate, endDate) {
             offset += pageSize
         }
 
-        allData = rows.map(normalizeRow).filter(row => row.dateOnly && Number.isFinite(row.price))
+        allData = rows
+            .map(normalizeRow)
+            .filter(row => row.dateOnly && Number.isFinite(row.price) && FUEL_ORDER.includes(row.fuel))
 
         populateFilters(allData)
         render()
@@ -169,9 +182,9 @@ function populateFilters(data) {
     const regions = uniqueSorted(data.map(row => row.region).filter(Boolean))
     fillSelect(regionFilter, regions, "Всички области", currentRegion)
 
-    const cityRows = currentRegion === "all"
+    const cityRows = regionFilter.value === "all"
         ? data
-        : data.filter(row => row.region === currentRegion)
+        : data.filter(row => row.region === regionFilter.value)
 
     const cities = uniqueSorted(cityRows.map(row => row.city).filter(Boolean))
     fillSelect(cityFilter, cities, "Всички градове", currentCity)
@@ -209,29 +222,30 @@ function fillSelect(select, values, label, preferredValue = "all") {
 function injectFiltersIntoCalendar() {
     if (document.querySelector(".calendar-filters")) return
 
+    const slot = document.getElementById("filter-slot")
     const calendarContainer = document.getElementById("calendar")
-    if (!calendarContainer) return
+    if (!slot && !calendarContainer) return
 
     const filters = document.createElement("div")
     filters.className = "calendar-filters"
     filters.innerHTML = `
         <label class="filter-field">
             <span>Област</span>
-            <select id="region-filter">
+            <select id="region-filter" aria-label="Филтър по област">
                 <option value="all">Всички области</option>
             </select>
         </label>
 
         <label class="filter-field">
             <span>Град</span>
-            <select id="city-filter">
+            <select id="city-filter" aria-label="Филтър по град">
                 <option value="all">Всички градове</option>
             </select>
         </label>
 
         <label class="filter-field">
             <span>Гориво</span>
-            <select id="fuel-filter">
+            <select id="fuel-filter" aria-label="Филтър по гориво">
                 <option value="all">Всички горива</option>
                 <option value="A95">A95</option>
                 <option value="Дизел">Дизел</option>
@@ -244,20 +258,26 @@ function injectFiltersIntoCalendar() {
 
         <label class="filter-field">
             <span>Бензиностанция</span>
-            <select id="station-filter">
+            <select id="station-filter" aria-label="Филтър по бензиностанция">
                 <option value="all">Всички бензиностанции</option>
             </select>
         </label>
 
-        <button type="button" id="clear-filters" class="clear-filters">Изчисти филтрите</button>
+        <button type="button" id="clear-filters" class="clear-filters">Изчисти</button>
     `
 
-    calendarContainer.before(filters)
+    if (slot) {
+        slot.appendChild(filters)
+    } else {
+        calendarContainer.before(filters)
+    }
 
     if (!filtersInitialized) {
         bindFilters()
         filtersInitialized = true
     }
+
+    updateActiveFilterCount()
 }
 
 function bindFilters() {
@@ -268,19 +288,26 @@ function bindFilters() {
     const clearFilters = document.getElementById("clear-filters")
 
     regionFilter?.addEventListener("change", () => {
-        cityFilter.value = "all"
-        stationFilter.value = "all"
+        if (cityFilter) cityFilter.value = "all"
+        if (stationFilter) stationFilter.value = "all"
         populateFilters(allData)
         render()
     })
 
     cityFilter?.addEventListener("change", () => {
-        stationFilter.value = "all"
+        if (stationFilter) stationFilter.value = "all"
         populateFilters(allData)
         render()
     })
 
-    fuelFilter?.addEventListener("change", render)
+    fuelFilter?.addEventListener("change", () => {
+        if (fuelFilter.value !== "all") {
+            selectedFuel = fuelFilter.value
+            syncChartFuelButtons()
+        }
+        render()
+    })
+
     stationFilter?.addEventListener("change", render)
 
     clearFilters?.addEventListener("click", () => {
@@ -316,9 +343,48 @@ function render() {
         setTimeout(injectCounts, 0)
     }
 
+    setOverviewMetrics(filtered)
     renderChart(filtered)
     updateCalendarSummary(filtered)
+    updateActiveFilterCount()
     renderBestPricesForTodayOrLatest()
+}
+
+function setMetricLoadingState() {
+    ;["metric-records", "metric-stations", "metric-days", "metric-lowest"].forEach(id => {
+        const element = document.getElementById(id)
+        if (element) element.textContent = "…"
+    })
+}
+
+function setOverviewMetrics(data) {
+    const recordsEl = document.getElementById("metric-records")
+    const stationsEl = document.getElementById("metric-stations")
+    const daysEl = document.getElementById("metric-days")
+    const lowestEl = document.getElementById("metric-lowest")
+
+    const stationCount = new Set(data.map(row => `${row.station || ""}|${row.city || ""}|${row.location || ""}`)).size
+    const dayCount = new Set(data.map(row => row.dateOnly).filter(Boolean)).size
+    const lowest = data.length ? Math.min(...data.map(row => row.price).filter(Number.isFinite)) : null
+
+    if (recordsEl) recordsEl.textContent = new Intl.NumberFormat("bg-BG").format(data.length)
+    if (stationsEl) stationsEl.textContent = new Intl.NumberFormat("bg-BG").format(stationCount)
+    if (daysEl) daysEl.textContent = new Intl.NumberFormat("bg-BG").format(dayCount)
+    if (lowestEl) lowestEl.textContent = Number.isFinite(lowest) ? `${lowest.toFixed(2)} €` : "—"
+}
+
+function updateActiveFilterCount() {
+    const badge = document.getElementById("active-filter-count")
+    if (!badge) return
+
+    const controls = ["region-filter", "city-filter", "fuel-filter", "station-filter"]
+        .map(id => document.getElementById(id))
+        .filter(Boolean)
+
+    const active = controls.filter(control => control.value && control.value !== "all").length
+
+    badge.textContent = active ? `${active} активни ${active === 1 ? "филтър" : "филтъра"}` : "Без активни филтри"
+    badge.classList.toggle("has-filters", active > 0)
 }
 
 function getFuelClass(fuel) {
@@ -429,7 +495,7 @@ function renderBestPrices(data) {
     if (!container) return
 
     if (!data.length) {
-        container.innerHTML = `<div class="empty-state">Няма налични цени за избрания период.</div>`
+        container.innerHTML = `<div class="empty-state">Няма налични цени за избрания период и филтри.</div>`
         return
     }
 
@@ -464,12 +530,13 @@ function renderBestPrices(data) {
 
 function showDayData(dateStr) {
     const filtered = getFilteredData().filter(row => row.dateOnly === dateStr)
-    currentModalDate = dateStr
 
     currentModalData = filtered
         .slice()
         .sort((a, b) => {
-            const fuelDiff = FUEL_ORDER.indexOf(a.fuel) - FUEL_ORDER.indexOf(b.fuel)
+            const fuelA = FUEL_ORDER.indexOf(a.fuel)
+            const fuelB = FUEL_ORDER.indexOf(b.fuel)
+            const fuelDiff = (fuelA === -1 ? 999 : fuelA) - (fuelB === -1 ? 999 : fuelB)
             if (fuelDiff !== 0) return fuelDiff
             return a.price - b.price
         })
@@ -483,9 +550,9 @@ function showDayData(dateStr) {
     if (modalDate) modalDate.textContent = formatDateBg(dateStr)
 
     if (modalMeta) {
-        const stationsCount = new Set(filtered.map(row => `${row.station}|${row.city}`)).size
+        const stationsCount = new Set(filtered.map(row => `${row.station}|${row.city}|${row.location || ""}`)).size
         modalMeta.textContent = filtered.length
-            ? `${filtered.length} цени от ${stationsCount} бензиностанции`
+            ? `${filtered.length} цени · ${stationsCount} ${stationsCount === 1 ? "бензиностанция" : "бензиностанции"}`
             : "Няма налични данни за този ден"
     }
 
@@ -495,7 +562,12 @@ function showDayData(dateStr) {
         modal.classList.add("show")
         modal.setAttribute("aria-hidden", "false")
         document.body.classList.add("modal-open")
+        closeModalButtonFocus()
     }
+}
+
+function closeModalButtonFocus() {
+    requestAnimationFrame(() => document.getElementById("close-modal")?.focus({ preventScroll: true }))
 }
 
 function closeDayModal() {
@@ -567,13 +639,11 @@ function renderPagination(totalItems) {
 
     paginationInfoEl.textContent = `${startItem}–${endItem} от ${totalItems} резултата`
 
-    const previous = paginationButton("← Предишна", currentPageTrend === 1, () => {
+    paginationEl.appendChild(paginationButton("← Предишна", currentPageTrend === 1, () => {
         currentPageTrend -= 1
         renderPage()
         scrollModalToTop()
-    })
-
-    paginationEl.appendChild(previous)
+    }))
 
     getPaginationPages(currentPageTrend, totalPages).forEach(page => {
         if (page === "ellipsis") {
@@ -598,13 +668,11 @@ function renderPagination(totalItems) {
         paginationEl.appendChild(button)
     })
 
-    const next = paginationButton("Следваща →", currentPageTrend === totalPages, () => {
+    paginationEl.appendChild(paginationButton("Следваща →", currentPageTrend === totalPages, () => {
         currentPageTrend += 1
         renderPage()
         scrollModalToTop()
-    })
-
-    paginationEl.appendChild(next)
+    }))
 }
 
 function paginationButton(label, disabled, onClick) {
@@ -636,17 +704,18 @@ function scrollModalToTop() {
 }
 
 function bindChartFilters() {
-    const buttons = document.querySelectorAll(".chart-filters button")
-
-    buttons.forEach(button => {
+    document.querySelectorAll(".chart-filters button").forEach(button => {
         button.addEventListener("click", () => {
             selectedFuel = canonicalFuel(button.dataset.fuel)
-
-            buttons.forEach(item => item.classList.remove("active"))
-            button.classList.add("active")
-
+            syncChartFuelButtons()
             renderChart(getFilteredData())
         })
+    })
+}
+
+function syncChartFuelButtons() {
+    document.querySelectorAll(".chart-filters button").forEach(button => {
+        button.classList.toggle("active", canonicalFuel(button.dataset.fuel) === selectedFuel)
     })
 }
 
@@ -672,14 +741,17 @@ function buildChartData(data) {
 
 function renderChart(data) {
     const ctx = document.getElementById("price-chart")
-    if (!ctx) return
+    if (!ctx || typeof Chart === "undefined") return
 
     const { labels, values } = buildChartData(data)
+    const color = FUEL_COLORS[selectedFuel] || "#3b82f6"
 
     if (chart) {
         chart.data.labels = labels
         chart.data.datasets[0].data = values
         chart.data.datasets[0].label = selectedFuel
+        chart.data.datasets[0].borderColor = color
+        chart.data.datasets[0].backgroundColor = `${color}18`
         chart.update()
         return
     }
@@ -691,9 +763,14 @@ function renderChart(data) {
             datasets: [{
                 label: selectedFuel,
                 data: values,
-                tension: 0.28,
-                pointRadius: 3,
-                pointHoverRadius: 5
+                borderColor: color,
+                backgroundColor: `${color}18`,
+                fill: true,
+                borderWidth: 2.2,
+                tension: 0.32,
+                pointRadius: 2.5,
+                pointHoverRadius: 5,
+                pointBackgroundColor: color
             }]
         },
         options: {
@@ -704,17 +781,33 @@ function renderChart(data) {
                 mode: "index"
             },
             scales: {
+                x: {
+                    grid: { color: "rgba(148,163,184,0.07)" },
+                    ticks: { color: "#8094aa", maxTicksLimit: 9 }
+                },
                 y: {
+                    grid: { color: "rgba(148,163,184,0.07)" },
                     ticks: {
+                        color: "#8094aa",
                         callback: value => `${Number(value).toFixed(2)} €`
                     }
                 }
             },
             plugins: {
                 legend: {
-                    display: true
+                    display: true,
+                    labels: {
+                        color: "#b8c8d9",
+                        usePointStyle: true,
+                        boxWidth: 8
+                    }
                 },
                 tooltip: {
+                    backgroundColor: "rgba(8,17,31,0.96)",
+                    borderColor: "rgba(148,163,184,0.14)",
+                    borderWidth: 1,
+                    titleColor: "#ffffff",
+                    bodyColor: "#cbd5e1",
                     callbacks: {
                         label: context => `${context.dataset.label}: ${Number(context.raw).toFixed(2)} €`
                     }
@@ -726,11 +819,11 @@ function renderChart(data) {
 
 function updateCalendarSummary(data) {
     const uniqueDates = new Set(data.map(row => row.dateOnly).filter(Boolean)).size
-    const uniqueStations = new Set(data.map(row => `${row.station}|${row.city}`)).size
+    const uniqueStations = new Set(data.map(row => `${row.station}|${row.city}|${row.location || ""}`)).size
 
     setCalendarSummary(
         data.length
-            ? `${data.length} цени · ${uniqueStations} станции · ${uniqueDates} дни`
+            ? `${new Intl.NumberFormat("bg-BG").format(data.length)} цени · ${uniqueStations} станции · ${uniqueDates} дни`
             : "Няма резултати за избраните филтри"
     )
 }
