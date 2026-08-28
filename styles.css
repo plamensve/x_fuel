@@ -2,3 +2,17 @@
 @import url("./styles-legacy.css");
 @import url("./pages/styles/site-shell.css");
 @import url("./pages/styles/site-shell-legacy.css");
+
+/* Smooth homepage price ticker
+   script.js recycles each item after itemWidth + 50px, so the visual gap must match exactly.
+   Matching the CSS gap removes the 10px discontinuity at every recycle. */
+.ticker-track {
+    gap: 50px;
+    transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    contain: layout paint;
+}
+
+.ticker-item {
+    flex: 0 0 auto;
+}
