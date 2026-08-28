@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../styles.css">
     <link rel="stylesheet" href="styles/useful.css">
     <link rel="stylesheet" href="styles/trends.css">
+    <link rel="stylesheet" href="styles/site-shell.css">
 
     <meta property="og:title" content="История и динамика на цените на горивата">
     <meta property="og:description" content="Виж актуалните средни цени на бензин, дизел и газ в реално време.">
@@ -52,37 +53,35 @@
 <body id="top">
 <div class="background"></div>
 
-<header class="header-bar">
-    <div class="header-container">
-        <img src="../media/2logo.png" alt="goriva.online logo" class="header-logo">
-
-        <div class="header-text">
-            <strong>Цени на горивата в България</strong>
-            <span>Следете актуални цени и споделяйте информация от бензиностанции в цялата страна</span>
-            <span>Цените в сайта са подадени от потребителите. Разчитаме на коректно изпратена информация.</span>
-        </div>
-
-        <a class="facebook-button"
-           href="https://www.facebook.com/groups/960591129738525"
-           target="_blank">
-            Facebook група
+<header class="business-header">
+    <div class="business-nav-shell">
+        <a class="brand-lockup" href="../index.html" aria-label="goriva.online - Начало">
+            <img src="../media/2logo.png" alt="goriva.online logo">
+            <span class="brand-copy">
+                <strong>goriva.online</strong>
+                <span>Цени на горивата в България</span>
+            </span>
         </a>
+
+        <nav class="main-nav" aria-label="Основна навигация">
+            <div id="nav-menu" class="nav-container">
+                <a href="../index.html">Цени</a>
+                <a href="../pages/trends.html">История</a>
+                <a href="../pages/useful.html">Полезно</a>
+                <a href="../pages/weather.html">Времето</a>
+                <a href="../pages/news.html">Новини</a>
+                <a href="../pages/business-clients.html" class="nav-business">За бизнеса</a>
+            </div>
+        </nav>
+
+        <button id="menu-toggle" class="menu-toggle" type="button" aria-label="Отвори менюто">
+            <span aria-hidden="true">☰</span>
+            <span class="menu-label">Меню</span>
+        </button>
+
+        <a class="nav-cta" href="../index.html#fuel-form">Сподели цена</a>
     </div>
 </header>
-
-<nav class="main-nav">
-    <button id="menu-toggle" class="menu-toggle">☰</button>
-
-    <div id="nav-menu" class="nav-container">
-        <a href="../index.html">Начало</a>
-        <a href="../pages/useful.html">Полезно</a>
-        <a href="../pages/trends.html">История на цените</a>
-        <a href="../pages/weather.html">Прогноза за времето</a>
-        <a href="../pages/business-clients.html">Бизнес клиенти</a>
-        <a href="../pages/news.html">Новини</a>
-        <a href="../pages/rules.html">Общи условия</a>
-    </div>
-</nav>
 
 <main class="container trends-page">
     <section class="trends-hero">
@@ -182,48 +181,69 @@
 <footer class="site-footer">
     <div class="footer-container">
         <div class="footer-column footer-brand">
-            <img src="../media/footer-logo.png" alt="goriva.online logo" class="footer-logo">
+            <a href="../index.html" class="footer-brand-link" aria-label="goriva.online - Начало">
+                <img src="../media/footer-logo.png" alt="goriva.online logo" class="footer-logo">
+            </a>
+            <p class="footer-brand-copy">
+                Практична платформа за актуални и исторически цени на горивата в България — по градове, бензиностанции и вид гориво.
+            </p>
+            <div class="footer-data-note">
+                Данните имат информационен характер и могат да се различават от цените на място.
+            </div>
         </div>
 
         <div class="footer-column">
-            <h4>Навигация</h4>
+            <h4>Данни и инструменти</h4>
             <ul class="footer-links">
-                <li><a href="#top">Начало</a></li>
-                <li><a href="useful.html">Полезно</a></li>
+                <li><a href="../index.html">Текущи цени</a></li>
                 <li><a href="trends.html">История на цените</a></li>
+                <li><a href="useful.html">Полезно</a></li>
                 <li><a href="weather.html">Прогноза за времето</a></li>
-                <li><a href="business-clients.html">Бизнес клиенти</a></li>
-                <li><a href="news.html">Новини</a></li>
-                <li><a href="rules.html">Общи условия</a></li>
             </ul>
         </div>
 
         <div class="footer-column">
-            <h4>Контакти</h4>
-            <div class="contact-item"><span>📞</span><a href="tel:+359883427273">+359 883 427 273</a></div>
-            <div class="contact-item"><span>✉️</span><a href="mailto:svetoslavov.plamen@gmail.com">svetoslavov.plamen@gmail.com</a></div>
-            <div class="contact-item"><span>👤</span>Пламен Светославов</div>
+            <h4>goriva.online</h4>
+            <ul class="footer-links">
+                <li><a href="news.html">Новини</a></li>
+                <li><a href="business-clients.html">Бизнес клиенти</a></li>
+                <li><a href="rules.html">Общи условия</a></li>
+                <li><a href="../index.html#fuel-form">Сподели цена</a></li>
+            </ul>
         </div>
 
-        <div class="footer-column">
-            <h4>Социални мрежи</h4>
-            <div class="social-icons">
-                <a href="https://www.facebook.com/plamen.sve" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg" alt="Facebook"></a>
-                <a href="https://www.linkedin.com/in/plamen-svetoslavov/" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt="LinkedIn"></a>
-                <a href="https://wa.me/359883427273" target="_blank"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg" alt="WhatsApp"></a>
+        <div class="footer-column footer-contact-column">
+            <h4>Контакт</h4>
+            <div class="footer-contact-list">
+                <div class="contact-item">
+                    <span class="contact-icon" aria-hidden="true">☎</span>
+                    <a href="tel:+359883427273">+359 883 427 273</a>
+                </div>
+                <div class="contact-item">
+                    <span class="contact-icon" aria-hidden="true">✉</span>
+                    <a href="mailto:svetoslavov.plamen@gmail.com">svetoslavov.plamen@gmail.com</a>
+                </div>
+            </div>
+
+            <div class="social-icons" aria-label="Социални мрежи">
+                <a href="https://www.facebook.com/plamen.sve" target="_blank" rel="noopener" aria-label="Facebook"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg" alt=""></a>
+                <a href="https://www.linkedin.com/in/plamen-svetoslavov/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt=""></a>
+                <a href="https://wa.me/359883427273" target="_blank" rel="noopener" aria-label="WhatsApp"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg" alt=""></a>
             </div>
         </div>
     </div>
 
     <div class="footer-bottom">
-        <span>© 2026 goriva.online</span>
-        <span class="footer-separator">•</span>
-        <span>Цени на горивата в България</span>
+        <div class="footer-bottom-meta">
+            <span>© 2026 goriva.online</span>
+            <span class="footer-separator">•</span>
+            <span>Цени на горивата в България</span>
+        </div>
+        <span class="footer-status">Платформата е активна</span>
     </div>
 </footer>
 
-<script src="../scripts/script.js" defer></script>
-<script src="../scripts/useful.js" defer></script>
+<script src="../scripts/site-shell.js" defer></script>
 <script src="../scripts/trends.js" defer></script>
 <script
     data-name="BMC-Widget"
