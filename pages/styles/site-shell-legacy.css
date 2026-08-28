@@ -1,4 +1,6 @@
-/* Legacy compatibility preserved, followed by unified navigation overrides. */
+/* Legacy compatibility preserved, followed by unified navigation and mobile overrides. */
 @import url("./site-shell-legacy-base.css");
 @import url("./unified-nav.css");
 @import url("./unified-nav-actions.css");
+@import url("./canonical-nav.css?v=20260828-2105");
+@import url("./mobile-global.css?v=20260828-2105");
