@@ -1,5 +1,4 @@
 let initFilters = () => {
-
     let filterGroups = document.querySelectorAll("[data-filter-group]");
 
     filterGroups.forEach(group => {
@@ -81,6 +80,69 @@ function homeTodayBounds() {
     return {start: start.toISOString(), end: end.toISOString()};
 }
 
+function readHomeTop4SelectionFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const city = params.get("city");
+    const fuel = params.get("fuel");
+
+    if (city && HOME_TOP10_CITIES.includes(city)) homeTop10City = city;
+    if (fuel && HOME_FUEL_ORDER.includes(homeCanonicalFuel(fuel))) homeTop10Fuel = homeCanonicalFuel(fuel);
+}
+
+function syncHomeTop4SelectionToUrl() {
+    const url = new URL(window.location.href);
+    url.searchParams.set("city", homeTop10City);
+    url.searchParams.set("fuel", homeTop10Fuel);
+    url.hash = "home-top10-prices";
+    window.history.replaceState({}, "", url);
+}
+
+function buildTop4ShareUrl() {
+    const url = new URL("/pages/top-fuel-prices.html", window.location.origin);
+    url.searchParams.set("city", homeTop10City);
+    url.searchParams.set("fuel", homeTop10Fuel);
+    return url.toString();
+}
+
+function buildTop4ShareText() {
+    const rows = getHomeTop10ForFuelAndCity(homeTop10Fuel, homeTop10City);
+    if (!rows.length) return `Топ 4 цени за ${homeTop10Fuel} в ${homeTop10City} днес – goriva.online`;
+
+    const leader = rows[0];
+    return `Топ 4 най-ниски цени за ${homeTop10Fuel} в ${homeTop10City} днес. №1: ${leader.station || "бензиностанция"} – ${leader.price.toFixed(2)} €/л. goriva.online`;
+}
+
+async function copyTop4ShareLink(button) {
+    const url = buildTop4ShareUrl();
+    try {
+        await navigator.clipboard.writeText(url);
+        const original = button.textContent;
+        button.textContent = "Копирано";
+        button.classList.add("is-copied");
+        setTimeout(() => {
+            button.textContent = original;
+            button.classList.remove("is-copied");
+        }, 1800);
+    } catch (error) {
+        window.prompt("Копирай линка:", url);
+    }
+}
+
+function updateTop4ShareLinks() {
+    const shareUrl = buildTop4ShareUrl();
+    const shareText = buildTop4ShareText();
+    const encodedUrl = encodeURIComponent(shareUrl);
+    const encodedText = encodeURIComponent(shareText);
+
+    const facebook = document.getElementById("home-share-facebook");
+    const linkedin = document.getElementById("home-share-linkedin");
+    const whatsapp = document.getElementById("home-share-whatsapp");
+
+    if (facebook) facebook.href = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`;
+    if (linkedin) linkedin.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`;
+    if (whatsapp) whatsapp.href = `https://wa.me/?text=${encodedText}%20${encodedUrl}`;
+}
+
 function buildHomeTop10Section() {
     if (document.getElementById("home-top10-prices")) return;
 
@@ -88,6 +150,7 @@ function buildHomeTop10Section() {
     if (!mapSection) return;
 
     ensureHomeTop10Styles();
+    readHomeTop4SelectionFromUrl();
 
     const section = document.createElement("section");
     section.id = "home-top10-prices";
@@ -106,8 +169,8 @@ function buildHomeTop10Section() {
             <div class="home-top10-control-group">
                 <span class="home-top10-control-label">Град</span>
                 <div class="home-top10-city-tabs" role="tablist" aria-label="Избери град">
-                    ${HOME_TOP10_CITIES.map((city, index) => `
-                        <button type="button" class="home-city-tab ${index === 0 ? "is-active" : ""}" data-home-city="${homeEscapeHtml(city)}" role="tab" aria-selected="${index === 0 ? "true" : "false"}">${homeEscapeHtml(city)}</button>
+                    ${HOME_TOP10_CITIES.map(city => `
+                        <button type="button" class="home-city-tab ${city === homeTop10City ? "is-active" : ""}" data-home-city="${homeEscapeHtml(city)}" role="tab" aria-selected="${city === homeTop10City ? "true" : "false"}">${homeEscapeHtml(city)}</button>
                     `).join("")}
                 </div>
             </div>
@@ -115,14 +178,23 @@ function buildHomeTop10Section() {
             <div class="home-top10-control-group">
                 <span class="home-top10-control-label">Гориво</span>
                 <div class="home-top10-tabs" role="tablist" aria-label="Гориво за класацията">
-                    ${HOME_FUEL_ORDER.map((fuel, index) => `
-                        <button type="button" class="home-top10-tab ${index === 0 ? "is-active" : ""}" data-home-fuel="${homeEscapeHtml(fuel)}" role="tab" aria-selected="${index === 0 ? "true" : "false"}">${homeEscapeHtml(fuel)}</button>
+                    ${HOME_FUEL_ORDER.map(fuel => `
+                        <button type="button" class="home-top10-tab ${fuel === homeTop10Fuel ? "is-active" : ""}" data-home-fuel="${homeEscapeHtml(fuel)}" role="tab" aria-selected="${fuel === homeTop10Fuel ? "true" : "false"}">${homeEscapeHtml(fuel)}</button>
                     `).join("")}
                 </div>
             </div>
         </div>
 
-        <div class="home-top10-context" id="home-top10-context">София · A95</div>
+        <div class="home-top10-meta-row">
+            <div class="home-top10-context" id="home-top10-context">${homeEscapeHtml(homeTop10City)} · ${homeEscapeHtml(homeTop10Fuel)}</div>
+            <div class="home-top10-share" aria-label="Сподели класацията">
+                <span class="home-top10-share-label">Сподели</span>
+                <a id="home-share-facebook" class="home-share-btn" href="#" target="_blank" rel="noopener noreferrer" aria-label="Сподели във Facebook">Facebook</a>
+                <a id="home-share-linkedin" class="home-share-btn" href="#" target="_blank" rel="noopener noreferrer" aria-label="Сподели в LinkedIn">LinkedIn</a>
+                <a id="home-share-whatsapp" class="home-share-btn" href="#" target="_blank" rel="noopener noreferrer" aria-label="Сподели в WhatsApp">WhatsApp</a>
+                <button id="home-share-copy" class="home-share-btn home-share-copy" type="button">Копирай линк</button>
+            </div>
+        </div>
 
         <div id="home-top10-list" class="home-top10-card-grid">
             <div class="home-top10-empty">Зареждане на днешните цени…</div>
@@ -148,6 +220,7 @@ function buildHomeTop10Section() {
                 item.classList.toggle("is-active", active);
                 item.setAttribute("aria-selected", String(active));
             });
+            syncHomeTop4SelectionToUrl();
             renderHomeTop10();
         });
     });
@@ -160,9 +233,13 @@ function buildHomeTop10Section() {
                 item.classList.toggle("is-active", active);
                 item.setAttribute("aria-selected", String(active));
             });
+            syncHomeTop4SelectionToUrl();
             renderHomeTop10();
         });
     });
+
+    document.getElementById("home-share-copy")?.addEventListener("click", event => copyTop4ShareLink(event.currentTarget));
+    updateTop4ShareLinks();
 }
 
 async function fetchHomeTodayPrices() {
@@ -227,6 +304,7 @@ function renderHomeTop10() {
 
     if (!rows.length) {
         container.innerHTML = `<div class="home-top10-empty">Няма налични цени за ${homeEscapeHtml(homeTop10Fuel)} в ${homeEscapeHtml(homeTop10City)} за днешния ден.</div>`;
+        updateTop4ShareLinks();
         return;
     }
 
@@ -262,6 +340,8 @@ function renderHomeTop10() {
             </article>
         `;
     }).join("");
+
+    updateTop4ShareLinks();
 }
 
 async function initHomeTop10() {
