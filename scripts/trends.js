@@ -147,13 +147,11 @@ async function loadData(startDate, endDate) {
 
         populateFilters(allData)
         render()
-        renderBestPricesForTodayOrLatest()
     } catch (error) {
         console.error(error)
         allData = []
         render()
         setCalendarSummary("Неуспешно зареждане на данните")
-        renderBestPrices([])
     }
 }
 
@@ -320,6 +318,7 @@ function render() {
 
     renderChart(filtered)
     updateCalendarSummary(filtered)
+    renderBestPricesForTodayOrLatest()
 }
 
 function getFuelClass(fuel) {
