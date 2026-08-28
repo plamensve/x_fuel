@@ -360,41 +360,77 @@ h2.gradient-text::after {
 
 .business-process-highlight {
     margin: 28px 0;
-    padding: 34px 38px;
-    border: 0;
-    border-radius: 18px;
-    background: var(--bc-navy);
-    box-shadow: 0 18px 40px rgba(15, 23, 42, .16);
+    padding: 36px 40px;
+    overflow: hidden;
+    border: 1px solid rgba(37, 99, 235, .14);
+    border-radius: 20px;
+    background:
+        radial-gradient(circle at 8% 20%, rgba(255,255,255,.9), transparent 22%),
+        radial-gradient(circle at 92% 82%, rgba(22,163,74,.10), transparent 28%),
+        linear-gradient(125deg, #eff6ff 0%, #f8fbff 48%, #ecfdf5 100%);
+    box-shadow: 0 18px 42px rgba(15, 23, 42, .08);
 }
 
 .business-process-highlight::before {
     width: 4px;
-    background: var(--bc-blue);
+    background: linear-gradient(180deg, var(--bc-blue), var(--bc-green));
 }
 
 .business-process-highlight .text-block-content {
     display: grid;
-    grid-template-columns: 56px 1fr;
-    gap: 22px;
+    grid-template-columns: 64px 1fr;
+    gap: 24px;
     align-items: center;
 }
 
 .process-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 12px;
-    background: #fff;
-    color: var(--bc-navy);
-    box-shadow: none;
+    position: relative;
+    width: 60px;
+    height: 60px;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border: 1px solid rgba(37, 99, 235, .16);
+    border-radius: 18px;
+    background: linear-gradient(145deg, #ffffff, #eaf2ff);
+    color: transparent;
+    box-shadow: 0 10px 24px rgba(37, 99, 235, .12);
+}
+
+.process-icon::before {
+    content: "→";
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--bc-blue), #1d4ed8);
+    color: #fff;
+    font-size: 21px;
+    font-weight: 800;
+    line-height: 1;
+}
+
+.process-icon::after {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 2px;
+    left: -4px;
+    bottom: 11px;
+    border-radius: 999px;
+    background: var(--bc-green);
+    transform: rotate(-42deg);
+    opacity: .8;
 }
 
 .business-process-highlight .text-highlight {
-    color: #fff !important;
+    color: var(--bc-navy) !important;
     margin-bottom: 6px;
 }
 
 .business-process-highlight .process-copy p:last-child {
-    color: #cbd5e1;
+    color: #475569;
     margin-bottom: 0;
 }
 
@@ -551,29 +587,36 @@ h2.gradient-text::after {
 }
 
 .impact-fleet-popular {
-    position: absolute;
-    right: 16px;
-    top: 16px;
-    padding: 5px 8px;
-    border-radius: 6px;
+    position: static;
+    display: inline-flex;
+    align-items: center;
+    width: fit-content;
+    margin: 0 0 14px;
+    padding: 6px 9px;
+    border: 1px solid #bfdbfe;
+    border-radius: 7px;
     background: #dbeafe;
     color: #1d4ed8;
     font-size: 10px;
     font-weight: 800;
+    letter-spacing: .045em;
     text-transform: uppercase;
 }
 
 .impact-fleet-card-top {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 22px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid #eef2f7;
 }
 
 .impact-fleet-number {
-    font-size: 38px;
-    line-height: 1;
-    font-weight: 800;
+    font-size: 42px;
+    line-height: .95;
+    font-weight: 850;
+    letter-spacing: -.045em;
     color: var(--bc-navy);
 }
 
@@ -584,6 +627,17 @@ h2.gradient-text::after {
 
 .impact-fleet-title strong {
     color: var(--bc-navy);
+    font-size: 18px;
+    line-height: 1.05;
+    letter-spacing: -.015em;
+}
+
+.impact-fleet-title span {
+    margin-top: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .045em;
+    text-transform: uppercase;
 }
 
 .impact-fleet-title span,
@@ -704,9 +758,13 @@ h2.gradient-text::after {
 .contact-image {
     display: grid;
     place-items: center;
-    border-radius: 16px;
-    background: rgba(255,255,255,.06);
     min-height: 100%;
+    padding: 24px;
+    box-sizing: border-box;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.7), 0 12px 28px rgba(15,23,42,.12);
 }
 
 .contact-image img {
@@ -802,13 +860,28 @@ h2.gradient-text::after {
     }
 
     .business-process-highlight .text-block-content {
-        grid-template-columns: 1fr;
+        grid-template-columns: 56px 1fr;
+        gap: 16px;
         text-align: left;
+    }
+
+    .business-process-highlight {
+        padding: 24px 20px;
+    }
+
+    .process-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 15px;
     }
 
     .impact-wide-footer {
         align-items: flex-start;
         flex-direction: column;
+    }
+
+    .impact-fleet-card-top {
+        margin-bottom: 18px;
     }
 
     .business-intro p,
