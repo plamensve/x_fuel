@@ -26,7 +26,7 @@ let initFilters = () => {
 document.addEventListener("DOMContentLoaded", initFilters);
 
 /* =========================================================
-   HOMEPAGE — TOP 10 LOWEST PRICES FOR TODAY
+   HOMEPAGE — TOP 5 LOWEST PRICES FOR TODAY
    ========================================================= */
 
 const HOME_SUPABASE_URL = "https://eaqvhxfvozhzatrnbkvx.supabase.co";
@@ -96,8 +96,8 @@ function buildHomeTop10Section() {
         <div class="home-top10-header home-top10-header-v2">
             <div>
                 <span class="home-top10-eyebrow">★ Най-добрите цени днес</span>
-                <h2>Топ 10 най-изгодни бензиностанции</h2>
-                <p>Сравни най-ниските цени в избрания град. Избери град и продукт, за да видиш къде е най-изгодно да заредиш днес.</p>
+                <h2>Топ 5 най-изгодни бензиностанции</h2>
+                <p>Сравни петте най-ниски цени в избрания град. Избери град и продукт, за да видиш къде е най-изгодно да заредиш днес.</p>
             </div>
             <span class="home-top10-date" id="home-top10-date"></span>
         </div>
@@ -180,7 +180,7 @@ async function fetchHomeTodayPrices() {
             }
         });
 
-        if (!response.ok) throw new Error(`Top 10 fuel request failed: ${response.status}`);
+        if (!response.ok) throw new Error(`Top 5 fuel request failed: ${response.status}`);
 
         const batch = await response.json();
         rows.push(...batch);
@@ -206,7 +206,7 @@ function getHomeTop10ForFuelAndCity(fuel, city) {
 
     return [...byStation.values()]
         .sort((a, b) => a.price - b.price || String(a.station || "").localeCompare(String(b.station || ""), "bg"))
-        .slice(0, 10);
+        .slice(0, 5);
 }
 
 function getRankBadge(index) {
