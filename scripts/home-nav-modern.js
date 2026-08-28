@@ -1,4 +1,5 @@
 (() => {
+    const ASSET_VERSION = "20260828-2038";
     const header = document.querySelector("body > .header-bar");
     const nav = document.querySelector("body > .main-nav");
     const headerContainer = header?.querySelector(".header-container");
@@ -8,6 +9,24 @@
     if (!header || !nav || !headerContainer || !logo) return;
 
     document.body.classList.add("has-modern-home-nav");
+
+    const refreshTop4Stylesheet = () => {
+        const top4Styles = document.getElementById("home-top10-cards-css");
+        if (!top4Styles) return false;
+
+        const freshHref = `pages/styles/home-top10-cards.css?v=${ASSET_VERSION}`;
+        if (!top4Styles.getAttribute("href")?.includes(`v=${ASSET_VERSION}`)) {
+            top4Styles.href = freshHref;
+        }
+        return true;
+    };
+
+    if (!refreshTop4Stylesheet()) {
+        const observer = new MutationObserver(() => {
+            if (refreshTop4Stylesheet()) observer.disconnect();
+        });
+        observer.observe(document.head, {childList: true});
+    }
 
     if (!headerContainer.querySelector(".home-nav-brand")) {
         const brand = document.createElement("a");
