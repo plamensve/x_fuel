@@ -16,3 +16,58 @@
 .ticker-item {
     flex: 0 0 auto;
 }
+
+/* Consistent icon treatment for primary actions across the site. */
+.submit-button,
+.map-btn,
+.nav-cta,
+.eco-map-link,
+.view-toggle .view-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.submit-button::before,
+.nav-cta::before {
+    content: "+";
+    width: 18px;
+    height: 18px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    font-size: 13px;
+    line-height: 1;
+    opacity: 0.92;
+}
+
+.map-btn::before,
+.eco-map-link::before {
+    content: "⌖";
+    font-size: 16px;
+    line-height: 1;
+}
+
+.view-toggle .view-btn::before {
+    content: "▦";
+    font-size: 15px;
+    line-height: 1;
+}
+
+button,
+a[class*="button"],
+.map-btn,
+.nav-cta {
+    -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+a[class*="button"]:focus-visible,
+.map-btn:focus-visible,
+.nav-cta:focus-visible {
+    outline: 2px solid rgba(96, 165, 250, 0.78);
+    outline-offset: 3px;
+}
