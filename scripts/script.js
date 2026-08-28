@@ -27,3 +27,43 @@
         console.error("Failed to load legacy site script", error);
     }
 })();
+
+// Business clients CTA: the approved design renders the right-side button as a CSS
+// pseudo-element, so it needs an explicit click handler to behave like a real link.
+(() => {
+    const initBusinessInquiryCta = () => {
+        const section = document.querySelector(".business-cta-text");
+        const content = section?.querySelector(".cta-content");
+        const textLink = section?.querySelector(".cta-highlight");
+        const contact = document.getElementById("contact");
+
+        if (!section || !content || !textLink || !contact) return;
+
+        const scrollToContact = (event) => {
+            if (event) event.preventDefault();
+            contact.scrollIntoView({ behavior: "smooth", block: "start" });
+        };
+
+        textLink.setAttribute("role", "link");
+        textLink.setAttribute("tabindex", "0");
+        textLink.setAttribute("aria-label", "Изпрати запитване");
+
+        textLink.addEventListener("click", scrollToContact);
+        textLink.addEventListener("keydown", (event) => {
+            if (event.key === "Enter" || event.key === " ") {
+                scrollToContact(event);
+            }
+        });
+
+        // A click directly on .cta-content is a click on its ::after pseudo-button.
+        content.addEventListener("click", (event) => {
+            if (event.target === content) scrollToContact(event);
+        });
+    };
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initBusinessInquiryCta, { once: true });
+    } else {
+        initBusinessInquiryCta();
+    }
+})();
