@@ -3,16 +3,13 @@ let initFilters = () => {
     let filterGroups = document.querySelectorAll("[data-filter-group]");
 
     filterGroups.forEach(group => {
-
         let buttons = group.querySelectorAll(".filter-btn");
         let targetSelector = group.dataset.target;
         let items = document.querySelectorAll(targetSelector);
 
         buttons.forEach(btn => {
             btn.addEventListener("click", () => {
-
                 let filter = btn.dataset.filter;
-
                 buttons.forEach(b => b.classList.remove("is-active"));
                 btn.classList.add("is-active");
 
@@ -55,6 +52,15 @@ let homeTop10Rows = [];
 let homeTop10Fuel = "A95";
 let homeTop10City = "София";
 
+function ensureHomeTop10Styles() {
+    if (document.getElementById("home-top10-cards-css")) return;
+    const link = document.createElement("link");
+    link.id = "home-top10-cards-css";
+    link.rel = "stylesheet";
+    link.href = "pages/styles/home-top10-cards.css";
+    document.head.appendChild(link);
+}
+
 function homeEscapeHtml(value) {
     return String(value ?? "")
         .replaceAll("&", "&amp;")
@@ -80,6 +86,8 @@ function buildHomeTop10Section() {
 
     const mapSection = document.querySelector(".station-map-section");
     if (!mapSection) return;
+
+    ensureHomeTop10Styles();
 
     const section = document.createElement("section");
     section.id = "home-top10-prices";
