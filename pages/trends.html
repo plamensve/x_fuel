@@ -1,12 +1,10 @@
 <!doctype html>
 <html lang="bg">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>История на цените на горивата в България</title>
-    <meta name="description" content="Проследи динамиката на цените на бензин, дизел и газ в България по дни и региони.">
+    <meta name="description" content="Проследи динамиката на цените на бензин, дизел, LPG и метан в България по дни, градове и бензиностанции.">
 
     <script src="//fuelo.net/js/widget-bg.min.js"></script>
 
@@ -16,7 +14,7 @@
     <link rel="stylesheet" href="styles/site-shell.css">
 
     <meta property="og:title" content="История и динамика на цените на горивата">
-    <meta property="og:description" content="Виж актуалните средни цени на бензин, дизел и газ в реално време.">
+    <meta property="og:description" content="Виж исторически и актуални цени на бензин, дизел, LPG и метан по дни.">
     <meta property="og:image" content="https://goriva.online/media/og-3.png">
     <meta property="og:url" content="https://goriva.online/pages/trends.html">
     <meta property="og:type" content="website">
@@ -31,9 +29,7 @@
 
     <script>
         (function (h, o, t, j, a, r) {
-            h.hj = h.hj || function () {
-                (h.hj.q = h.hj.q || []).push(arguments)
-            };
+            h.hj = h.hj || function () { (h.hj.q = h.hj.q || []).push(arguments) };
             h._hjSettings = {hjid: 6686373, hjsv: 6};
             a = o.getElementsByTagName('head')[0];
             r = o.createElement('script');
@@ -43,10 +39,7 @@
         })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
     </script>
 
-    <script async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3478773231642095"
-            crossorigin="anonymous"></script>
-
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3478773231642095" crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-3478773231642095">
 </head>
 
@@ -84,42 +77,105 @@
 </header>
 
 <main class="container trends-page">
-    <section class="trends-hero">
-        <div>
-            <p class="trends-kicker">История на цените</p>
-            <h1>Виж как са се движили цените по дни</h1>
-            <p>Избери дата от календара, за да видиш конкретните цени по бензиностанции. Филтрите се прилагат едновременно върху календара, най-ниските цени и графиката.</p>
+    <section class="history-hero" aria-labelledby="history-title">
+        <div class="history-hero-copy">
+            <div class="hero-label">
+                <span class="hero-label-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"/></svg>
+                </span>
+                Анализ на пазара
+            </div>
+            <h1 id="history-title">История на цените на горивата</h1>
+            <p class="history-lead">Проследявай как се променят цените по дни, сравнявай бензиностанции и откривай най-ниските стойности за избран регион, град или гориво.</p>
+
+            <div class="hero-actions">
+                <a class="history-primary-action" href="#price-calendar">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg>
+                    Отвори календара
+                </a>
+                <a class="history-secondary-action" href="#price-chart-section">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 19V9m5 10V5m5 14v-7m5 7V3"/></svg>
+                    Виж тенденцията
+                </a>
+            </div>
+
+            <div class="hero-trust-row">
+                <span><i class="status-pulse"></i> Данните се обновяват регулярно</span>
+                <span>Филтрите синхронизират всички визуализации</span>
+            </div>
         </div>
-        <div class="trends-help-card">
-            <strong>Как да използваш страницата</strong>
-            <span>1. Избери област, град, гориво или бензиностанция.</span>
-            <span>2. Кликни върху дата в календара.</span>
-            <span>3. Разгледай цените и премини между страниците с Предишна/Следваща.</span>
-        </div>
+
+        <aside class="hero-guide-card" aria-label="Как да използваш страницата">
+            <div class="guide-card-header">
+                <span class="guide-icon">
+                    <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 8h.01M11 12h1v4h1"/></svg>
+                </span>
+                <div>
+                    <span>Бърз старт</span>
+                    <strong>Намери информация за секунди</strong>
+                </div>
+            </div>
+            <ol class="guide-steps">
+                <li><span>1</span><div><strong>Филтрирай</strong><small>Област, град, гориво или верига.</small></div></li>
+                <li><span>2</span><div><strong>Избери дата</strong><small>Кликни върху ден с налични записи.</small></div></li>
+                <li><span>3</span><div><strong>Сравни</strong><small>Виж конкретните станции и цени.</small></div></li>
+            </ol>
+        </aside>
     </section>
 
-    <section class="best-prices-section">
-        <div class="section-heading-row">
-            <div>
+    <section class="overview-grid" aria-label="Обобщение за избрания период">
+        <article class="overview-card overview-blue">
+            <div class="overview-icon"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h10"/></svg></div>
+            <div><span>Налични цени</span><strong id="metric-records">—</strong><small>след приложените филтри</small></div>
+        </article>
+        <article class="overview-card overview-green">
+            <div class="overview-icon"><svg viewBox="0 0 24 24"><path d="M3 21h18M6 21V8l6-4 6 4v13M9 12h6M9 16h6"/></svg></div>
+            <div><span>Бензиностанции</span><strong id="metric-stations">—</strong><small>уникални станции</small></div>
+        </article>
+        <article class="overview-card overview-violet">
+            <div class="overview-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></div>
+            <div><span>Дни с данни</span><strong id="metric-days">—</strong><small>в текущия календар</small></div>
+        </article>
+        <article class="overview-card overview-amber">
+            <div class="overview-icon"><svg viewBox="0 0 24 24"><path d="M12 3v18M17 7.5c0-2-2-3.5-5-3.5S7 5.2 7 7s2 2.5 5 3 5 1.2 5 3-2 3-5 3-5-1.5-5-3.5"/></svg></div>
+            <div><span>Най-ниска цена</span><strong id="metric-lowest">—</strong><small>за избраните филтри</small></div>
+        </article>
+    </section>
+
+    <section class="best-prices-section dashboard-panel" aria-labelledby="best-prices-title">
+        <div class="panel-heading-row">
+            <div class="panel-heading-copy">
                 <span class="section-eyebrow">Най-добри оферти</span>
                 <h2 id="best-prices-title">Най-ниски цени за днес</h2>
+                <p>Най-ниската налична цена за всеки тип гориво според активните филтри.</p>
             </div>
             <div id="best-prices-date" class="section-date-chip"></div>
         </div>
         <div id="best-prices" class="best-prices-list"></div>
     </section>
 
-    <section class="trends-section">
-        <div class="calendar-shell">
-            <div class="calendar-header-block">
-                <div>
-                    <span class="section-eyebrow">Календар</span>
-                    <h2>Цени по дати</h2>
-                    <p>Всяка цветна точка показва налични данни за съответното гориво през този ден.</p>
-                </div>
-                <div class="calendar-summary" id="calendar-summary">Зареждане на данните…</div>
+    <section class="workspace-section" id="price-calendar">
+        <div class="workspace-heading">
+            <div>
+                <span class="section-eyebrow">Исторически данни</span>
+                <h2>Календар на цените</h2>
+                <p>Избери ден, за да видиш всички налични цени. Цветните индикатори показват какви горива имат данни за съответната дата.</p>
             </div>
+            <div class="calendar-summary" id="calendar-summary">Зареждане на данните…</div>
+        </div>
 
+        <div class="filter-panel">
+            <div class="filter-panel-heading">
+                <div class="filter-panel-title">
+                    <span class="filter-icon"><svg viewBox="0 0 24 24"><path d="M4 5h16M7 12h10M10 19h4"/></svg></span>
+                    <div><strong>Филтри</strong><small>Стесни данните според това, което те интересува</small></div>
+                </div>
+                <span class="active-filter-badge" id="active-filter-count">Без активни филтри</span>
+            </div>
+            <div id="filter-slot"></div>
+        </div>
+
+        <div class="calendar-shell dashboard-panel">
             <div class="legend" aria-label="Легенда за видовете гориво">
                 <span><span class="dot fuel-a95"></span> A95</span>
                 <span><span class="dot fuel-diesel"></span> Дизел</span>
@@ -128,40 +184,64 @@
                 <span><span class="dot fuel-diesel-plus"></span> Дизел +</span>
                 <span><span class="dot fuel-methane"></span> Метан</span>
             </div>
-
             <div id="calendar"></div>
         </div>
+    </section>
 
-        <div class="chart-section">
+    <section class="chart-section dashboard-panel" id="price-chart-section">
+        <div class="chart-header-layout">
             <div class="chart-copy">
-                <span class="section-eyebrow">Тенденция</span>
-                <h2 class="chart-title">Динамика на цената</h2>
-                <p class="chart-description">
-                    Графиката показва средната цена на избраното гориво по дни, базирана на наличните записи след приложените филтри.
-                </p>
+                <span class="section-eyebrow">Пазарна тенденция</span>
+                <h2 class="chart-title">Динамика на средната цена</h2>
+                <p class="chart-description">Графиката показва средната цена по дни за избраното гориво и всички активни филтри.</p>
             </div>
-
-            <div class="chart-filters">
-                <button data-fuel="A95" class="active">A95</button>
-                <button data-fuel="Дизел">Дизел</button>
-                <button data-fuel="LPG">LPG</button>
-                <button data-fuel="A100">A100</button>
-                <button data-fuel="Дизел +">Дизел +</button>
-                <button data-fuel="Метан">Метан</button>
-            </div>
-
-            <div class="chart-container">
-                <canvas id="price-chart"></canvas>
+            <div class="chart-tip">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a7 7 0 0 0-4 12.7V19h8v-3.3A7 7 0 0 0 12 3Z"/><path d="M9 22h6"/></svg>
+                <span>Посочи точка в графиката за точната средна цена.</span>
             </div>
         </div>
+
+        <div class="chart-filters" aria-label="Избери гориво за графиката">
+            <button data-fuel="A95" class="active"><span class="dot fuel-a95"></span>A95</button>
+            <button data-fuel="Дизел"><span class="dot fuel-diesel"></span>Дизел</button>
+            <button data-fuel="LPG"><span class="dot fuel-gas"></span>LPG</button>
+            <button data-fuel="A100"><span class="dot fuel-a100"></span>A100</button>
+            <button data-fuel="Дизел +"><span class="dot fuel-diesel-plus"></span>Дизел +</button>
+            <button data-fuel="Метан"><span class="dot fuel-methane"></span>Метан</button>
+        </div>
+
+        <div class="chart-container">
+            <canvas id="price-chart"></canvas>
+        </div>
+    </section>
+
+    <section class="history-quick-actions" aria-label="Бързи действия">
+        <a href="../index.html" class="quick-action-card">
+            <span class="quick-action-icon"><svg viewBox="0 0 24 24"><path d="M4 18h16M6 15l4-4 3 3 5-7"/></svg></span>
+            <div><strong>Текущи цени</strong><small>Виж последните цени по станции</small></div>
+            <span class="quick-arrow">→</span>
+        </a>
+        <a href="../index.html#fuel-form" class="quick-action-card">
+            <span class="quick-action-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg></span>
+            <div><strong>Сподели цена</strong><small>Добави актуална цена от бензиностанция</small></div>
+            <span class="quick-arrow">→</span>
+        </a>
+        <a href="business-clients.html" class="quick-action-card">
+            <span class="quick-action-icon"><svg viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V4h8v3M3 12h18"/></svg></span>
+            <div><strong>За бизнеса</strong><small>Решения за фирми и автопаркове</small></div>
+            <span class="quick-arrow">→</span>
+        </a>
     </section>
 </main>
 
 <div id="day-modal" class="modal" aria-hidden="true">
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-date">
-        <button id="close-modal" class="modal-close" aria-label="Затвори">×</button>
+        <button id="close-modal" class="modal-close" aria-label="Затвори">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+        </button>
 
         <div class="modal-header">
+            <div class="modal-title-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></div>
             <div>
                 <span class="section-eyebrow">Цени за избрания ден</span>
                 <h3 id="modal-date"></h3>
@@ -184,12 +264,8 @@
             <a href="../index.html" class="footer-brand-link" aria-label="goriva.online - Начало">
                 <img src="../media/footer-logo.png" alt="goriva.online logo" class="footer-logo">
             </a>
-            <p class="footer-brand-copy">
-                Практична платформа за актуални и исторически цени на горивата в България — по градове, бензиностанции и вид гориво.
-            </p>
-            <div class="footer-data-note">
-                Данните имат информационен характер и могат да се различават от цените на място.
-            </div>
+            <p class="footer-brand-copy">Практична платформа за актуални и исторически цени на горивата в България — по градове, бензиностанции и вид гориво.</p>
+            <div class="footer-data-note">Данните имат информационен характер и могат да се различават от цените на място.</div>
         </div>
 
         <div class="footer-column">
@@ -215,16 +291,9 @@
         <div class="footer-column footer-contact-column">
             <h4>Контакт</h4>
             <div class="footer-contact-list">
-                <div class="contact-item">
-                    <span class="contact-icon" aria-hidden="true">☎</span>
-                    <a href="tel:+359883427273">+359 883 427 273</a>
-                </div>
-                <div class="contact-item">
-                    <span class="contact-icon" aria-hidden="true">✉</span>
-                    <a href="mailto:svetoslavov.plamen@gmail.com">svetoslavov.plamen@gmail.com</a>
-                </div>
+                <div class="contact-item"><span class="contact-icon" aria-hidden="true">☎</span><a href="tel:+359883427273">+359 883 427 273</a></div>
+                <div class="contact-item"><span class="contact-icon" aria-hidden="true">✉</span><a href="mailto:svetoslavov.plamen@gmail.com">svetoslavov.plamen@gmail.com</a></div>
             </div>
-
             <div class="social-icons" aria-label="Социални мрежи">
                 <a href="https://www.facebook.com/plamen.sve" target="_blank" rel="noopener" aria-label="Facebook"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg" alt=""></a>
                 <a href="https://www.linkedin.com/in/plamen-svetoslavov/" target="_blank" rel="noopener" aria-label="LinkedIn"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt=""></a>
@@ -234,28 +303,13 @@
     </div>
 
     <div class="footer-bottom">
-        <div class="footer-bottom-meta">
-            <span>© 2026 goriva.online</span>
-            <span class="footer-separator">•</span>
-            <span>Цени на горивата в България</span>
-        </div>
+        <div class="footer-bottom-meta"><span>© 2026 goriva.online</span><span class="footer-separator">•</span><span>Цени на горивата в България</span></div>
         <span class="footer-status">Платформата е активна</span>
     </div>
 </footer>
 
 <script src="../scripts/site-shell.js" defer></script>
 <script src="../scripts/trends.js" defer></script>
-<script
-    data-name="BMC-Widget"
-    data-cfasync="false"
-    src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
-    data-id="qwan"
-    data-description="Подкрепете goriva.online"
-    data-message="Ако goriva.online Ви е полезен, можете да подкрепите развитието на проекта."
-    data-color="#FF813F"
-    data-position="Right"
-    data-x_margin="18"
-    data-y_margin="10">
-</script>
+<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="qwan" data-description="Подкрепете goriva.online" data-message="Ако goriva.online Ви е полезен, можете да подкрепите развитието на проекта." data-color="#FF813F" data-position="Right" data-x_margin="18" data-y_margin="10"></script>
 </body>
 </html>
