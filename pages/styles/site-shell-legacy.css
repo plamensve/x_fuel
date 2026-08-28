@@ -4,3 +4,134 @@
 @import url("./unified-nav-actions.css");
 @import url("./canonical-nav.css?v=20260828-2105");
 @import url("./mobile-global.css?v=20260828-2105");
+
+/* Business clients — process success banner */
+body .business-process-highlight {
+    position: relative !important;
+    isolation: isolate !important;
+    min-height: 176px !important;
+    display: flex !important;
+    align-items: center !important;
+    margin: 30px 0 34px !important;
+    padding: 34px 46px !important;
+    overflow: hidden !important;
+    border: 1px solid rgba(96, 165, 250, .34) !important;
+    border-radius: 24px !important;
+    background:
+        radial-gradient(circle at 93% 50%, rgba(34, 197, 94, .17), transparent 24%),
+        radial-gradient(circle at 10% 0%, rgba(255, 255, 255, .98), transparent 30%),
+        linear-gradient(112deg, #f8fbff 0%, #f3f8ff 47%, #eafcf4 100%) !important;
+    box-shadow: 0 20px 48px rgba(15, 23, 42, .10) !important;
+}
+
+body .business-process-highlight::before {
+    content: none !important;
+}
+
+body .business-process-highlight::after {
+    content: "✓" !important;
+    position: absolute !important;
+    z-index: -1 !important;
+    right: -14px !important;
+    top: 50% !important;
+    width: 190px !important;
+    height: 190px !important;
+    display: grid !important;
+    place-items: center !important;
+    transform: translateY(-50%) !important;
+    border-radius: 50% !important;
+    color: rgba(255, 255, 255, .54) !important;
+    background: rgba(34, 197, 94, .07) !important;
+    font-size: 92px !important;
+    font-weight: 800 !important;
+    line-height: 1 !important;
+    pointer-events: none !important;
+}
+
+body .business-process-highlight .text-block-content {
+    position: relative !important;
+    z-index: 1 !important;
+    width: 100% !important;
+    display: grid !important;
+    grid-template-columns: 108px minmax(0, 1fr) !important;
+    gap: 30px !important;
+    align-items: center !important;
+}
+
+body .business-process-highlight .process-icon {
+    width: 104px !important;
+    height: 104px !important;
+    display: block !important;
+    overflow: visible !important;
+    border: 1px solid rgba(59, 130, 246, .15) !important;
+    border-radius: 25px !important;
+    background-color: rgba(255, 255, 255, .82) !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 104 104'%3E%3Cdefs%3E%3ClinearGradient id='f' x1='20' y1='18' x2='82' y2='88' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%2360A5FA'/%3E%3Cstop offset='1' stop-color='%232563EB'/%3E%3C/linearGradient%3E%3ClinearGradient id='g' x1='55' y1='57' x2='76' y2='78' gradientUnits='userSpaceOnUse'%3E%3Cstop stop-color='%2334D399'/%3E%3Cstop offset='1' stop-color='%2316A34A'/%3E%3C/linearGradient%3E%3Cfilter id='s' x='5' y='7' width='94' height='94' filterUnits='userSpaceOnUse'%3E%3CfeDropShadow dx='0' dy='5' stdDeviation='5' flood-color='%231E3A8A' flood-opacity='.18'/%3E%3C/filter%3E%3C/defs%3E%3Cg filter='url(%23s)'%3E%3Cpath d='M21 33c0-6 4-10 10-10h18l7 8h23c6 0 10 4 10 10v34c0 7-5 11-11 11H31c-6 0-10-4-10-10V33Z' fill='url(%23f)'/%3E%3Cpath d='M25 43h60v31c0 5-4 8-9 8H34c-5 0-9-3-9-8V43Z' fill='%2397C6FF' fill-opacity='.45'/%3E%3C/g%3E%3Ccircle cx='68' cy='67' r='18' fill='url(%23g)'/%3E%3Cpath d='m59.5 67.5 5.5 5.5 11-12' fill='none' stroke='white' stroke-width='4.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") !important;
+    background-repeat: no-repeat !important;
+    background-position: center !important;
+    background-size: 88px 88px !important;
+    color: transparent !important;
+    box-shadow: 0 12px 28px rgba(37, 99, 235, .10) !important;
+}
+
+body .business-process-highlight .process-icon::before,
+body .business-process-highlight .process-icon::after {
+    content: none !important;
+    display: none !important;
+}
+
+body .business-process-highlight .process-copy {
+    max-width: 850px !important;
+}
+
+body .business-process-highlight .process-copy .text-highlight {
+    margin: 0 0 10px !important;
+    color: #0f172a !important;
+    font-size: clamp(18px, 2vw, 21px) !important;
+    font-weight: 800 !important;
+    line-height: 1.35 !important;
+    letter-spacing: -.012em !important;
+}
+
+body .business-process-highlight .process-copy p:last-child {
+    margin: 0 !important;
+    color: #64748b !important;
+    font-size: 15px !important;
+    line-height: 1.65 !important;
+}
+
+@media (max-width: 760px) {
+    body .business-process-highlight {
+        min-height: 0 !important;
+        padding: 25px 22px !important;
+        border-radius: 19px !important;
+    }
+
+    body .business-process-highlight::after {
+        right: -54px !important;
+        width: 145px !important;
+        height: 145px !important;
+        font-size: 68px !important;
+        opacity: .75 !important;
+    }
+
+    body .business-process-highlight .text-block-content {
+        grid-template-columns: 74px minmax(0, 1fr) !important;
+        gap: 18px !important;
+    }
+
+    body .business-process-highlight .process-icon {
+        width: 72px !important;
+        height: 72px !important;
+        border-radius: 19px !important;
+        background-size: 62px 62px !important;
+    }
+
+    body .business-process-highlight .process-copy .text-highlight {
+        font-size: 17px !important;
+    }
+
+    body .business-process-highlight .process-copy p:last-child {
+        font-size: 13px !important;
+    }
+}
