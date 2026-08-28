@@ -1,2205 +1,765 @@
-/* =========================
-   PAGE BACKGROUND
-========================= */
-.business-page {
-    background: #f8fafc;
+/* Business clients redesign — corporate B2B visual system */
+
+:root {
+    --bc-navy: #0f172a;
+    --bc-navy-2: #162238;
+    --bc-blue: #2563eb;
+    --bc-green: #16a34a;
+    --bc-text: #111827;
+    --bc-muted: #64748b;
+    --bc-line: #e2e8f0;
+    --bc-soft: #f8fafc;
+    --bc-card: #ffffff;
+}
+
+body {
+    background: #f5f7fb;
+}
+
+main.container {
+    max-width: 1180px;
+    padding: 0 24px 72px;
 }
 
 .gradient-text {
-    background: linear-gradient(90deg, #2563eb, #22c55e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: var(--bc-navy);
+    background: none;
+    -webkit-text-fill-color: initial;
 }
 
-/* =========================
-   CONTAINER
-========================= */
-.container {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 30px;
-}
-
-.container-bs-1 {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 0px;
-}
-
-.container-bt-1 {
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 0 0px;
-}
-
-/* =========================
-   HERO
-========================= */
 .business-hero {
-    margin: 40px 0;
-    padding: 70px 40px;
-
-    background: linear-gradient(120deg, rgb(33, 52, 72) 55%, #2563eb, #22c55e);
-    border-radius: 20px;
-
-    color: white;
-    text-align: center;
+    position: relative;
+    overflow: hidden;
+    margin: 42px 0 28px;
+    padding: 76px 64px;
+    border-radius: 28px;
+    background:
+        radial-gradient(circle at 85% 15%, rgba(37, 99, 235, .28), transparent 34%),
+        radial-gradient(circle at 82% 82%, rgba(22, 163, 74, .18), transparent 28%),
+        linear-gradient(135deg, #0b1220 0%, #13233c 58%, #18375a 100%);
+    color: #fff;
+    text-align: left;
+    box-shadow: 0 28px 70px rgba(15, 23, 42, .22);
 }
 
-/* =========================
-   SECTIONS (CLEAN STYLE)
-========================= */
+.business-hero .container {
+    max-width: 760px;
+    margin: 0;
+    padding: 0;
+}
+
+.business-hero::after {
+    content: "B2B";
+    position: absolute;
+    right: 54px;
+    bottom: -34px;
+    font-size: clamp(100px, 15vw, 190px);
+    line-height: 1;
+    font-weight: 800;
+    letter-spacing: -.06em;
+    color: rgba(255,255,255,.035);
+    pointer-events: none;
+}
+
+.business-hero h1 {
+    margin: 0 0 18px;
+    max-width: 760px;
+    font-size: clamp(36px, 5vw, 58px);
+    line-height: 1.04;
+    letter-spacing: -.035em;
+}
+
+.business-hero p {
+    max-width: 680px;
+    margin: 0;
+    font-size: clamp(17px, 2vw, 21px);
+    line-height: 1.6;
+    color: #cbd5e1;
+}
+
+.btn-primary,
+.impact-wide-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+    padding: 0 24px;
+    margin-top: 28px;
+    border: 0;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--bc-navy);
+    font-size: 14px;
+    font-weight: 700;
+    text-decoration: none;
+    cursor: pointer;
+    box-shadow: 0 12px 28px rgba(0,0,0,.14);
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+}
+
+.btn-primary:hover,
+.impact-wide-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px rgba(0,0,0,.18);
+}
+
+.business-intro,
+.business-text-block,
+.business-cta-text,
+.advantage {
+    margin: 24px 0;
+    padding: 34px 36px;
+    border: 1px solid var(--bc-line);
+    border-radius: 18px;
+    background: var(--bc-card);
+    box-shadow: 0 8px 24px rgba(15, 23, 42, .045);
+}
+
+.business-intro::before,
+.business-intro::after,
+.bg-shapes {
+    display: none;
+}
+
+.business-intro p,
+.business-text-block p,
+.business-cta-text p {
+    max-width: 860px;
+    margin: 0 auto 10px;
+    color: #334155;
+    font-size: 16px;
+    line-height: 1.75;
+    text-align: left;
+}
+
+.intro-lead,
+.text-highlight,
+.cta-main {
+    color: var(--bc-navy) !important;
+    font-size: 19px !important;
+    font-weight: 700 !important;
+}
+
+.cta-highlight {
+    margin-top: 8px !important;
+    color: var(--bc-blue) !important;
+    background: none !important;
+    -webkit-text-fill-color: initial !important;
+    font-size: 18px !important;
+    font-weight: 700 !important;
+}
+
 .business-steps,
 .business-benefits,
 .business-target,
 .business-contact {
-    padding: 50px 0;
-
-    background: white;
-
-    border-top: 1px solid #e5e7eb;
+    margin: 28px 0;
+    padding: 48px 0;
+    border: 0;
+    background: transparent;
 }
 
-/* първата секция да няма линия */
-.business-steps {
-    border-top: none;
-}
-
-/* леко редуване */
-.business-benefits {
-    background: #f9fafb;
-}
-
-.business-contact {
-    background: #f9fafb;
-}
-
-/* =========================
-   TITLES
-========================= */
-h2 {
-    font-size: 1.7rem;
-    margin-bottom: 35px;
-    color: #111827;
-}
-
-/* =========================
-   GRID
-========================= */
-.steps-grid {
-    display: grid;
-    width: 100%;
-
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 25px;
-}
-
-/* =========================
-   BENEFITS GRID
-========================= */
-.business-benefits .steps-grid {
-    grid-template-columns: repeat(4, 1fr);
-}
-
-/* =========================
-   HOW IT WORKS
-========================= */
-.business-steps .step {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-
-    padding: 35px 25px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-
-    min-height: 300px;
-
-    transition: 0.2s;
-}
-
-.business-steps .step:hover {
-    border-color: #2563eb;
-    transform: translateY(-4px);
-}
-
-/* NUMBER */
-.business-steps .step span {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    width: 46px;
-    height: 46px;
-
-    margin: 0 auto 15px;
-
-    font-size: 15px;
-    border-radius: 12px;
-
-    background: linear-gradient(135deg, #2563eb, #22c55e);
-    color: white;
-}
-
-/* TEXT */
-.business-steps .step h3 {
-    font-size: 17px;
-    margin-bottom: 6px;
-}
-
-.business-steps .step p {
-    font-size: 13px;
-    color: #6b7280;
-    margin-bottom: 15px;
-}
-
-.business-steps .step img {
-    margin-top: auto;
-
-    width: 120px;
-    max-width: none;
-
-    object-fit: contain;
-}
-
-.advantage {
-    position: relative;
-
-    margin: 40px 0;
-    padding: 40px 35px;
-
-    border-radius: 16px;
-
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(6px);
-
-    border: 1px solid #e5e7eb;
-
-    transition: 0.25s;
-
-    overflow: hidden; /* FIX: да не излиза gradient-a */
-}
-
-/* лек hover */
-.advantage:hover {
-    border-color: #2563eb33;
-    transform: translateY(-2px);
-}
-
-/* gradient overlay */
-.advantage::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-
-    border-radius: 16px;
-
-    background: linear-gradient(120deg, #2563eb10, #22c55e10);
-
-    pointer-events: none;
-    z-index: 0; /* FIX */
-}
-
-/* съдържание винаги над overlay */
-.advantage .container {
-    position: relative;
-    z-index: 1;
-}
-
-/* =========================
-   LIST
-========================= */
-.advantage-list {
-    list-style: none;
-    padding-left: 0;
-    max-width: 760px;
+.container,
+.container-bs-1,
+.container-bt-1 {
+    max-width: 1120px;
     margin: 0 auto;
 }
 
-.advantage-list li {
-    position: relative;
-    padding-left: 30px;
-    margin-bottom: 14px;
-
-    font-size: 16px;
-    line-height: 1.65;
-
-    color: #111827;
-    font-weight: 500;
-}
-
-/* чек икона */
-.advantage-list li::before {
-    content: "✓";
-    position: absolute;
-    left: 0;
-    top: 2px;
-
-    color: #22c55e;
-    font-weight: 700;
-    font-size: 16px;
-}
-
-/* hover лек ефект (UX) */
-.advantage-list li:hover {
-    transform: translateX(2px);
-    transition: 0.2s;
-}
-
-
-
-/* =========================
-   STEP (GLOBAL)
-========================= */
-.step {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
-
-    padding: 30px 25px;
-
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    text-align: left;
-
-    min-height: 260px;
-
-    transition: 0.2s;
-}
-
-/* BENEFITS BAR */
-.business-benefits .step::before {
-    content: "";
-    display: block;
-    width: 40px;
-    height: 4px;
-
-    background: linear-gradient(90deg, #2563eb, #22c55e);
-
-    border-radius: 2px;
-    margin-bottom: 12px;
-}
-
-.step:hover {
-    border-color: #2563eb;
-}
-
-/* IMAGE */
-.step img {
-    width: 250px;
-    object-fit: contain;
-    margin-top: auto;
-    align-self: center;
-}
-
-/* TEXT */
-.step h3 {
-    margin-bottom: 6px;
-    color: #111827;
-    font-size: 16px;
-}
-
-.step p {
-    color: #6b7280;
-    font-size: 13px;
-}
-
-/* =========================
-   BENEFITS
-========================= */
-.business-benefits .step {
-    min-height: 220px;
-    align-items: center;
-    text-align: center;
-}
-
-.business-benefits .step img {
-    width: 90px;
-    margin-bottom: 10px;
-}
-
-/* =========================
-   TARGET
-========================= */
-.target-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 15px;
-}
-
-.target-grid div {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-
-    padding: 14px;
-    border-radius: 10px;
-
-    font-size: 0.95rem;
-    color: #374151;
-
-    text-align: center;
-}
-
-/* =========================
-   CONTACT
-========================= */
-.contact-form {
-    max-width: 500px;
-    margin: 0 auto;
-
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.contact-form input {
-    padding: 13px;
-    border-radius: 10px;
-
-    border: 1px solid #d1d5db;
-    background: white;
-
-    font-size: 14px;
-}
-
-.contact-form input:focus {
-    border-color: #2563eb;
-    outline: none;
-}
-
-.contact-form button {
-    margin-top: 10px;
-    cursor: pointer;
-}
-
-/* =========================
-   BUTTONS (FINAL STYLE)
-========================= */
-.btn-primary {
-    display: inline-block;
-
-    padding: 12px 28px;
-
-    background: linear-gradient(135deg, #2563eb, #22c55e);
-    color: white;
-
-    font-weight: 600;
-    font-size: 14px;
-
-    border: none;
-    border-radius: 10px;
-
-    text-decoration: none;
-    cursor: pointer;
-
-    transition: all 0.25s ease;
-    margin-top: 30px;
-}
-
-/* hover */
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
-}
-
-/* click */
-.btn-primary:active {
-    transform: translateY(0);
-    box-shadow: 0 4px 10px rgba(37, 99, 235, 0.2);
-}
-
-/* focus (accessibility) */
-.btn-primary:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.3);
-}
-
-.business-target .steps-grid {
-    grid-template-columns: repeat(2, 2fr);
-}
-
-/* =========================
-   TARGET TEXT (ENHANCED)
-========================= */
-.business-target .step h3 {
-    font-size: 18px;
-    font-weight: 600;
-
-    background: linear-gradient(90deg, #2563eb, #22c55e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-
-    margin-bottom: 15px;
-
-    position: relative;
-    display: inline-block;
-}
-
-/* underline accent */
-.business-target .step h3::after {
-    content: "";
-    display: block;
-
-    width: 40%;
-    height: 3px;
-
-    margin: 6px auto 0;
-
-    background: linear-gradient(90deg, #2563eb, #22c55e);
-    border-radius: 2px;
-
-    transition: 0.3s;
-}
-
-/* hover ефект */
-.business-target .step:hover h3::after {
-    width: 70%;
-}
-
-
-/* =========================
-   SECTION TITLES (PRO)
-========================= */
-h2.gradient-text {
-    font-size: clamp(20px, 4vw, 32px);
-    font-weight: 700;
-
-    text-align: center;
-
-    margin-bottom: 50px;
-
-    position: relative;
-    display: inline-block;
-}
-
-/* wrapper за центриране */
 .business-steps h2,
 .business-benefits h2,
 .business-target h2,
 .business-contact h2 {
+    display: block;
+    margin: 0 0 32px;
+    text-align: left;
+    font-size: clamp(28px, 4vw, 38px);
+    line-height: 1.15;
+    letter-spacing: -.025em;
+}
+
+h2.gradient-text::after {
+    display: none;
+}
+
+.steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.step,
+.business-steps .step,
+.business-benefits .step {
+    min-height: 0;
+    padding: 26px;
+    border: 1px solid var(--bc-line);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 6px 18px rgba(15, 23, 42, .04);
+    text-align: left;
+    align-items: flex-start;
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+}
+
+.step:hover,
+.business-steps .step:hover {
+    transform: translateY(-3px);
+    border-color: #cbd5e1;
+    box-shadow: 0 14px 28px rgba(15, 23, 42, .08);
+}
+
+.business-steps .step span {
+    width: 38px;
+    height: 38px;
+    margin: 0 0 18px;
+    border-radius: 10px;
+    background: var(--bc-navy);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.step h3,
+.business-steps .step h3,
+.business-target .step h3 {
+    margin: 0 0 8px;
+    color: var(--bc-navy);
+    background: none;
+    -webkit-text-fill-color: initial;
+    font-size: 18px !important;
+    font-weight: 700;
+}
+
+.business-target .step h3::after,
+.business-benefits .step::before {
+    display: none;
+}
+
+.step p,
+.business-steps .step p {
+    margin: 0 0 18px;
+    color: var(--bc-muted);
+    font-size: 14px !important;
+    line-height: 1.6;
+}
+
+.step img,
+.business-steps .step img {
+    width: 100%;
+    max-width: 170px;
+    height: 120px;
+    margin: 10px auto 0;
+    object-fit: contain;
+    align-self: center;
+}
+
+.business-benefits .steps-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.business-benefits .step {
+    align-items: flex-start;
+    text-align: left;
+}
+
+.business-benefits .step img {
+    width: 58px;
+    height: 58px;
+    margin: 0 0 20px;
+}
+
+.advantage-list {
+    max-width: 920px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.advantage-list li {
+    position: relative;
+    padding: 14px 0 14px 38px;
+    margin: 0;
+    border-bottom: 1px solid #eef2f7;
+    color: #334155;
+    font-size: 15px;
+    line-height: 1.65;
+}
+
+.advantage-list li:last-child {
+    border-bottom: 0;
+}
+
+.advantage-list li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    top: 15px;
+    width: 24px;
+    height: 24px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: #ecfdf3;
+    color: var(--bc-green);
+    font-size: 13px;
+    font-weight: 800;
+}
+
+.business-target .steps-grid {
+    grid-template-columns: repeat(4, minmax(0,1fr));
+}
+
+.business-target .step {
+    align-items: center;
     text-align: center;
 }
 
-/* underline accent */
-h2.gradient-text::after {
-    content: "";
-
-    display: block;
-    width: 60px;
-    height: 4px;
-
-    margin: 12px auto 0;
-
-    border-radius: 3px;
-
-    background: linear-gradient(90deg, #2563eb, #22c55e);
-
-    transition: 0.3s;
+.business-target .step img {
+    max-width: 190px;
+    height: 130px;
 }
 
-/* hover ефект */
-section:hover h2.gradient-text::after {
-    width: 100px;
+.business-process-highlight {
+    margin: 28px 0;
+    padding: 34px 38px;
+    border: 0;
+    border-radius: 18px;
+    background: var(--bc-navy);
+    box-shadow: 0 18px 40px rgba(15, 23, 42, .16);
 }
 
-/* допълнителен subtle ефект */
-h2.gradient-text:hover {
-    transform: translateY(-1px);
+.business-process-highlight::before {
+    width: 4px;
+    background: var(--bc-blue);
 }
 
-/* =========================
-   MOBILE / TABLET FIX
-========================= */
-
-/* Tablet */
-@media (max-width: 900px) {
-
-    /* benefits */
-    .business-benefits .steps-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    /* target */
-    .business-target .steps-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
-    }
-
-    /* hero */
-    .business-hero {
-        padding: 50px 20px;
-    }
-
-    .business-hero h1 {
-        font-size: 1.6rem;
-    }
-}
-
-/* WRAPPER */
-.contact-wrapper {
+.business-process-highlight .text-block-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 50px;
+    grid-template-columns: 56px 1fr;
+    gap: 22px;
     align-items: center;
 }
 
-/* FORM */
-.contact-form-box {
-    width: 100%;
+.process-icon {
+    width: 52px;
+    height: 52px;
+    border-radius: 12px;
+    background: #fff;
+    color: var(--bc-navy);
+    box-shadow: none;
 }
 
-/* TEXTAREA */
-.contact-form textarea {
-    width: 100%;
-    padding: 12px 14px;
+.business-process-highlight .text-highlight {
+    color: #fff !important;
+    margin-bottom: 6px;
+}
+
+.business-process-highlight .process-copy p:last-child {
+    color: #cbd5e1;
+    margin-bottom: 0;
+}
+
+.business-impact-wide {
+    position: relative;
+    width: auto;
+    margin: 32px 0 28px;
+    padding: 54px;
+    overflow: hidden;
+    border: 1px solid var(--bc-line);
+    border-radius: 22px;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.impact-wide-glow {
+    display: none;
+}
+
+.impact-wide-container {
+    max-width: 1120px;
+    margin: 0 auto;
+}
+
+.impact-wide-header {
+    max-width: 760px;
+    margin: 0 0 34px;
+    text-align: left;
+}
+
+.impact-wide-label,
+.impact-savings-badge {
+    display: inline-flex;
+    margin-bottom: 14px;
+    padding: 7px 10px;
+    border: 1px solid #dbeafe;
+    border-radius: 7px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+}
+
+.impact-wide-header h2 {
+    margin: 0 0 12px;
+    color: var(--bc-navy);
+    font-size: clamp(32px, 4vw, 46px);
+    line-height: 1.08;
+    letter-spacing: -.03em;
+}
+
+.impact-wide-header h2 span {
+    color: var(--bc-blue);
+}
+
+.impact-wide-header p,
+.impact-savings-heading p {
+    color: var(--bc-muted);
+    font-size: 16px;
+    line-height: 1.7;
+}
+
+.impact-benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+}
+
+.impact-benefit-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px;
+    border: 1px solid var(--bc-line);
+    border-radius: 14px;
+    background: var(--bc-soft);
+}
+
+.impact-benefit-icon {
+    width: 38px;
+    height: 38px;
+    flex: 0 0 38px;
+    display: grid;
+    place-items: center;
     border-radius: 10px;
-    border: 1px solid #e2e8f0;
-    resize: vertical;
-    font-family: inherit;
+    background: var(--bc-navy);
+    color: #fff;
+    font-size: 13px;
+    font-weight: 800;
 }
 
-/* IMAGE */
-.contact-image img {
-    width: 100%;
-    max-width: 420px;
-    height: auto;
+.impact-benefit-content strong,
+.impact-benefit-content span {
+    display: block;
+}
+
+.impact-benefit-content strong {
+    color: var(--bc-navy);
+    font-size: 16px;
+}
+
+.impact-benefit-content span {
+    margin-top: 3px;
+    color: var(--bc-muted);
+    font-size: 12px;
+    line-height: 1.4;
+}
+
+.impact-fleet-image {
+    margin: 30px 0 38px;
+    padding: 18px 18px 0;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #f8fafc, #eef2f7);
+    text-align: center;
+}
+
+.impact-fleet-image img {
+    width: min(100%, 920px);
     display: block;
     margin: 0 auto;
 }
 
-.contact-form input,
-.contact-form textarea {
-    color: #111827; /* черен текст */
+.impact-savings-heading {
+    max-width: 760px;
+    margin: 0 0 26px;
 }
 
-/* placeholder-а (сив текст вътре) */
-.contact-form input::placeholder,
-.contact-form textarea::placeholder {
-    color: #9ca3af;
+.impact-savings-heading h3 {
+    margin: 0 0 8px;
+    color: var(--bc-navy);
+    font-size: 28px;
+}
+
+.impact-fleet-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 16px;
+}
+
+.impact-fleet-card {
+    position: relative;
+    padding: 24px;
+    border: 1px solid var(--bc-line);
+    border-radius: 16px;
+    background: #fff;
+}
+
+.impact-fleet-card-featured {
+    border-color: #bfdbfe;
+    background: #f8fbff;
+}
+
+.impact-fleet-popular {
+    position: absolute;
+    right: 16px;
+    top: 16px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    background: #dbeafe;
+    color: #1d4ed8;
+    font-size: 10px;
+    font-weight: 800;
+    text-transform: uppercase;
+}
+
+.impact-fleet-card-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.impact-fleet-number {
+    font-size: 38px;
+    line-height: 1;
+    font-weight: 800;
+    color: var(--bc-navy);
+}
+
+.impact-fleet-title strong,
+.impact-fleet-title span {
+    display: block;
+}
+
+.impact-fleet-title strong {
+    color: var(--bc-navy);
+}
+
+.impact-fleet-title span,
+.impact-data-row span,
+.impact-saving-result span,
+.impact-saving-year {
+    color: var(--bc-muted);
+    font-size: 12px;
+}
+
+.impact-data-row,
+.impact-saving-result {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 9px 0;
+}
+
+.impact-data-row strong,
+.impact-saving-result strong {
+    color: var(--bc-navy);
+    font-size: 13px;
+    text-align: right;
+}
+
+.impact-data-divider {
+    height: 1px;
+    margin: 7px 0;
+    background: var(--bc-line);
+}
+
+.impact-saving-result strong {
+    color: var(--bc-green);
+    font-size: 17px;
+}
+
+.impact-saving-year {
+    margin-top: 4px;
+}
+
+.impact-saving-year strong {
+    color: var(--bc-navy);
+}
+
+.impact-wide-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    margin-top: 26px;
+    padding-top: 22px;
+    border-top: 1px solid var(--bc-line);
+}
+
+.impact-wide-footer .impact-wide-button {
+    margin-top: 0;
+    background: var(--bc-navy);
+    color: #fff;
+    box-shadow: none;
+}
+
+.impact-wide-footer p {
+    max-width: 540px;
+    margin: 0;
+    color: var(--bc-muted);
+    font-size: 12px;
+    line-height: 1.55;
+}
+
+.business-contact {
+    padding: 0;
+}
+
+.contact-wrapper {
+    display: grid;
+    grid-template-columns: 1.05fr .95fr;
+    gap: 38px;
+    align-items: stretch;
+    padding: 42px;
+    border-radius: 20px;
+    background: var(--bc-navy);
+}
+
+.contact-form-box h2 {
+    color: #fff;
+}
+
+.contact-form {
+    max-width: none;
+    display: grid;
+    gap: 12px;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 14px 15px;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    background: #fff;
+    color: var(--bc-text);
+    font: inherit;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-color: #60a5fa;
+    box-shadow: 0 0 0 3px rgba(96, 165, 250, .18);
+}
+
+.contact-form .btn-primary {
+    justify-self: start;
+    margin-top: 6px;
+}
+
+.contact-image {
+    display: grid;
+    place-items: center;
+    border-radius: 16px;
+    background: rgba(255,255,255,.06);
+    min-height: 100%;
+}
+
+.contact-image img {
+    width: min(100%, 360px);
+    display: block;
 }
 
 .form-success {
-    margin-top: 15px;
-    padding: 12px 16px;
-
-    background: linear-gradient(90deg, #22c55e, #16a34a);
-    color: white;
-
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 500;
-
-    opacity: 0;
-    transform: translateY(10px);
-    transition: 0.3s;
-
     display: none;
+    margin-top: 8px;
+    padding: 12px 14px;
+    border-radius: 8px;
+    background: #dcfce7;
+    color: #166534;
+    font-size: 13px;
+    font-weight: 700;
 }
 
-/* показване */
 .form-success.show {
     display: block;
-    opacity: 1;
-    transform: translateY(0);
 }
 
-/* =========================
-   INTRO TEXT (MAIN HERO COPY)
-========================= */
-.business-intro {
-    padding: 60px 20px;
-    text-align: center;
+@media (max-width: 980px) {
+    .business-benefits .steps-grid,
+    .business-target .steps-grid,
+    .impact-benefits-grid {
+        grid-template-columns: repeat(2, minmax(0,1fr));
+    }
+
+    .impact-fleet-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-wrapper {
+        grid-template-columns: 1fr;
+    }
 }
 
-.business-intro p {
-    max-width: 850px;
-    margin: 0 auto 20px;
+@media (max-width: 760px) {
+    main.container {
+        padding: 0 12px 48px;
+    }
 
-    font-size: 20px;
-    line-height: 1.8;
+    .business-hero {
+        margin-top: 22px;
+        padding: 46px 24px;
+        border-radius: 20px;
+    }
 
-    color: #1f2937;
-    font-weight: 400;
-}
-
-/* lead paragraph */
-.business-intro p:first-child {
-    font-size: 16px;
-    font-weight: 600;
-    color: #111827;
-}
-
-/* =========================
-   SECTION SPACING (FIX)
-========================= */
-.business-intro,
-.business-text-block,
-.business-cta-text {
-    position: relative;
-
-    margin-bottom: 40px;
-    padding: 40px 35px;
-
-    border-radius: 16px;
-
-    background: rgba(255, 255, 255, 0.7);
-    backdrop-filter: blur(6px);
-
-    border: 1px solid #e5e7eb;
-}
-
-/* лек hover ефект */
-.business-intro:hover,
-.business-text-block:hover,
-.business-cta-text:hover {
-    border-color: #2563eb33;
-    transform: translateY(-2px);
-    transition: 0.25s;
-}
-
-/* =========================
-   CONTENT
-========================= */
-.intro-content,
-.text-block-content,
-.cta-content {
-    position: relative;
-    z-index: 2;
-}
-
-/* =========================
-   TEXT STYLE
-========================= */
-.business-intro p,
-.business-text-block p,
-.business-cta-text p {
-    max-width: 760px;
-    margin: 0 auto 12px;
-
-    text-align: left;
-    line-height: 1.65;
-}
-
-/* intro */
-.intro-lead {
-    font-size: 20px;
-    font-weight: 600;
-    color: #111827;
-}
-
-.business-intro p {
-    font-size: 17px;
-    color: #374151;
-}
-
-/* middle */
-.business-text-block p {
-    font-size: 16px;
-    color: #4b5563;
-}
-
-.text-highlight {
-    font-weight: 500;
-    color: #111827;
-}
-
-/* CTA */
-.business-cta-text p {
-    font-size: 17px;
-    color: #1f2937;
-}
-
-.cta-main {
-    font-size: 18px;
-    font-weight: 500;
-}
-
-/* highlight */
-.cta-highlight {
-    font-size: 19px;
-    font-weight: 700;
-
-    background: linear-gradient(90deg, #2563eb, #22c55e);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* =========================
-   BG SHAPES (SUBTLE)
-========================= */
-.bg-shapes {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-}
-
-.bg-shapes svg {
-    position: absolute;
-    width: 400px;
-    height: 400px;
-
-    filter: blur(70px);
-    opacity: 0.35;
-}
-
-/* позиции */
-.business-intro .bg-shapes svg {
-    top: -120px;
-    left: -80px;
-}
-
-.business-text-block .bg-shapes svg {
-    top: -80px;
-    left: -60px;
-}
-
-.business-cta-text .bg-shapes svg {
-    top: -100px;
-    left: -60px;
-}
-
-/* втори shape */
-.shape-2 {
-    bottom: -100px;
-    right: -80px;
-    top: auto;
-    left: auto;
-}
-
-/* =========================
-   INTRO PREMIUM EFFECT
-========================= */
-
-.business-intro {
-    position: relative;
-    overflow: hidden;
-}
-
-/* gradient border */
-.business-intro::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    padding: 1px;
-
-    border-radius: 16px;
-
-    background: linear-gradient(120deg, #2563eb, #22c55e);
-
-    -webkit-mask:
-        linear-gradient(#fff 0 0) content-box,
-        linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-
-    pointer-events: none;
-
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
-}
-
-/* glow */
-.business-intro::after {
-    content: "";
-    position: absolute;
-
-    width: 300px;
-    height: 300px;
-
-    background: radial-gradient(circle, rgba(37,99,235,0.15), transparent 70%);
-
-    top: -100px;
-    right: -100px;
-
-    filter: blur(40px);
-    opacity: 0.6;
-
-    z-index: 0;
-
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-/* hover (без смяна на gradient) */
-.business-intro:hover::before {
-    opacity: 1;
-}
-
-.business-intro:hover::after {
-    opacity: 0.9;
-    transform: scale(1.05);
-}
-
-.business-intro:hover {
-    transform: translateY(-3px);
-    transition: transform 0.3s ease;
-}
-
-/* underline */
-.business-intro .intro-lead::after {
-    content: "";
-    display: block;
-
-    width: 80px;
-    height: 3px;
-
-    margin: 15px auto 0;
-
-    background: linear-gradient(90deg, #2563eb, #22c55e);
-    border-radius: 2px;
-
-    opacity: 0.8;
-}
-
-/* =========================
-   RESPONSIVE (TABLET)
-========================= */
-@media (max-width: 900px) {
-    .container {
-        max-width: 100%;
-        padding-left: 12px;
-        padding-right: 12px;
+    .business-hero::after {
+        right: 20px;
+        font-size: 92px;
     }
 
     .business-intro,
     .business-text-block,
-    .business-cta-text {
-        margin: 20px 8px;
-        padding: 22px 14px;
-        text-align: center;
+    .business-cta-text,
+    .advantage,
+    .business-impact-wide,
+    .contact-wrapper {
+        padding: 24px 20px;
+        border-radius: 16px;
     }
 
-    .bg-shapes svg {
-        width: 240px;
-        height: 240px;
-        filter: blur(45px);
-    }
-}
-
-/* =========================
-   MOBILE (MAIN)
-========================= */
-@media (max-width: 750px) {
-
-    .container {
-        max-width: 100%;
-        padding-left: 10px;
-        padding-right: 10px;
+    .steps-grid,
+    .business-benefits .steps-grid,
+    .business-target .steps-grid,
+    .impact-benefits-grid {
+        grid-template-columns: 1fr;
     }
 
-    /* TEXT BLOCKS */
-    .business-intro,
-    .business-text-block,
-    .business-cta-text {
-        margin: 15px 6px;
-        padding: 18px 12px;
-        text-align: center;
+    .business-steps,
+    .business-benefits,
+    .business-target {
+        padding: 30px 0;
+    }
+
+    .business-process-highlight .text-block-content {
+        grid-template-columns: 1fr;
+        text-align: left;
+    }
+
+    .impact-wide-footer {
+        align-items: flex-start;
+        flex-direction: column;
     }
 
     .business-intro p,
     .business-text-block p,
     .business-cta-text p {
-        font-size: 14px;
-        line-height: 1.6;
-        text-align: center;
-    }
-
-    /* HEADINGS */
-    h2.gradient-text {
-        text-align: center;
-        width: 100%;
-    }
-
-    /* GRID FULL WIDTH */
-    .steps-grid {
-        grid-template-columns: 1fr;
-        width: 100%;
-        justify-items: stretch;
-    }
-
-    .business-target .steps-grid {
-        grid-template-columns: 1fr !important;
-    }
-
-    .business-benefits .steps-grid {
-        grid-template-columns: 1fr !important;
-    }
-
-    /* CARDS */
-    .step {
-        width: 100%;
-        min-height: auto;
-        padding: 18px 12px;
-        text-align: center;
-        align-items: center;
-    }
-
-    /* IMAGES */
-    .step img {
-        width: 130px;
-        max-width: 100%;
-        margin-top: 12px;
-    }
-
-    /* CTA */
-    .cta-highlight {
-        text-align: center;
-        margin-top: 12px;
-        font-size: 16px;
-    }
-
-    /* BACKGROUND SHAPES */
-    .bg-shapes svg {
-        width: 170px;
-        height: 170px;
-        filter: blur(35px);
-    }
-}
-
-/* =========================
-   CONTACT MOBILE
-========================= */
-@media (max-width: 768px) {
-    .contact-wrapper {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-
-    .contact-image {
-        order: -1;
-        display: flex;
-        justify-content: center;
-    }
-}
-
-/* =========================
-   EXTRA SMALL DEVICES
-========================= */
-@media (max-width: 480px) {
-
-    .container {
-        padding-left: 8px;
-        padding-right: 8px;
-    }
-
-    .business-intro,
-    .business-text-block,
-    .business-cta-text {
-        margin: 12px 4px;
-        padding: 16px 10px;
-    }
-
-    .step {
-        padding: 16px 10px;
-    }
-
-    .step img {
-        width: 110px;
-    }
-
-    .cta-highlight {
+        text-align: left;
         font-size: 15px;
     }
-}
-
-
-/* =========================
-   PROCESS HIGHLIGHT SECTION
-========================= */
-
-.business-process-highlight {
-    position: relative;
-    overflow: hidden;
-
-    margin: 50px 0;
-    padding: 48px 35px;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(15, 23, 42, 0.98),
-            rgba(30, 41, 59, 0.96)
-        );
-
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    border-radius: 22px;
-
-    box-shadow:
-        0 24px 55px rgba(15, 23, 42, 0.2),
-        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-
-    transition:
-        transform 0.3s ease,
-        box-shadow 0.3s ease;
-}
-
-/* цветна вертикална линия */
-.business-process-highlight::before {
-    content: "";
-    position: absolute;
-
-    top: 0;
-    bottom: 0;
-    left: 0;
-
-    width: 6px;
-
-    background: linear-gradient(
-        180deg,
-        #2563eb,
-        #22c55e
-    );
-
-    z-index: 2;
-}
-
-.business-process-highlight:hover {
-    transform: translateY(-4px);
-
-    box-shadow:
-        0 30px 65px rgba(15, 23, 42, 0.26),
-        inset 0 1px 0 rgba(255, 255, 255, 0.07);
-}
-
-/* усилваме съществуващите shapes */
-.business-process-highlight .bg-shapes {
-    opacity: 0.9;
-}
-
-.business-process-highlight .bg-shapes svg {
-    filter: blur(55px);
-}
-
-/* вътрешно съдържание */
-.business-process-highlight .text-block-content {
-    position: relative;
-    z-index: 3;
-
-    display: grid;
-    grid-template-columns: 68px 1fr;
-    align-items: center;
-    gap: 26px;
-
-    max-width: 1000px;
-}
-
-/* икона */
-.process-icon {
-    width: 64px;
-    height: 64px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    font-size: 28px;
-    font-weight: 800;
-    color: #ffffff;
-
-    background: linear-gradient(
-        135deg,
-        #2563eb,
-        #22c55e
-    );
-
-    border-radius: 18px;
-
-    box-shadow:
-        0 12px 25px rgba(37, 99, 235, 0.28),
-        inset 0 1px 0 rgba(255, 255, 255, 0.2);
-}
-
-/* текстов контейнер */
-.process-copy {
-    min-width: 0;
-}
-
-/* премахваме старото ограничение max-width */
-.business-process-highlight .process-copy p {
-    max-width: none;
-    margin-left: 0;
-    margin-right: 0;
-    text-align: left;
-}
-
-/* основен текст */
-.business-process-highlight .text-highlight {
-    margin-bottom: 12px;
-
-    font-size: clamp(19px, 2.2vw, 24px);
-    line-height: 1.45;
-    font-weight: 700;
-
-    color: #ffffff;
-}
-
-/* вторичен текст */
-.business-process-highlight .process-copy p:last-child {
-    margin-bottom: 0;
-
-    font-size: 16px;
-    line-height: 1.7;
-
-    color: #cbd5e1;
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 750px) {
-
-    .business-process-highlight {
-        margin: 25px 6px;
-        padding: 30px 18px;
-    }
-
-    .business-process-highlight .text-block-content {
-        grid-template-columns: 1fr;
-        gap: 18px;
-    }
-
-    .process-icon {
-        width: 56px;
-        height: 56px;
-
-        margin: 0 auto;
-
-        font-size: 24px;
-        border-radius: 16px;
-    }
-
-    .business-process-highlight .process-copy p {
-        text-align: center;
-    }
-
-    .business-process-highlight .text-highlight {
-        font-size: 18px;
-    }
-
-    .business-process-highlight .process-copy p:last-child {
-        font-size: 14px;
-    }
-}
-
-/* =========================================
-   FULL-WIDTH BUSINESS IMPACT SECTION
-========================================= */
-
-.business-impact-wide {
-    position: relative;
-    overflow: hidden;
-
-    /*
-       Секцията излиза извън ограниченията
-       на родителския .container
-    */
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    margin-right: calc(50% - 50vw);
-
-    margin-top: 60px;
-    margin-bottom: 80px;
-
-    /*
-       Реален отстъп от краищата на екрана
-    */
-    padding: 80px clamp(24px, 5vw, 80px);
-
-    box-sizing: border-box;
-
-    background:
-        linear-gradient(
-            135deg,
-            rgba(37, 99, 235, 0.025),
-            rgba(34, 197, 94, 0.025)
-        ),
-        #ffffff;
-
-    border-top: 1px solid #e2e8f0;
-    border-bottom: 1px solid #e2e8f0;
-}
-
-
-/* =========================================
-   INNER CONTAINER
-========================================= */
-
-.impact-wide-container {
-    position: relative;
-    z-index: 2;
-
-    width: 100%;
-    max-width: 1500px;
-
-    margin: 0 auto;
-}
-
-
-/* =========================================
-   SUBTLE BACKGROUND GLOWS
-========================================= */
-
-.impact-wide-glow {
-    position: absolute;
-
-    width: 480px;
-    height: 480px;
-
-    border-radius: 50%;
-
-    filter: blur(110px);
-    opacity: 0.1;
-
-    pointer-events: none;
-}
-
-.impact-wide-glow-blue {
-    top: -220px;
-    left: -180px;
-
-    background: #2563eb;
-}
-
-.impact-wide-glow-green {
-    right: -190px;
-    bottom: -240px;
-
-    background: #22c55e;
-}
-
-
-/* =========================================
-   HEADER
-========================================= */
-
-.impact-wide-header {
-    max-width: 850px;
-
-    margin: 0 auto 55px;
-
-    text-align: center;
-}
-
-.impact-wide-label {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    margin-bottom: 20px;
-    padding: 9px 16px;
-
-    color: #15803d;
-    background: #f0fdf4;
-
-    border: 1px solid #bbf7d0;
-    border-radius: 999px;
-
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0.14em;
-}
-
-.impact-wide-header h2 {
-    margin: 0 0 20px;
-
-    color: #0f172a;
-
-    font-size: clamp(34px, 5vw, 54px);
-    line-height: 1.1;
-    font-weight: 800;
-}
-
-.impact-wide-header h2 span {
-    background: linear-gradient(
-        90deg,
-        #2563eb,
-        #22c55e
-    );
-
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.impact-wide-header p {
-    max-width: 730px;
-
-    margin: 0 auto;
-
-    color: #475569;
-
-    font-size: 17px;
-    line-height: 1.75;
-}
-
-
-/* =========================================
-   BENEFITS GRID
-========================================= */
-
-.impact-benefits-grid {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-
-    gap: 22px;
-
-    margin-bottom: 75px;
-}
-
-.impact-benefit-card {
-    position: relative;
-    overflow: hidden;
-
-    min-height: 145px;
-    padding: 25px;
-
-    display: flex;
-    align-items: center;
-    gap: 18px;
-
-    box-sizing: border-box;
-
-    background: rgba(255, 255, 255, 0.92);
-
-    border: 1px solid #e2e8f0;
-    border-radius: 18px;
-
-    box-shadow: 0 12px 30px rgba(15, 23, 42, 0.06);
-
-    transition:
-        transform 0.25s ease,
-        border-color 0.25s ease,
-        box-shadow 0.25s ease;
-}
-
-.impact-benefit-card::after {
-    content: "";
-
-    position: absolute;
-
-    width: 120px;
-    height: 120px;
-
-    right: -55px;
-    bottom: -65px;
-
-    background: radial-gradient(
-        circle,
-        rgba(37, 99, 235, 0.1),
-        transparent 70%
-    );
-
-    pointer-events: none;
-}
-
-.impact-benefit-card:hover {
-    transform: translateY(-5px);
-
-    border-color: rgba(37, 99, 235, 0.35);
-
-    box-shadow: 0 20px 42px rgba(15, 23, 42, 0.1);
-}
-
-.impact-benefit-icon {
-    position: relative;
-    z-index: 2;
-
-    width: 54px;
-    height: 54px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    flex-shrink: 0;
-
-    color: #ffffff;
-
-    background: linear-gradient(
-        135deg,
-        #2563eb,
-        #22c55e
-    );
-
-    border-radius: 15px;
-
-    font-size: 22px;
-    font-weight: 800;
-
-    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.22);
-}
-
-.impact-benefit-icon-small {
-    font-size: 14px;
-}
-
-.impact-benefit-content {
-    position: relative;
-    z-index: 2;
-}
-
-.impact-benefit-content strong {
-    display: block;
-
-    margin-bottom: 7px;
-
-    color: #0f172a;
-
-    font-size: 19px;
-    line-height: 1.2;
-}
-
-.impact-benefit-content span {
-    display: block;
-
-    color: #64748b;
-
-    font-size: 13px;
-    line-height: 1.55;
-}
-
-
-/* =========================================
-   SAVINGS HEADING
-========================================= */
-
-.impact-savings-heading {
-    max-width: 820px;
-
-    margin: 0 auto 42px;
-
-    text-align: center;
-}
-
-.impact-savings-badge {
-    display: inline-block;
-
-    margin-bottom: 15px;
-    padding: 7px 13px;
-
-    color: #1d4ed8;
-    background: #eff6ff;
-
-    border: 1px solid #bfdbfe;
-    border-radius: 999px;
-
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-
-.impact-savings-heading h3 {
-    margin: 0 0 14px;
-
-    color: #0f172a;
-
-    font-size: clamp(26px, 4vw, 38px);
-    line-height: 1.2;
-}
-
-.impact-savings-heading p {
-    max-width: 700px;
-
-    margin: 0 auto;
-
-    color: #64748b;
-
-    font-size: 15px;
-    line-height: 1.7;
-}
-
-
-/* =========================================
-   FLEET CARDS GRID
-========================================= */
-
-.impact-fleet-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-
-    gap: 26px;
-
-    align-items: stretch;
-
-    /*
-       Малък вътрешен отстъп, за да не се
-       допират картите до визуалните краища
-    */
-    padding: 8px 0 18px;
-}
-
-
-/* =========================================
-   FLEET CARD
-========================================= */
-
-.impact-fleet-card {
-    position: relative;
-    overflow: hidden;
-
-    min-width: 0;
-    padding: 37px 32px 32px;
-
-    display: flex;
-    flex-direction: column;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-
-    border: 1px solid #e2e8f0;
-    border-radius: 22px;
-
-    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08);
-
-    transition:
-        transform 0.28s ease,
-        box-shadow 0.28s ease,
-        border-color 0.28s ease;
-}
-
-/*
-   Градиентната лента вече е вътре
-   в картата и следва точно border-radius
-*/
-.impact-fleet-card::before {
-    content: "";
-
-    position: absolute;
-
-    top: 0;
-    left: 0;
-    right: 0;
-
-    width: 100%;
-    height: 6px;
-
-    background: linear-gradient(
-        90deg,
-        #2563eb 0%,
-        #3b82f6 45%,
-        #22c55e 100%
-    );
-
-    border-radius: 22px 22px 0 0;
-
-    pointer-events: none;
-}
-
-.impact-fleet-card:hover {
-    transform: translateY(-7px);
-
-    border-color: rgba(37, 99, 235, 0.38);
-
-    box-shadow: 0 28px 58px rgba(15, 23, 42, 0.14);
-}
-
-
-/* =========================================
-   FEATURED FLEET CARD
-========================================= */
-
-.impact-fleet-card-featured {
-    border-color: rgba(37, 99, 235, 0.45);
-
-    background:
-        linear-gradient(
-            145deg,
-            rgba(37, 99, 235, 0.025),
-            rgba(34, 197, 94, 0.025)
-        ),
-        #ffffff;
-
-    box-shadow:
-        0 24px 55px rgba(37, 99, 235, 0.12),
-        0 0 0 1px rgba(37, 99, 235, 0.04);
-}
-
-.impact-fleet-popular {
-    position: absolute;
-    z-index: 3;
-
-    top: 18px;
-    right: 20px;
-
-    padding: 7px 13px;
-
-    color: #ffffff;
-
-    background: linear-gradient(
-        135deg,
-        #2563eb,
-        #22c55e
-    );
-
-    border-radius: 999px;
-
-    font-size: 10px;
-    font-weight: 800;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-
-    box-shadow: 0 8px 18px rgba(37, 99, 235, 0.22);
-}
-
-
-/* =========================================
-   FLEET CARD HEADER
-========================================= */
-
-.impact-fleet-card-top {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-
-    margin-bottom: 28px;
-}
-
-.impact-fleet-number {
-    width: 62px;
-    height: 62px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    flex-shrink: 0;
-
-    color: #ffffff;
-
-    background: linear-gradient(
-        135deg,
-        #2563eb,
-        #22c55e
-    );
-
-    border-radius: 17px;
-
-    font-size: 25px;
-    font-weight: 800;
-
-    box-shadow: 0 11px 24px rgba(37, 99, 235, 0.2);
-}
-
-.impact-fleet-title {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-
-    min-width: 0;
-}
-
-.impact-fleet-title strong {
-    color: #0f172a;
-
-    font-size: 21px;
-    line-height: 1.2;
-}
-
-.impact-fleet-title span {
-    color: #64748b;
-
-    font-size: 13px;
-}
-
-
-/* =========================================
-   FLEET DATA
-========================================= */
-
-.impact-fleet-data {
-    display: flex;
-    flex-direction: column;
-
-    flex-grow: 1;
-}
-
-.impact-data-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    gap: 20px;
-
-    padding: 12px 0;
-
-    color: #64748b;
-
-    font-size: 14px;
-}
-
-.impact-data-row span {
-    min-width: 0;
-}
-
-.impact-data-row strong {
-    color: #0f172a;
-
-    font-size: 14px;
-    font-weight: 700;
-
-    text-align: right;
-    white-space: nowrap;
-}
-
-.impact-data-divider {
-    height: 1px;
-
-    margin: 14px 0;
-
-    background: #e2e8f0;
-}
-
-.impact-saving-result {
-    display: flex;
-    align-items: flex-end;
-    justify-content: space-between;
-
-    gap: 18px;
-
-    margin-top: 15px;
-}
-
-.impact-saving-result span {
-    max-width: 150px;
-
-    color: #334155;
-
-    font-size: 14px;
-    line-height: 1.45;
-    font-weight: 500;
-}
-
-.impact-saving-result strong {
-    color: #16a34a;
-
-    font-size: clamp(25px, 2.4vw, 34px);
-    line-height: 1;
-
-    text-align: right;
-    white-space: nowrap;
-}
-
-.impact-saving-year {
-    margin-top: 14px;
-
-    color: #64748b;
-
-    font-size: 13px;
-    text-align: right;
-}
-
-.impact-saving-year strong {
-    color: #0f172a;
-}
-
-
-/* =========================================
-   FOOTER / CTA
-========================================= */
-
-.impact-wide-footer {
-    max-width: 650px;
-
-    margin: 48px auto 0;
-
-    text-align: center;
-}
-
-.impact-wide-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-
-    min-width: 300px;
-
-    padding: 16px 28px;
-
-    color: #ffffff;
-
-    background: linear-gradient(
-        135deg,
-        #2563eb,
-        #22c55e
-    );
-
-    border-radius: 13px;
-
-    font-size: 15px;
-    font-weight: 700;
-    text-decoration: none;
-
-    box-shadow: 0 14px 30px rgba(37, 99, 235, 0.22);
-
-    transition:
-        transform 0.25s ease,
-        box-shadow 0.25s ease;
-}
-
-.impact-wide-button span {
-    font-size: 20px;
-
-    transition: transform 0.25s ease;
-}
-
-.impact-wide-button:hover {
-    transform: translateY(-3px);
-
-    box-shadow: 0 20px 38px rgba(37, 99, 235, 0.3);
-}
-
-.impact-wide-button:hover span {
-    transform: translateX(5px);
-}
-
-.impact-wide-footer p {
-    margin: 16px 0 0;
-
-    color: #64748b;
-
-    font-size: 11px;
-    line-height: 1.55;
-}
-
-
-/* =========================================
-   MEDIUM DESKTOP / LAPTOP
-========================================= */
-
-@media (max-width: 1300px) {
-
-    .business-impact-wide {
-        padding-left: 40px;
-        padding-right: 40px;
-    }
-
-    .impact-benefits-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .impact-fleet-grid {
-        gap: 20px;
-    }
-
-    .impact-fleet-card {
-        padding: 37px 24px 28px;
-    }
-
-    .impact-saving-result {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 8px;
-    }
-
-    .impact-saving-result strong {
-        text-align: left;
-    }
-}
-
-
-/* =========================================
-   TABLET
-========================================= */
-
-@media (max-width: 950px) {
-
-    .business-impact-wide {
-        padding-top: 65px;
-        padding-bottom: 65px;
-    }
-
-    .impact-fleet-grid {
-        grid-template-columns: 1fr;
-
-        max-width: 720px;
-        margin: 0 auto;
-    }
-
-    .impact-fleet-card {
-        padding: 38px 30px 32px;
-    }
-
-    .impact-data-row {
-        align-items: center;
-        flex-direction: row;
-    }
-
-    .impact-data-row strong {
-        text-align: right;
-    }
-
-    .impact-saving-result {
-        align-items: flex-end;
-        flex-direction: row;
-    }
-
-    .impact-saving-result strong {
-        text-align: right;
-    }
-}
-
-
-/* =========================================
-   SMALL TABLET
-========================================= */
-
-@media (max-width: 700px) {
-
-    .business-impact-wide {
-        padding-left: 22px;
-        padding-right: 22px;
-    }
-
-    .impact-benefits-grid {
-        grid-template-columns: 1fr;
-
-        margin-bottom: 55px;
-    }
-
-    .impact-benefit-card {
-        min-height: auto;
-    }
-}
-
-
-/* =========================================
-   MOBILE
-========================================= */
-
-@media (max-width: 600px) {
-
-    .business-impact-wide {
-        margin-top: 35px;
-        margin-bottom: 50px;
-
-        padding: 50px 16px;
-    }
-
-    .impact-wide-header {
-        margin-bottom: 40px;
-    }
-
-    .impact-wide-label {
-        padding: 8px 11px;
-
-        font-size: 9px;
-        letter-spacing: 0.07em;
-    }
-
-    .impact-wide-header h2 {
-        font-size: 31px;
-    }
-
-    .impact-wide-header p {
-        font-size: 14px;
-    }
-
-    .impact-benefit-card {
-        padding: 21px;
-    }
-
-    .impact-savings-heading {
-        margin-bottom: 32px;
-    }
-
-    .impact-savings-heading h3 {
-        font-size: 26px;
-    }
-
-    .impact-savings-heading p {
-        font-size: 14px;
-    }
-
-    .impact-fleet-grid {
-        padding-bottom: 8px;
-    }
-
-    .impact-fleet-card {
-        padding: 38px 18px 27px;
-    }
-
-    .impact-fleet-popular {
-        top: 16px;
-        right: 14px;
-
-        padding: 6px 9px;
-
-        font-size: 8px;
-    }
-
-    .impact-fleet-card-top {
-        margin-bottom: 23px;
-    }
-
-    .impact-fleet-number {
-        width: 55px;
-        height: 55px;
-
-        font-size: 22px;
-    }
-
-    .impact-fleet-title strong {
-        font-size: 18px;
-    }
-
-    .impact-data-row {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 5px;
-    }
-
-    .impact-data-row strong {
-        text-align: left;
-    }
-
-    .impact-saving-result {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 7px;
-    }
-
-    .impact-saving-result strong {
-        text-align: left;
-        font-size: 29px;
-    }
-
-    .impact-saving-year {
-        text-align: left;
-    }
-
-    .impact-wide-button {
-        width: 100%;
-        min-width: 0;
-
-        box-sizing: border-box;
-    }
-}
-
-
-/* =========================================
-   EXTRA SMALL MOBILE
-========================================= */
-
-@media (max-width: 420px) {
-
-    .business-impact-wide {
-        padding-left: 12px;
-        padding-right: 12px;
-    }
-
-    .impact-fleet-card {
-        padding-left: 15px;
-        padding-right: 15px;
-    }
-
-    .impact-benefit-card {
-        gap: 14px;
-    }
-
-    .impact-benefit-icon {
-        width: 49px;
-        height: 49px;
-    }
-}
-
-
-/* =========================================
-   PREVENT HORIZONTAL SCROLL
-========================================= */
-
-html,
-body {
-    overflow-x: hidden;
-}
-
-/* =========================================
-   FLEET IMAGE
-========================================= */
-
-.impact-fleet-image {
-    position: relative;
-
-    width: 100%;
-    margin: 64px 0;
-
-    border-radius: 26px;
-    overflow: hidden;
-
-    background: #f1f5f9;
-
-    box-shadow:
-        0 22px 55px rgba(15, 23, 42, 0.14),
-        0 6px 18px rgba(15, 23, 42, 0.08);
-}
-
-.impact-fleet-image::before {
-    content: "";
-
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-
-    background:
-        linear-gradient(
-            90deg,
-            rgba(15, 23, 42, 0.18) 0%,
-            transparent 38%,
-            transparent 70%,
-            rgba(15, 23, 42, 0.12) 100%
-        );
-
-    pointer-events: none;
-}
-
-.impact-fleet-image img {
-    display: block;
-
-    width: 100%;
-    height: 460px;
-
-    object-fit: cover;
-    object-position: center;
-
-    transition:
-        transform 0.6s ease,
-        filter 0.6s ease;
-}
-
-.impact-fleet-image:hover img {
-    transform: scale(1.025);
-    filter: contrast(1.04) saturate(1.06);
-}
-
-@media (max-width: 992px) {
-
-    .impact-fleet-image {
-        margin: 50px 0;
-        border-radius: 22px;
-    }
-
-    .impact-fleet-image img {
-        height: 360px;
-    }
-
-}
-
-@media (max-width: 640px) {
-
-    .impact-fleet-image {
-        margin: 38px 0;
-        border-radius: 18px;
-    }
-
-    .impact-fleet-image img {
-        height: 240px;
-        object-position: center;
-    }
-
 }
