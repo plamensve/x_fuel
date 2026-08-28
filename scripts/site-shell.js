@@ -57,4 +57,21 @@ document.addEventListener("DOMContentLoaded", () => {
             link.removeAttribute("aria-current")
         }
     })
+
+    /* The history dashboard's "Най-ниски цени за днес" block is intentionally
+       strict: it must never fall back to a previous date. */
+    if (currentPath === "/pages/trends.html" &&
+        typeof window.getFilteredData === "function" &&
+        typeof window.toDateOnly === "function" &&
+        typeof window.renderBestPrices === "function" &&
+        typeof window.updateBestPricesHeading === "function") {
+
+        window.renderBestPricesForTodayOrLatest = () => {
+            const todayStr = window.toDateOnly(new Date())
+            const todayData = window.getFilteredData().filter(row => row.dateOnly === todayStr)
+
+            window.updateBestPricesHeading(todayStr, false)
+            window.renderBestPrices(todayData)
+        }
+    }
 })
