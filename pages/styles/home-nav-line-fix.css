@@ -1,0 +1,5 @@
+/* Homepage navigation: remove decorative top accent line. */
+body.has-modern-home-nav > .header-bar::before {
+  display: none !important;
+  content: none !important;
+}

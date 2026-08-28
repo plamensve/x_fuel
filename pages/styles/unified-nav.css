@@ -1,0 +1,304 @@
+/* Unified navigation overrides — shared visual system for homepage and internal pages */
+:root {
+  --unified-nav-bg: rgba(8,17,31,.94);
+  --unified-nav-panel: rgba(15,29,48,.86);
+  --unified-nav-border: rgba(148,163,184,.15);
+  --unified-nav-text: #cbd5e1;
+  --unified-nav-muted: #8192a7;
+  --unified-nav-blue: #60a5fa;
+  --unified-nav-green: #34d399;
+}
+
+/* Remove the decorative line above the navigation everywhere. */
+body > .header-bar::before,
+body > .main-nav::before,
+.business-header::before {
+  display: none !important;
+  content: none !important;
+}
+
+/* Legacy header/nav pages: match the homepage glass + pill navigation. */
+body > .header-bar {
+  position: sticky !important;
+  top: 0 !important;
+  z-index: 6000 !important;
+  height: 82px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--unified-nav-border) !important;
+  background: radial-gradient(circle at 18% -40%, rgba(59,130,246,.16), transparent 42%), linear-gradient(180deg, rgba(8,17,31,.96), rgba(8,17,31,.88)) !important;
+  box-shadow: 0 12px 36px rgba(2,6,23,.24) !important;
+  backdrop-filter: blur(20px) saturate(145%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(145%) !important;
+}
+
+body > .header-bar .header-container {
+  width: min(calc(100% - 32px), 1440px) !important;
+  max-width: none !important;
+  min-height: 82px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  display: grid !important;
+  grid-template-columns: minmax(220px,auto) minmax(0,1fr) auto !important;
+  align-items: center !important;
+  gap: 22px !important;
+}
+
+body > .header-bar .header-logo {
+  width: 46px !important;
+  height: 46px !important;
+  margin: 0 !important;
+  object-fit: contain !important;
+  filter: drop-shadow(0 8px 18px rgba(37,99,235,.18));
+}
+
+body > .header-bar .header-text { display: none !important; }
+
+body > .header-bar .facebook-button {
+  grid-column: 3 !important;
+  min-height: 42px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 0 14px !important;
+  border: 1px solid rgba(96,165,250,.24) !important;
+  border-radius: 12px !important;
+  color: #eaf2ff !important;
+  background: rgba(37,99,235,.13) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.03) !important;
+  text-decoration: none !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+}
+
+body > .header-bar .facebook-button::before {
+  content: "f" !important;
+  width: 21px !important;
+  height: 21px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 0 !important;
+  border-radius: 7px !important;
+  color: #2563eb !important;
+  background: #fff !important;
+  font-family: Arial,sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+}
+
+body > .main-nav {
+  position: fixed !important;
+  z-index: 6002 !important;
+  top: 17px !important;
+  left: 50% !important;
+  width: min(760px,53vw) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  transform: translateX(-50%) !important;
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+body > .main-nav .nav-container {
+  width: 100% !important;
+  max-width: none !important;
+  min-height: 48px !important;
+  margin: 0 !important;
+  padding: 4px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  border: 1px solid rgba(148,163,184,.14) !important;
+  border-radius: 16px !important;
+  background: linear-gradient(180deg,rgba(21,35,54,.84),rgba(12,25,42,.78)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.035),0 12px 28px rgba(2,6,23,.20) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+body > .main-nav .nav-container a {
+  min-height: 38px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 10px !important;
+  border: 1px solid transparent !important;
+  border-radius: 11px !important;
+  color: var(--unified-nav-text) !important;
+  background: transparent !important;
+  text-decoration: none !important;
+  font-size: 11px !important;
+  font-weight: 720 !important;
+  white-space: nowrap !important;
+  transition: color .18s ease,background .18s ease,border-color .18s ease,transform .18s ease !important;
+}
+
+body > .main-nav .nav-container a:hover {
+  color: #fff !important;
+  border-color: rgba(148,163,184,.12) !important;
+  background: rgba(255,255,255,.055) !important;
+  transform: translateY(-1px) !important;
+}
+
+body > .main-nav .nav-container a[aria-current="page"],
+body > .main-nav .nav-container a.is-active,
+body > .main-nav .nav-container a[href="index.html"] {
+  color: #fff !important;
+  border-color: rgba(96,165,250,.22) !important;
+  background: linear-gradient(180deg,rgba(59,130,246,.20),rgba(37,99,235,.10)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05),0 7px 18px rgba(37,99,235,.12) !important;
+}
+
+/* Business-shell pages: same dimensions, panel, typography and CTA language. */
+.business-header {
+  min-height: 82px !important;
+  border: 0 !important;
+  border-bottom: 1px solid var(--unified-nav-border) !important;
+  background: radial-gradient(circle at 18% -40%, rgba(59,130,246,.16), transparent 42%), linear-gradient(180deg,rgba(8,17,31,.96),rgba(8,17,31,.88)) !important;
+  box-shadow: 0 12px 36px rgba(2,6,23,.24) !important;
+  backdrop-filter: blur(20px) saturate(145%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(145%) !important;
+}
+
+.business-header .business-nav-shell {
+  width: min(calc(100% - 32px),1440px) !important;
+  min-height: 82px !important;
+  gap: 22px !important;
+}
+
+.business-header .brand-lockup img { width: 46px !important; height: 46px !important; }
+.business-header .brand-copy strong { font-size: 15px !important; font-weight: 850 !important; }
+.business-header .brand-copy span { color: var(--unified-nav-muted) !important; font-size: 10px !important; font-weight: 700 !important; }
+
+.business-header .main-nav { position: static !important; width: 100% !important; transform: none !important; }
+.business-header .nav-container {
+  min-height: 48px !important;
+  padding: 4px !important;
+  gap: 4px !important;
+  border: 1px solid rgba(148,163,184,.14) !important;
+  border-radius: 16px !important;
+  background: linear-gradient(180deg,rgba(21,35,54,.84),rgba(12,25,42,.78)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.035),0 12px 28px rgba(2,6,23,.20) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+.business-header .nav-container a {
+  min-height: 38px !important;
+  padding: 0 10px !important;
+  border: 1px solid transparent !important;
+  border-radius: 11px !important;
+  color: var(--unified-nav-text) !important;
+  background: transparent !important;
+  font-size: 11px !important;
+  font-weight: 720 !important;
+}
+
+.business-header .nav-container a:hover {
+  color: #fff !important;
+  border-color: rgba(148,163,184,.12) !important;
+  background: rgba(255,255,255,.055) !important;
+  transform: translateY(-1px) !important;
+}
+
+.business-header .nav-container a.is-active,
+.business-header .nav-container a[aria-current="page"] {
+  color: #fff !important;
+  border-color: rgba(96,165,250,.22) !important;
+  background: linear-gradient(180deg,rgba(59,130,246,.20),rgba(37,99,235,.10)) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.05),0 7px 18px rgba(37,99,235,.12) !important;
+}
+
+.business-header .nav-container a.is-active::after,
+.business-header .nav-container a[aria-current="page"]::after { display: none !important; content: none !important; }
+
+.business-header .nav-cta {
+  min-height: 42px !important;
+  padding: 0 14px !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(96,165,250,.24) !important;
+  color: #eaf2ff !important;
+  background: rgba(37,99,235,.13) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.03) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+}
+
+@media (max-width: 900px) {
+  body > .header-bar,
+  .business-header { min-height: 72px !important; height: 72px !important; }
+
+  body > .header-bar .header-container,
+  .business-header .business-nav-shell {
+    width: min(calc(100% - 24px),1440px) !important;
+    min-height: 72px !important;
+  }
+
+  body > .header-bar .facebook-button { display: none !important; }
+
+  body > .main-nav {
+    top: 15px !important;
+    left: auto !important;
+    right: 12px !important;
+    width: 44px !important;
+    transform: none !important;
+  }
+
+  body > .main-nav .menu-toggle,
+  .business-header .menu-toggle {
+    width: 42px !important;
+    height: 42px !important;
+    min-width: 42px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    border: 1px solid rgba(148,163,184,.18) !important;
+    border-radius: 12px !important;
+    color: #fff !important;
+    background: linear-gradient(180deg,rgba(30,46,66,.96),rgba(15,29,47,.96)) !important;
+    box-shadow: 0 10px 22px rgba(2,6,23,.20),inset 0 1px 0 rgba(255,255,255,.04) !important;
+    font-size: 18px !important;
+  }
+
+  body > .main-nav .nav-container {
+    position: fixed !important;
+    top: 78px !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+    display: none !important;
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    gap: 8px !important;
+    padding: 12px !important;
+    border-radius: 18px !important;
+    background: rgba(8,17,31,.97) !important;
+    box-shadow: 0 22px 50px rgba(2,6,23,.42) !important;
+  }
+
+  body > .main-nav .nav-container.open { display: grid !important; }
+  body > .main-nav .nav-container a { min-height: 46px !important; justify-content: flex-start !important; font-size: 12px !important; }
+
+  .business-header .main-nav { position: absolute !important; top: 15px !important; right: 12px !important; width: 44px !important; }
+  .business-header .nav-container {
+    position: fixed !important;
+    top: 78px !important;
+    left: 12px !important;
+    right: 12px !important;
+    width: auto !important;
+    display: none !important;
+    grid-template-columns: repeat(2,minmax(0,1fr)) !important;
+    gap: 8px !important;
+    padding: 12px !important;
+    border-radius: 18px !important;
+    background: rgba(8,17,31,.97) !important;
+    box-shadow: 0 22px 50px rgba(2,6,23,.42) !important;
+  }
+  .business-header .nav-container.open { display: grid !important; }
+  .business-header .nav-container a { min-height: 46px !important; justify-content: flex-start !important; font-size: 12px !important; }
+  .business-header .nav-cta { display: none !important; }
+}
