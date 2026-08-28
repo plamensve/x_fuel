@@ -1,0 +1,61 @@
+.business-header .home-nav-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-end !important;
+  gap: 8px !important;
+}
+
+.business-header .home-nav-submit {
+  min-height: 42px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  padding: 0 14px !important;
+  border: 1px solid rgba(110,231,183,.34) !important;
+  border-radius: 12px !important;
+  color: #07131f !important;
+  background: linear-gradient(135deg,#6ee7b7 0%,#34d399 48%,#22c55e 100%) !important;
+  box-shadow: 0 10px 24px rgba(34,197,94,.18), inset 0 1px 0 rgba(255,255,255,.32) !important;
+  text-decoration: none !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  white-space: nowrap !important;
+}
+
+.business-header .home-nav-submit::before {
+  content: "＋";
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 7px;
+  background: rgba(7,19,31,.10);
+  font-size: 14px;
+}
+
+.business-header .home-nav-submit:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 30px rgba(34,197,94,.24), inset 0 1px 0 rgba(255,255,255,.32) !important;
+}
+
+.business-header .facebook-nav-cta::before {
+  content: "f" !important;
+  width: 21px !important;
+  height: 21px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 0 !important;
+  border-radius: 7px !important;
+  color: #2563eb !important;
+  background: #fff !important;
+  font-family: Arial,sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 900 !important;
+}
+
+@media (max-width: 900px) {
+  .business-header .home-nav-actions { display: none !important; }
+}
