@@ -1,0 +1,264 @@
+/* Conversion-focused refresh for the first two B2B sections only. */
+
+/* HERO */
+body .business-hero {
+    position: relative;
+    isolation: isolate;
+    min-height: 540px;
+    display: flex;
+    align-items: center;
+    margin: 34px 0 24px;
+    padding: 64px 62px;
+    overflow: hidden;
+    border: 1px solid rgba(96,165,250,.20);
+    border-radius: 30px;
+    background:
+        radial-gradient(circle at 78% 24%, rgba(59,130,246,.30), transparent 28%),
+        radial-gradient(circle at 88% 82%, rgba(16,185,129,.18), transparent 27%),
+        linear-gradient(128deg,#07111f 0%,#0d1d33 43%,#173967 100%);
+    box-shadow: 0 30px 70px rgba(15,23,42,.24);
+}
+
+body .business-hero::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    right: 54px;
+    top: 50%;
+    width: 350px;
+    height: 310px;
+    transform: translateY(-50%);
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 28px;
+    background:
+        linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.035));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08), 0 25px 60px rgba(2,6,23,.20);
+    backdrop-filter: blur(7px);
+}
+
+body .business-hero::after {
+    content: "B2B";
+    position: absolute;
+    z-index: -1;
+    right: 77px;
+    bottom: 26px;
+    color: rgba(255,255,255,.055);
+    font-size: 128px;
+    font-weight: 900;
+    line-height: .85;
+    letter-spacing: -.08em;
+}
+
+body .business-hero .container {
+    position: relative;
+    width: 100%;
+    max-width: 1040px;
+    margin: 0;
+    padding: 0;
+}
+
+body .business-hero .container::before {
+    content: "БИЗНЕС КАРТИ ЗА ГОРИВО";
+    display: inline-flex;
+    align-items: center;
+    min-height: 30px;
+    margin-bottom: 20px;
+    padding: 0 11px;
+    border: 1px solid rgba(147,197,253,.24);
+    border-radius: 999px;
+    color: #bfdbfe;
+    background: rgba(59,130,246,.10);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .105em;
+}
+
+body .business-hero h1 {
+    max-width: 700px;
+    margin: 0 0 18px;
+    color: #fff;
+    font-size: clamp(42px,5.3vw,66px);
+    line-height: .98;
+    letter-spacing: -.047em;
+    text-wrap: balance;
+}
+
+body .business-hero p {
+    max-width: 650px;
+    margin: 0;
+    color: #cbd5e1;
+    font-size: clamp(17px,1.75vw,20px);
+    line-height: 1.65;
+}
+
+body .business-hero .btn-primary {
+    position: relative;
+    min-height: 54px;
+    margin-top: 28px;
+    padding: 0 24px;
+    border: 1px solid rgba(255,255,255,.92);
+    border-radius: 12px;
+    color: #0f172a;
+    background: #fff;
+    box-shadow: 0 16px 32px rgba(2,6,23,.22);
+    font-size: 14px;
+    font-weight: 850;
+}
+
+body .business-hero .btn-primary::after {
+    content: "→";
+    margin-left: 10px;
+    font-size: 17px;
+    transition: transform .2s ease;
+}
+
+body .business-hero .btn-primary:hover::after {
+    transform: translateX(3px);
+}
+
+/* Visual business value panel created without changing HTML. */
+body .business-hero .container::after {
+    content: "Преференциални условия\AЕдна фактура\AКонтрол по карти и автомобили";
+    white-space: pre-line;
+    position: absolute;
+    left: 760px;
+    top: 86px;
+    width: 250px;
+    padding: 22px 24px 22px 54px;
+    border: 1px solid rgba(255,255,255,.09);
+    border-radius: 18px;
+    color: #e2e8f0;
+    background: rgba(8,20,38,.40);
+    box-shadow: 0 18px 40px rgba(2,6,23,.18);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 3.05;
+    backdrop-filter: blur(8px);
+}
+
+/* INTRO / VALUE BRIDGE */
+body .business-intro {
+    position: relative;
+    margin: 0 0 30px;
+    padding: 0;
+    overflow: hidden;
+    border: 1px solid #dbe4ef;
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 18px 42px rgba(15,23,42,.07);
+}
+
+body .business-intro::before {
+    content: "ЗА КОГО Е РЕШЕНИЕТО";
+    position: static;
+    display: block;
+    width: auto;
+    height: auto;
+    padding: 24px 36px 15px;
+    color: #2563eb;
+    background: transparent;
+    font-size: 11px;
+    font-weight: 850;
+    letter-spacing: .11em;
+}
+
+body .business-intro::after {
+    content: "";
+    position: absolute;
+    right: -70px;
+    top: -75px;
+    width: 250px;
+    height: 250px;
+    display: block;
+    border-radius: 50%;
+    background: radial-gradient(circle,rgba(59,130,246,.09),rgba(16,185,129,.045) 48%,transparent 70%);
+    pointer-events: none;
+}
+
+body .business-intro .intro-content {
+    position: relative;
+    z-index: 1;
+    max-width: none;
+    display: grid;
+    grid-template-columns: minmax(0,.86fr) minmax(0,1.35fr);
+    gap: 48px;
+    align-items: start;
+    padding: 0 36px 34px;
+}
+
+body .business-intro .intro-lead {
+    position: relative;
+    max-width: 420px;
+    margin: 0 !important;
+    padding-left: 18px;
+    color: #0f172a !important;
+    font-size: clamp(21px,2.2vw,27px) !important;
+    font-weight: 820 !important;
+    line-height: 1.28 !important;
+    letter-spacing: -.025em;
+}
+
+body .business-intro .intro-lead::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 4px;
+    bottom: 4px;
+    width: 4px;
+    border-radius: 99px;
+    background: linear-gradient(180deg,#2563eb,#22c55e);
+}
+
+body .business-intro .intro-content > p:last-child {
+    max-width: 680px;
+    margin: 0 !important;
+    padding: 2px 0 0;
+    color: #52637a;
+    font-size: 15px;
+    line-height: 1.85;
+}
+
+body .business-intro .intro-content > p:last-child::after {
+    content: "Автопарк  •  Транспорт  •  Дистрибуция  •  Строителство";
+    display: block;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid #edf1f6;
+    color: #334155;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .035em;
+}
+
+@media (max-width: 1050px) {
+    body .business-hero { min-height: 500px; padding: 56px 42px; }
+    body .business-hero::before { right: 24px; width: 280px; opacity: .8; }
+    body .business-hero .container::after { display: none; }
+    body .business-hero h1 { max-width: 760px; }
+}
+
+@media (max-width: 760px) {
+    body .business-hero {
+        min-height: 0;
+        margin-top: 20px;
+        padding: 42px 24px;
+        border-radius: 22px;
+    }
+    body .business-hero::before { right: -90px; width: 230px; height: 230px; opacity: .5; }
+    body .business-hero::after { right: 15px; bottom: 22px; font-size: 72px; }
+    body .business-hero .container::before { margin-bottom: 17px; font-size: 9px; }
+    body .business-hero h1 { font-size: clamp(36px,11vw,48px); line-height: 1.01; }
+    body .business-hero p { font-size: 16px; line-height: 1.6; }
+    body .business-hero .btn-primary { width: 100%; margin-top: 24px; }
+
+    body .business-intro { border-radius: 19px; }
+    body .business-intro::before { padding: 22px 22px 13px; }
+    body .business-intro .intro-content {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        padding: 0 22px 27px;
+    }
+    body .business-intro .intro-lead { max-width: none; font-size: 21px !important; }
+    body .business-intro .intro-content > p:last-child { font-size: 14px; line-height: 1.75; }
+    body .business-intro .intro-content > p:last-child::after { line-height: 1.7; }
+}
