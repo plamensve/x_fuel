@@ -58,6 +58,17 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     })
 
+    /* Right-side CTA: Facebook community, matching the homepage navigation. */
+    const navCta = document.querySelector(".business-header .nav-cta")
+    if (navCta) {
+        navCta.href = "https://www.facebook.com/groups/960591129738525"
+        navCta.target = "_blank"
+        navCta.rel = "noopener"
+        navCta.textContent = "Facebook група"
+        navCta.classList.add("facebook-nav-cta")
+        navCta.setAttribute("aria-label", "Отвори Facebook групата на goriva.online")
+    }
+
     /* The history dashboard's "Най-ниски цени за днес" block is intentionally
        strict: it must never fall back to a previous date. */
     if (currentPath === "/pages/trends.html" &&
