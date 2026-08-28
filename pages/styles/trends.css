@@ -1,114 +1,405 @@
-.trends-section {
-    margin-top: 40px;
+/* ===== PAGE ===== */
+.trends-page {
+    padding-top: 30px;
 }
 
-.filters,
-.section-title-trend,
-.trends-description-trend,
-.chart-section{
-    background: rgb(33, 52, 72);
-    padding: 20px;
-    border-radius: 10px;
+.trends-hero,
+.best-prices-section,
+.calendar-shell,
+.chart-section {
+    background: linear-gradient(135deg, rgba(31, 41, 55, 0.96), rgba(33, 52, 72, 0.96));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 18px 45px rgba(0, 0, 0, 0.22);
 }
 
+.trends-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(260px, 0.8fr);
+    gap: 28px;
+    align-items: center;
+    padding: 28px;
+    border-radius: 20px;
+    margin-bottom: 26px;
+}
 
-/* FILTERS */
+.trends-hero h1 {
+    margin: 6px 0 10px;
+    font-size: clamp(28px, 4vw, 44px);
+    line-height: 1.1;
+}
 
-.filters {
+.trends-hero p {
+    margin: 0;
+    max-width: 760px;
+    opacity: 0.78;
+    line-height: 1.6;
+}
+
+.trends-kicker,
+.section-eyebrow {
+    display: inline-block;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    font-size: 11px;
+    font-weight: 700;
+    opacity: 0.65;
+}
+
+.trends-help-card {
+    display: grid;
+    gap: 8px;
+    padding: 18px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.trends-help-card strong {
+    margin-bottom: 4px;
+}
+
+.trends-help-card span {
+    font-size: 13px;
+    line-height: 1.5;
+    opacity: 0.78;
+}
+
+/* ===== BEST PRICES ===== */
+.best-prices-section {
+    margin-bottom: 28px;
+    padding: 24px;
+    border-radius: 20px;
+}
+
+.section-heading-row,
+.calendar-header-block {
     display: flex;
-    gap: 15px;
-    margin-bottom: 25px;
-    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 18px;
 }
 
-.filters select {
-    padding: 10px 14px;
+.section-heading-row h2,
+.calendar-header-block h2,
+.chart-title {
+    margin: 5px 0 0;
+}
+
+.section-date-chip,
+.calendar-summary {
+    flex: 0 0 auto;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 12px;
+    opacity: 0.85;
+}
+
+.best-prices-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+}
+
+.best-price-card {
+    min-width: 0;
+    padding: 16px;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.045);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.best-price-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+.best-card-topline {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.fuel-badge,
+.best-label {
+    font-size: 11px;
+    border-radius: 999px;
+    padding: 5px 8px;
+}
+
+.fuel-badge {
+    background: rgba(255, 255, 255, 0.07);
+    font-weight: 700;
+}
+
+.best-label {
+    opacity: 0.55;
+}
+
+.best-price-card .price {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 8px;
+}
+
+.best-price-card .station {
+    font-size: 14px;
+    font-weight: 650;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.best-price-card .city {
+    margin-top: 3px;
+    font-size: 12px;
+    opacity: 0.62;
+}
+
+.empty-state {
+    padding: 18px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px dashed rgba(255, 255, 255, 0.11);
+    text-align: center;
+    opacity: 0.72;
+}
+
+/* ===== CALENDAR ===== */
+.trends-section {
+    margin-top: 0;
+}
+
+.calendar-shell {
+    padding: 24px;
+    border-radius: 20px;
+}
+
+.calendar-header-block p,
+.chart-description {
+    margin: 7px 0 0;
+    max-width: 720px;
+    opacity: 0.7;
+    line-height: 1.55;
+}
+
+.legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 16px;
+    margin-bottom: 16px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.legend > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+}
+
+.dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.legend .fuel-a95,
+.modal-fuel-heading .fuel-a95 { background: #2563eb; }
+.legend .fuel-diesel,
+.modal-fuel-heading .fuel-diesel { background: #16a34a; }
+.legend .fuel-gas,
+.modal-fuel-heading .fuel-gas { background: #facc15; }
+.legend .fuel-a100,
+.modal-fuel-heading .fuel-a100 { background: #7c3aed; }
+.legend .fuel-diesel-plus,
+.modal-fuel-heading .fuel-diesel-plus { background: #868686; }
+.legend .fuel-methane,
+.modal-fuel-heading .fuel-methane { background: #06b6d4; }
+
+.calendar-filters {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(150px, 1fr)) auto;
+    gap: 10px;
+    align-items: end;
+    margin-bottom: 16px;
+}
+
+.filter-field {
+    display: grid;
+    gap: 6px;
+}
+
+.filter-field span {
+    font-size: 11px;
+    opacity: 0.62;
+}
+
+.filter-field select,
+.clear-filters {
+    min-height: 42px;
     border-radius: 10px;
     border: 1px solid var(--border-color);
     background: var(--input-bg);
     color: var(--text-color);
-    font-size: 14px;
+    padding: 9px 11px;
+    font-size: 13px;
 }
 
-/* CALENDAR */
+.clear-filters {
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.055);
+    transition: 0.2s ease;
+}
+
+.clear-filters:hover {
+    background: rgba(255, 255, 255, 0.09);
+}
 
 #calendar {
-    background: var(--card-bg);
-    padding: 20px;
+    min-height: 0;
+    padding: 16px;
     border-radius: 16px;
+    background: var(--card-bg);
     border: 1px solid var(--border-color);
-    min-height: 820px;
+    overflow: hidden;
 }
-
-
-
-/* HEADER */
 
 .fc .fc-toolbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
+    gap: 12px;
+    margin-bottom: 14px;
 }
 
-.fc-toolbar-title {
-    font-size: 22px;
-    font-weight: 600;
+.fc .fc-toolbar-title {
+    font-size: 20px;
+    font-weight: 700;
 }
 
-.fc-button {
-    padding: 6px 10px;
-    border-radius: 8px;
-    cursor: pointer;
+.fc .fc-button {
+    border-radius: 9px !important;
+    padding: 7px 10px !important;
 }
-
-/* DAY CELL */
 
 .fc-daygrid-day {
     position: relative;
     cursor: pointer;
+    transition: background 0.15s ease;
 }
 
-/* EVENTS */
+.fc-daygrid-day:hover {
+    background: rgba(255, 255, 255, 0.025);
+}
+
+.fc-daygrid-day-events {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    margin: 2px 4px 22px !important;
+}
 
 .fc-daygrid-event {
     display: flex !important;
     justify-content: center;
     align-items: center;
-    background: transparent !important;
-    border: none !important;
+    width: 10px;
+    height: 10px;
+    margin: 0 !important;
     padding: 0 !important;
-    cursor: pointer;
+    border: none !important;
+    background: transparent !important;
 }
 
-/* DOT SIZE */
+.fc-daygrid-event .fc-event-title,
+.fc-daygrid-event .fc-event-time {
+    display: none !important;
+}
 
 .fc-daygrid-event .fc-event-main {
-    width: 14px;
-    height: 14px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
 }
 
-/* COLORS */
-
 .fuel-a95 .fc-event-main { background: #2563eb !important; }
-.fuel-a98 .fc-event-main { background: #dc2626 !important; }
-.fuel-a100 .fc-event-main { background: #7c3aed !important; }
-
 .fuel-diesel .fc-event-main { background: #16a34a !important; }
-.fuel-diesel-plus .fc-event-main { background: #868686 !important; }
-
 .fuel-gas .fc-event-main { background: #facc15 !important; }
+.fuel-a100 .fc-event-main { background: #7c3aed !important; }
+.fuel-diesel-plus .fc-event-main { background: #868686 !important; }
 .fuel-methane .fc-event-main { background: #06b6d4 !important; }
 
-/* CURSOR */
-
-.fc,
-.fc * {
-    cursor: pointer;
+.day-count {
+    position: absolute;
+    left: 7px;
+    bottom: 5px;
+    padding: 2px 6px;
+    border-radius: 999px;
+    font-size: 10px;
+    background: rgba(0, 0, 0, 0.22);
+    opacity: 0.78;
+    pointer-events: none;
 }
 
-/* MODAL */
+/* ===== CHART ===== */
+.chart-section {
+    margin-top: 28px;
+    padding: 24px;
+    border-radius: 20px;
+}
+
+.chart-copy {
+    margin-bottom: 18px;
+}
+
+.chart-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.chart-filters button {
+    padding: 8px 13px;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    background: rgba(255, 255, 255, 0.035);
+    color: white;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.chart-filters button:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.chart-filters button.active {
+    background: rgba(255, 255, 255, 0.13);
+    border-color: rgba(255, 255, 255, 0.24);
+}
+
+.chart-container {
+    height: 380px;
+    padding: 16px;
+    border-radius: 16px;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+/* ===== MODAL ===== */
+body.modal-open {
+    overflow: hidden;
+}
 
 .modal {
     position: fixed;
@@ -117,10 +408,12 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(11, 15, 25, 0.95);
+    padding: 24px;
+    background: rgba(8, 13, 22, 0.86);
+    backdrop-filter: blur(6px);
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.2s ease;
+    transition: opacity 0.18s ease;
 }
 
 .modal.show {
@@ -129,548 +422,308 @@
 }
 
 .modal-content {
-    background: var(--card-bg);
-    padding: 25px;
-    width: 90%;
-    max-width: 500px;
-    border-radius: 16px;
-    border: 1px solid var(--border-color);
-    max-height: 80vh;
+    width: min(760px, 100%);
+    max-height: 86vh;
     display: flex;
     flex-direction: column;
-    position: relative;
-    transform: translateY(20px);
-    opacity: 0;
-    transition: all 0.25s ease;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+    transform: translateY(12px) scale(0.99);
+    transition: transform 0.18s ease;
 }
 
 .modal.show .modal-content {
-    transform: translateY(0);
-    opacity: 1;
+    transform: translateY(0) scale(1);
 }
 
-#close-modal {
+.modal-header {
+    padding: 22px 58px 14px 22px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.modal-header h3 {
+    margin: 4px 0 6px;
+    font-size: 24px;
+}
+
+.modal-meta {
+    font-size: 12px;
+    opacity: 0.62;
+}
+
+.modal-close {
     position: absolute;
-    top: 12px;
-    right: 15px;
-    font-size: 22px;
+    top: 14px;
+    right: 16px;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.06);
+    color: inherit;
+    font-size: 24px;
     cursor: pointer;
 }
 
 #modal-list {
-    margin-top: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
     overflow-y: auto;
-    max-height: 55vh;
+    padding: 14px 18px;
+    min-height: 0;
+}
+
+.modal-fuel-heading {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 12px 2px 7px;
+    font-size: 12px;
+    font-weight: 750;
+    opacity: 0.78;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .modal-row {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    padding: 10px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.03);
+    gap: 18px;
+    padding: 12px 13px;
+    margin-bottom: 8px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.035);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.modal-station-copy {
+    min-width: 0;
+    display: grid;
+    gap: 2px;
+}
+
+.modal-station-copy strong {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.modal-station-copy span,
+.modal-station-copy small {
+    font-size: 12px;
+    opacity: 0.62;
+}
+
+.modal-price-block {
+    flex: 0 0 auto;
+    text-align: right;
+}
+
+.modal-price-block span {
+    display: block;
+    font-weight: 800;
+    font-size: 18px;
+}
+
+.modal-price-block small {
+    display: block;
+    margin-top: 2px;
+    opacity: 0.55;
+}
+
+.pagination-shell {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding: 14px 18px 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.pagination-info {
+    font-size: 12px;
+    opacity: 0.6;
+    white-space: nowrap;
+}
+
+.pagination {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: flex-end;
+}
+
+.pagination button {
+    min-width: 36px;
+    min-height: 36px;
+    padding: 7px 10px;
+    border-radius: 9px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    background: rgba(255, 255, 255, 0.035);
+    color: inherit;
     cursor: pointer;
 }
 
-.modal-row .price {
-    font-weight: bold;
+.pagination button:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.08);
 }
 
-.trends-description {
-    max-width: 700px;
-    margin: 0 auto 25px auto;
-    text-align: center;
-    color: rgba(255, 255, 255, 0.7);
+.pagination button.active {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(255, 255, 255, 0.25);
+    font-weight: 700;
 }
 
-/* LEGEND */
-
-.legend{
-    display:flex;
-    justify-content:center;
-    gap:20px;
-    margin-bottom:15px;
-    font-size:13px;
-    flex-wrap:wrap;
-    background: rgb(33, 52, 72);
-    border-radius: 30px;
-    padding: 1em;
+.pagination button:disabled {
+    opacity: 0.35;
+    cursor: default;
 }
 
-
-
-.legend span{
-    display:flex;
-    align-items:center;
-    gap:6px;
+.pagination-ellipsis {
+    min-width: 26px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0.5;
 }
 
-.legend .dot{
-    width:14px;
-    height:14px;
-    border-radius:50%;
+.modal-empty {
+    margin: 12px 0;
 }
 
-.legend .dot.fuel-a95 { background:#2563eb; }
-.legend .dot.fuel-a98 { background:#dc2626; }
-.legend .dot.fuel-a100 { background:#7c3aed; }
-.legend .dot.fuel-diesel { background:#16a34a; }
-.legend .dot.fuel-diesel-plus { background:#868686; }
-.legend .dot.fuel-gas { background:#facc15; }
-.legend .dot.fuel-methane { background:#06b6d4; }
-
-/* COUNT */
-
-.day-count{
-    position:absolute;
-    bottom:4px;
-    left:6px;
-    font-size:11px;
-    opacity:0.85;
+/* ===== LIGHT THEME ===== */
+body.light-theme .trends-hero,
+body.light-theme .best-prices-section,
+body.light-theme .calendar-shell,
+body.light-theme .chart-section {
+    background: var(--card-bg);
 }
 
-/* CHART */
-
-.chart-section{
-    margin-top:80px;
+body.light-theme .chart-filters button,
+body.light-theme .modal-close,
+body.light-theme .pagination button {
+    color: #1a1a1a;
 }
 
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1000px) {
+    .best-prices-list {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
-/* BUTTONS */
+    .calendar-filters {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
-.chart-filters{
-    display:flex;
-    justify-content:center;
-    gap:10px;
-    flex-wrap:wrap;
-    margin-bottom:20px;
-    background: rgb(33, 52, 72);
-    border-radius: 30px;
-    padding: 1em;
+    .clear-filters {
+        grid-column: span 2;
+    }
 }
 
-.chart-filters button{
-    padding:8px 14px;
-    border-radius:20px;
-    border:1px solid var(--border-color);
-    background:rgba(255,255,255,0.05);
-    color:white;
-    cursor:pointer;
-    transition:0.2s;
-    font-weight:500;
-}
+@media (max-width: 768px) {
+    .trends-page {
+        padding-top: 18px;
+    }
 
-/* OUTLINE COLORS */
+    .trends-hero {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
 
-.chart-filters button[data-fuel="Бензин A95"]{ border-color:#2563eb; }
-.chart-filters button[data-fuel="Бензин A98"]{ border-color:#dc2626; }
-.chart-filters button[data-fuel="Бензин A100"]{ border-color:#7c3aed; }
-.chart-filters button[data-fuel="Дизел"]{ border-color:#16a34a; }
-.chart-filters button[data-fuel="Дизел премиум"]{ border-color:#868686; }
-.chart-filters button[data-fuel="Пропан Бутан"]{ border-color:#facc15; }
-.chart-filters button[data-fuel="Метан"]{ border-color:#06b6d4; }
-
-/* ACTIVE */
-
-.chart-filters button.active{
-    color:white;
-    border:none;
-}
-
-.chart-filters button[data-fuel="Бензин A95"].active{ background:#2563eb; }
-.chart-filters button[data-fuel="Бензин A98"].active{ background:#dc2626; }
-.chart-filters button[data-fuel="Бензин A100"].active{ background:#7c3aed; }
-.chart-filters button[data-fuel="Дизел"].active{ background:#16a34a; }
-.chart-filters button[data-fuel="Дизел премиум"].active{ background:#868686; }
-.chart-filters button[data-fuel="Пропан Бутан"].active{ background:#facc15; color:black; }
-.chart-filters button[data-fuel="Метан"].active{ background:#06b6d4; }
-
-/* HOVER */
-
-.chart-filters button:hover{
-    transform:translateY(-2px);
-    opacity:0.9;
-}
-
-/* CHART BOX */
-
-.chart-container{
-    height:400px;
-    background:var(--card-bg);
-    padding:20px;
-    border-radius:16px;
-    border:1px solid var(--border-color);
-}
-
-/* MOBILE */
-
-/* ===== MOBILE FIX CALENDAR HEADER ===== */
-
-@media (max-width:768px){
-
-    .fc .fc-toolbar{
-        flex-direction: column;
+    .section-heading-row,
+    .calendar-header-block {
         align-items: flex-start;
-        gap: 10px;
+        flex-direction: column;
     }
 
-    .fc .fc-toolbar-chunk{
-        width:100%;
-        display:flex;
-        justify-content: space-between;
-        align-items:center;
+    .best-prices-section,
+    .calendar-shell,
+    .chart-section {
+        padding: 16px;
+        border-radius: 16px;
     }
 
-    .fc-toolbar-title{
-        font-size:18px;
-        line-height:1.2;
-        word-break: break-word;
-        max-width: 100%;
+    .best-prices-list {
+        grid-template-columns: 1fr;
     }
 
-    .fc-button{
-        padding:6px 8px;
-        font-size:12px;
+    .calendar-filters {
+        grid-template-columns: 1fr;
     }
 
-    #calendar{
-        overflow:hidden;
+    .clear-filters {
+        grid-column: auto;
     }
 
-    .chart-description{
-        margin-bottom: 25px;
+    #calendar {
+        padding: 10px;
     }
 
-    .fc-daygrid-day-frame{
-        padding-bottom:30px;
-    }
-
-
-    .fc-daygrid-event .fc-event-main{
-        transform: translateY(-6px);
-    }
-
-
-    .day-count{
-        position:absolute;
-        bottom: 1px;
-        left:4px;
-        font-size:10px;
-        background:rgba(0,0,0,0.4);
-        padding:1px 4px;
-        border-radius:4px;
-    }
-
-    .filters{
+    .fc .fc-toolbar {
         flex-direction: column;
         align-items: stretch;
     }
 
-    .filters select{
-        width:100%;
+    .fc .fc-toolbar-chunk {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
     }
 
-      .chart-container{
-        height:260px;
-        padding:15px;
-    }
-}
-
-body.light-theme .chart-filters button{
-    color: #1a1a1a;
-    background: rgba(0,0,0,0.05);
-}
-
-body.light-theme .chart-filters button:hover{
-    background: rgba(0,0,0,0.1);
-    color: #000;
-}
-
-body.light-theme .chart-filters button.active{
-    color: white;
-}
-
-/* FIX: border да е по-видим */
-body.light-theme .chart-filters button{
-    border-color: rgba(0,0,0,0.15);
-}
-
-.fc-daygrid-day-events {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 3px;
-}
-
-.fc-daygrid-event {
-    margin: 0 !important;
-    padding: 0 !important;
-}
-
-.fc-daygrid-event .fc-event-main {
-    width: 10px;
-    height: 10px;
-}
-
-/* ===== FILTERS IN CALENDAR ===== */
-
-.calendar-filters{
-    display:flex;
-    gap:8px;
-    align-items:center;
-    flex-wrap:wrap; /* важно */
-}
-
-/* desktop */
-.calendar-filters select{
-    padding:6px 10px;
-    border-radius:8px;
-    border:1px solid var(--border-color);
-    background:var(--input-bg);
-    color:var(--text-color);
-    font-size:12px;
-}
-
-/* ===== MOBILE ===== */
-
-@media (max-width:768px){
-
-    .calendar-filters{
-        flex-direction:column;
-        align-items:stretch;
-        width:100%;
-        margin-top:8px;
+    .fc .fc-toolbar-title {
+        font-size: 18px;
     }
 
-    .calendar-filters select{
-        width:100%;
+    .fc-daygrid-day-number {
+        font-size: 12px;
     }
 
-    .fc .fc-toolbar{
-        flex-direction:column;
-        align-items:stretch;
-        gap:10px;
+    .day-count {
+        font-size: 9px;
+        left: 3px;
+        bottom: 3px;
+        padding: 1px 4px;
     }
 
-    .fc .fc-toolbar-chunk{
-        width:100%;
-        display:flex;
-        justify-content:space-between;
-        align-items:center;
-        flex-wrap:wrap;
-    }
-}
-
-.best-prices-section{
-    margin-bottom:30px;
-    background:linear-gradient(135deg, #1f2937, #213448);
-    padding:20px;
-    border-radius:16px;
-    border:1px solid rgba(255,255,255,0.08);
-}
-
-.best-prices-section h3{
-    margin-bottom:15px;
-    font-size:18px;
-}
-
-/* ===== BEST PRICES SECTION ===== */
-
-.best-prices-section{
-    margin-bottom:30px;
-    padding:20px;
-    border-radius:16px;
-    background:linear-gradient(135deg, #1f2937, #213448);
-    border:1px solid rgba(255,255,255,0.08);
-    box-shadow:0 10px 25px rgba(0,0,0,0.3);
-    position:relative;
-    overflow:hidden;
-}
-
-/* subtle animated glow */
-.best-prices-section::before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.05), transparent);
-    opacity:0;
-    transition:0.6s;
-}
-
-.best-prices-section:hover::before{
-    opacity:1;
-}
-
-/* title */
-
-.best-prices-section h3{
-    margin-bottom:15px;
-    font-size:18px;
-    font-weight:600;
-}
-
-/* LIST */
-
-.best-prices-list{
-    display:flex;
-    flex-wrap:wrap;
-    gap:14px;
-}
-
-/* CARD */
-
-.best-price-card{
-    flex:1 1 160px;
-    background:rgba(255,255,255,0.05);
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:14px;
-    padding:14px;
-    text-align:center;
-    position:relative;
-    overflow:hidden;
-    transition:all 0.25s ease;
-}
-
-/* 🔥 hover interaction */
-
-.best-price-card:hover{
-    transform:translateY(-6px) scale(1.02);
-    box-shadow:0 15px 30px rgba(0,0,0,0.4);
-    border-color:rgba(255,255,255,0.2);
-}
-
-/* glow line on hover */
-
-.best-price-card::after{
-    content:"";
-    position:absolute;
-    top:0;
-    left:-100%;
-    width:100%;
-    height:100%;
-    background:linear-gradient(120deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition:0.6s;
-}
-
-.best-price-card:hover::after{
-    left:100%;
-}
-
-/* fuel */
-
-.best-price-card .fuel{
-    font-size:13px;
-    opacity:0.75;
-    margin-bottom:6px;
-}
-
-/* price (pulse effect) */
-
-.best-price-card .price{
-    font-size:22px;
-    font-weight:700;
-    margin-bottom:6px;
-    transition:0.2s;
-}
-
-.best-price-card:hover .price{
-    transform:scale(1.1);
-}
-
-/* station */
-
-.best-price-card .station{
-    font-size:13px;
-    font-weight:500;
-}
-
-/* city */
-
-.best-price-card .city{
-    font-size:12px;
-    opacity:0.6;
-}
-
-/* empty */
-
-.best-prices-list .empty{
-    opacity:0.6;
-    text-align:center;
-    padding:10px;
-}
-
-/* ===== ANIMATION ON LOAD ===== */
-
-.best-price-card{
-    opacity:0;
-    transform:translateY(10px);
-    animation:fadeInUp 0.4s ease forwards;
-}
-
-.best-price-card:nth-child(1){ animation-delay:0.05s; }
-.best-price-card:nth-child(2){ animation-delay:0.1s; }
-.best-price-card:nth-child(3){ animation-delay:0.15s; }
-.best-price-card:nth-child(4){ animation-delay:0.2s; }
-.best-price-card:nth-child(5){ animation-delay:0.25s; }
-
-@keyframes fadeInUp{
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-/* ===== MOBILE ===== */
-
-@media (max-width:768px){
-
-    .best-prices-section{
-        padding:15px;
+    .chart-container {
+        height: 280px;
+        padding: 10px;
     }
 
-    .best-price-card{
-        flex:1 1 100%;
+    .modal {
+        padding: 10px;
+        align-items: flex-end;
     }
 
-    .best-price-card .price{
-        font-size:18px;
+    .modal-content {
+        width: 100%;
+        max-height: 92vh;
+        border-radius: 18px 18px 0 0;
     }
-}
 
-/* ONLINE DOT */
-
-.best-prices-section h3{
-    display:flex;
-    align-items:center;
-    gap:10px;
-}
-
-.best-prices-section h3::after{
-    content:"";
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:#22c55e;
-    box-shadow:0 0 8px #22c55e;
-    animation:pulseDot 1.5s infinite;
-}
-
-/* пулсиращ ефект */
-
-@keyframes pulseDot{
-    0%{
-        transform:scale(1);
-        box-shadow:0 0 6px #22c55e;
+    .modal-row {
+        align-items: flex-start;
     }
-    50%{
-        transform:scale(1.4);
-        box-shadow:0 0 12px #22c55e;
+
+    .modal-station-copy strong {
+        white-space: normal;
     }
-    100%{
-        transform:scale(1);
-        box-shadow:0 0 6px #22c55e;
+
+    .pagination-shell {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .pagination {
+        justify-content: flex-start;
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        padding-bottom: 2px;
+    }
+
+    .pagination button {
+        flex: 0 0 auto;
     }
 }
