@@ -202,10 +202,22 @@
         result.innerHTML = `
             Благодаря! Избра <strong>${fuel.label}</strong>. Така ни помагаш да правим сайта по-полезен.
             <br>
-            <a class="fuel-poll-link" href="#prices-container">Виж актуалните цени</a>
+            <a class="fuel-poll-link" href="#top-stations">Виж топ бензиностанциите</a>
         `;
         result.classList.add("is-visible");
     };
+
+    result.addEventListener("click", event => {
+        const link = event.target.closest(".fuel-poll-link");
+        if (!link) return;
+
+        const topStations = document.querySelector(".home-top10-cards-section");
+        if (!topStations) return;
+
+        event.preventDefault();
+        if (!topStations.id) topStations.id = "top-stations";
+        topStations.scrollIntoView({behavior: "smooth", block: "start"});
+    });
 
     const selectButton = value => {
         options.querySelectorAll(".fuel-poll-option").forEach(button => {
