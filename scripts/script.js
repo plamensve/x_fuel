@@ -28,6 +28,21 @@
     }
 })();
 
+// Homepage hero + station-map visual redesign.
+(() => {
+    const src = "/scripts/home-hero-map-pro.js?v=20260829-hero-map";
+
+    if (document.readyState === "loading") {
+        document.write(`<script src="${src}"><\/script>`);
+        return;
+    }
+
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = false;
+    document.head.appendChild(script);
+})();
+
 // Business clients CTA: the approved design renders the right-side button as a CSS
 // pseudo-element, so it needs an explicit click handler to behave like a real link.
 (() => {
