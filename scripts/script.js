@@ -43,6 +43,20 @@
     document.head.appendChild(script);
 })();
 
+// Homepage process + founder / partnerships redesign.
+(() => {
+    if (window.location.pathname !== '/' && !window.location.pathname.endsWith('/index.html')) return;
+    const src = "/scripts/home-about-modern.js?v=20260829-1123";
+    if (document.readyState === "loading") {
+        document.write(`<script src="${src}"><\/script>`);
+        return;
+    }
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = false;
+    document.head.appendChild(script);
+})();
+
 // Shared editorial layout for article pages.
 (() => {
     if (!window.location.pathname.includes('/pages/articles/')) return;
