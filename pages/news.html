@@ -1,275 +1,139 @@
 <!doctype html>
 <html lang="bg">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>История на цените</title>
-
-    <script src="//fuelo.net/js/widget-bg.min.js"></script>
-
-    <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="styles/news.css">
-
-
-    <meta property="og:title" content="Текущи цени на горивата в България">
-    <meta property="og:description" content="Виж актуалните средни цени на бензин, дизел и газ в реално време.">
-    <meta property="og:image" content="https://goriva.online/media/og-3.png">
-    <meta property="og:url" content="https://goriva.online/">
-    <meta property="og:type" content="website">
-
-    <meta name="description"
-          content="Актуални цени на горивата в България. Проверете цените по бензиностанции във вашия град.">
-
+    <title>Новини, анализи и полезно за горивата | goriva.online</title>
+    <meta name="description" content="Новини, седмични анализи и практически материали за цените на горивата, пазара и разходите за транспорт в България.">
     <link rel="canonical" href="https://goriva.online/pages/news.html">
     <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
 
-    <!-- Leaflet -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <meta property="og:title" content="Новини и анализи за горивата | goriva.online">
+    <meta property="og:description" content="Следи анализи на цените, пазарни тенденции и практични материали за шофьори и бизнес.">
+    <meta property="og:image" content="https://goriva.online/media/og-3.png">
+    <meta property="og:url" content="https://goriva.online/pages/news.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="bg_BG">
 
-    <!-- Calendar -->
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/main.min.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.5/locales/bg.js" defer></script>
-
-    <!-- Chart -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-    <!-- Hotjar Tracking Code for goriva.online -->
-    <script>
-        (function (h, o, t, j, a, r) {
-            h.hj = h.hj || function () {
-                (h.hj.q = h.hj.q || []).push(arguments)
-            };
-            h._hjSettings = {hjid: 6686373, hjsv: 6};
-            a = o.getElementsByTagName('head')[0];
-            r = o.createElement('script');
-            r.async = 1;
-            r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
-            a.appendChild(r);
-        })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
-    </script>
-
-    <script async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3478773231642095"
-            crossorigin="anonymous"></script>
-
-    <meta name="google-adsense-account" content="ca-pub-3478773231642095">
-
+    <link rel="stylesheet" href="../styles.css?v=20260829-news3">
+    <link rel="stylesheet" href="styles/news.css?v=20260829-news3">
 </head>
-
-<body id="top">
-
+<body id="top" class="news-page">
 <div class="background"></div>
 
 <header class="header-bar">
     <div class="header-container">
-
         <img src="../media/2logo.png" alt="goriva.online logo" class="header-logo">
-
-        <div class="header-text">
-            <strong>Цени на горивата в България</strong>
-            <span>Следете актуални цени и споделяйте информация от бензиностанции в цялата страна</span>
-            <span>Цените в сайта са подадени от потребителите. Разчитаме на коретно изпратена информация.</span>
-        </div>
-
-        <a class="facebook-button"
-           href="https://www.facebook.com/groups/960591129738525"
-           target="_blank">
-            Facebook група
-        </a>
-
+        <div class="header-text"><strong>Новини и анализи</strong><span>Пазарни тенденции, седмични обзори и практични материали.</span></div>
+        <a class="facebook-button" href="https://www.facebook.com/groups/960591129738525" target="_blank" rel="noopener noreferrer">Facebook група</a>
     </div>
 </header>
-
 <nav class="main-nav">
-
     <button id="menu-toggle" class="menu-toggle">☰</button>
-
     <div id="nav-menu" class="nav-container">
-        <!--        <button id="theme-toggle">🌙</button>-->
-
-        <a href="../index.html">Начало</a>
-        <a href="../pages/useful.html">Полезно</a>
-        <a href="../pages/trends.html">История на цените</a>
-        <a href="../pages/weather.html">Прогноза за времето</a>
-        <a href="../pages/business-clients.html">Бизнес клиенти</a>
-        <a href="../pages/news.html">Новини</a>
-        <a href="../pages/rules.html">Общи условия</a>
+        <a href="../index.html">Начало</a><a href="useful.html">Полезно</a><a href="trends.html">История на цените</a><a href="weather.html">Прогноза за времето</a><a href="business-clients.html">Бизнес клиенти</a><a href="news.html">Новини</a><a href="rules.html">Общи условия</a>
     </div>
-
 </nav>
 
-<!--<div class="ticker">-->
-<!--    <div id="ticker-content" class="ticker-content"></div>-->
-<!--</div>-->
-
-<main class="container">
-    <section class="articles-section">
-
-        <h1 class="section-title">Новини и статии</h1>
-
-        <p class="info-helper" style="text-align:center;">
-            Анализи, новини и полезна информация за цените на горивата в България
-        </p>
-
-        <div class="articles-grid">
-
-            <!-- CARD -->
-            <a href="articles/article-1/article-1.html" class="article-card">
-
-                <div class="article-image"
-                     style="background-image:url('articles/article-1/img.png')"></div>
-                <div class="article-content">
-                    <h3>Как се промениха цените на горивата в България (16–22 март 2026)</h3>
-                    <p>
-                        Основните фактори, които влияят върху цените в България.
-                    </p>
-                    <span class="article-date">Март 2026</span>
-                </div>
-            </a>
-
-            <!-- CARD -->
-            <a href="articles/article-2/article-2.html" class="article-card">
-
-                <div class="article-image"
-                     style="background-image:url('articles/article-2/img.png')"></div>
-                <div class="article-content">
-                    <h3>Промените в цените на горивата в България (23–29 март 2026)</h3>
-                    <p>
-                        Поскъпването на горивата продължава
-                    </p>
-                    <span class="article-date">Март 2026</span>
-                </div>
-            </a>
-
-            <!-- CARD -->
-            <a href="articles/fuel-cards/art-fuel-cards.html" class="article-card">
-
-                <div class="article-image"
-                     style="background-image:url('articles/fuel-cards/art-fuel-card-main-photo.png')"></div>
-                <div class="article-content">
-                    <h3>Как бизнесът може да оптимизира разходите за гориво</h3>
-                    <p>
-                        Спестете от гориво с карти за бизнес клиенти
-                    </p>
-                    <span class="article-date">Април 2026</span>
-                </div>
-            </a>
-
+<main class="news-shell">
+    <section class="news-hero">
+        <div class="news-hero-copy">
+            <span class="news-kicker"><i></i> Редакционен център</span>
+            <h1>Данни, контекст и <span>истории за пазара на горива</span></h1>
+            <p>Събираме на едно място седмични анализи, пазарни тенденции и практически материали, които помагат да разбереш не само колко струва горивото, а и защо цената се променя.</p>
+            <div class="news-hero-actions">
+                <a href="#latest" class="news-primary-btn">Виж последните статии</a>
+                <a href="trends.html" class="news-secondary-btn">История на цените</a>
+            </div>
         </div>
-
+        <aside class="news-hero-aside">
+            <span class="news-aside-label">goriva.online insight</span>
+            <strong>От сурови ценови данни към полезен контекст.</strong>
+            <p>Анализите стъпват върху реални наблюдения и информация от платформата, като целта е ясно и практично представяне.</p>
+            <div class="news-aside-stat"><span>03</span><div><strong>публикувани материала</strong><small>анализи и практически ръководства</small></div></div>
+        </aside>
     </section>
 
+    <section class="news-featured" aria-labelledby="featured-title">
+        <div class="section-heading-row">
+            <div><span class="section-eyebrow">Избрано</span><h2 id="featured-title">Последен седмичен анализ</h2></div>
+            <a href="articles/article-2/article-2.html" class="section-text-link">Отвори анализа →</a>
+        </div>
+        <a href="articles/article-2/article-2.html" class="featured-story">
+            <div class="featured-story-media" style="background-image:url('articles/article-2/img.png')">
+                <span class="story-category">Пазарен анализ</span>
+            </div>
+            <div class="featured-story-copy">
+                <div class="story-meta"><span>30 март 2026</span><span>•</span><span>6 мин четене</span></div>
+                <h3>Промените в цените на горивата в България (23–29 март 2026)</h3>
+                <p>Поскъпването при основните горива продължава. В анализа разглеждаме динамиката при бензин, дизел и пропан-бутан и какво се променя спрямо предходната седмица.</p>
+                <span class="story-read-more">Прочети анализа <b>→</b></span>
+            </div>
+        </a>
+    </section>
+
+    <section id="latest" class="news-library">
+        <div class="section-heading-row news-library-head">
+            <div><span class="section-eyebrow">Архив</span><h2>Всички статии</h2><p>Анализи на пазара и практически материали за по-добри решения.</p></div>
+            <div class="news-filters" aria-label="Филтрирай статиите">
+                <button class="is-active" data-news-filter="all">Всички</button>
+                <button data-news-filter="analysis">Анализи</button>
+                <button data-news-filter="business">За бизнеса</button>
+            </div>
+        </div>
+
+        <div class="articles-grid" id="news-grid">
+            <article class="article-card" data-category="analysis">
+                <a class="article-card-media" href="articles/article-2/article-2.html" style="background-image:url('articles/article-2/img.png')"><span>Анализ</span></a>
+                <div class="article-content">
+                    <div class="article-date">30 март 2026 · Пазарен анализ</div>
+                    <h3><a href="articles/article-2/article-2.html">Промените в цените на горивата в България (23–29 март 2026)</a></h3>
+                    <p>Продължаващо поскъпване при основните горива и промяна в тенденцията при пропан-бутана.</p>
+                    <a class="article-link" href="articles/article-2/article-2.html">Прочети повече →</a>
+                </div>
+            </article>
+
+            <article class="article-card" data-category="analysis">
+                <a class="article-card-media" href="articles/article-1/article-1.html" style="background-image:url('articles/article-1/img.png')"><span>Анализ</span></a>
+                <div class="article-content">
+                    <div class="article-date">22 март 2026 · Седмичен обзор</div>
+                    <h3><a href="articles/article-1/article-1.html">Как се промениха цените на горивата в България (16–22 март 2026)</a></h3>
+                    <p>Първи ясни сигнали за възходящ тренд при бензин A95 и дизел, при по-стабилна цена на газта.</p>
+                    <a class="article-link" href="articles/article-1/article-1.html">Прочети повече →</a>
+                </div>
+            </article>
+
+            <article class="article-card" data-category="business">
+                <a class="article-card-media" href="articles/fuel-cards/art-fuel-cards.html" style="background-image:url('articles/fuel-cards/art-fuel-card-main-photo.png')"><span>За бизнеса</span></a>
+                <div class="article-content">
+                    <div class="article-date">11 април 2026 · Практично</div>
+                    <h3><a href="articles/fuel-cards/art-fuel-cards.html">Как бизнесът може да оптимизира разходите за гориво</a></h3>
+                    <p>Как картовите решения, централизираните плащания и контролът на зарежданията помагат за по-добро управление на автопарк.</p>
+                    <a class="article-link" href="articles/fuel-cards/art-fuel-cards.html">Прочети повече →</a>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <section class="news-cta">
+        <div><span class="section-eyebrow">Данните зад новините</span><h2>Искаш да видиш числата директно?</h2><p>Разгледай текущите и историческите цени и направи собствено сравнение.</p></div>
+        <div class="news-cta-actions"><a href="../index.html#home-top10-prices" class="news-primary-btn">Текущи цени</a><a href="trends.html" class="news-secondary-btn">Исторически данни</a></div>
+    </section>
 </main>
 
-<!-- MODAL -->
-<div id="day-modal" class="modal">
-    <div class="modal-content">
-        <span id="close-modal">&times;</span>
-        <h3 id="modal-date"></h3>
-        <div id="modal-list"></div>
-        <div id="pagination" class="pagination"></div>
-    </div>
-</div>
-
-<footer class="site-footer">
-
-    <div class="footer-container">
-
-        <div class="footer-column footer-brand">
-            <img src="../media/footer-logo.png" alt="goriva.online logo" class="footer-logo">
-        </div>
-
-        <div class="footer-column">
-
-            <h4>Навигация</h4>
-
-            <ul class="footer-links">
-                <li><a href="#top">Начало</a></li>
-                <li><a href="useful.html">Полезно</a></li>
-                <li><a href="trends.html">История на цените</a></li>
-                <li><a href="weather.html">Прогноза за времето</a></li>
-                <li><a href="business-clients.html">Бизнес клиенти</a></li>
-                <li><a href="news.html">Новини</a></li>
-                <li><a href="rules.html">Общи условия</a></li>
-            </ul>
-
-        </div>
-
-        <div class="footer-column">
-
-            <h4>Контакти</h4>
-
-            <div class="contact-item">
-                <span>📞</span>
-                <a href="tel:+359883427273">+359 883 427 273</a>
-            </div>
-
-            <div class="contact-item">
-                <span>✉️</span>
-                <a href="mailto:svetoslavov.plamen@gmail.com">
-                    svetoslavov.plamen@gmail.com
-                </a>
-            </div>
-
-            <div class="contact-item">
-                <span>👤</span>
-                Пламен Светославов
-            </div>
-
-        </div>
-
-        <div class="footer-column">
-
-            <h4>Социални мрежи</h4>
-
-            <div class="social-icons">
-
-                <a href="https://www.facebook.com/plamen.sve" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg">
-                </a>
-
-                <a href="https://www.linkedin.com/in/plamen-svetoslavov/" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg">
-                </a>
-
-                <a href="https://wa.me/359883427273" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg">
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="footer-bottom">
-        <span>© 2026 goriva.online</span>
-        <span class="footer-separator">•</span>
-        <span>Цени на горивата в България</span>
-    </div>
-
-</footer>
-
-<!-- SCRIPTS -->
+<footer class="site-footer"></footer>
 <script src="../scripts/script.js" defer></script>
-<script src="../scripts/useful.js" defer></script>
-<script src="../scripts/trends.js" defer></script>
-<script
-    data-name="BMC-Widget"
-    data-cfasync="false"
-    src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
-    data-id="qwan"
-    data-description="Подкрепете goriva.online"
-    data-message="Ако goriva.online Ви е полезен, можете да подкрепите развитието на проекта."
-    data-color="#FF813F"
-    data-position="Right"
-    data-x_margin="18"
-    data-y_margin="10">
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const buttons = document.querySelectorAll('[data-news-filter]');
+  const cards = document.querySelectorAll('#news-grid .article-card');
+  buttons.forEach(button => button.addEventListener('click', () => {
+    buttons.forEach(item => item.classList.remove('is-active'));
+    button.classList.add('is-active');
+    const filter = button.dataset.newsFilter;
+    cards.forEach(card => card.hidden = filter !== 'all' && card.dataset.category !== filter);
+  }));
+});
 </script>
-
 </body>
 </html>
