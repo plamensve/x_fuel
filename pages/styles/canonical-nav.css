@@ -31,11 +31,15 @@ body > .main-nav::before,
     box-shadow: 0 10px 30px rgba(2,6,23,.22);
     backdrop-filter: blur(20px) saturate(140%);
     -webkit-backdrop-filter: blur(20px) saturate(140%);
-    transition: background .2s ease, box-shadow .2s ease;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    will-change: box-shadow;
 }
 
+/* Keep the same painted background while scrolling. Changing a blurred,
+   translucent background at the first scroll threshold caused a one-frame flash
+   in Chromium. Only the shadow is strengthened after scrolling. */
 .goriva-global-header.is-scrolled {
-    background: rgba(10, 20, 35, .97);
     box-shadow: 0 14px 38px rgba(2,6,23,.34);
 }
 
