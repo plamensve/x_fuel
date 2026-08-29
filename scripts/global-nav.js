@@ -111,9 +111,77 @@
         window.addEventListener("scroll", updateScrollState, { passive: true });
     }
 
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", buildHeader, { once: true });
-    } else {
+    function buildFooter() {
+        if (!document.body) return;
+
+        const currentFooter = document.querySelector("body > .site-footer");
+        const footer = document.createElement("footer");
+        footer.className = "site-footer goriva-global-footer";
+        footer.innerHTML = `
+            <div class="footer-container">
+                <div class="footer-column footer-brand">
+                    <a href="/" class="footer-brand-link" aria-label="goriva.online - Начало">
+                        <img src="/media/footer-logo.png" alt="goriva.online logo" class="footer-logo">
+                    </a>
+                    <p class="footer-brand-copy">Практична платформа за актуални и исторически цени на горивата в България — по градове, бензиностанции и вид гориво.</p>
+                    <div class="footer-data-note">Данните имат информационен характер и могат да се различават от цените на място.</div>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Данни и инструменти</h4>
+                    <ul class="footer-links">
+                        <li><a href="/">Текущи цени</a></li>
+                        <li><a href="/pages/trends.html">История на цените</a></li>
+                        <li><a href="/pages/useful.html">Полезно</a></li>
+                        <li><a href="/pages/weather.html">Прогноза за времето</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>goriva.online</h4>
+                    <ul class="footer-links">
+                        <li><a href="/pages/news.html">Новини</a></li>
+                        <li><a href="/pages/business-clients.html">Бизнес клиенти</a></li>
+                        <li><a href="/pages/rules.html">Общи условия</a></li>
+                        <li><a href="/#fuel-form">Сподели цена</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column footer-contact-column">
+                    <h4>Контакт</h4>
+                    <div class="footer-contact-list">
+                        <div class="contact-item"><span class="contact-icon" aria-hidden="true">☎</span><a href="tel:+359883427273">+359 883 427 273</a></div>
+                        <div class="contact-item"><span class="contact-icon" aria-hidden="true">✉</span><a href="mailto:svetoslavov.plamen@gmail.com">svetoslavov.plamen@gmail.com</a></div>
+                    </div>
+                    <div class="social-icons" aria-label="Социални мрежи">
+                        <a href="https://www.facebook.com/plamen.sve" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg" alt=""></a>
+                        <a href="https://www.linkedin.com/in/plamen-svetoslavov/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt=""></a>
+                        <a href="https://wa.me/359883427273" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg" alt=""></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="footer-bottom-meta"><span>© 2026 goriva.online</span><span class="footer-separator">•</span><span>Цени на горивата в България</span></div>
+                <span class="footer-status">Платформата е активна</span>
+            </div>
+        `;
+
+        if (currentFooter) {
+            currentFooter.replaceWith(footer);
+        } else {
+            document.body.appendChild(footer);
+        }
+    }
+
+    function initGlobalShell() {
         buildHeader();
+        buildFooter();
+    }
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initGlobalShell, { once: true });
+    } else {
+        initGlobalShell();
     }
 })();
