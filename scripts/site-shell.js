@@ -1,5 +1,5 @@
 (() => {
-    const navSrc = "/scripts/global-nav.js?v=20260828-2108";
+    const navSrc = "/scripts/global-nav.js?v=20260829-1100";
     if (!window.__GORIVA_GLOBAL_NAV_LOADER__) {
         window.__GORIVA_GLOBAL_NAV_LOADER__ = true;
         const navScript = document.createElement("script");
