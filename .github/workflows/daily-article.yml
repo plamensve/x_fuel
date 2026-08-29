@@ -8,8 +8,8 @@ on:
         required: false
         type: string
   schedule:
-    # Sofia is UTC+3 in summer and UTC+2 in winter.
-    # Both UTC candidates are scheduled; the gate below runs only at local 18:00.
+    # 18:00 Sofia = 15:00 UTC in summer and 16:00 UTC in winter.
+    # Both candidates are scheduled and the gate selects the one matching Sofia's UTC offset.
     - cron: "0 15 * * *"
     - cron: "0 16 * * *"
 
@@ -25,16 +25,29 @@ jobs:
       - name: Check Sofia publication window
         id: window
         shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_SCHEDULE: ${{ github.event.schedule }}
         run: |
           python - <<'PY'
           import os
           from datetime import datetime
           from zoneinfo import ZoneInfo
 
-          event = os.environ.get("GITHUB_EVENT_NAME", "")
+          event = os.environ.get("EVENT_NAME", "")
+          schedule = os.environ.get("EVENT_SCHEDULE", "")
           now = datetime.now(ZoneInfo("Europe/Sofia"))
-          should_run = event == "workflow_dispatch" or now.hour == 18
+          offset_hours = int(now.utcoffset().total_seconds() // 3600)
+
+          if event == "workflow_dispatch":
+              should_run = True
+          elif offset_hours == 3:
+              should_run = schedule == "0 15 * * *"
+          else:
+              should_run = schedule == "0 16 * * *"
+
           print(f"Sofia time: {now.isoformat()}")
+          print(f"Schedule candidate: {schedule or 'manual'}; UTC offset: +{offset_hours}")
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
               fh.write(f"should_run={'true' if should_run else 'false'}\n")
               fh.write(f"sofia_date={now.date().isoformat()}\n")
