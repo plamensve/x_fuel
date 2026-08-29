@@ -6,6 +6,7 @@
 @import url("./mobile-global.css?v=20260828-2105");
 @import url("./business-hero-refresh.css?v=20260829-hero1");
 @import url("./business-benefits-refresh.css?v=20260829-benefits1");
+@import url("./useful-fixes.css?v=20260829-useful-fixes1");
 
 /* Business clients — process success banner */
 body .business-process-highlight {
