@@ -17,6 +17,36 @@ const SHARE_FUEL_ALIASES = {
 const SHARE_CITIES = ["София", "Пловдив", "Варна", "Бургас", "Русе"];
 const SHARE_FUELS = ["A95", "Дизел", "LPG", "A100", "Дизел +", "Метан"];
 
+const SHARE_STATION_LOGOS = [
+    {match: ["еко петрол", "екопетрол", "ecopetrol"], src: "../images/station_logos/ecopetrol.svg"},
+    {match: ["бенита", "benita"], src: "../images/station_logos/benita.svg"},
+    {match: ["лукойл", "lukoil"], src: "../images/station_logos/lukoil.svg"},
+    {match: ["omv", "омв"], src: "../images/station_logos/omv.svg"},
+    {match: ["shell", "шел"], src: "../images/station_logos/shell.svg"},
+    {match: ["rompetrol", "ромпетрол"], src: "../images/station_logos/rompetrol.svg"},
+    {match: ["insa", "инса"], src: "../images/station_logos/insa.svg"},
+    {match: ["kruiz", "cruise", "круиз"], src: "../images/station_logos/kruiz.svg"},
+    {match: ["bulmarket", "булмаркет"], src: "../images/station_logos/bulmarket.svg"},
+    {match: ["petrol", "петрол"], src: "../images/station_logos/petrol.svg"},
+    {match: ["eko", "еко"], src: "../images/station_logos/eko.svg"},
+    {match: ["dieselor", "дизелор", "diesoler"], src: "../images/station_logos/diselor.svg"},
+    {match: ["himoil", "chimoil", "химойл"], src: "../images/station_logos/himoil.svg"},
+    {match: ["avia"], src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/AVIA_International_logo.svg"},
+    {match: ["gazprom", "газпром"], src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Gazprom_logo.svg"},
+    {match: ["зара", "zara"], src: "https://zara.bg/favicon.ico"},
+    {match: ["топливо", "toplivo"], src: "https://toplivo.bg/favicon.ico"}
+];
+
+function shareStationLogo(name) {
+    const normalized = String(name || "")
+        .toLocaleLowerCase("bg-BG")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    const config = SHARE_STATION_LOGOS.find(item => item.match.some(token => normalized.includes(token)));
+    return config?.src || "../images/station_logos/unknown.svg";
+}
+
 function shareEscapeHtml(value) {
     return String(value ?? "")
         .replaceAll("&", "&amp;")
@@ -171,11 +201,15 @@ function renderSharedTop4(city, fuel, rows) {
         const location = row.location || city;
         const difference = row.price - minPrice;
         const podiumClass = index < 3 ? ` is-podium rank-${index + 1}` : "";
+        const logo = shareStationLogo(station);
 
         return `
             <article class="home-top10-card${podiumClass}">
                 <div class="home-top10-card-top">
                     <span class="home-top10-rank-badge">${shareRankBadge(index)}</span>
+                    <span class="home-top10-station-logo-wrap" aria-hidden="true">
+                        <img class="home-top10-station-logo" src="${shareEscapeHtml(logo)}" alt="" loading="lazy" decoding="async">
+                    </span>
                     <span class="home-top10-fuel-pill">${shareEscapeHtml(fuel)}</span>
                 </div>
                 <div class="home-top10-card-copy">
