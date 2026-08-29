@@ -1,336 +1,221 @@
 <!doctype html>
 <html lang="bg">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Полезни инструменти за шофьори</title>
-    <meta name="description" content="Калкулатор за разход, най-близки бензиностанции и полезни услуги за автомобилисти.">
-
-    <script src="//fuelo.net/js/widget-bg.min.js"></script>
-
-    <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="styles/useful.css">
+    <title>Полезни инструменти за шофьори | goriva.online</title>
+    <meta name="description" content="Най-близки бензиностанции, калкулатор за разход на гориво, проверки за винетка и гражданска отговорност и полезни инструменти за шофьори в България.">
+    <link rel="canonical" href="https://goriva.online/pages/useful.html">
+    <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
 
     <meta property="og:title" content="Полезни инструменти за шофьори | goriva.online">
-    <meta property="og:description" content="Виж актуалните средни цени на бензин, дизел и газ в реално време.">
+    <meta property="og:description" content="Карта на най-близките бензиностанции, калкулатор за пътуване и бързи автомобилни проверки.">
     <meta property="og:image" content="https://goriva.online/media/og-3.png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:url" content="https://goriva.online/">
+    <meta property="og:url" content="https://goriva.online/pages/useful.html">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="bg_BG">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Текущи цени на горивата в България">
-    <meta name="twitter:description" content="Виж актуалните средни цени на бензин, дизел и газ в реално време.">
+    <meta name="twitter:title" content="Полезни инструменти за шофьори | goriva.online">
+    <meta name="twitter:description" content="Карта на най-близките бензиностанции, калкулатор за пътуване и бързи автомобилни проверки.">
     <meta name="twitter:image" content="https://goriva.online/media/og-3.png">
 
-    <meta name="description"
-          content="Актуални цени на бензин, дизел, пропан бутан и метан в България. Проверете цените по бензиностанции във вашия град и споделете информация за най-евтиното гориво.">
-
-    <link rel="canonical" href="https://goriva.online/pages/useful.html">
-    <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
-
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+    <link rel="stylesheet" href="../styles.css?v=20260829-useful">
+    <link rel="stylesheet" href="styles/useful.css?v=20260829-useful">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css">
 
-    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6YJNGGFR2"></script>
-
     <script>
         window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
+        function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'G-F6YJNGGFR2');
     </script>
-
-    <script async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3478773231642095"
-            crossorigin="anonymous"></script>
-
-    <meta name="google-adsense-account" content="ca-pub-3478773231642095">
-
-    <!-- Hotjar Tracking Code for goriva.online -->
-    <script>
-        (function (h, o, t, j, a, r) {
-            h.hj = h.hj || function () {
-                (h.hj.q = h.hj.q || []).push(arguments)
-            };
-            h._hjSettings = {hjid: 6686373, hjsv: 6};
-            a = o.getElementsByTagName('head')[0];
-            r = o.createElement('script');
-            r.async = 1;
-            r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
-            a.appendChild(r);
-        })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
-    </script>
-
 </head>
-
-<body id="top">
-
+<body id="top" class="useful-page">
 <div class="background"></div>
 
-
 <header class="header-bar">
-
     <div class="header-container">
-
         <img src="../media/2logo.png" alt="goriva.online logo" class="header-logo">
-
         <div class="header-text">
             <strong>Цени на горивата в България</strong>
-            <span>Следете актуални цени и споделяйте информация от бензиностанции в цялата страна</span>
-            <span>Цените в сайта са подадени от потребителите. Разчитаме на коретно изпратена информация.</span>
+            <span>Следете актуални цени и използвайте полезни инструменти за пътя.</span>
         </div>
-
-        <a class="facebook-button"
-           href="https://www.facebook.com/groups/960591129738525"
-           target="_blank">
-            Facebook група
-        </a>
-
+        <a class="facebook-button" href="https://www.facebook.com/groups/960591129738525" target="_blank" rel="noopener noreferrer">Facebook група</a>
     </div>
-
 </header>
 
-
 <nav class="main-nav">
-
     <button id="menu-toggle" class="menu-toggle">☰</button>
-
     <div id="nav-menu" class="nav-container">
-
-        <!--        <button id="theme-toggle">🌙</button>-->
-
         <a href="../index.html">Начало</a>
-        <a href="../pages/useful.html">Полезно</a>
-        <a href="../pages/trends.html">История на цените</a>
-        <a href="../pages/weather.html">Прогноза за времето</a>
-        <a href="../pages/business-clients.html">Бизнес клиенти</a>
-        <a href="../pages/news.html">Новини</a>
-        <a href="../pages/rules.html">Общи условия</a>
-
+        <a href="useful.html">Полезно</a>
+        <a href="trends.html">История на цените</a>
+        <a href="weather.html">Прогноза за времето</a>
+        <a href="business-clients.html">Бизнес клиенти</a>
+        <a href="news.html">Новини</a>
+        <a href="rules.html">Общи условия</a>
     </div>
-
 </nav>
 
-<!--<div class="ticker">-->
-<!--    <div id="ticker-content" class="ticker-content"></div>-->
-<!--</div>-->
-
-
-<main class="container">
-
-
-    <section class="nearest-stations-section">
-
-        <h2 class="section-title-useful-1">
-            Най-близки бензиностанции
-        </h2>
-
-        <p class="nearest-description-useful">
-            Разрешете достъп до вашата локация, за да покажем най-близките бензиностанции.
-        </p>
-
-        <button id="find-nearest-btn" class="nearest-btn">
-            Покажи най-близките бензиностанции
-        </button>
-
-        <div class="nearest-stations-wrapper">
-
-            <div id="nearest-stations-list" class="nearest-stations-list">
-                <!-- JS ще рендерира станциите тук -->
+<main class="useful-shell">
+    <section class="useful-hero">
+        <div class="useful-hero-copy">
+            <span class="useful-kicker"><i></i> Инструменти за пътя</span>
+            <h1>Всичко полезно за шофьора <span>на едно място</span></h1>
+            <p>Намери най-близките бензиностанции, изчисли разхода за пътуването и направи важните автомобилни проверки без да търсиш из различни сайтове.</p>
+            <div class="useful-hero-actions">
+                <a href="#nearest" class="useful-primary-btn">⌖ Най-близки бензиностанции</a>
+                <a href="#calculator" class="useful-secondary-btn">▥ Калкулатор за пътуване</a>
             </div>
+        </div>
+        <div class="useful-hero-metrics" aria-label="Полезни функции">
+            <article><span>⌖</span><div><strong>Карта наблизо</strong><small>5 най-близки станции</small></div></article>
+            <article><span>€</span><div><strong>Разход за път</strong><small>Цена, литри и €/км</small></div></article>
+            <article><span>✓</span><div><strong>Бързи проверки</strong><small>Винетка и ГО</small></div></article>
+        </div>
+    </section>
 
+    <nav class="useful-jumpbar" aria-label="Навигация в страницата">
+        <a href="#nearest">⌖ Бензиностанции</a>
+        <a href="#calculator">▥ Калкулатор</a>
+        <a href="#checks">✓ Проверки</a>
+        <a href="#more-tools">→ Още инструменти</a>
+    </nav>
+
+    <section id="nearest" class="useful-panel nearest-stations-section">
+        <div class="useful-section-heading">
+            <div>
+                <span class="section-eyebrow">Локация</span>
+                <h2>Най-близки бензиностанции</h2>
+                <p>Разреши достъп до местоположението си и ще покажем петте най-близки станции върху картата.</p>
+            </div>
+            <button id="find-nearest-btn" class="nearest-btn">⌖ Използвай моята локация</button>
+        </div>
+
+        <div id="nearest-status" class="nearest-status" aria-live="polite">
+            <span class="status-dot"></span>
+            Готово за търсене. Локацията се използва само в браузъра ти.
+        </div>
+
+        <div class="nearest-stations-layout">
+            <div class="nearest-results-panel">
+                <div class="nearest-results-head">
+                    <strong>Най-близки до теб</strong>
+                    <span id="nearest-count">0 станции</span>
+                </div>
+                <div id="nearest-stations-list" class="nearest-stations-list">
+                    <div class="nearest-empty-state">
+                        <span>⌖</span>
+                        <strong>Все още няма избрана локация</strong>
+                        <p>Натисни бутона „Използвай моята локация“, за да започнеш.</p>
+                    </div>
+                </div>
+            </div>
             <div class="nearest-map-wrapper">
-                <div id="nearest-map"></div>
+                <div id="nearest-map" aria-label="Карта с най-близките бензиностанции"></div>
             </div>
-
         </div>
-
     </section>
 
-    <section class="tools-section">
-
-        <!-- КАЛКУЛАТОР -->
-
-        <div class="tool-card">
-
-            <h2 class="section-title-useful">
-                Калкулатор за разход на гориво
-            </h2>
-
-            <p class="calculator-description-useful">
-                Изчислете колко ще струва вашето пътуване.
-            </p>
-
-            <div class="calculator-grid">
-
-                <div class="input-group">
-                    <label>Разход (Л. / 100 km)</label>
-                    <input type="number" id="consumption" placeholder="7.5">
-                </div>
-
-                <div class="input-group">
-                    <label>Цена (€ / Л.)</label>
-                    <input type="number" id="fuel-price" placeholder="1.5">
-                </div>
-
-                <div class="input-group">
-                    <label>Километри</label>
-                    <input type="number" id="distance" placeholder="120">
-                </div>
-
+    <section id="calculator" class="useful-panel calculator-panel">
+        <div class="useful-section-heading compact">
+            <div>
+                <span class="section-eyebrow">Калкулатор</span>
+                <h2>Колко ще струва пътуването?</h2>
+                <p>Въведи разхода на автомобила, цената на горивото и разстоянието.</p>
             </div>
-
-            <button id="calculate-btn" class="nearest-btn">
-                Изчисли
-            </button>
-
-            <div id="fuel-result" class="fuel-result"></div>
-
         </div>
 
-
-        <!-- ПРОВЕРКИ -->
-
-        <div class="tool-card">
-
-            <h2 class="section-title-useful">
-                Проверка на автомобил
-            </h2>
-
-            <p class="calculator-description-useful">
-                Бърза проверка за винетка и гражданска отговорност.
-            </p>
-
-            <div class="check-links">
-
-                <a class="check-card"
-                   href="https://web.bgtoll.bg/TollProduct"
-                   target="_blank">
-                    Проверка за винетка
-                </a>
-
-                <a class="check-card"
-                   href="https://www.guaranteefund.org/bg/%D0%B8%D0%BD%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%B5%D0%BD-%D1%86%D0%B5%D0%BD%D1%82%D1%8A%D1%80-%D0%B8-%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B8/%D1%83%D1%81%D0%BB%D1%83%D0%B3%D0%B8/%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%B7%D0%B0-%D0%B2%D0%B0%D0%BB%D0%B8%D0%B4%D0%BD%D0%B0-%D0%B7%D0%B0%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B3%D1%80a%D0%B6%D0%B4a%D0%BD%D1%81%D0%BAa-%D0%BE%D1%82%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%D0%BD%D0%BE%D1%81%D1%82-%D0%BD%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%BE%D0%B1%D0%B8%D0%BB%D0%B8%D1%81%D1%82%D0%B8%D1%82%D0%B5"
-                   target="_blank">
-                    Проверка за гражданска отговорност
-                </a>
-
+        <div class="calculator-layout">
+            <div class="calculator-form-card">
+                <div class="calculator-grid">
+                    <label class="input-group">
+                        <span>Среден разход</span>
+                        <div class="input-with-unit"><input type="number" id="consumption" min="0" step="0.1" placeholder="7.5"><em>л/100 км</em></div>
+                    </label>
+                    <label class="input-group">
+                        <span>Цена на горивото</span>
+                        <div class="input-with-unit"><input type="number" id="fuel-price" min="0" step="0.01" placeholder="1.55"><em>€/л</em></div>
+                    </label>
+                    <label class="input-group">
+                        <span>Разстояние</span>
+                        <div class="input-with-unit"><input type="number" id="distance" min="0" step="1" placeholder="250"><em>км</em></div>
+                    </label>
+                </div>
+                <div class="calculator-actions">
+                    <button id="calculate-btn" class="nearest-btn">Изчисли разхода</button>
+                    <button id="calculator-reset" class="ghost-btn" type="button">Изчисти</button>
+                </div>
             </div>
 
+            <div id="fuel-result" class="fuel-result">
+                <div class="result-placeholder">
+                    <span>€</span>
+                    <strong>Резултатът ще се появи тук</strong>
+                    <p>Ще видиш необходимите литри, общата цена, цена за 100 км и цена за 1 км.</p>
+                </div>
+            </div>
         </div>
-
     </section>
 
+    <section id="checks" class="useful-panel checks-panel">
+        <div class="useful-section-heading compact">
+            <div>
+                <span class="section-eyebrow">Проверки</span>
+                <h2>Провери важните документи на автомобила</h2>
+                <p>Бързи връзки към официалните услуги за винетка и валидна застраховка „Гражданска отговорност“.</p>
+            </div>
+        </div>
+
+        <div class="check-links">
+            <a class="check-card" href="https://web.bgtoll.bg/TollProduct" target="_blank" rel="noopener noreferrer">
+                <span class="check-icon blue">V</span>
+                <div><strong>Проверка за винетка</strong><small>Официална услуга на БГТОЛ</small></div>
+                <b>↗</b>
+            </a>
+            <a class="check-card" href="https://www.guaranteefund.org/bg/%D0%B8%D0%BD%D1%84%D0%BE%D1%80%D0%BC%D0%B0%D1%86%D0%B8%D0%BE%D0%BD%D0%B5%D0%BD-%D1%86%D0%B5%D0%BD%D1%82%D1%8A%D1%80-%D0%B8-%D1%81%D0%BF%D1%80%D0%B0%D0%B2%D0%BA%D0%B8/%D1%83%D1%81%D0%BB%D1%83%D0%B3%D0%B8/%D0%BF%D1%80%D0%BE%D0%B2%D0%B5%D1%80%D0%BA%D0%B0-%D0%B7%D0%B0-%D0%B2%D0%B0%D0%BB%D0%B8%D0%B4%D0%BD%D0%B0-%D0%B7%D0%B0%D1%81%D1%82%D1%80%D0%B0%D1%85%D0%BE%D0%B2%D0%BA%D0%B0-%D0%B3%D1%80a%D0%B6%D0%B4a%D0%BD%D1%81%D0%BAa-%D0%BE%D1%82%D0%B3%D0%BE%D0%B2%D0%BE%D1%80%D0%BD%D0%BE%D1%81%D1%82-%D0%BD%D0%B0-%D0%B0%D0%B2%D1%82%D0%BE%D0%BC%D0%BE%D0%B1%D0%B8%D0%BB%D0%B8%D1%81%D1%82%D0%B8%D1%82%D0%B5" target="_blank" rel="noopener noreferrer">
+                <span class="check-icon green">✓</span>
+                <div><strong>Гражданска отговорност</strong><small>Проверка в Гаранционния фонд</small></div>
+                <b>↗</b>
+            </a>
+        </div>
+    </section>
+
+    <section id="more-tools" class="more-tools-section">
+        <div class="useful-section-heading compact">
+            <div>
+                <span class="section-eyebrow">goriva.online</span>
+                <h2>Още полезни инструменти</h2>
+            </div>
+        </div>
+        <div class="more-tools-grid">
+            <a href="top-fuel-prices.html" class="mini-tool-card"><span>↓</span><strong>Топ 4 най-ниски цени</strong><small>Сравни най-евтините станции днес</small></a>
+            <a href="trends.html" class="mini-tool-card"><span>↗</span><strong>История на цените</strong><small>Проследи движението във времето</small></a>
+            <a href="weather.html" class="mini-tool-card"><span>☁</span><strong>Прогноза за времето</strong><small>Провери условията преди път</small></a>
+            <a href="../index.html#home-top10-prices" class="mini-tool-card"><span>€</span><strong>Актуални цени</strong><small>Виж днешните данни по градове</small></a>
+        </div>
+    </section>
 </main>
 
-
 <footer class="site-footer">
-
     <div class="footer-container">
-
-        <div class="footer-column footer-brand">
-            <img src="../media/footer-logo.png" alt="goriva.online logo" class="footer-logo">
-        </div>
-
-        <div class="footer-column">
-
-            <h4>Навигация</h4>
-
-            <ul class="footer-links">
-                <li><a href="#top">Начало</a></li>
-                <li><a href="useful.html">Полезно</a></li>
-                <li><a href="trends.html">История на цените</a></li>
-                <li><a href="weather.html">Прогноза за времето</a></li>
-                <li><a href="business-clients.html">Бизнес клиенти</a></li>
-                <li><a href="news.html">Новини</a></li>
-                <li><a href="rules.html">Общи условия</a></li>
-            </ul>
-
-        </div>
-
-        <div class="footer-column">
-
-            <h4>Контакти</h4>
-
-            <div class="contact-item">
-                <span>📞</span>
-                <a href="tel:+359883427273">+359 883 427 273</a>
-            </div>
-
-            <div class="contact-item">
-                <span>✉️</span>
-                <a href="mailto:svetoslavov.plamen@gmail.com">
-                    svetoslavov.plamen@gmail.com
-                </a>
-            </div>
-
-            <div class="contact-item">
-                <span>👤</span>
-                Пламен Светославов
-            </div>
-
-        </div>
-
-        <div class="footer-column">
-
-            <h4>Социални мрежи</h4>
-
-            <div class="social-icons">
-
-                <a href="https://www.facebook.com/plamen.sve" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg" alt="facebook">
-                </a>
-
-                <a href="https://www.linkedin.com/in/plamen-svetoslavov/" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt="linkedin">
-                </a>
-
-                <a href="https://wa.me/359883427273" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg" alt="whatsapp">
-                </a>
-
-            </div>
-
-        </div>
-
+        <div class="footer-column footer-brand"><img src="../media/footer-logo.png" alt="goriva.online logo" class="footer-logo"></div>
+        <div class="footer-column"><h4>Навигация</h4><ul class="footer-links"><li><a href="../index.html">Начало</a></li><li><a href="useful.html">Полезно</a></li><li><a href="trends.html">История на цените</a></li><li><a href="business-clients.html">Бизнес клиенти</a></li><li><a href="news.html">Новини</a></li></ul></div>
+        <div class="footer-column"><h4>Контакти</h4><div class="contact-item"><span>✉️</span><a href="mailto:svetoslavov.plamen@gmail.com">svetoslavov.plamen@gmail.com</a></div><div class="contact-item"><span>👤</span>Пламен Светославов</div></div>
+        <div class="footer-column"><h4>Социални мрежи</h4><div class="social-icons"><a href="https://www.facebook.com/plamen.sve" target="_blank" rel="noopener noreferrer"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg" alt="facebook"></a><a href="https://www.linkedin.com/in/plamen-svetoslavov/" target="_blank" rel="noopener noreferrer"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt="linkedin"></a></div></div>
     </div>
-
-    <div class="footer-bottom">
-        <span>© 2026 goriva.online</span>
-        <span class="footer-separator">•</span>
-        <span>Цени на горивата в България</span>
-    </div>
+    <div class="footer-bottom"><span>© 2026 goriva.online</span><span class="footer-separator">•</span><span>Цени на горивата в България</span></div>
 </footer>
-
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 <script src="../scripts/station-icons.js"></script>
 <script src="../scripts/script.js"></script>
-<script src="../scripts/useful.js"></script>
-<script
-    data-name="BMC-Widget"
-    data-cfasync="false"
-    src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
-    data-id="qwan"
-    data-description="Подкрепете goriva.online"
-    data-message="Ако goriva.online Ви е полезен, можете да подкрепите развитието на проекта."
-    data-color="#FF813F"
-    data-position="Right"
-    data-x_margin="18"
-    data-y_margin="10">
-</script>
+<script src="../scripts/useful.js?v=20260829-useful"></script>
 </body>
 </html>
