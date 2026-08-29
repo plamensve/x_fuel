@@ -124,26 +124,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function loadPrices() {
 
-            fetch("https://eaqvhxfvozhzatrnbkvx.supabase.co/rest/v1/fuel_prices?select=*&order=created_at.desc&limit=200", {
+            const start = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0, 0)
+            const end = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1, 0, 0, 0, 0)
+            const pageSize = 1000
+            let offset = 0
+            let loaded = []
 
-                headers: {
-                    apikey: "sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH",
-                    Authorization: "Bearer sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH"
-                }
+            function fetchNextPage() {
+                const url = `https://eaqvhxfvozhzatrnbkvx.supabase.co/rest/v1/fuel_prices?select=*&created_at=gte.${encodeURIComponent(start.toISOString())}&created_at=lt.${encodeURIComponent(end.toISOString())}&order=created_at.desc&limit=${pageSize}&offset=${offset}`
 
-            })
-                .then(res => res.json())
-                .then(data => {
+                return fetch(url, {
+                    headers: {
+                        apikey: "sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH",
+                        Authorization: "Bearer sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH"
+                    }
+                })
+                    .then(res => {
+                        if (!res.ok) throw new Error(`Prices request failed: ${res.status}`)
+                        return res.json()
+                    })
+                    .then(batch => {
+                        loaded.push(...batch)
+                        if (batch.length === pageSize) {
+                            offset += pageSize
+                            return fetchNextPage()
+                        }
+                    })
+            }
 
-                    allPrices = data
+            fetchNextPage()
+                .then(() => {
+                    allPrices = loaded
 
-                    let todayData = data.filter(isToday)
+                    let todayData = allPrices.filter(isToday)
 
                     renderTicker(todayData)
 
                     populateRegions()
                     renderPrices()
-
+                })
+                .catch(error => {
+                    console.error("Failed to load today's fuel prices", error)
+                    allPrices = []
+                    renderTicker([])
+                    populateRegions()
+                    renderPrices()
                 })
 
         }
@@ -152,7 +177,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             let todayData = allPrices.filter(isToday)
 
-            let regions = [...new Set(todayData.map(r => r.region))].sort()
+            let regions = [...new Set(todayData.map(r => r.region).filter(Boolean))].sort()
 
             regionSelect.innerHTML = `<option value="all">Всички области</option>`
 
@@ -170,7 +195,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function populateCities(data, selectedCity = "all") {
 
-            let cities = [...new Set(data.map(r => r.city))].sort()
+            let cities = [...new Set(data.map(r => r.city).filter(Boolean))].sort()
 
             citySelect.innerHTML = `<option value="all">Всички градове</option>`
 
@@ -192,7 +217,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         function populateStations(data, selectedStation = "all") {
 
-            let stations = [...new Set(data.map(r => r.station))].sort()
+            let stations = [...new Set(data.map(r => r.station).filter(Boolean))].sort()
 
             stationSelect.innerHTML = `<option value="all">Всички бензиностанции</option>`
 
