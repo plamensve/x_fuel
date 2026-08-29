@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
+<title id="title">Наблюдаваната извадка на goriva.online отчита по-ниски средни цени при всички проследени горива</title>
+<desc id="desc">Дневен обзор на цените на горивата от goriva.online за 28 август 2026</desc>
+<defs>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#07111f"/><stop offset="0.58" stop-color="#102642"/><stop offset="1" stop-color="#0d3a2b"/></linearGradient>
+  <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#22c55e"/></linearGradient>
+  <filter id="glow"><feGaussianBlur stdDeviation="42"/></filter>
+</defs>
+<rect width="1200" height="630" fill="url(#bg)"/>
+<circle cx="1040" cy="70" r="190" fill="#2563eb" opacity=".16" filter="url(#glow)"/>
+<circle cx="1065" cy="550" r="220" fill="#22c55e" opacity=".12" filter="url(#glow)"/>
+<rect x="76" y="64" width="176" height="38" rx="19" fill="#ffffff" opacity=".08"/>
+<circle cx="98" cy="83" r="5" fill="#22c55e"/>
+<text x="114" y="89" fill="#dbeafe" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="1.3">ДНЕВЕН ОБЗОР</text>
+<text x="78" y="146" fill="#93c5fd" font-family="Arial, sans-serif" font-size="21" font-weight="700">28 август 2026</text>
+<text x="78" y="212" fill="#f8fafc" font-family="Arial, sans-serif" font-size="47" font-weight="800">
+  <tspan x="78" dy="0">Наблюдаваната извадка на</tspan>
+  <tspan x="78" dy="54">goriva.online отчита по-ниски</tspan>
+  <tspan x="78" dy="54">средни цени при всички</tspan>
+  <tspan x="78" dy="54">проследени горива</tspan>
+</text>
+<text x="80" y="440" fill="#b9c7d8" font-family="Arial, sans-serif" font-size="22">
+  <tspan x="80" dy="0">1028 ценови записа · 306 станции · 179 града</tspan>
+  <tspan x="80" dy="29">Данни, анализ и дневна динамика от goriva.online</tspan>
+</text>
+<rect x="78" y="542" width="1044" height="2" fill="url(#accent)" opacity=".85"/>
+<text x="78" y="588" fill="#ffffff" font-family="Arial, sans-serif" font-size="28" font-weight="800">goriva.online</text>
+<text x="1122" y="588" text-anchor="end" fill="#9fb0c3" font-family="Arial, sans-serif" font-size="17">Цени · данни · анализ</text>
+</svg>
