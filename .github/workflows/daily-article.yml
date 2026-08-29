@@ -19,7 +19,7 @@ permissions:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - name: Check Sofia publication window
@@ -141,9 +141,11 @@ jobs:
           base.main()
           PY
 
-      - name: Generate article artwork and update news cards
+      - name: Generate contextual article image and update news cards
         if: steps.window.outputs.should_run == 'true'
         env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_IMAGE_MODEL: gpt-image-2
           ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
         run: python automation/postprocess_daily_article.py
 
