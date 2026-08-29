@@ -42,43 +42,46 @@ jobs:
           import re
           import automation.generate_daily_article_bg as base
 
-          def validate_numbers(article, facts):
-              allowed = base.allowed_numbers(facts)
-              body_text = re.sub(r"<[^>]+>", " ", article.get("body_html", ""))
-              generated_text = " ".join([
-                  article.get("title", ""),
-                  article.get("deck", ""),
-                  body_text,
-              ])
+          MIN_CITY_RANKING_COUNT = 10
+          META_DESCRIPTION_MAX = 155
 
-              unknown = sorted({
-                  number
-                  for number in base.decimal_numbers(generated_text)
-                  if number not in allowed
-              })
-              if not unknown:
-                  return
+          original_summarize_day = base.summarize_day
+          original_render_article = base.render_article
 
-              valid_bg_sources = [
-                  str(source.get("url") or "").strip()
-                  for source in (article.get("sources") or [])
-                  if base.is_bulgarian_source(str(source.get("url") or "").strip())
+          def summarize_day(rows):
+              summary = original_summarize_day(rows)
+              summary["city_averages"] = [
+                  item
+                  for item in summary.get("city_averages", [])
+                  if int(item.get("count", 0)) >= MIN_CITY_RANKING_COUNT
               ]
+              return summary
 
-              if not valid_bg_sources:
-                  raise RuntimeError(
-                      "Validation stopped publication: decimal claims not present in "
-                      "Supabase facts were generated without a valid Bulgarian source: "
-                      f"{unknown}"
-                  )
+          def smart_meta_description(text, max_len=META_DESCRIPTION_MAX):
+              clean = re.sub(r"\s+", " ", str(text or "")).strip()
+              if len(clean) <= max_len:
+                  return clean
 
-              print(
-                  "Validator note: accepting decimal claims outside Supabase facts "
-                  "because the article has validated Bulgarian sources: "
-                  + ", ".join(unknown)
+              window = clean[:max_len + 1]
+              sentence_breaks = [m.end() for m in re.finditer(r"[.!?](?=\s|$)", window)]
+              usable_breaks = [pos for pos in sentence_breaks if pos >= 90]
+              if usable_breaks:
+                  return window[:usable_breaks[-1]].strip()
+
+              cut = window.rsplit(" ", 1)[0].rstrip(" ,;:-")
+              if len(cut) > max_len - 1:
+                  cut = cut[:max_len - 1].rsplit(" ", 1)[0].rstrip(" ,;:-")
+              return cut + "…"
+
+          def render_article(date_str, article):
+              safe_article = dict(article)
+              safe_article["description"] = smart_meta_description(
+                  safe_article.get("description", "")
               )
+              return original_render_article(date_str, safe_article)
 
-          base.validate_numbers = validate_numbers
+          base.summarize_day = summarize_day
+          base.render_article = render_article
           base.main()
           PY
 
