@@ -1,320 +1,133 @@
 <!doctype html>
 <html lang="bg">
-
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700&display=swap" rel="stylesheet">
-
-
-    <!-- TITLE -->
-    <title>Прогноза за времето в България | Актуално време по градове</title>
-
-    <!-- META DESCRIPTION -->
-    <meta name="description"
-          content="Проверете актуалната прогноза за времето в България по градове. Температура, вятър, влажност и 5-дневна прогноза в реално време.">
-
-    <!-- CANONICAL -->
+    <title>Прогноза за времето в България | goriva.online</title>
+    <meta name="description" content="Актуално време по градове в България: температура, вятър, влажност, почасова и 5-дневна прогноза за по-добро планиране на пътуването.">
     <link rel="canonical" href="https://goriva.online/pages/weather.html">
+    <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
 
-    <!-- OPEN GRAPH -->
-    <meta property="og:title" content="Прогноза за времето в България | Актуално време по градове">
-    <meta property="og:description"
-          content="Актуална прогноза за времето – температура, вятър и 5-дневна прогноза за всеки град в България.">
+    <meta property="og:title" content="Прогноза за времето в България | goriva.online">
+    <meta property="og:description" content="Провери актуалното време и прогнозата преди път.">
     <meta property="og:image" content="https://goriva.online/images/weather/weather-og.png">
-    <meta property="og:image:secure_url" content="https://goriva.online/images/weather/weather-og.png">
-    <meta property="og:image:type" content="image/png">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
     <meta property="og:url" content="https://goriva.online/pages/weather.html">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="bg_BG">
 
-    <!-- TWITTER -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Прогноза за времето в България">
-    <meta name="twitter:description"
-          content="Проверете времето по градове в България – температура, вятър и прогноза.">
+    <meta name="twitter:description" content="Температура, вятър, влажност и 5-дневна прогноза по градове.">
     <meta name="twitter:image" content="https://goriva.online/images/weather/weather-og.png">
 
-    <!-- FAVICON -->
-    <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
-
-    <!-- STYLES -->
-    <link rel="stylesheet" href="../styles.css">
-    <link rel="stylesheet" href="styles/weather.css">
-
-    <!-- SCRIPTS -->
-    <script src="//fuelo.net/js/widget-bg.min.js"></script>
+    <link rel="stylesheet" href="../styles.css?v=20260829-weather2">
+    <link rel="stylesheet" href="styles/weather.css?v=20260829-weather2">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- HOTJAR -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6YJNGGFR2"></script>
     <script>
-        (function (h, o, t, j, a, r) {
-            h.hj = h.hj || function () {
-                (h.hj.q = h.hj.q || []).push(arguments)
-            };
-            h._hjSettings = {hjid: 6686373, hjsv: 6};
-            a = o.getElementsByTagName('head')[0];
-            r = o.createElement('script');
-            r.async = 1;
-            r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
-            a.appendChild(r);
-        })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-F6YJNGGFR2');
     </script>
-
-    <script async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3478773231642095"
-            crossorigin="anonymous"></script>
-
-    <meta name="google-adsense-account" content="ca-pub-3478773231642095">
-
 </head>
-
-<body id="top">
-
+<body id="top" class="weather-page">
 <div class="background"></div>
 
 <header class="header-bar">
     <div class="header-container">
-
         <img src="../media/2logo.png" alt="goriva.online logo" class="header-logo">
-
-        <div class="header-text">
-            <strong>Актуална прогноза за времето в България</strong>
-            <span>Температура, вятър, влажност и 5-дневна прогноза в реално време</span>
-        </div>
-
-        <a class="facebook-button"
-           href="https://www.facebook.com/groups/960591129738525"
-           target="_blank">
-            Facebook група
-        </a>
-
+        <div class="header-text"><strong>Прогноза за времето</strong><span>Планирай пътуването с актуални метеорологични данни.</span></div>
+        <a class="facebook-button" href="https://www.facebook.com/groups/960591129738525" target="_blank" rel="noopener noreferrer">Facebook група</a>
     </div>
 </header>
-
 <nav class="main-nav">
-
     <button id="menu-toggle" class="menu-toggle">☰</button>
-
     <div id="nav-menu" class="nav-container">
-        <!--        <button id="theme-toggle">🌙</button>-->
-
-        <a href="../index.html">Начало</a>
-        <a href="../pages/useful.html">Полезно</a>
-        <a href="../pages/trends.html">История на цените</a>
-        <a href="../pages/weather.html">Прогноза за времето</a>
-        <a href="../pages/business-clients.html">Бизнес клиенти</a>
-        <a href="../pages/news.html">Новини</a>
-        <a href="../pages/rules.html">Общи условия</a>
+        <a href="../index.html">Начало</a><a href="useful.html">Полезно</a><a href="trends.html">История на цените</a><a href="weather.html">Прогноза за времето</a><a href="business-clients.html">Бизнес клиенти</a><a href="news.html">Новини</a><a href="rules.html">Общи условия</a>
     </div>
-
 </nav>
 
-<!--<div class="ticker">-->
-<!--    <div id="ticker-content" class="ticker-content"></div>-->
-<!--</div>-->
-
-<main class="container">
-
-    <section class="weather-intro">
-        <div class="weather-intro-inner">
-
-            <h1 class="weather-intro-title">
-                Актуална прогноза за времето в България
-            </h1>
-
-            <p class="weather-intro-text">
-                Проверете текущите метеорологични условия във вашия град – температура, вятър, влажност
-                и подробна 5-дневна прогноза в реално време.
-            </p>
-
+<main class="weather-shell">
+    <section class="weather-hero">
+        <div class="weather-hero-copy">
+            <span class="weather-kicker"><i></i> Времето за пътя</span>
+            <h1>Провери условията <span>преди да тръгнеш</span></h1>
+            <p>Актуална температура, вятър, влажност, карта и прогноза за следващите дни — събрани в един чист изглед за шофьори.</p>
+            <div class="weather-search" role="search">
+                <div class="weather-search-field"><span>⌕</span><input id="city" autocomplete="off" placeholder="Например: София, Пловдив, Варна"></div>
+                <button id="weather-search-btn" type="button" onclick="loadWeather()">Покажи времето</button>
+                <button class="weather-location-btn" type="button" onclick="loadByLocation()" aria-label="Използвай моята локация">⌖ Моята локация</button>
+            </div>
+            <div class="weather-hero-trust"><span>● Актуални данни</span><span>Почасова прогноза</span><span>5-дневен обзор</span></div>
         </div>
+        <aside class="weather-hero-side">
+            <span class="weather-side-label">Бърз достъп</span>
+            <strong>Избери град или използвай текущата си локация.</strong>
+            <p>Картата и всички показатели се синхронизират автоматично с избраното място.</p>
+            <div class="weather-side-mini"><span>⌖</span><div><strong>За шофьори</strong><small>Планирай по-добре маршрута и времето за тръгване.</small></div></div>
+        </aside>
     </section>
 
-    <div class="weather-dashboard">
-        <div class="weather-dashboard">
+    <section class="weather-dashboard" aria-label="Метеорологичен dashboard">
+        <div class="weather-dashboard-head">
+            <div><span class="section-eyebrow">В момента</span><h2>Актуални условия</h2><p>Основните показатели за избрания град.</p></div>
+            <span class="weather-live-badge"><i></i> Обновява се при всяко търсене</span>
+        </div>
 
-            <!-- SEARCH -->
-            <div class="weather-top">
-                <div class="search-button">
-                    <input id="city" placeholder="Въведи град">
-                    <button onclick="loadWeather()">Търси</button>
-                </div>
-                <div class="weather-top-title">
-                    <p class="weather-top-title-p1">Проверете времето по градове</p>
+        <div class="weather-layout">
+            <div class="weather-left">
+                <div class="current-box" id="weather"><div class="weather-loading">Зареждане на времето…</div></div>
+                <div class="details-grid" id="weather-details"></div>
+                <div class="weather-chart-card">
+                    <div class="weather-card-heading"><div><span>Температурна тенденция</span><strong>Следващите дни</strong></div><small>Средна температура</small></div>
+                    <div class="weather-chart-wrap"><canvas id="chart"></canvas></div>
                 </div>
             </div>
 
-            <!-- MAIN GRID -->
-            <div class="weather-layout">
-
-                <!-- LEFT SIDE -->
-                <div class="weather-left">
-
-                    <!-- CURRENT -->
-                    <div class="current-box" id="weather"></div>
-
-                    <!-- DETAILS -->
-                    <div class="details-grid" id="weather-details"></div>
-
+            <div class="weather-right">
+                <div class="weather-map-card">
+                    <div class="weather-card-heading"><div><span>Локация</span><strong>Карта на избрания град</strong></div><small>OpenStreetMap</small></div>
+                    <div id="map"></div>
                 </div>
-
-                <!-- RIGHT SIDE -->
-                <div class="weather-right">
-
-                    <!-- MAP -->
-                    <div class="map-box">
-                        <div id="map"></div>
-                    </div>
-
-                    <!-- HOURLY -->
+                <div class="hourly-card">
+                    <div class="weather-card-heading"><div><span>Почасово</span><strong>Следващите часове</strong></div></div>
                     <div class="hourly-scroll" id="hourly"></div>
-
                 </div>
-
             </div>
-
-            <!-- DAILY (FULL WIDTH) -->
-            <div class="daily-grid" id="daily"></div>
-
         </div>
-    </div>
-    <section class="weather-stats">
-        <h2>Средни температури в България днес</h2>
 
-        <div class="weather-stats-grid">
-            <div class="stat-card">
-                <span>🌡️ Средна температура</span>
-                <strong id="avg-temp">--°C</strong>
-            </div>
-
-            <div class="stat-card">
-                <span>💨 Среден вятър</span>
-                <strong id="avg-wind">-- m/s</strong>
-            </div>
-
-            <div class="stat-card">
-                <span>💧 Средна влажност</span>
-                <strong id="avg-humidity">--%</strong>
-            </div>
+        <div class="daily-section">
+            <div class="weather-card-heading"><div><span>Прогноза</span><strong>Следващите 5 дни</strong></div><small>Ориентировъчни стойности</small></div>
+            <div class="daily-grid" id="daily"></div>
         </div>
     </section>
- <section class="popular-cities">
-    <h2>Времето в големите градове</h2>
 
-    <div class="city-grid" id="city-grid">
-    </div>
-</section>
+    <section class="weather-stats">
+        <div class="weather-section-heading"><div><span class="section-eyebrow">Днес</span><h2>Средни показатели за избраното място</h2></div></div>
+        <div class="weather-stats-grid">
+            <article class="stat-card"><span class="stat-icon blue">°</span><div><span>Средна температура</span><strong id="avg-temp">--°C</strong></div></article>
+            <article class="stat-card"><span class="stat-icon green">↝</span><div><span>Среден вятър</span><strong id="avg-wind">-- m/s</strong></div></article>
+            <article class="stat-card"><span class="stat-icon cyan">◉</span><div><span>Средна влажност</span><strong id="avg-humidity">--%</strong></div></article>
+        </div>
+    </section>
+
+    <section class="popular-cities">
+        <div class="weather-section-heading"><div><span class="section-eyebrow">Популярни градове</span><h2>Времето в големите градове</h2><p>Избери град за моментално обновяване на dashboard-а.</p></div></div>
+        <div class="city-grid" id="city-grid"></div>
+    </section>
+
+    <section class="weather-road-note">
+        <span>i</span><div><strong>Планирай безопасно</strong><p>Метеорологичната информация е ориентировъчна. При тежки условия проверявай и официалните предупреждения и пътната обстановка преди пътуване.</p></div>
+    </section>
 </main>
 
-<!-- MODAL -->
-<div id="day-modal" class="modal">
-    <div class="modal-content">
-        <span id="close-modal">&times;</span>
-        <h3 id="modal-date"></h3>
-        <div id="modal-list"></div>
-        <div id="pagination" class="pagination"></div>
-    </div>
-</div>
+<footer class="site-footer"></footer>
 
-<footer class="site-footer">
-
-    <div class="footer-container">
-
-        <div class="footer-column footer-brand">
-            <img src="../media/footer-logo.png" alt="goriva.online logo" class="footer-logo">
-        </div>
-
-        <div class="footer-column">
-
-            <h4>Навигация</h4>
-
-            <ul class="footer-links">
-                <li><a href="#top">Начало</a></li>
-                <li><a href="useful.html">Полезно</a></li>
-                <li><a href="trends.html">История на цените</a></li>
-                <li><a href="weather.html">Прогноза за времето</a></li>
-                <li><a href="business-clients.html">Бизнес клиенти</a></li>
-                <li><a href="news.html">Новини</a></li>
-                <li><a href="rules.html">Общи условия</a></li>
-            </ul>
-
-        </div>
-
-        <div class="footer-column">
-
-            <h4>Контакти</h4>
-
-            <div class="contact-item">
-                <span>📞</span>
-                <a href="tel:+359883427273">+359 883 427 273</a>
-            </div>
-
-            <div class="contact-item">
-                <span>✉️</span>
-                <a href="mailto:svetoslavov.plamen@gmail.com">
-                    svetoslavov.plamen@gmail.com
-                </a>
-            </div>
-
-            <div class="contact-item">
-                <span>👤</span>
-                Пламен Светославов
-            </div>
-
-        </div>
-
-        <div class="footer-column">
-
-            <h4>Социални мрежи</h4>
-
-            <div class="social-icons">
-
-                <a href="https://www.facebook.com/plamen.sve" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg">
-                </a>
-
-                <a href="https://www.linkedin.com/in/plamen-svetoslavov/" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg">
-                </a>
-
-                <a href="https://wa.me/359883427273" target="_blank">
-                    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg">
-                </a>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="footer-bottom">
-        <span>© 2026 goriva.online</span>
-        <span class="footer-separator">•</span>
-        <span>Цени на горивата в България</span>
-    </div>
-
-</footer>
-<!-- LEAFLET -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-<script src="../scripts/weather.js"></script>
-<script src="../scripts/script.js"></script>
-<script
-    data-name="BMC-Widget"
-    data-cfasync="false"
-    src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js"
-    data-id="qwan"
-    data-description="Подкрепете goriva.online"
-    data-message="Ако goriva.online Ви е полезен, можете да подкрепите развитието на проекта."
-    data-color="#FF813F"
-    data-position="Right"
-    data-x_margin="18"
-    data-y_margin="10">
-</script>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="../scripts/weather.js?v=20260829-weather2"></script>
+<script src="../scripts/script.js?v=20260829-footer-global2"></script>
 </body>
 </html>
