@@ -16,7 +16,7 @@ from openai import OpenAI
 
 ROOT = Path(__file__).resolve().parents[1]
 SOFIA = ZoneInfo("Europe/Sofia")
-DEFAULT_SUPABASE_URL = "https://eaqvhxfvozhatrnbkvx.supabase.co"
+DEFAULT_SUPABASE_URL = "https://eaqvhxfvozhzatrnbkvx.supabase.co"
 TABLE = "fuel_prices"
 PAGE_SIZE = 1000
 MODEL = os.getenv("OPENAI_MODEL", "gpt-5.6-luna")
@@ -88,276 +88,266 @@ def fetch_rows() -> list[dict]:
 def build_daily_snapshots(rows: list[dict]) -> dict[str, list[dict]]:
     latest: dict[tuple, dict] = {}
     for row in rows:
-        try:
-            dt = parse_dt(row["created_at"])
-            price = float(row["price"])
-        except (KeyError, TypeError, ValueError):
+        if not row.get("created_at") or row.get("price") is None:
             continue
-        if not (0.1 <= price <= 10):
-            continue
+        dt = parse_dt(row["created_at"])
         day = dt.date().isoformat()
-        normalized = dict(row)
-        normalized["_dt"] = dt
-        normalized["_price"] = price
-        normalized["_fuel"] = canonical_fuel(row.get("fuel", ""))
+        fuel = canonical_fuel(row.get("fuel", ""))
         key = (
             day,
-            (row.get("city") or "").strip().lower(),
-            (row.get("station") or "").strip().lower(),
-            normalized["_fuel"],
-            (row.get("location") or "").strip().lower(),
+            (row.get("city") or "").strip(),
+            (row.get("station") or "").strip(),
+            fuel,
+            (row.get("location") or "").strip(),
         )
-        previous = latest.get(key)
-        if previous is None or dt > previous["_dt"]:
-            latest[key] = normalized
+        candidate = dict(row)
+        candidate["_dt"] = dt
+        candidate["_day"] = day
+        candidate["_fuel"] = fuel
+        current = latest.get(key)
+        if current is None or dt > current["_dt"]:
+            latest[key] = candidate
 
-    daily: dict[str, list[dict]] = defaultdict(list)
-    for key, row in latest.items():
-        daily[key[0]].append(row)
-    return dict(daily)
+    by_day: dict[str, list[dict]] = defaultdict(list)
+    for row in latest.values():
+        by_day[row["_day"]].append(row)
+    return dict(by_day)
 
 
-def choose_target_day(daily: dict[str, list[dict]]) -> str:
-    requested = os.getenv("ARTICLE_DATE", "").strip()
+def select_days(by_day: dict[str, list[dict]], requested: str | None) -> tuple[str, str | None]:
+    days = sorted(by_day)
+    if not days:
+        raise RuntimeError("No viable daily snapshots")
     if requested:
-        if requested not in daily:
-            raise RuntimeError(f"No data for requested ARTICLE_DATE={requested}")
-        return requested
-    viable = [day for day, items in daily.items() if len(items) >= 20]
-    if not viable:
-        raise RuntimeError("No day with enough observations to generate an article")
-    return max(viable)
+        if requested not in by_day:
+            raise RuntimeError(f"Requested ARTICLE_DATE {requested} has no data")
+        target = requested
+    else:
+        viable = [d for d in days if len(by_day[d]) >= 20]
+        target = viable[-1] if viable else days[-1]
+    previous = next((d for d in reversed(days) if d < target), None)
+    return target, previous
 
 
-def aggregate(items: list[dict]) -> dict[str, dict]:
-    groups: dict[str, list[float]] = defaultdict(list)
-    for row in items:
-        groups[row["_fuel"]].append(row["_price"])
-    result = {}
-    for fuel, values in groups.items():
-        result[fuel] = {
-            "count": len(values),
-            "avg": round(statistics.fmean(values), 3),
-            "median": round(statistics.median(values), 3),
-            "min": round(min(values), 3),
-            "max": round(max(values), 3),
+def safe_price(row: dict) -> float:
+    return float(row["price"])
+
+
+def summarize_day(rows: list[dict]) -> dict:
+    by_fuel: dict[str, list[dict]] = defaultdict(list)
+    for row in rows:
+        price = safe_price(row)
+        if 0.2 <= price <= 10:
+            by_fuel[row["_fuel"]].append(row)
+
+    fuels = {}
+    for fuel, items in sorted(by_fuel.items()):
+        prices = [safe_price(r) for r in items]
+        cheapest = sorted(items, key=safe_price)[:5]
+        fuels[fuel] = {
+            "count": len(items),
+            "average": round(statistics.mean(prices), 3),
+            "median": round(statistics.median(prices), 3),
+            "minimum": round(min(prices), 3),
+            "maximum": round(max(prices), 3),
+            "cheapest": [
+                {
+                    "city": r.get("city") or "",
+                    "station": r.get("station") or "",
+                    "price": round(safe_price(r), 3),
+                    "location": r.get("location") or "",
+                }
+                for r in cheapest
+            ],
         }
-    return result
-
-
-def build_report(daily: dict[str, list[dict]], target: str) -> dict:
-    days = sorted(daily)
-    target_index = days.index(target)
-    previous = days[target_index - 1] if target_index > 0 else None
-    current_stats = aggregate(daily[target])
-    previous_stats = aggregate(daily[previous]) if previous else {}
-
-    preferred = ["Бензин A95", "Дизел", "LPG", "Метан", "Бензин A100", "Дизел +"]
-    fuels = [f for f in preferred if f in current_stats] + [f for f in current_stats if f not in preferred]
-
-    fuel_rows = []
-    for fuel in fuels:
-        cur = current_stats[fuel]
-        prev = previous_stats.get(fuel)
-        delta = round(cur["avg"] - prev["avg"], 3) if prev else None
-        pct = round((delta / prev["avg"]) * 100, 2) if prev and prev["avg"] else None
-        fuel_rows.append({"fuel": fuel, **cur, "previous_avg": prev["avg"] if prev else None, "delta": delta, "delta_pct": pct})
 
     city_fuel: dict[tuple[str, str], list[float]] = defaultdict(list)
-    for row in daily[target]:
+    for row in rows:
         city = (row.get("city") or "").strip()
         if city:
-            city_fuel[(row["_fuel"], city)].append(row["_price"])
-
-    cheapest = {}
-    for fuel in preferred[:4]:
-        candidates = []
-        for (group_fuel, city), values in city_fuel.items():
-            if group_fuel == fuel and len(values) >= 2:
-                candidates.append({"city": city, "avg": round(statistics.fmean(values), 3), "count": len(values)})
-        cheapest[fuel] = sorted(candidates, key=lambda x: x["avg"])[:5]
-
+            city_fuel[(city, row["_fuel"])].append(safe_price(row))
+    city_averages = [
+        {"city": city, "fuel": fuel, "average": round(statistics.mean(values), 3), "count": len(values)}
+        for (city, fuel), values in city_fuel.items()
+        if len(values) >= 2
+    ]
     return {
-        "date": target,
-        "previous_date": previous,
-        "observations": len(daily[target]),
-        "fuel_stats": fuel_rows,
-        "cheapest_cities": cheapest,
+        "records": len(rows),
+        "stations": len({((r.get("station") or ""), (r.get("location") or ""), (r.get("city") or "")) for r in rows}),
+        "cities": len({(r.get("city") or "").strip() for r in rows if (r.get("city") or "").strip()}),
+        "fuels": fuels,
+        "city_averages": city_averages,
     }
 
 
-def generate_editorial(report: dict) -> dict:
+def build_facts(target: str, current: dict, previous_day: str | None, previous: dict | None) -> dict:
+    facts = {"date": target, "current": current, "previous_date": previous_day, "changes": {}}
+    if previous:
+        for fuel, data in current["fuels"].items():
+            old = previous["fuels"].get(fuel)
+            if old:
+                delta = round(data["average"] - old["average"], 3)
+                pct = round((delta / old["average"]) * 100, 2) if old["average"] else 0
+                facts["changes"][fuel] = {"absolute": delta, "percent": pct, "previous_average": old["average"]}
+    for fuel in ("Дизел", "Бензин A95", "LPG"):
+        candidates = [x for x in current["city_averages"] if x["fuel"] == fuel and x["count"] >= 3]
+        candidates.sort(key=lambda x: x["average"])
+        facts.setdefault("cheapest_cities", {})[fuel] = candidates[:5]
+    return facts
+
+
+def response_text(response) -> str:
+    text = getattr(response, "output_text", None)
+    if text:
+        return text.strip()
+    chunks = []
+    for item in getattr(response, "output", []) or []:
+        for content in getattr(item, "content", []) or []:
+            value = getattr(content, "text", None)
+            if value:
+                chunks.append(value)
+    return "\n".join(chunks).strip()
+
+
+def generate_article(facts: dict) -> dict:
     client = OpenAI(api_key=require_env("OPENAI_API_KEY"))
+    schema = {
+        "type": "object",
+        "properties": {
+            "title": {"type": "string"},
+            "description": {"type": "string"},
+            "deck": {"type": "string"},
+            "body_html": {"type": "string"},
+            "sources": {
+                "type": "array",
+                "items": {
+                    "type": "object",
+                    "properties": {"name": {"type": "string"}, "url": {"type": "string"}},
+                    "required": ["name", "url"],
+                    "additionalProperties": False,
+                },
+            },
+        },
+        "required": ["title", "description", "deck", "body_html", "sources"],
+        "additionalProperties": False,
+    }
     prompt = f"""
-Ти си редактор на българския сайт goriva.online. Подготви ежедневен журналистически обзор за пазара на горива на БЪЛГАРСКИ език.
+Ти си икономически журналист на goriva.online. Напиши оригинален дневен обзор на БЪЛГАРСКИ език за цените и пазара на горивата.
 
-Авторитетните локални данни са тези по-долу. Не измисляй цени, проценти, градове или тенденции. За международния контекст използвай web search и само надеждни, актуални източници (например Reuters, IEA, EIA, Европейска комисия, OPEC и официални институции). Не използвай числови котировки от външни източници; международният контекст трябва да е качествен, за да не се смесват различни мерни единици и пазари.
+СТРОГИ ПРАВИЛА:
+- Данните за българските цени идват единствено от FACTS_JSON. Не измисляй числа, цени, проценти, градове или бензиностанции.
+- Разграничавай средна наблюдавана цена в goriva.online от официална национална средна цена.
+- Използвай web search само за актуален международен/европейски пазарен контекст: Brent, петролни продукти, OPEC+, рафинерии, запаси, санкции или събития с реално отношение към горивата.
+- За външния контекст предпочитай Reuters, IEA, EIA, European Commission, OPEC и официални институции. Не използвай слухове и SEO агрегатори.
+- Не твърди причинно-следствена връзка между международно събитие и българска цена, ако няма доказателство. Използвай формулировки като „може да окаже влияние“.
+- Статията трябва да звучи като професионален български икономически новинарски материал, не като AI отчет.
+- Без сензационни заглавия и без инвестиционни прогнози.
+- Около 700–1000 думи, когато има достатъчно факти; по-кратко, ако денят е спокоен.
+- body_html съдържа само HTML фрагмент с <h2>, <p>, <ul>/<li> и по желание <blockquote>. Без <html>, <head>, markdown и script.
+- Не поставяй URL-и в body_html. Върни използваните външни източници в sources.
 
-Локални данни:
-{json.dumps(report, ensure_ascii=False, indent=2)}
-
-Върни САМО валиден JSON без markdown със следната структура:
-{{
-  "title": "кратко новинарско заглавие",
-  "meta_description": "до 155 символа",
-  "lead": "2-3 изречения",
-  "analysis": ["абзац 1", "абзац 2"],
-  "market_context": ["абзац 1", "абзац 2"],
-  "outlook": ["кратък предпазлив абзац"],
-  "sources": [{{"publisher":"...","title":"...","url":"https://..."}}],
-  "linkedin": "кратък текст за LinkedIn",
-  "facebook": "кратък текст за Facebook"
-}}
-
-Правила: без сензационализъм; без категорични прогнози; ясно отделяй наблюдавани локални данни от външен пазарен контекст; не твърди причинно-следствена връзка, ако източниците не я доказват; 2-5 източника; текстът да звучи като икономическа новина, а не като AI отчет.
-"""
+FACTS_JSON:
+{json.dumps(facts, ensure_ascii=False, indent=2)}
+""".strip()
     response = client.responses.create(
         model=MODEL,
         reasoning={"effort": "low"},
-        tools=[{"type": "web_search_preview"}],
-        include=["web_search_call.action.sources"],
+        tools=[{"type": "web_search"}],
         input=prompt,
+        text={"format": {"type": "json_schema", "name": "daily_fuel_article", "strict": True, "schema": schema}},
     )
-    text = response.output_text.strip()
-    if text.startswith("```"):
-        text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text, flags=re.S)
-    try:
-        data = json.loads(text)
-    except json.JSONDecodeError as exc:
-        raise RuntimeError(f"OpenAI returned invalid JSON: {exc}\n{text[:800]}") from exc
-
-    required = ["title", "meta_description", "lead", "analysis", "market_context", "outlook", "sources"]
-    missing = [key for key in required if key not in data]
-    if missing:
-        raise RuntimeError(f"OpenAI response missing fields: {missing}")
-    return data
+    raw = response_text(response)
+    if not raw:
+        raise RuntimeError("OpenAI returned no article text")
+    return json.loads(raw)
 
 
-def format_price(value) -> str:
-    return "—" if value is None else f"{float(value):.3f} €"
+def allowed_numbers(facts: dict) -> set[str]:
+    numbers = set()
+    def add(value):
+        if isinstance(value, (int, float)):
+            numbers.add(str(value))
+            numbers.add(f"{value:.2f}")
+            numbers.add(f"{value:.3f}")
+            numbers.add(str(value).replace(".", ","))
+            numbers.add(f"{value:.2f}".replace(".", ","))
+            numbers.add(f"{value:.3f}".replace(".", ","))
+        elif isinstance(value, dict):
+            for v in value.values(): add(v)
+        elif isinstance(value, list):
+            for v in value: add(v)
+    add(facts)
+    return numbers
 
 
-def render_stats(report: dict) -> str:
-    rows = []
-    for item in report["fuel_stats"]:
-        delta = item["delta"]
-        if delta is None:
-            change = "няма база за сравнение"
-        elif abs(delta) < 0.0005:
-            change = "без промяна"
-        else:
-            sign = "+" if delta > 0 else ""
-            change = f"{sign}{delta:.3f} € ({sign}{item['delta_pct']:.2f}%)"
-        rows.append(
-            f"<tr><td>{html.escape(item['fuel'])}</td><td>{format_price(item['avg'])}</td>"
-            f"<td>{format_price(item['min'])}</td><td>{format_price(item['max'])}</td>"
-            f"<td>{html.escape(change)}</td><td>{item['count']}</td></tr>"
-        )
-    return (
-        '<div class="article-data-table"><table><thead><tr><th>Гориво</th><th>Средна</th><th>Мин.</th><th>Макс.</th><th>Спрямо предходния ден</th><th>Наблюдения</th></tr></thead>'
-        f"<tbody>{''.join(rows)}</tbody></table></div>"
-    )
+def validate_local_claims(article: dict, facts: dict) -> None:
+    body = " ".join([article.get("title", ""), article.get("deck", ""), re.sub(r"<[^>]+>", " ", article.get("body_html", ""))])
+    suspicious = re.findall(r"\b\d+[\.,]\d{2,3}\b", body)
+    allowed = allowed_numbers(facts)
+    unknown = [n for n in suspicious if n not in allowed]
+    if unknown:
+        raise RuntimeError(f"Validation stopped publication: unverified decimal numbers in article: {sorted(set(unknown))}")
 
 
-def render_cheapest(report: dict) -> str:
-    blocks = []
-    for fuel, cities in report["cheapest_cities"].items():
-        if not cities:
-            continue
-        lis = "".join(f"<li><strong>{html.escape(c['city'])}</strong> — {c['avg']:.3f} € средна наблюдавана цена</li>" for c in cities)
-        blocks.append(f"<h3>{html.escape(fuel)}</h3><ul>{lis}</ul>")
-    return "".join(blocks) or "<p>Няма достатъчно наблюдения по градове за надеждно сравнение.</p>"
+def render_sources(sources: list[dict]) -> str:
+    items = []
+    for source in sources[:8]:
+        name = html.escape(source.get("name") or "Източник")
+        url = html.escape(source.get("url") or "", quote=True)
+        if url.startswith("http"):
+            items.append(f'<li><a href="{url}" target="_blank" rel="noopener noreferrer">{name}</a></li>')
+    if not items:
+        return ""
+    return '<section class="article-sources"><h2>Източници</h2><ul>' + "".join(items) + "</ul></section>"
 
 
-def safe_paragraphs(values) -> str:
-    return "".join(f"<p>{html.escape(str(value))}</p>" for value in (values or []))
-
-
-def render_article(report: dict, editorial: dict, article_url: str) -> str:
-    date_obj = datetime.fromisoformat(report["date"])
-    bg_months = ["януари", "февруари", "март", "април", "май", "юни", "юли", "август", "септември", "октомври", "ноември", "декември"]
-    display_date = f"{date_obj.day} {bg_months[date_obj.month - 1]} {date_obj.year}"
-    title = html.escape(editorial["title"])
-    meta = html.escape(editorial["meta_description"][:160])
-    lead = html.escape(editorial["lead"])
-    sources = editorial.get("sources") or []
-    source_items = []
-    for source in sources[:5]:
-        url = str(source.get("url", "")).strip()
-        if not url.startswith("http"):
-            continue
-        publisher = html.escape(str(source.get("publisher", "Източник")))
-        stitle = html.escape(str(source.get("title", "Пазарен източник")))
-        source_items.append(f'<li><a href="{html.escape(url, quote=True)}" target="_blank" rel="noopener noreferrer">{publisher}: {stitle}</a></li>')
-    sources_html = "".join(source_items) or "<li>Международният контекст е обобщен от актуални публични пазарни източници.</li>"
-
+def render_article(date_str: str, article: dict) -> str:
+    title = html.escape(article["title"])
+    description = html.escape(article["description"], quote=True)
+    deck = html.escape(article["deck"])
+    url = f"https://goriva.online/pages/articles/daily/{date_str}/"
+    published = f"{date_str}T18:30:00+03:00"
     schema = {
         "@context": "https://schema.org",
         "@type": "NewsArticle",
-        "headline": editorial["title"],
-        "description": editorial["meta_description"],
-        "datePublished": report["date"],
-        "dateModified": report["date"],
-        "inLanguage": "bg-BG",
-        "mainEntityOfPage": article_url,
-        "author": {"@type": "Organization", "name": "goriva.online Редакция"},
+        "headline": article["title"],
+        "description": article["description"],
+        "datePublished": published,
+        "dateModified": published,
+        "mainEntityOfPage": url,
+        "author": {"@type": "Organization", "name": "goriva.online"},
         "publisher": {"@type": "Organization", "name": "goriva.online", "url": "https://goriva.online/"},
-        "image": "https://goriva.online/media/og-3.png",
     }
-
-    return f'''<!doctype html>
+    return f'''<!DOCTYPE html>
 <html lang="bg">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title} | goriva.online</title>
-  <meta name="description" content="{meta}">
-  <link rel="canonical" href="{article_url}">
-  <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
-  <meta property="og:type" content="article">
-  <meta property="og:locale" content="bg_BG">
-  <meta property="og:site_name" content="goriva.online">
-  <meta property="og:title" content="{title}">
-  <meta property="og:description" content="{meta}">
-  <meta property="og:url" content="{article_url}">
-  <meta property="og:image" content="https://goriva.online/media/og-3.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <link rel="stylesheet" href="/styles.css?v=20260829-daily1">
+  <meta name="description" content="{description}">
+  <link rel="canonical" href="{url}">
+  <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/pages/styles/article-modern.css?v=20260829-newsroom1">
   <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
 </head>
-<body id="top" class="article-modern-page">
-<div class="background"></div>
-<header class="header-bar"><div class="header-container"><img src="/media/2logo.png" alt="goriva.online logo" class="header-logo"><div class="header-text"><strong>Новини и анализи</strong><span>Ежедневен обзор на пазара на горива</span></div></div></header>
-<nav class="main-nav"><div class="nav-container"><a href="/">Начало</a><a href="/pages/trends.html">История на цените</a><a href="/pages/news.html">Новини</a><a href="/pages/business-clients.html">За бизнеса</a></div></nav>
-<main class="container">
-<section class="article-page">
-  <h1 class="article-title">{title}</h1>
-  <div class="article-meta"><span>{display_date}</span><span>•</span><span>Дневен обзор</span><span>•</span><span>goriva.online Редакция</span></div>
-  <div class="article-image-main" style="background-image:url('/media/og-3.png')"></div>
-  <div class="article-content-full">
-    <p>{lead}</p>
-    <h2>Цените в България днес</h2>
-    <p>Обзорът е изчислен от {report['observations']} последни дневни наблюдения в базата на goriva.online. За всяка бензиностанция и вид гориво се използва последната налична цена за деня.</p>
-    {render_stats(report)}
-    <h2>Какво показват данните</h2>
-    {safe_paragraphs(editorial.get('analysis'))}
-    <h2>Къде средните наблюдавани цени са най-ниски</h2>
-    {render_cheapest(report)}
-    <h2>Международен пазарен контекст</h2>
-    {safe_paragraphs(editorial.get('market_context'))}
-    <h2>Какво да следим</h2>
-    {safe_paragraphs(editorial.get('outlook'))}
-    <h2>Източници</h2>
-    <ul>{sources_html}</ul>
-    <p><small>Данните за България са автоматично агрегирани от goriva.online. Международният контекст е автоматично обобщен от публични източници. Материалът е с информационна цел и не представлява прогноза за бъдещи цени.</small></p>
-  </div>
-</section>
-</main>
-<footer class="site-footer"></footer>
-<script src="/scripts/script.js?v=20260829-daily1" defer></script>
+<body>
+  <main class="article-page">
+    <article>
+      <div class="article-news-kicker">Дневен обзор</div>
+      <h1 class="article-title">{title}</h1>
+      <p class="article-news-deck">{deck}</p>
+      <div class="article-meta"><span>{date_str}</span><span>goriva.online</span></div>
+      <div class="article-content-full">
+        {article["body_html"]}
+        {render_sources(article.get("sources", []))}
+        <p class="data-source"><strong>За цените в България:</strong> анализът използва наблюденията в базата данни на goriva.online за посочената дата. Данните са информационни и могат да се различават от цената на място.</p>
+      </div>
+    </article>
+  </main>
+  <script src="/scripts/script.js?v=20260829-daily-news"></script>
 </body>
-</html>'''
+</html>
+'''
 
 
 def load_manifest() -> list[dict]:
@@ -371,90 +361,90 @@ def load_manifest() -> list[dict]:
         return []
 
 
-def save_manifest(entries: list[dict]) -> None:
+def save_manifest(items: list[dict]) -> None:
     path = ROOT / "data" / "generated-news.json"
-    path.write_text(json.dumps(entries, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(items, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
-def update_news_page(entries: list[dict]) -> None:
+def update_news_page(item: dict) -> None:
     path = ROOT / "pages" / "news.html"
     text = path.read_text(encoding="utf-8")
+    start = "<!-- AUTO_DAILY_NEWS_START -->"
+    end = "<!-- AUTO_DAILY_NEWS_END -->"
+    if start not in text or end not in text:
+        block = f"\n{start}\n{end}\n"
+        text = text.replace("</main>", block + "</main>", 1)
+    manifest = load_manifest()
     cards = []
-    for item in entries[:30]:
-        cards.append(f'''            <article class="article-card" data-category="analysis">
-                <a class="article-card-media" href="{html.escape(item['href'], quote=True)}" style="background-image:url('/media/og-3.png')"><span>Дневен обзор</span></a>
-                <div class="article-content">
-                    <div class="article-date">{html.escape(item['display_date'])} · Дневен обзор</div>
-                    <h3><a href="{html.escape(item['href'], quote=True)}">{html.escape(item['title'])}</a></h3>
-                    <p>{html.escape(item['description'])}</p>
-                    <a class="article-link" href="{html.escape(item['href'], quote=True)}">Прочети повече →</a>
-                </div>
-            </article>''')
-    block = "<!-- AUTO-DAILY-START -->\n" + "\n".join(cards) + "\n            <!-- AUTO-DAILY-END -->"
-    pattern = r"<!-- AUTO-DAILY-START -->.*?<!-- AUTO-DAILY-END -->"
-    if re.search(pattern, text, flags=re.S):
-        text = re.sub(pattern, block, text, flags=re.S)
-    else:
-        marker = '<div class="articles-grid" id="news-grid">'
-        text = text.replace(marker, marker + "\n            " + block, 1)
-    total = 3 + len(entries)
-    text = re.sub(r'(<div class="news-aside-stat"><span>)\d+(</span>)', rf'\g<1>{total:02d}\2', text, count=1)
+    for entry in manifest[:12]:
+        cards.append(f'''<article class="news-card auto-daily-news-card">
+  <div class="news-card-body">
+    <span class="news-card-category">Дневен обзор</span>
+    <h2><a href="{html.escape(entry['url'], quote=True)}">{html.escape(entry['title'])}</a></h2>
+    <p>{html.escape(entry['description'])}</p>
+    <div class="news-card-meta"><span>{html.escape(entry['date'])}</span><a href="{html.escape(entry['url'], quote=True)}">Прочети анализа →</a></div>
+  </div>
+</article>''')
+    section = f'''{start}
+<section class="news-section auto-daily-news" aria-labelledby="daily-news-heading">
+  <div class="news-section-heading"><span>Ежедневно</span><h2 id="daily-news-heading">Дневни обзори на пазара</h2></div>
+  <div class="news-grid">{''.join(cards)}</div>
+</section>
+{end}'''
+    text = re.sub(re.escape(start) + r".*?" + re.escape(end), section, text, flags=re.S)
     path.write_text(text, encoding="utf-8")
 
 
-def update_sitemap(article_url: str, date_str: str) -> None:
+def update_sitemap(url: str, date_str: str) -> None:
     path = ROOT / "sitemap.xml"
-    text = path.read_text(encoding="utf-8")
-    if article_url in text:
+    if not path.exists():
         return
-    node = f'''    <url>
-        <loc>{article_url}</loc>
-        <lastmod>{date_str}</lastmod>
-        <changefreq>yearly</changefreq>
-        <priority>0.7</priority>
-    </url>\n\n'''
+    text = path.read_text(encoding="utf-8")
+    if url in text:
+        return
+    node = f"  <url>\n    <loc>{html.escape(url)}</loc>\n    <lastmod>{date_str}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n"
     text = text.replace("</urlset>", node + "</urlset>")
     path.write_text(text, encoding="utf-8")
 
 
 def main() -> None:
     rows = fetch_rows()
-    daily = build_daily_snapshots(rows)
-    target = choose_target_day(daily)
-    report = build_report(daily, target)
-    editorial = generate_editorial(report)
+    by_day = build_daily_snapshots(rows)
+    requested = os.getenv("ARTICLE_DATE", "").strip() or None
+    target_day, previous_day = select_days(by_day, requested)
+    current = summarize_day(by_day[target_day])
+    previous = summarize_day(by_day[previous_day]) if previous_day else None
+    facts = build_facts(target_day, current, previous_day, previous)
+    article = generate_article(facts)
+    validate_local_claims(article, facts)
 
-    slug = target
-    article_dir = ROOT / "pages" / "articles" / "daily" / slug
-    article_dir.mkdir(parents=True, exist_ok=True)
-    href = f"/pages/articles/daily/{slug}/index.html"
-    article_url = f"https://goriva.online{href}"
-    article_html = render_article(report, editorial, article_url)
-    (article_dir / "index.html").write_text(article_html, encoding="utf-8")
+    out_dir = ROOT / "pages" / "articles" / "daily" / target_day
+    out_dir.mkdir(parents=True, exist_ok=True)
+    out_path = out_dir / "index.html"
+    out_path.write_text(render_article(target_day, article), encoding="utf-8")
 
-    date_obj = datetime.fromisoformat(target)
-    months = ["януари", "февруари", "март", "април", "май", "юни", "юли", "август", "септември", "октомври", "ноември", "декември"]
-    display_date = f"{date_obj.day} {months[date_obj.month - 1]} {date_obj.year}"
-
-    entries = [item for item in load_manifest() if item.get("date") != target]
-    entries.append({
-        "date": target,
-        "display_date": display_date,
-        "title": editorial["title"],
-        "description": editorial["meta_description"],
-        "href": href,
-        "linkedin": editorial.get("linkedin", ""),
-        "facebook": editorial.get("facebook", ""),
+    url = f"/pages/articles/daily/{target_day}/"
+    manifest = [x for x in load_manifest() if x.get("date") != target_day]
+    manifest.insert(0, {
+        "date": target_day,
+        "title": article["title"],
+        "description": article["description"],
+        "url": url,
     })
-    entries.sort(key=lambda x: x.get("date", ""), reverse=True)
-    save_manifest(entries)
-    update_news_page(entries)
-    update_sitemap(article_url, target)
+    manifest.sort(key=lambda x: x.get("date", ""), reverse=True)
+    save_manifest(manifest[:90])
+    update_news_page(manifest[0])
+    update_sitemap(f"https://goriva.online{url}", target_day)
 
-    print(f"Generated: {article_dir / 'index.html'}")
-    print(f"Article URL: {article_url}")
-    print(f"Model: {MODEL}")
-    print(f"Observations used: {report['observations']}")
+    print(json.dumps({
+        "status": "generated",
+        "date": target_day,
+        "previous_date": previous_day,
+        "records": current["records"],
+        "article": str(out_path.relative_to(ROOT)),
+        "model": MODEL,
+    }, ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":
