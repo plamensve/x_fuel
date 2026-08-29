@@ -1,0 +1,52 @@
+name: Generate daily fuel article
+
+on:
+  workflow_dispatch:
+    inputs:
+      article_date:
+        description: "Optional date in YYYY-MM-DD. Leave empty to use the latest viable day."
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: "pip"
+          cache-dependency-path: requirements-automation.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements-automation.txt
+
+      - name: Generate Bulgarian daily article
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: gpt-5.6-luna
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          ARTICLE_DATE: ${{ inputs.article_date }}
+        run: python automation/generate_daily_article.py
+
+      - name: Commit generated article
+        run: |
+          if git diff --quiet && [ -z "$(git status --porcelain)" ]; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git config user.name "goriva.online bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add pages/articles/daily pages/news.html data/generated-news.json sitemap.xml
+          git commit -m "Publish daily fuel market article"
+          git push
