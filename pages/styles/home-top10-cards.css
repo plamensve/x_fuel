@@ -212,9 +212,9 @@
 .home-top10-card-top {
     position: relative;
     z-index: 1;
-    display: flex;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    justify-content: space-between;
     gap: 12px;
 }
 
@@ -230,6 +230,28 @@
     border: 1px solid rgba(148,163,184,.12);
     font-size: 16px;
     font-weight: 900;
+}
+
+.home-top10-station-logo-wrap {
+    min-width: 0;
+    width: 96px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    justify-self: start;
+    padding: 5px 8px;
+    border: 1px solid rgba(148,163,184,.12);
+    border-radius: 10px;
+    background: rgba(255,255,255,.94);
+    box-shadow: 0 6px 16px rgba(2,6,23,.12);
+}
+
+.home-top10-station-logo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
 }
 
 .home-top10-fuel-pill {
@@ -386,5 +408,16 @@
 
     .home-top10-card {
         padding: 16px;
+    }
+
+    .home-top10-card-top {
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        gap: 9px;
+    }
+
+    .home-top10-station-logo-wrap {
+        width: 78px;
+        height: 38px;
+        padding: 4px 6px;
     }
 }
