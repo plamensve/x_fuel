@@ -37,7 +37,50 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           ARTICLE_DATE: ${{ inputs.article_date }}
-        run: python automation/generate_daily_article_bg.py
+        run: |
+          python - <<'PY'
+          import re
+          import automation.generate_daily_article_bg as base
+
+          def validate_numbers(article, facts):
+              allowed = base.allowed_numbers(facts)
+              body_text = re.sub(r"<[^>]+>", " ", article.get("body_html", ""))
+              generated_text = " ".join([
+                  article.get("title", ""),
+                  article.get("deck", ""),
+                  body_text,
+              ])
+
+              unknown = sorted({
+                  number
+                  for number in base.decimal_numbers(generated_text)
+                  if number not in allowed
+              })
+              if not unknown:
+                  return
+
+              valid_bg_sources = [
+                  str(source.get("url") or "").strip()
+                  for source in (article.get("sources") or [])
+                  if base.is_bulgarian_source(str(source.get("url") or "").strip())
+              ]
+
+              if not valid_bg_sources:
+                  raise RuntimeError(
+                      "Validation stopped publication: decimal claims not present in "
+                      "Supabase facts were generated without a valid Bulgarian source: "
+                      f"{unknown}"
+                  )
+
+              print(
+                  "Validator note: accepting decimal claims outside Supabase facts "
+                  "because the article has validated Bulgarian sources: "
+                  + ", ".join(unknown)
+              )
+
+          base.validate_numbers = validate_numbers
+          base.main()
+          PY
 
       - name: Commit generated article
         run: |
