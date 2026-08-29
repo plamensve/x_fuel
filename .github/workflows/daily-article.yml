@@ -7,6 +7,11 @@ on:
         description: "Optional date in YYYY-MM-DD. Leave empty to use the latest viable day."
         required: false
         type: string
+  schedule:
+    # Sofia is UTC+3 in summer and UTC+2 in winter.
+    # Both UTC candidates are scheduled; the gate below runs only at local 18:00.
+    - cron: "0 15 * * *"
+    - cron: "0 16 * * *"
 
 permissions:
   contents: write
@@ -17,10 +22,30 @@ jobs:
     timeout-minutes: 15
 
     steps:
+      - name: Check Sofia publication window
+        id: window
+        shell: bash
+        run: |
+          python - <<'PY'
+          import os
+          from datetime import datetime
+          from zoneinfo import ZoneInfo
+
+          event = os.environ.get("GITHUB_EVENT_NAME", "")
+          now = datetime.now(ZoneInfo("Europe/Sofia"))
+          should_run = event == "workflow_dispatch" or now.hour == 18
+          print(f"Sofia time: {now.isoformat()}")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
+              fh.write(f"should_run={'true' if should_run else 'false'}\n")
+              fh.write(f"sofia_date={now.date().isoformat()}\n")
+          PY
+
       - name: Checkout repository
+        if: steps.window.outputs.should_run == 'true'
         uses: actions/checkout@v4
 
       - name: Set up Python
+        if: steps.window.outputs.should_run == 'true'
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
@@ -28,15 +53,33 @@ jobs:
           cache-dependency-path: requirements-automation.txt
 
       - name: Install dependencies
+        if: steps.window.outputs.should_run == 'true'
         run: pip install -r requirements-automation.txt
 
+      - name: Resolve article date
+        if: steps.window.outputs.should_run == 'true'
+        id: article
+        shell: bash
+        env:
+          MANUAL_DATE: ${{ inputs.article_date }}
+          SOFIA_DATE: ${{ steps.window.outputs.sofia_date }}
+        run: |
+          if [ "${GITHUB_EVENT_NAME}" = "schedule" ]; then
+            TARGET_DATE="${SOFIA_DATE}"
+          else
+            TARGET_DATE="${MANUAL_DATE}"
+          fi
+          echo "target_date=${TARGET_DATE}" >> "$GITHUB_OUTPUT"
+          echo "Target article date: ${TARGET_DATE:-latest viable day}"
+
       - name: Generate Bulgarian daily article
+        if: steps.window.outputs.should_run == 'true'
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: gpt-5.6-luna
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
-          ARTICLE_DATE: ${{ inputs.article_date }}
+          ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
         run: |
           python - <<'PY'
           import re
@@ -85,7 +128,14 @@ jobs:
           base.main()
           PY
 
+      - name: Generate article artwork and update news cards
+        if: steps.window.outputs.should_run == 'true'
+        env:
+          ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
+        run: python automation/postprocess_daily_article.py
+
       - name: Commit generated article
+        if: steps.window.outputs.should_run == 'true'
         run: |
           if git diff --quiet && [ -z "$(git status --porcelain)" ]; then
             echo "No changes to commit."
@@ -93,6 +143,6 @@ jobs:
           fi
           git config user.name "goriva.online bot"
           git config user.email "actions@users.noreply.github.com"
-          git add pages/articles/daily pages/news.html data/generated-news.json sitemap.xml
+          git add pages/articles/daily pages/news.html data/generated-news.json sitemap.xml media/daily-news
           git commit -m "Publish daily fuel market article"
           git push
