@@ -22,6 +22,48 @@
         return item.match.some(match => match.endsWith("/") ? path.startsWith(match) : path === normalizePath(match));
     };
 
+    function loadGlobalProgressStyles() {
+        if (document.getElementById("goriva-global-progress-css")) return;
+        const link = document.createElement("link");
+        link.id = "goriva-global-progress-css";
+        link.rel = "stylesheet";
+        link.href = "/pages/styles/global-progress.css?v=20260829-1134";
+        document.head.appendChild(link);
+    }
+
+    function buildScrollProgress() {
+        if (!document.body || document.querySelector(".goriva-scroll-progress")) return;
+        loadGlobalProgressStyles();
+
+        const progress = document.createElement("div");
+        progress.className = "goriva-scroll-progress";
+        progress.setAttribute("aria-hidden", "true");
+        progress.innerHTML = '<span class="goriva-scroll-progress-bar"></span>';
+        document.body.prepend(progress);
+
+        const bar = progress.querySelector(".goriva-scroll-progress-bar");
+        let ticking = false;
+
+        const update = () => {
+            const doc = document.documentElement;
+            const max = Math.max(1, doc.scrollHeight - window.innerHeight);
+            const ratio = Math.min(1, Math.max(0, window.scrollY / max));
+            bar.style.transform = `scaleX(${ratio})`;
+            ticking = false;
+        };
+
+        const requestUpdate = () => {
+            if (ticking) return;
+            ticking = true;
+            window.requestAnimationFrame(update);
+        };
+
+        update();
+        window.addEventListener("scroll", requestUpdate, { passive: true });
+        window.addEventListener("resize", requestUpdate, { passive: true });
+        window.addEventListener("load", requestUpdate, { once: true });
+    }
+
     function buildHeader() {
         if (!document.body || document.querySelector(".goriva-global-header")) return;
 
@@ -175,6 +217,7 @@
     }
 
     function initGlobalShell() {
+        buildScrollProgress();
         buildHeader();
         buildFooter();
     }
