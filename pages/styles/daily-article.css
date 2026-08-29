@@ -1,0 +1,29 @@
+/* Dedicated presentation for automated daily market articles */
+body.daily-article-page{background:#f6f7f9;color:#172033}
+body.daily-article-page .article-page{width:min(calc(100% - 32px),1240px)!important;margin:0 auto!important;padding:38px 0 84px!important}
+body.daily-article-page .article-modern-topline{max-width:1120px;margin-bottom:28px}
+body.daily-article-page .article-news-kicker{max-width:960px;margin-bottom:14px;color:#2563eb}
+body.daily-article-page .article-title{max-width:960px!important;font-size:clamp(38px,5vw,62px)!important;line-height:1.055!important;letter-spacing:-.042em!important;text-wrap:balance}
+body.daily-article-page .article-news-deck{max-width:850px;margin-top:20px;color:#526174;font-size:clamp(19px,2vw,25px);line-height:1.5;text-wrap:pretty}
+body.daily-article-page .article-meta{max-width:960px!important;margin-top:20px!important;margin-bottom:0!important;padding-top:16px;border-top:1px solid #dfe4ea}
+body.daily-article-page .article-meta span+span:before{content:"•";margin-right:8px;color:#a4afbd}
+body.daily-article-page .article-daily-visual{width:min(100%,1120px);margin:32px auto 0}
+body.daily-article-page .article-daily-visual .article-image-main{width:100%!important;aspect-ratio:3/2!important;max-height:680px;object-fit:cover!important;object-position:center;border-radius:18px!important;box-shadow:0 22px 55px rgba(15,23,42,.14)!important;background:#e8edf3}
+body.daily-article-page .article-image-caption{width:100%;margin:9px 0 0;color:#7a8798;font-family:Inter,system-ui,sans-serif;font-size:11px;line-height:1.5}
+body.daily-article-page .article-news-layout{grid-template-columns:minmax(0,760px) 250px;gap:64px;max-width:1080px;margin-top:52px}
+body.daily-article-page .article-news-main{min-width:0}
+body.daily-article-page .article-content-full{font-family:Georgia,"Times New Roman",serif}
+body.daily-article-page .article-content-full>p{color:#273444!important;font-size:18px!important;line-height:1.88!important;margin-bottom:25px!important}
+body.daily-article-page .article-content-full>p:first-child{font-size:20px!important;line-height:1.78!important;color:#172033!important}
+body.daily-article-page .article-content-full h2{margin-top:48px!important;margin-bottom:16px!important;padding-top:0!important;color:#101827!important;font-size:29px!important;line-height:1.22!important;letter-spacing:-.026em!important}
+body.daily-article-page .article-content-full h3{margin-top:34px;color:#172033;font-family:Inter,system-ui,sans-serif;font-size:21px;line-height:1.3}
+body.daily-article-page .article-content-full ul{margin:18px 0 32px!important;padding:22px 26px 22px 44px!important;border:1px solid #e1e6ec!important;border-left:4px solid #2563eb!important;border-radius:10px;background:#fff!important;box-shadow:0 8px 24px rgba(15,23,42,.045)}
+body.daily-article-page .article-content-full li{font-size:15px!important;line-height:1.72!important}
+body.daily-article-page .article-pullquote{margin:38px 0;padding:25px 0;border-color:#cbd5df;font-size:25px;line-height:1.42}
+body.daily-article-page .article-news-side{top:92px;padding:18px 18px 8px;border:1px solid #e0e5eb;border-radius:14px;background:#fff;box-shadow:0 10px 28px rgba(15,23,42,.05)}
+body.daily-article-page .article-news-side strong{font-size:12px;letter-spacing:.02em;text-transform:uppercase;color:#64748b}
+body.daily-article-page .article-news-side a{padding:13px 0;font-size:12px;line-height:1.45}
+body.daily-article-page .data-source{margin-top:42px!important;padding:18px 20px;border:1px solid #dce3ea;border-radius:10px;background:#f9fbfd;color:#59697a!important;font-family:Inter,system-ui,sans-serif!important;font-size:12px!important;line-height:1.65!important}
+body.daily-article-page .article-modern-end{max-width:1080px;margin-top:54px}
+@media(max-width:900px){body.daily-article-page .article-news-layout{grid-template-columns:1fr;gap:34px;max-width:820px}body.daily-article-page .article-news-side{position:static;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px}body.daily-article-page .article-news-side strong{grid-column:1/-1}.article-news-side a{margin-right:0!important}}
+@media(max-width:700px){body.daily-article-page .article-page{width:min(calc(100% - 20px),1240px)!important;padding-top:24px!important}body.daily-article-page .article-title{font-size:clamp(34px,10vw,46px)!important;line-height:1.08!important}body.daily-article-page .article-news-deck{font-size:19px}body.daily-article-page .article-daily-visual{margin-top:24px}body.daily-article-page .article-daily-visual .article-image-main{aspect-ratio:4/3!important;border-radius:12px!important}body.daily-article-page .article-news-layout{margin-top:36px}body.daily-article-page .article-content-full>p{font-size:16.5px!important;line-height:1.8!important}body.daily-article-page .article-content-full>p:first-child{font-size:18px!important}body.daily-article-page .article-content-full h2{font-size:24px!important;margin-top:38px!important}body.daily-article-page .article-news-side{grid-template-columns:1fr}}
