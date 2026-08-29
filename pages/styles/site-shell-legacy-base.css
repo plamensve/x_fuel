@@ -136,8 +136,22 @@ body .site-footer .footer-container {
 
 body .site-footer .footer-brand {
     display: flex;
+    flex-direction: column;
     align-items: flex-start;
     justify-content: flex-start;
+    gap: 14px;
+    max-width: 290px;
+}
+
+body .site-footer .footer-brand > * {
+    max-width: 100%;
+}
+
+body .site-footer .footer-brand p,
+body .site-footer .footer-brand .footer-brand-copy,
+body .site-footer .footer-brand .footer-data-note {
+    margin-left: 0;
+    margin-right: 0;
 }
 
 body .site-footer .footer-logo {
