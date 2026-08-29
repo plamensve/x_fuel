@@ -6,9 +6,9 @@ import os
 import re
 import statistics
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
-from urllib.parse import urlencode, urlparse
+from urllib.parse import parse_qsl, urlencode, urlparse, urlsplit, urlunsplit
 from zoneinfo import ZoneInfo
 
 import requests
@@ -20,8 +20,11 @@ TABLE = "fuel_prices"
 PAGE_SIZE = 1000
 MODEL = os.getenv("OPENAI_MODEL", "gpt-5.6-luna")
 
-# External editorial context is intentionally limited to Bulgarian-language / Bulgarian-domain sources.
-# Local pump-price numbers always come from Supabase, never from these sites.
+MIN_DAILY_RECORDS = int(os.getenv("MIN_DAILY_RECORDS", "50"))
+MIN_DAILY_STATIONS = int(os.getenv("MIN_DAILY_STATIONS", "15"))
+MIN_DAILY_CITIES = int(os.getenv("MIN_DAILY_CITIES", "5"))
+SOURCE_MAX_AGE_HOURS = int(os.getenv("SOURCE_MAX_AGE_HOURS", "72"))
+
 PREFERRED_BG_SOURCES = (
     "bta.bg",
     "bnr.bg",
@@ -40,6 +43,11 @@ PREFERRED_BG_SOURCES = (
     "kzp.bg",
     "cpc.bg",
 )
+
+TRACKING_QUERY_KEYS = {
+    "utm_source", "utm_medium", "utm_campaign", "utm_term", "utm_content",
+    "gclid", "fbclid", "mc_cid", "mc_eid",
+}
 
 
 def require_env(name: str) -> str:
@@ -113,6 +121,7 @@ def build_daily_snapshots(rows: list[dict]) -> dict[str, list[dict]]:
             continue
         if not (0.2 <= price <= 10):
             continue
+
         day = dt.date().isoformat()
         fuel = canonical_fuel(row.get("fuel", ""))
         key = (
@@ -135,22 +144,6 @@ def build_daily_snapshots(rows: list[dict]) -> dict[str, list[dict]]:
     for row in latest.values():
         by_day[row["_day"]].append(row)
     return dict(by_day)
-
-
-def select_days(by_day: dict[str, list[dict]]) -> tuple[str, str | None]:
-    requested = os.getenv("ARTICLE_DATE", "").strip()
-    days = sorted(by_day)
-    if not days:
-        raise RuntimeError("No viable daily snapshots")
-    if requested:
-        if requested not in by_day:
-            raise RuntimeError(f"Requested ARTICLE_DATE={requested} has no data")
-        target = requested
-    else:
-        viable = [d for d in days if len(by_day[d]) >= 20]
-        target = viable[-1] if viable else days[-1]
-    previous = next((d for d in reversed(days) if d < target), None)
-    return target, previous
 
 
 def summarize_day(rows: list[dict]) -> dict:
@@ -190,32 +183,103 @@ def summarize_day(rows: list[dict]) -> dict:
     }
 
 
+def coverage_is_sufficient(summary: dict) -> bool:
+    return (
+        summary["records"] >= MIN_DAILY_RECORDS
+        and summary["stations"] >= MIN_DAILY_STATIONS
+        and summary["cities"] >= MIN_DAILY_CITIES
+    )
+
+
+def select_days(by_day: dict[str, list[dict]]) -> tuple[str, str | None]:
+    requested = os.getenv("ARTICLE_DATE", "").strip()
+    days = sorted(by_day)
+    if not days:
+        raise RuntimeError("No viable daily snapshots")
+
+    if requested:
+        if requested not in by_day:
+            raise RuntimeError(f"Requested ARTICLE_DATE={requested} has no data")
+        target = requested
+    else:
+        viable = [d for d in days if coverage_is_sufficient(summarize_day(by_day[d]))]
+        if not viable:
+            latest = days[-1]
+            summary = summarize_day(by_day[latest])
+            raise RuntimeError(
+                "Publication skipped: latest dataset is too small for a daily market article "
+                f"({summary['records']} records, {summary['stations']} stations, {summary['cities']} cities; "
+                f"required at least {MIN_DAILY_RECORDS}/{MIN_DAILY_STATIONS}/{MIN_DAILY_CITIES})."
+            )
+        target = viable[-1]
+
+    previous = next((d for d in reversed(days) if d < target), None)
+    return target, previous
+
+
+def fmt_price(value: float) -> str:
+    return f"{value:.3f}".rstrip("0").rstrip(".").replace(".", ",")
+
+
+def fmt_change(value: float) -> str:
+    sign = "+" if value > 0 else ""
+    return f"{sign}{value:.3f}".rstrip("0").rstrip(".").replace(".", ",")
+
+
+def fmt_percent(value: float) -> str:
+    sign = "+" if value > 0 else ""
+    return f"{sign}{value:.2f}".replace(".", ",") + "%"
+
+
 def build_facts(target: str, current: dict, previous_day: str | None, previous: dict | None) -> dict:
     facts = {
         "date": target,
         "previous_date": previous_day,
-        "current": current,
-        "changes": {},
+        "coverage": {
+            "records": current["records"],
+            "stations": current["stations"],
+            "cities": current["cities"],
+            "scope_label": "наблюдаваната извадка на goriva.online",
+            "national_claim_allowed": False,
+        },
+        "fuels": {},
         "cheapest_cities": {},
     }
 
-    if previous:
-        for fuel, data in current["fuels"].items():
-            old = previous["fuels"].get(fuel)
-            if not old:
-                continue
+    for fuel, data in current["fuels"].items():
+        item = {
+            "count": data["count"],
+            "average": data["average"],
+            "median": data["median"],
+            "minimum": data["minimum"],
+            "maximum": data["maximum"],
+            "display": {
+                "average": fmt_price(data["average"]),
+                "median": fmt_price(data["median"]),
+                "minimum": fmt_price(data["minimum"]),
+                "maximum": fmt_price(data["maximum"]),
+            },
+        }
+        old = previous["fuels"].get(fuel) if previous else None
+        if old:
             delta = round(data["average"] - old["average"], 3)
             pct = round((delta / old["average"]) * 100, 2) if old["average"] else 0
-            facts["changes"][fuel] = {
+            item["change"] = {
+                "previous_average": old["average"],
                 "absolute": delta,
                 "percent": pct,
-                "previous_average": old["average"],
+                "display_previous_average": fmt_price(old["average"]),
+                "display_absolute": fmt_change(delta),
+                "display_percent": fmt_percent(pct),
             }
+        facts["fuels"][fuel] = item
 
     for fuel in ("Бензин A95", "Дизел", "LPG", "Метан"):
         candidates = [x for x in current["city_averages"] if x["fuel"] == fuel]
         candidates.sort(key=lambda x: x["average"])
-        facts["cheapest_cities"][fuel] = candidates[:5]
+        facts["cheapest_cities"][fuel] = [
+            {**x, "display_average": fmt_price(x["average"])} for x in candidates[:5]
+        ]
 
     return facts
 
@@ -249,8 +313,9 @@ def generate_article(facts: dict) -> dict:
                     "properties": {
                         "name": {"type": "string"},
                         "url": {"type": "string"},
+                        "published_at": {"type": "string"},
                     },
-                    "required": ["name", "url"],
+                    "required": ["name", "url", "published_at"],
                     "additionalProperties": False,
                 },
             },
@@ -260,20 +325,25 @@ def generate_article(facts: dict) -> dict:
     }
 
     source_list = ", ".join(PREFERRED_BG_SOURCES)
+    target_date = facts["date"]
     prompt = f"""
-Ти си икономически журналист на goriva.online. Напиши оригинален дневен обзор на БЪЛГАРСКИ език за цените и пазара на горивата в България.
+Ти си икономически журналист на goriva.online. Напиши оригинален дневен обзор на БЪЛГАРСКИ език.
 
-ЗАДЪЛЖИТЕЛНИ ПРАВИЛА:
-1. Всички числа за цени на горива в България, средни стойности, промени, проценти, градове и бензиностанции идват САМО от FACTS_JSON. Не добавяй други локални числа.
-2. За новинарски и пазарен контекст използвай web search САМО към български източници и български домейни. Предпочитани домейни: {source_list}.
-3. Не използвай Reuters, Bloomberg, IEA, EIA, OPEC, чуждестранни медии или чуждестранни домейни като директни източници. Ако българска медия преразказва международна новина, използвай българската публикация.
-4. В пазарния контекст НЕ цитирай външни числови котировки, цени на Brent, долари за барел, проценти или други десетични стойности. Описвай външния контекст качествено: поскъпване, поевтиняване, напрежение, стабилизация, решение на производители, логистичен риск и т.н. Това предотвратява смесване с нашите локални данни.
-5. Постави външния контекст в секция с ТОЧНО заглавие <h2>Пазарен контекст от български източници</h2>.
-6. Не твърди, че дадена международна новина е причинила конкретна промяна в България. Използвай предпазлив език: „може да влияе“, „е фактор за наблюдение“, „създава пазарен фон“.
-7. Статията да звучи като професионална икономическа новина, а не като AI отчет. Без сензационализъм и без категорични прогнози.
-8. body_html да съдържа само <h2>, <h3>, <p>, <ul>, <li>, <blockquote>. Без markdown, script, style, iframe и без URL-и в текста.
-9. В sources върни само реално използваните български URL-и. Ако не откриеш надеждна актуална българска публикация, остави sources празен и напиши кратък локален обзор само по FACTS_JSON.
-10. Не копирай дълги пасажи от източниците. Синтезирай информацията със собствен текст.
+СТРОГИ РЕДАКЦИОННИ ПРАВИЛА:
+1. Ценовите числа са изчислени от Python и се намират във FACTS_JSON. НЕ смятай сам нищо. Когато цитираш цена, промяна или процент, използвай точно display полетата.
+2. Данните НЕ са официална национална статистика. Формулирай ги като „наблюдаваната извадка на goriva.online“, „наблюдаваните обекти“ или „данните в goriva.online“.
+3. Забранено е заглавието да внушава, че малката извадка представлява целия български пазар. Не използвай категорично „горивата в България поскъпват/поевтиняват“. Споменавай goriva.online или наблюдаваната извадка.
+4. Задължително посочи размера на извадката: records, stations и cities.
+5. За външен контекст използвай web search САМО към български източници/домейни. Предпочитани: {source_list}.
+6. Използвай само външни публикации, публикувани до {SOURCE_MAX_AGE_HOURS} часа преди {target_date}. Ако няма надеждна свежа публикация, НЕ добавяй пазарен контекст и върни sources=[] .
+7. Не използвай чуждестранен домейн като директен източник. Българска медия може да преразказва международна новина.
+8. В body_html НЕ поставяй URL, markdown link, скоби с източник, inline citation или utm параметри. Всички източници са само в sources.
+9. В пазарния контекст не цитирай външни десетични котировки или проценти. Описвай контекста качествено.
+10. Ако има външен контекст, секцията се казва точно <h2>Пазарен контекст от български източници</h2>.
+11. Не твърди причинно-следствена връзка между външна новина и конкретна промяна в наблюдаваните цени без доказателство.
+12. Без сензационализъм, инвестиционни прогнози и AI формулировки. 600–900 думи при достатъчно материал.
+13. body_html може да съдържа само <h2>, <h3>, <p>, <ul>, <li>, <strong>, <blockquote>.
+14. За всеки source върни published_at във формат YYYY-MM-DDTHH:MM:SS+03:00 или поне YYYY-MM-DD.
 
 FACTS_JSON:
 {json.dumps(facts, ensure_ascii=False, indent=2)}
@@ -299,6 +369,61 @@ FACTS_JSON:
     return json.loads(raw)
 
 
+def clean_source_url(url: str) -> str:
+    parts = urlsplit((url or "").strip())
+    kept = [(k, v) for k, v in parse_qsl(parts.query, keep_blank_values=True) if k.lower() not in TRACKING_QUERY_KEYS and not k.lower().startswith("utm_")]
+    return urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(kept), ""))
+
+
+def is_bulgarian_source(url: str) -> bool:
+    try:
+        host = (urlparse(url).hostname or "").lower().removeprefix("www.")
+    except ValueError:
+        return False
+    return host.endswith(".bg") or host in PREFERRED_BG_SOURCES
+
+
+def parse_source_date(value: str, target_day: str) -> datetime:
+    text = (value or "").strip()
+    if not text:
+        raise ValueError("missing source date")
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=SOFIA)
+        return parsed.astimezone(SOFIA)
+    except ValueError:
+        parsed_day = date.fromisoformat(text[:10])
+        return datetime.combine(parsed_day, datetime.min.time(), tzinfo=SOFIA)
+
+
+def normalize_and_validate_sources(article: dict, target_day: str) -> None:
+    cleaned = []
+    target_end = datetime.combine(date.fromisoformat(target_day), datetime.max.time(), tzinfo=SOFIA)
+    oldest = target_end - timedelta(hours=SOURCE_MAX_AGE_HOURS)
+
+    for source in article.get("sources") or []:
+        url = clean_source_url(str(source.get("url") or ""))
+        if not url.startswith(("https://", "http://")):
+            raise RuntimeError(f"Publication stopped: invalid source URL: {url}")
+        if not is_bulgarian_source(url):
+            raise RuntimeError(f"Publication stopped: non-Bulgarian source returned by model: {url}")
+
+        try:
+            published = parse_source_date(str(source.get("published_at") or ""), target_day)
+        except ValueError as exc:
+            raise RuntimeError(f"Publication stopped: source has no valid publication date: {url}") from exc
+
+        if published < oldest or published > target_end + timedelta(hours=12):
+            raise RuntimeError(
+                f"Publication stopped: source is not fresh enough for daily news ({source.get('published_at')}): {url}"
+            )
+
+        cleaned.append({"name": source.get("name") or url, "url": url, "published_at": published.isoformat()})
+
+    article["sources"] = cleaned
+
+
 def allowed_numbers(facts: dict) -> set[str]:
     values: set[str] = set()
 
@@ -309,6 +434,8 @@ def allowed_numbers(facts: dict) -> set[str]:
             for variant in (str(value), f"{value:.1f}", f"{value:.2f}", f"{value:.3f}"):
                 values.add(variant)
                 values.add(variant.replace(".", ","))
+        elif isinstance(value, str):
+            values.update(re.findall(r"(?<!\d)\d+[\.,]\d{1,3}(?!\d)", value))
         elif isinstance(value, dict):
             for v in value.values():
                 add(v)
@@ -324,64 +451,46 @@ def decimal_numbers(text: str) -> list[str]:
     return re.findall(r"(?<!\d)\d+[\.,]\d{1,3}(?!\d)", text or "")
 
 
-def is_bulgarian_source(url: str) -> bool:
-    try:
-        host = (urlparse(url).hostname or "").lower().removeprefix("www.")
-    except ValueError:
-        return False
-    return host.endswith(".bg") or host in PREFERRED_BG_SOURCES
+def validate_article(article: dict, facts: dict) -> None:
+    title = article.get("title", "")
+    title_low = title.lower()
+    if "в българия" in title_low and "goriva.online" not in title_low and "наблюдаван" not in title_low:
+        raise RuntimeError("Publication stopped: title overstates the scope of the goriva.online sample")
 
-
-def validate_sources(article: dict) -> None:
-    for source in article.get("sources") or []:
-        url = str(source.get("url") or "").strip()
-        if not url.startswith(("https://", "http://")):
-            raise RuntimeError(f"Source URL is invalid: {url}")
-        if not is_bulgarian_source(url):
-            raise RuntimeError(f"Publication stopped: non-Bulgarian source returned by model: {url}")
-
-
-def validate_numbers(article: dict, facts: dict) -> None:
-    allowed = allowed_numbers(facts)
     body_html = article.get("body_html", "")
+    if re.search(r"https?://|www\.", body_html, flags=re.I) or re.search(r"\[[^\]]+\]\([^\)]+\)", body_html):
+        raise RuntimeError("Publication stopped: inline URL/markdown citation leaked into body_html")
+
+    allowed = allowed_numbers(facts)
     context_heading = r"<h2\b[^>]*>\s*Пазарен\s+контекст\s+от\s+български\s+източници\s*</h2>"
     marker = re.search(context_heading, body_html, flags=re.I)
-
     local_html = body_html[:marker.start()] if marker else body_html
     external_html = body_html[marker.start():] if marker else ""
-    local_text = " ".join([
-        article.get("title", ""),
-        article.get("deck", ""),
-        re.sub(r"<[^>]+>", " ", local_html),
-    ])
 
+    local_text = " ".join([title, article.get("deck", ""), re.sub(r"<[^>]+>", " ", local_html)])
     unknown_local = sorted({n for n in decimal_numbers(local_text) if n not in allowed})
     if unknown_local:
-        raise RuntimeError(
-            "Validation stopped publication: local decimal numbers are not present in Supabase facts: "
-            f"{unknown_local}"
-        )
+        raise RuntimeError(f"Publication stopped: local decimal numbers are not present in prepared facts: {unknown_local}")
 
-    # The external Bulgarian-source section is qualitative by design. Any decimal there means
-    # the model violated the prompt, so we stop instead of attempting to reconcile market units.
     external_text = re.sub(r"<[^>]+>", " ", external_html)
     external_decimals = sorted(set(decimal_numbers(external_text)))
     if external_decimals:
-        raise RuntimeError(
-            "Validation stopped publication: Bulgarian-source context must be qualitative and contains external decimals: "
-            f"{external_decimals}"
-        )
+        raise RuntimeError(f"Publication stopped: external context must stay qualitative: {external_decimals}")
 
 
 def sanitize_body(body_html: str) -> str:
-    body_html = re.sub(r"<\/?(?:script|style|iframe|object|embed)[^>]*>", "", body_html, flags=re.I)
-    return body_html
+    body = body_html or ""
+    body = re.sub(r"<\/?(?:script|style|iframe|object|embed)[^>]*>", "", body, flags=re.I)
+    body = re.sub(r"\[([^\]]+)\]\(https?://[^\)]+\)", r"\1", body, flags=re.I)
+    body = re.sub(r"\(\s*https?://[^\)]+\)", "", body, flags=re.I)
+    body = re.sub(r"https?://\S+", "", body, flags=re.I)
+    return body.strip()
 
 
 def render_sources(sources: list[dict]) -> str:
     items = []
     for source in sources[:8]:
-        url = str(source.get("url") or "").strip()
+        url = clean_source_url(str(source.get("url") or ""))
         if not is_bulgarian_source(url):
             continue
         name = html.escape(str(source.get("name") or url))
@@ -392,13 +501,20 @@ def render_sources(sources: list[dict]) -> str:
     return '<section class="article-sources"><h2>Източници</h2><ul>' + "".join(items) + "</ul></section>"
 
 
+def publication_timestamp(target_day: str) -> str:
+    today = datetime.now(SOFIA).date().isoformat()
+    if target_day == today:
+        return datetime.now(SOFIA).replace(microsecond=0).isoformat()
+    return f"{target_day}T18:30:00+03:00"
+
+
 def render_article(date_str: str, article: dict) -> str:
     title = html.escape(article["title"])
     description = html.escape(article["description"][:160], quote=True)
     deck = html.escape(article["deck"])
     body = sanitize_body(article["body_html"])
     url = f"https://goriva.online/pages/articles/daily/{date_str}/"
-    published = f"{date_str}T18:30:00+03:00"
+    published = publication_timestamp(date_str)
     schema = {
         "@context": "https://schema.org",
         "@type": "NewsArticle",
@@ -440,7 +556,7 @@ def render_article(date_str: str, article: dict) -> str:
       <div class="article-content-full">
         {body}
         {render_sources(article.get("sources", []))}
-        <p class="data-source"><strong>За цените в България:</strong> числовите данни в материала са агрегирани от базата на goriva.online за посочената дата. Данните са информационни и могат да се различават от цената на място.</p>
+        <p class="data-source"><strong>За данните:</strong> ценовите стойности са агрегирани от наблюденията в goriva.online за посочената дата и не представляват официална национална средна цена. Данните са информационни и могат да се различават от цената на място.</p>
       </div>
     </article>
   </main>
@@ -514,12 +630,18 @@ def main() -> None:
     by_day = build_daily_snapshots(rows)
     target_day, previous_day = select_days(by_day)
     current = summarize_day(by_day[target_day])
+    if not coverage_is_sufficient(current):
+        raise RuntimeError(
+            "Publication skipped: selected dataset does not meet minimum coverage "
+            f"({current['records']} records, {current['stations']} stations, {current['cities']} cities)."
+        )
+
     previous = summarize_day(by_day[previous_day]) if previous_day else None
     facts = build_facts(target_day, current, previous_day, previous)
-
     article = generate_article(facts)
-    validate_sources(article)
-    validate_numbers(article, facts)
+    normalize_and_validate_sources(article, target_day)
+    article["body_html"] = sanitize_body(article.get("body_html", ""))
+    validate_article(article, facts)
 
     out_dir = ROOT / "pages" / "articles" / "daily" / target_day
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -543,6 +665,8 @@ def main() -> None:
         "date": target_day,
         "previous_date": previous_day,
         "records": current["records"],
+        "stations": current["stations"],
+        "cities": current["cities"],
         "sources": [s.get("url") for s in article.get("sources", [])],
         "model": MODEL,
     }, ensure_ascii=False, indent=2))
