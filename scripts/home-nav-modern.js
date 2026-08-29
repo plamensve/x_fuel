@@ -1,5 +1,5 @@
 (() => {
-    const ASSET_VERSION = "20260828-2038";
+    const ASSET_VERSION = "20260829-1730";
     const header = document.querySelector("body > .header-bar");
     const nav = document.querySelector("body > .main-nav");
     const headerContainer = header?.querySelector(".header-container");
@@ -95,4 +95,14 @@
             nav.querySelector(".nav-container")?.classList.remove("open");
         });
     });
+})();
+
+(() => {
+    if (document.querySelector('script[data-home-fuel-poll]')) return;
+
+    const pollScript = document.createElement("script");
+    pollScript.src = "scripts/home-fuel-poll.js?v=20260829-1730";
+    pollScript.defer = true;
+    pollScript.dataset.homeFuelPoll = "true";
+    document.body.appendChild(pollScript);
 })();
