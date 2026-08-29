@@ -8,7 +8,7 @@
         document.head.appendChild(navScript);
     }
 
-    const baseSrc = "/scripts/script-base.js?v=20260828-2108";
+    const baseSrc = "/scripts/script-base.js?v=20260829-all-today-prices";
     const current = document.currentScript;
 
     if (document.readyState === "loading" && !current?.defer && !current?.async) {
