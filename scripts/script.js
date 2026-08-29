@@ -43,6 +43,20 @@
     document.head.appendChild(script);
 })();
 
+// Shared editorial layout for article pages.
+(() => {
+    if (!window.location.pathname.includes('/pages/articles/')) return;
+    const src = "/scripts/article-modern.js?v=20260829-article3";
+    if (document.readyState === "loading") {
+        document.write(`<script src="${src}"><\/script>`);
+        return;
+    }
+    const script = document.createElement("script");
+    script.src = src;
+    script.async = false;
+    document.head.appendChild(script);
+})();
+
 // Business clients CTA: the approved design renders the right-side button as a CSS
 // pseudo-element, so it needs an explicit click handler to behave like a real link.
 (() => {
