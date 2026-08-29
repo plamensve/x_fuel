@@ -6,13 +6,14 @@
         const link = document.createElement('link');
         link.id = 'article-modern-css';
         link.rel = 'stylesheet';
-        link.href = '/pages/styles/article-modern.css?v=20260829-newsroom1';
+        link.href = '/pages/styles/article-modern.css?v=20260829-newsroom2';
         document.head.appendChild(link);
     };
 
     const articleCategory = () => {
         const path = window.location.pathname;
         const text = document.title.toLowerCase();
+        if (path.includes('/daily/')) return 'Дневен обзор';
         if (path.includes('fuel-cards') || text.includes('бизнес')) return 'Бизнес';
         if (path.includes('fuel-analysis') || text.includes('анализ')) return 'Пазарен анализ';
         return 'Цени на горивата';
@@ -30,6 +31,9 @@
         if (!article || document.body.classList.contains('article-modern-page')) return;
 
         document.body.classList.add('article-modern-page');
+        if (window.location.pathname.includes('/pages/articles/daily/')) {
+            document.body.classList.add('daily-article-page');
+        }
         loadStyles();
 
         const title = article.querySelector('.article-title, .page-title, h1');
@@ -37,12 +41,14 @@
         const wordCount = (textRoot.innerText || '').trim().split(/\s+/).filter(Boolean).length;
         const minutes = Math.max(1, Math.round(wordCount / 210));
 
-        const topLine = document.createElement('div');
-        topLine.className = 'article-modern-topline';
-        topLine.innerHTML = `<a class="article-back-link" href="/pages/news.html">← Новини и анализи</a><span class="article-reading-time">${minutes} мин четене</span>`;
-        article.insertBefore(topLine, title || article.firstChild);
+        if (!article.querySelector('.article-modern-topline')) {
+            const topLine = document.createElement('div');
+            topLine.className = 'article-modern-topline';
+            topLine.innerHTML = `<a class="article-back-link" href="/pages/news.html">← Новини и анализи</a><span class="article-reading-time">${minutes} мин четене</span>`;
+            article.insertBefore(topLine, title || article.firstChild);
+        }
 
-        if (title) {
+        if (title && !article.querySelector('.article-news-kicker')) {
             const kicker = document.createElement('div');
             kicker.className = 'article-news-kicker';
             kicker.textContent = articleCategory();
@@ -51,8 +57,9 @@
 
         const content = article.querySelector('.article-content-full');
         if (content) {
+            const existingDeck = article.querySelector('.article-news-deck');
             const firstParagraph = content.querySelector(':scope > p');
-            if (firstParagraph && title) {
+            if (!existingDeck && firstParagraph && title) {
                 const deck = document.createElement('p');
                 deck.className = 'article-news-deck';
                 deck.textContent = firstParagraph.textContent.trim();
@@ -70,19 +77,21 @@
                 source.after(quote);
             }
 
-            const layout = document.createElement('div');
-            layout.className = 'article-news-layout';
-            const main = document.createElement('div');
-            main.className = 'article-news-main';
-            const side = document.createElement('aside');
-            side.className = 'article-news-side';
-            side.innerHTML = `<strong>Още от goriva.online</strong><a href="/pages/news.html">Последни новини и анализи</a><a href="/pages/trends.html">История на цените</a><a href="/">Актуални цени днес</a><a href="/pages/business-clients.html">Решения за бизнеса</a>`;
+            if (!article.querySelector('.article-news-layout')) {
+                const layout = document.createElement('div');
+                layout.className = 'article-news-layout';
+                const main = document.createElement('div');
+                main.className = 'article-news-main';
+                const side = document.createElement('aside');
+                side.className = 'article-news-side';
+                side.innerHTML = `<strong>Още от goriva.online</strong><a href="/pages/news.html">Последни новини и анализи</a><a href="/pages/trends.html">История на цените</a><a href="/">Актуални цени днес</a><a href="/pages/business-clients.html">Решения за бизнеса</a>`;
 
-            content.before(layout);
-            main.appendChild(content);
-            const shareBottom = article.querySelector('.share-section-2');
-            if (shareBottom) main.appendChild(shareBottom);
-            layout.append(main, side);
+                content.before(layout);
+                main.appendChild(content);
+                const shareBottom = article.querySelector('.share-section-2');
+                if (shareBottom) main.appendChild(shareBottom);
+                layout.append(main, side);
+            }
         }
 
         const image = article.querySelector('.article-image-main, .article-main-img');
@@ -103,10 +112,12 @@
             link.rel = 'noopener noreferrer';
         });
 
-        const end = document.createElement('aside');
-        end.className = 'article-modern-end';
-        end.innerHTML = `<div><strong>Следи пазара с реални данни</strong><p>Сравни текущите цени или виж как са се променяли във времето.</p></div><a href="/pages/trends.html">История на цените →</a>`;
-        article.appendChild(end);
+        if (!article.querySelector('.article-modern-end')) {
+            const end = document.createElement('aside');
+            end.className = 'article-modern-end';
+            end.innerHTML = `<div><strong>Следи пазара с реални данни</strong><p>Сравни текущите цени или виж как са се променяли във времето.</p></div><a href="/pages/trends.html">История на цените →</a>`;
+            article.appendChild(end);
+        }
     };
 
     loadStyles();
