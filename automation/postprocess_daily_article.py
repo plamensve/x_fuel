@@ -1,18 +1,21 @@
 from __future__ import annotations
 
+import base64
 import html
 import json
 import os
 import re
-import textwrap
 from datetime import datetime
 from pathlib import Path
 from zoneinfo import ZoneInfo
+
+from openai import OpenAI
 
 ROOT = Path(__file__).resolve().parents[1]
 SOFIA = ZoneInfo("Europe/Sofia")
 MANIFEST_PATH = ROOT / "data" / "generated-news.json"
 NEWS_PATH = ROOT / "pages" / "news.html"
+IMAGE_MODEL = os.getenv("OPENAI_IMAGE_MODEL", "gpt-image-2")
 
 
 def load_manifest() -> list[dict]:
@@ -51,67 +54,95 @@ def clean_text(value: str) -> str:
     return re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", value or "")).strip()
 
 
-def wrap_lines(text: str, width: int, max_lines: int) -> list[str]:
-    words = clean_text(text).split()
-    lines: list[str] = []
-    current: list[str] = []
-    for word in words:
-        candidate = " ".join(current + [word])
-        if len(candidate) <= width or not current:
-            current.append(word)
-            continue
-        lines.append(" ".join(current))
-        current = [word]
-        if len(lines) == max_lines - 1:
-            break
-    if len(lines) < max_lines and current:
-        remaining = " ".join(current)
-        consumed = " ".join(lines + [remaining])
-        if len(consumed.split()) < len(words):
-            remaining = remaining.rstrip(" .,:;-") + "…"
-        lines.append(remaining)
-    return lines[:max_lines]
-
-
 def format_bg_date(date_str: str) -> str:
     months = ["януари", "февруари", "март", "април", "май", "юни", "юли", "август", "септември", "октомври", "ноември", "декември"]
     dt = datetime.fromisoformat(date_str)
     return f"{dt.day} {months[dt.month - 1]} {dt.year}"
 
 
-def build_svg(date_str: str, title: str, deck: str) -> str:
-    title_lines = wrap_lines(title, 39, 4)
-    deck_lines = wrap_lines(deck, 72, 2)
-    title_tspans = "".join(
-        f'<tspan x="78" dy="{0 if i == 0 else 54}">{html.escape(line)}</tspan>'
-        for i, line in enumerate(title_lines)
+def build_image_prompt(date_str: str, title: str, deck: str, body: str) -> str:
+    context = clean_text(body)[:1200]
+    return f"""
+Create a premium editorial hero image for a Bulgarian fuel-price market article.
+
+Article date: {format_bg_date(date_str)}
+Headline meaning: {clean_text(title)}
+Deck: {clean_text(deck)}
+Article context: {context}
+
+Visual direction:
+- realistic editorial photography or polished cinematic editorial illustration;
+- clearly related to petrol stations, fuel pumps, road transport, fuel pricing or market movement;
+- interpret the article's actual direction and subject, rather than making a generic fuel image;
+- modern European/Bulgarian roadside atmosphere where appropriate;
+- restrained, trustworthy business-news mood; dark blue/neutral palette with subtle green or red market accents only when semantically useful;
+- strong composition suitable for a news article hero and social sharing;
+- leave useful negative space, but DO NOT render any headline, date, numbers, labels, captions, logos, trademarks, station brands or watermarks;
+- no legible text anywhere in the image;
+- no fake UI, no infographic panels, no typography-as-art.
+
+Landscape composition, editorial quality, natural lighting, believable objects and proportions.
+""".strip()
+
+
+def generate_ai_image(date_str: str, title: str, deck: str, body: str) -> tuple[str, int, int]:
+    api_key = os.getenv("OPENAI_API_KEY", "").strip()
+    if not api_key:
+        raise RuntimeError("OPENAI_API_KEY is not available for image generation")
+
+    client = OpenAI(api_key=api_key)
+    response = client.images.generate(
+        model=IMAGE_MODEL,
+        prompt=build_image_prompt(date_str, title, deck, body),
+        size="1536x1024",
+        quality="medium",
+        output_format="png",
     )
-    deck_y = 392 + max(0, len(title_lines) - 2) * 24
-    deck_tspans = "".join(
-        f'<tspan x="80" dy="{0 if i == 0 else 29}">{html.escape(line)}</tspan>'
-        for i, line in enumerate(deck_lines)
-    )
-    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-labelledby="title desc">
-<title id="title">{html.escape(title)}</title>
-<desc id="desc">Дневен обзор на цените на горивата от goriva.online за {html.escape(format_bg_date(date_str))}</desc>
+    if not response.data or not getattr(response.data[0], "b64_json", None):
+        raise RuntimeError("Image API returned no base64 image")
+
+    image_path = ROOT / "media" / "daily-news" / f"{date_str}.png"
+    image_path.parent.mkdir(parents=True, exist_ok=True)
+    image_path.write_bytes(base64.b64decode(response.data[0].b64_json))
+    return f"/media/daily-news/{date_str}.png", 1536, 1024
+
+
+def build_fallback_svg(date_str: str, title: str) -> str:
+    """Text-free editorial fallback used only if AI image generation is unavailable."""
+    label = html.escape(clean_text(title))
+    return f'''<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="{label}">
 <defs>
-  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#07111f"/><stop offset="0.58" stop-color="#102642"/><stop offset="1" stop-color="#0d3a2b"/></linearGradient>
-  <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#3b82f6"/><stop offset="1" stop-color="#22c55e"/></linearGradient>
-  <filter id="glow"><feGaussianBlur stdDeviation="42"/></filter>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#071321"/><stop offset=".55" stop-color="#16324d"/><stop offset="1" stop-color="#123c31"/></linearGradient>
+  <linearGradient id="road" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#1f2937"/><stop offset="1" stop-color="#0f172a"/></linearGradient>
+  <filter id="soft"><feGaussianBlur stdDeviation="22"/></filter>
 </defs>
 <rect width="1200" height="630" fill="url(#bg)"/>
-<circle cx="1040" cy="70" r="190" fill="#2563eb" opacity=".16" filter="url(#glow)"/>
-<circle cx="1065" cy="550" r="220" fill="#22c55e" opacity=".12" filter="url(#glow)"/>
-<rect x="76" y="64" width="176" height="38" rx="19" fill="#ffffff" opacity=".08"/>
-<circle cx="98" cy="83" r="5" fill="#22c55e"/>
-<text x="114" y="89" fill="#dbeafe" font-family="Arial, sans-serif" font-size="15" font-weight="700" letter-spacing="1.3">ДНЕВЕН ОБЗОР</text>
-<text x="78" y="146" fill="#93c5fd" font-family="Arial, sans-serif" font-size="21" font-weight="700">{html.escape(format_bg_date(date_str))}</text>
-<text x="78" y="212" fill="#f8fafc" font-family="Arial, sans-serif" font-size="47" font-weight="800">{title_tspans}</text>
-<text x="80" y="{deck_y}" fill="#b9c7d8" font-family="Arial, sans-serif" font-size="22">{deck_tspans}</text>
-<rect x="78" y="542" width="1044" height="2" fill="url(#accent)" opacity=".85"/>
-<text x="78" y="588" fill="#ffffff" font-family="Arial, sans-serif" font-size="28" font-weight="800">goriva.online</text>
-<text x="1122" y="588" text-anchor="end" fill="#9fb0c3" font-family="Arial, sans-serif" font-size="17">Цени · данни · анализ</text>
+<circle cx="1040" cy="90" r="210" fill="#3b82f6" opacity=".12" filter="url(#soft)"/>
+<circle cx="160" cy="560" r="190" fill="#22c55e" opacity=".10" filter="url(#soft)"/>
+<path d="M0 520 C240 455 385 470 595 505 C810 542 990 525 1200 450 L1200 630 L0 630 Z" fill="url(#road)"/>
+<path d="M0 549 C260 486 430 510 620 539 C825 570 1000 548 1200 486" fill="none" stroke="#f8fafc" stroke-width="5" stroke-dasharray="34 27" opacity=".55"/>
+<g transform="translate(190 115)">
+  <rect x="0" y="75" width="235" height="300" rx="28" fill="#e5edf6"/>
+  <rect x="28" y="108" width="179" height="102" rx="14" fill="#17283b"/>
+  <rect x="45" y="128" width="145" height="62" rx="8" fill="#80b7c9" opacity=".78"/>
+  <rect x="45" y="246" width="60" height="87" rx="13" fill="#3b82f6"/>
+  <rect x="130" y="246" width="60" height="87" rx="13" fill="#22c55e"/>
+  <path d="M235 125 C320 125 300 230 330 250 C360 270 375 228 390 190" fill="none" stroke="#111827" stroke-width="18" stroke-linecap="round"/>
+  <path d="M375 190 l34 -40 l22 18 l-30 45 z" fill="#111827"/>
+</g>
+<g transform="translate(655 105)" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M0 100 L105 150 L205 128 L315 225 L420 280" stroke="#94a3b8" stroke-width="11" opacity=".35"/>
+  <path d="M0 94 L105 146 L205 124 L315 221 L420 276" stroke="#34d399" stroke-width="7"/>
+  <circle cx="0" cy="94" r="10" fill="#34d399" stroke="none"/><circle cx="105" cy="146" r="10" fill="#34d399" stroke="none"/><circle cx="205" cy="124" r="10" fill="#34d399" stroke="none"/><circle cx="315" cy="221" r="10" fill="#34d399" stroke="none"/><circle cx="420" cy="276" r="10" fill="#34d399" stroke="none"/>
+</g>
 </svg>'''
+
+
+def generate_fallback_image(date_str: str, title: str) -> tuple[str, int, int]:
+    path = ROOT / "media" / "daily-news" / f"{date_str}.svg"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(build_fallback_svg(date_str, title), encoding="utf-8")
+    return f"/media/daily-news/{date_str}.svg", 1200, 630
 
 
 def ensure_article_visual(date_str: str) -> tuple[str, str, str]:
@@ -122,31 +153,44 @@ def ensure_article_visual(date_str: str) -> tuple[str, str, str]:
     text = article_path.read_text(encoding="utf-8")
     title = extract(text, r'<h1[^>]*class="article-title"[^>]*>(.*?)</h1>', "Дневен обзор на горивата")
     deck = extract(text, r'<p[^>]*class="article-news-deck"[^>]*>(.*?)</p>', "Актуални данни и анализ от goriva.online")
-    image_rel = f"/media/daily-news/{date_str}.svg"
+    body = extract(text, r'<div[^>]*class="article-content-full"[^>]*>(.*?)</div>', "")
+
+    try:
+        image_rel, width, height = generate_ai_image(date_str, title, deck, body)
+        image_kind = "AI editorial illustration"
+    except Exception as exc:
+        print(f"Image generation warning: {exc}. Using text-free fallback artwork.")
+        image_rel, width, height = generate_fallback_image(date_str, title)
+        image_kind = "editorial illustration"
+
     image_abs = f"https://goriva.online{image_rel}"
 
-    image_path = ROOT / "media" / "daily-news" / f"{date_str}.svg"
-    image_path.parent.mkdir(parents=True, exist_ok=True)
-    image_path.write_text(build_svg(date_str, title, deck), encoding="utf-8")
-
-    text = re.sub(
-        r'<meta property="og:image" content="[^"]*">',
-        f'<meta property="og:image" content="{image_abs}">',
-        text,
-        count=1,
-    )
+    text = re.sub(r'<meta property="og:image" content="[^"]*">', f'<meta property="og:image" content="{image_abs}">', text, count=1)
+    text = re.sub(r'<meta property="og:image:width" content="[^"]*">', f'<meta property="og:image:width" content="{width}">', text, count=1)
+    text = re.sub(r'<meta property="og:image:height" content="[^"]*">', f'<meta property="og:image:height" content="{height}">', text, count=1)
     if 'property="og:image:width"' not in text:
         text = text.replace(
             f'<meta property="og:image" content="{image_abs}">',
-            f'<meta property="og:image" content="{image_abs}">\n  <meta property="og:image:width" content="1200">\n  <meta property="og:image:height" content="630">\n  <meta name="twitter:card" content="summary_large_image">',
+            f'<meta property="og:image" content="{image_abs}">\n  <meta property="og:image:width" content="{width}">\n  <meta property="og:image:height" content="{height}">',
             1,
         )
+    if 'name="twitter:card"' not in text:
+        text = text.replace(f'<meta property="og:image:height" content="{height}">', f'<meta property="og:image:height" content="{height}">\n  <meta name="twitter:card" content="summary_large_image">', 1)
 
-    figure = f'''\n      <figure class="article-daily-visual">\n        <img class="article-image-main" src="{image_rel}" alt="Дневен обзор на цените на горивата за {html.escape(format_bg_date(date_str))}" width="1200" height="630">\n        <figcaption class="article-image-caption">Автоматично генерирана визуализация към дневния обзор на goriva.online.</figcaption>\n      </figure>'''
-    if 'class="article-daily-visual"' not in text:
+    figure = f'''\n      <figure class="article-daily-visual">\n        <img class="article-image-main" src="{image_rel}" alt="Илюстрация към дневния обзор на горивата за {html.escape(format_bg_date(date_str))}" width="{width}" height="{height}" loading="eager" fetchpriority="high">\n        <figcaption class="article-image-caption">Илюстрация към дневния обзор на goriva.online.</figcaption>\n      </figure>'''
+    if 'class="article-daily-visual"' in text:
+        text = re.sub(r'\s*<figure class="article-daily-visual">.*?</figure>', figure, text, count=1, flags=re.S)
+    else:
         text = re.sub(r'(\s*<div class="article-meta">.*?</div>)', r'\1' + figure, text, count=1, flags=re.S)
 
+    # Keep structured data synchronized with the real hero image.
+    if '"image"' in text:
+        text = re.sub(r'"image"\s*:\s*"[^"]*"', f'"image": "{image_abs}"', text, count=1)
+    else:
+        text = text.replace('"mainEntityOfPage":', f'"image": "{image_abs}", "mainEntityOfPage":', 1)
+
     article_path.write_text(text, encoding="utf-8")
+    print(f"Article image: {image_kind} -> {image_rel}")
     return title, deck, image_rel
 
 
@@ -207,7 +251,7 @@ def main() -> None:
     title, deck, image_rel = ensure_article_visual(date_str)
     items = update_manifest(date_str, image_rel)
     rebuild_news_daily_section(items)
-    print(json.dumps({"status": "postprocessed", "date": date_str, "title": title, "image": image_rel}, ensure_ascii=False))
+    print(json.dumps({"status": "postprocessed", "date": date_str, "title": title, "image": image_rel, "image_model": IMAGE_MODEL}, ensure_ascii=False))
 
 
 if __name__ == "__main__":
