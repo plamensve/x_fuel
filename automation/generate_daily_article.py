@@ -240,6 +240,8 @@ def generate_article(facts: dict) -> dict:
 - Използвай web search само за актуален международен/европейски пазарен контекст: Brent, петролни продукти, OPEC+, рафинерии, запаси, санкции или събития с реално отношение към горивата.
 - За външния контекст предпочитай Reuters, IEA, EIA, European Commission, OPEC и официални институции. Не използвай слухове и SEO агрегатори.
 - Не твърди причинно-следствена връзка между международно събитие и българска цена, ако няма доказателство. Използвай формулировки като „може да окаже влияние“.
+- Международни числови стойности са разрешени само когато са подкрепени от поне един върнат source URL.
+- Отделяй международния контекст в самостоятелна секция с точно заглавие <h2>Международен пазарен контекст</h2>. Всички локални български числа трябва да са преди тази секция и да идват само от FACTS_JSON.
 - Статията трябва да звучи като професионален български икономически новинарски материал, не като AI отчет.
 - Без сензационни заглавия и без инвестиционни прогнози.
 - Около 700–1000 думи, когато има достатъчно факти; по-кратко, ако денят е спокоен.
@@ -264,29 +266,102 @@ FACTS_JSON:
 
 def allowed_numbers(facts: dict) -> set[str]:
     numbers = set()
+
     def add(value):
+        if isinstance(value, bool):
+            return
         if isinstance(value, (int, float)):
-            numbers.add(str(value))
-            numbers.add(f"{value:.2f}")
-            numbers.add(f"{value:.3f}")
-            numbers.add(str(value).replace(".", ","))
-            numbers.add(f"{value:.2f}".replace(".", ","))
-            numbers.add(f"{value:.3f}".replace(".", ","))
+            variants = {
+                str(value),
+                f"{value:.1f}",
+                f"{value:.2f}",
+                f"{value:.3f}",
+            }
+            for variant in variants:
+                numbers.add(variant)
+                numbers.add(variant.replace(".", ","))
         elif isinstance(value, dict):
-            for v in value.values(): add(v)
+            for v in value.values():
+                add(v)
         elif isinstance(value, list):
-            for v in value: add(v)
+            for v in value:
+                add(v)
+
     add(facts)
     return numbers
 
 
+def decimal_numbers(text: str) -> list[str]:
+    return re.findall(r"(?<!\d)\d+[\.,]\d{1,3}(?!\d)", text or "")
+
+
+def valid_external_sources(article: dict) -> list[dict]:
+    valid = []
+    for source in article.get("sources") or []:
+        url = str(source.get("url") or "").strip()
+        if re.match(r"^https?://", url, flags=re.I):
+            valid.append(source)
+    return valid
+
+
 def validate_local_claims(article: dict, facts: dict) -> None:
-    body = " ".join([article.get("title", ""), article.get("deck", ""), re.sub(r"<[^>]+>", " ", article.get("body_html", ""))])
-    suspicious = re.findall(r"\b\d+[\.,]\d{2,3}\b", body)
     allowed = allowed_numbers(facts)
-    unknown = [n for n in suspicious if n not in allowed]
-    if unknown:
-        raise RuntimeError(f"Validation stopped publication: unverified decimal numbers in article: {sorted(set(unknown))}")
+    title_and_deck = " ".join([article.get("title", ""), article.get("deck", "")])
+    header_unknown = sorted({n for n in decimal_numbers(title_and_deck) if n not in allowed})
+    if header_unknown:
+        raise RuntimeError(
+            "Validation stopped publication: title/deck contains decimal numbers not present in local facts: "
+            f"{header_unknown}"
+        )
+
+    body_html = article.get("body_html", "")
+    marker = re.search(
+        r"<h2\b[^>]*>\s*Международен\s+пазарен\s+контекст\s*</h2>",
+        body_html,
+        flags=re.I,
+    )
+
+    if marker:
+        local_html = body_html[:marker.start()]
+        external_html = body_html[marker.start():]
+    else:
+        local_html = body_html
+        external_html = ""
+
+    local_text = re.sub(r"<[^>]+>", " ", local_html)
+    local_unknown = sorted({n for n in decimal_numbers(local_text) if n not in allowed})
+    if local_unknown:
+        raise RuntimeError(
+            "Validation stopped publication: unverified decimal numbers in the Bulgarian/local section: "
+            f"{local_unknown}"
+        )
+
+    external_text = re.sub(r"<[^>]+>", " ", external_html)
+    external_numbers = decimal_numbers(external_text)
+    if external_numbers and not valid_external_sources(article):
+        raise RuntimeError(
+            "Validation stopped publication: international numeric claims were generated without a valid external source URL"
+        )
+
+    # Extra guard: local market wording must never carry an unknown decimal even inside the
+    # international section. This prevents a sourced oil-market number from being presented
+    # as if it were a Bulgarian pump-price observation.
+    local_markers = (
+        "българ", "goriva.online", "бензиностан", "бензин a95", "бензин a98",
+        "бензин a100", "дизел", "lpg", "пропан", "метан", "наблюдавана цена",
+        "средна цена", "цена на колонка",
+    )
+    for block in re.findall(r"<(?:p|li|blockquote)\b[^>]*>(.*?)</(?:p|li|blockquote)>", body_html, flags=re.I | re.S):
+        text = re.sub(r"<[^>]+>", " ", block)
+        lower = text.lower()
+        if not any(marker_text in lower for marker_text in local_markers):
+            continue
+        unknown = sorted({n for n in decimal_numbers(text) if n not in allowed})
+        if unknown:
+            raise RuntimeError(
+                "Validation stopped publication: a local-market sentence contains an unverified decimal number: "
+                f"{unknown}"
+            )
 
 
 def render_sources(sources: list[dict]) -> str:
