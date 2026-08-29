@@ -47,6 +47,32 @@ const HOME_FUEL_ALIASES = {
 const HOME_FUEL_ORDER = ["A95", "Дизел", "LPG", "A100", "Дизел +", "Метан"];
 const HOME_TOP10_CITIES = ["София", "Пловдив", "Варна", "Бургас", "Русе"];
 
+const HOME_STATION_LOGOS = [
+    {match: ["еко петрол", "екопетрол", "ecopetrol"], src: "images/station_logos/ecopetrol.svg"},
+    {match: ["бенита", "benita"], src: "images/station_logos/benita.svg"},
+    {match: ["лукойл", "lukoil"], src: "images/station_logos/lukoil.svg"},
+    {match: ["omv", "омв"], src: "images/station_logos/omv.svg"},
+    {match: ["shell", "шел"], src: "images/station_logos/shell.svg"},
+    {match: ["rompetrol", "ромпетрол"], src: "images/station_logos/rompetrol.svg"},
+    {match: ["insa", "инса"], src: "images/station_logos/insa.svg"},
+    {match: ["kruiz", "cruise", "круиз"], src: "images/station_logos/kruiz.svg"},
+    {match: ["bulmarket", "булмаркет"], src: "images/station_logos/bulmarket.svg"},
+    {match: ["petrol", "петрол"], src: "images/station_logos/petrol.svg"},
+    {match: ["eko", "еко"], src: "images/station_logos/eko.svg"},
+    {match: ["dieselor", "diselor", "dieseler", "дизелор"], src: "images/station_logos/diselor.svg"},
+    {match: ["himoil", "chimoil", "химойл"], src: "images/station_logos/himoil.svg"}
+];
+
+function homeStationLogo(name) {
+    const normalized = String(name || "")
+        .toLocaleLowerCase("bg-BG")
+        .replace(/\s+/g, " ")
+        .trim();
+
+    const config = HOME_STATION_LOGOS.find(item => item.match.some(token => normalized.includes(token)));
+    return config?.src || "images/station_logos/unknown.svg";
+}
+
 let homeTop10Rows = [];
 let homeTop10Fuel = "A95";
 let homeTop10City = "София";
@@ -315,11 +341,19 @@ function renderHomeTop10() {
         const location = row.location || homeTop10City;
         const saving = row.price - minPrice;
         const podiumClass = index < 3 ? ` is-podium rank-${index + 1}` : "";
+        const logo = homeStationLogo(station);
 
         return `
             <article class="home-top10-card${podiumClass}">
                 <div class="home-top10-card-top">
                     <span class="home-top10-rank-badge">${getRankBadge(index)}</span>
+                    <span class="home-top10-station-logo-wrap">
+                        <img src="${homeEscapeHtml(logo)}"
+                             class="home-top10-station-logo"
+                             alt="${homeEscapeHtml(station)} лого"
+                             loading="lazy"
+                             onerror="this.onerror=null;this.src='images/station_logos/unknown.svg';">
+                    </span>
                     <span class="home-top10-fuel-pill">${homeEscapeHtml(homeTop10Fuel)}</span>
                 </div>
 
