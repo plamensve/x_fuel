@@ -2,12 +2,20 @@
     if (!window.location.pathname.includes('/pages/articles/')) return;
 
     const loadStyles = () => {
-        if (document.getElementById('article-modern-css')) return;
-        const link = document.createElement('link');
-        link.id = 'article-modern-css';
-        link.rel = 'stylesheet';
-        link.href = '/pages/styles/article-modern.css?v=20260829-newsroom2';
-        document.head.appendChild(link);
+        if (!document.getElementById('article-modern-css')) {
+            const link = document.createElement('link');
+            link.id = 'article-modern-css';
+            link.rel = 'stylesheet';
+            link.href = '/pages/styles/article-modern.css?v=20260829-newsroom2';
+            document.head.appendChild(link);
+        }
+        if (window.location.pathname.includes('/pages/articles/daily/') && !document.getElementById('daily-article-css')) {
+            const daily = document.createElement('link');
+            daily.id = 'daily-article-css';
+            daily.rel = 'stylesheet';
+            daily.href = '/pages/styles/daily-article.css?v=20260829-daily2';
+            document.head.appendChild(daily);
+        }
     };
 
     const articleCategory = () => {
