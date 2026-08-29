@@ -37,7 +37,7 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           ARTICLE_DATE: ${{ inputs.article_date }}
-        run: python automation/generate_daily_article.py
+        run: python automation/generate_daily_article_bg.py
 
       - name: Commit generated article
         run: |
