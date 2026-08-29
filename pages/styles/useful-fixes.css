@@ -1,0 +1,44 @@
+/* Useful page refinements */
+
+/* Keep the in-page navigation where it belongs in the document flow.
+   It should not follow the user or attach itself below the global header. */
+.useful-page .useful-jumpbar {
+    position: relative !important;
+    top: auto !important;
+    z-index: 1 !important;
+}
+
+/* Footer brand: keep the supporting copy under the logo instead of beside it. */
+.useful-page .site-footer .footer-brand {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    gap: 14px !important;
+    max-width: 300px;
+}
+
+.useful-page .site-footer .footer-brand .footer-logo {
+    display: block;
+    margin: 0 !important;
+}
+
+.useful-page .site-footer .footer-brand p,
+.useful-page .site-footer .footer-brand .footer-brand-copy,
+.useful-page .site-footer .footer-brand .footer-data-note {
+    width: 100%;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+@media (max-width: 700px) {
+    .useful-page .useful-jumpbar {
+        overflow-x: auto;
+        flex-wrap: nowrap;
+        scrollbar-width: thin;
+    }
+
+    .useful-page .useful-jumpbar a {
+        flex: 0 0 auto;
+    }
+}
