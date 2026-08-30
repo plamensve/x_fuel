@@ -197,6 +197,7 @@
                     </div>
                     <div class="social-icons" aria-label="Социални мрежи">
                         <a href="https://www.facebook.com/plamen.sve" target="_blank" rel="noopener noreferrer" aria-label="Facebook"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/facebook.svg" alt=""></a>
+                        <a href="https://www.instagram.com/goriva.online/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/instagram.svg" alt=""></a>
                         <a href="https://www.linkedin.com/in/plamen-svetoslavov/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" alt=""></a>
                         <a href="https://wa.me/359883427273" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/whatsapp.svg" alt=""></a>
                     </div>
