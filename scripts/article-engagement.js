@@ -8,19 +8,6 @@
   const articleKey = q('link[rel="canonical"]')?.href || `${location.origin}${location.pathname}`;
   const storageKey = (suffix) => `goriva:article:${articleKey}:${suffix}`;
 
-  function seededCount(salt) {
-    const input = `${articleKey}|${salt}`;
-    let hash = 2166136261;
-    for (let i = 0; i < input.length; i += 1) {
-      hash ^= input.charCodeAt(i);
-      hash = Math.imul(hash, 16777619);
-    }
-    return (Math.abs(hash >>> 0) % 70) + 1;
-  }
-
-  const FALLBACK_VIEWS = seededCount('views');
-  const FALLBACK_LIKES = ((seededCount('likes') - 1) % FALLBACK_VIEWS) + 1;
-
   const ICONS = {
     facebook: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.025 4.388 11.02 10.125 11.927v-8.437H7.078v-3.49h3.047V9.414c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971h-1.513c-1.49 0-1.956.932-1.956 1.887v2.262h3.328l-.532 3.49h-2.796V24C19.612 23.093 24 18.098 24 12.073z"/></svg>',
     x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26L22.827 21.75h-6.657l-5.214-6.817-5.967 6.817H1.68l7.73-8.835L1.254 2.25h6.826l4.713 6.231 5.451-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>',
@@ -104,10 +91,12 @@
   }
 
   function setCounts(views, likes) {
-    const safeViews = Number.isFinite(Number(views)) ? Math.max(0, Number(views)) : FALLBACK_VIEWS;
-    const safeLikes = Number.isFinite(Number(likes)) ? Math.max(0, Math.min(safeViews, Number(likes))) : Math.min(safeViews, FALLBACK_LIKES);
-    qa('[data-article-views]').forEach((node) => { node.textContent = safeViews.toLocaleString('bg-BG'); });
-    qa('[data-article-likes]').forEach((node) => { node.textContent = safeLikes.toLocaleString('bg-BG'); });
+    const validViews = Number.isFinite(Number(views));
+    const validLikes = Number.isFinite(Number(likes));
+    const safeViews = validViews ? Math.max(0, Number(views)) : null;
+    const safeLikes = validLikes && safeViews !== null ? Math.max(0, Math.min(safeViews, Number(likes))) : null;
+    qa('[data-article-views]').forEach((node) => { node.textContent = safeViews === null ? '—' : safeViews.toLocaleString('bg-BG'); });
+    qa('[data-article-likes]').forEach((node) => { node.textContent = safeLikes === null ? '—' : safeLikes.toLocaleString('bg-BG'); });
   }
 
   function setLikedState(liked) {
@@ -126,14 +115,16 @@
       method: 'POST',
       headers: {
         apikey: SUPABASE_PUBLISHABLE_KEY,
-        Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
         'Content-Type': 'application/json',
         Accept: 'application/json'
       },
       body: JSON.stringify({ p_article_key: articleKey }),
       cache: 'no-store'
     });
-    if (!response.ok) throw new Error(`Supabase RPC ${functionName} failed: ${response.status}`);
+    if (!response.ok) {
+      const details = await response.text().catch(() => '');
+      throw new Error(`Supabase RPC ${functionName} failed: ${response.status}${details ? ` ${details}` : ''}`);
+    }
     const payload = await response.json();
     return Array.isArray(payload) ? payload[0] : payload;
   }
@@ -142,18 +133,19 @@
     const likedKey = storageKey('liked');
     let liked = localStorage.getItem(likedKey) === '1';
     setLikedState(liked);
-    setCounts(FALLBACK_VIEWS, FALLBACK_LIKES);
+    setCounts(null, null);
 
     try {
       const row = await rpc('register_article_view');
       if (row) setCounts(row.views, row.likes);
     } catch (error) {
+      setCounts(null, null);
       console.warn('[article-engagement] Could not load global counters.', error);
     }
 
     qa('[data-like-article]').forEach((button) => button.addEventListener('click', async () => {
       const nextLiked = !liked;
-      button.disabled = true;
+      qa('[data-like-article]').forEach((item) => { item.disabled = true; });
       try {
         const row = await rpc(nextLiked ? 'like_article' : 'unlike_article');
         liked = nextLiked;
