@@ -8,6 +8,32 @@
     document.head.appendChild(link);
 })();
 
+// Supabase publishable keys are API keys, not JWTs. Strip an invalid Bearer copy
+// if older frontend code sends the same sb_publishable_* value in Authorization.
+(() => {
+    if (window.__GORIVA_SUPABASE_FETCH_HARDENED__ || typeof window.fetch !== "function") return;
+    window.__GORIVA_SUPABASE_FETCH_HARDENED__ = true;
+    const nativeFetch = window.fetch.bind(window);
+
+    window.fetch = (input, init = {}) => {
+        try {
+            const url = typeof input === "string" ? input : input?.url || "";
+            if (url.includes(".supabase.co/rest/v1/")) {
+                const headers = new Headers(init.headers || (typeof input !== "string" ? input?.headers : undefined) || {});
+                const apiKey = headers.get("apikey") || "";
+                const authorization = headers.get("Authorization") || "";
+                if (apiKey.startsWith("sb_publishable_") && authorization === `Bearer ${apiKey}`) {
+                    headers.delete("Authorization");
+                    init = { ...init, headers };
+                }
+            }
+        } catch (error) {
+            console.warn("Supabase request hardening skipped", error);
+        }
+        return nativeFetch(input, init);
+    };
+})();
+
 (() => {
     const navSrc = "/scripts/global-nav.js?v=20260830-privacy1";
     if (!window.__GORIVA_GLOBAL_NAV_LOADER__) {
