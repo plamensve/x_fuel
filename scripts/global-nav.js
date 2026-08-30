@@ -185,6 +185,7 @@
                         <li><a href="/pages/news.html">Новини</a></li>
                         <li><a href="/pages/business-clients.html">Бизнес клиенти</a></li>
                         <li><a href="/pages/rules.html">Общи условия</a></li>
+                        <li><a href="/pages/privacy.html">Политика за поверителност</a></li>
                         <li><a href="/#fuel-form">Сподели цена</a></li>
                     </ul>
                 </div>
