@@ -13,14 +13,11 @@
     margin: 0 auto;
 }
 
-/* TITLE */
-
 .about-title {
     font-size: clamp(30px, 5vw, 48px);
     font-weight: 700;
     margin-bottom: 20px;
     line-height: 1.2;
-    /* subtle premium effect */
     letter-spacing: -0.5px;
 }
 
@@ -28,16 +25,12 @@
     color: rgb(39, 62, 89);
 }
 
-/* DESCRIPTION */
-
 .about-desc {
     font-size: 18px;
     line-height: 1.6;
     margin-bottom: 25px;
     color: #333;
 }
-
-/* POINTS */
 
 .about-points {
     display: flex;
@@ -61,16 +54,12 @@
     background: rgba(0,0,0,0.07);
 }
 
-/* CTA */
-
 .about-cta {
     display: flex;
     justify-content: center;
     gap: 15px;
     flex-wrap: wrap;
 }
-
-/* PRIMARY BUTTON */
 
 .cta-primary {
     background: linear-gradient(135deg, #2e7d32, #66bb6a);
@@ -86,8 +75,6 @@
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(76,175,80,0.25);
 }
-
-/* SECONDARY BUTTON */
 
 .cta-secondary {
     background: transparent;
@@ -105,60 +92,50 @@
 
 #fuel-form,
 #prices-container {
-    scroll-margin-top: 800px; /* настрой си стойността */
+    scroll-margin-top: 800px;
 }
 
-/* =========================
-   FACEBOOK CTA BUTTON
-========================= */
-
-.facebook-button-1 {
+.facebook-button-1,
+.instagram-button-1 {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-
     padding: 12px 22px;
     border-radius: 10px;
-
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
-
     color: white;
-    background: linear-gradient(135deg, #1877f2, #3b5998);
-
     transition: 0.25s;
 }
 
-/* HOVER */
+.facebook-button-1 {
+    background: linear-gradient(135deg, #1877f2, #3b5998);
+}
+
+.instagram-button-1 {
+    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+}
 
 .facebook-button-1:hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(24,119,242,0.3);
 }
 
-/* ACTIVE */
+.instagram-button-1:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(193,53,132,0.28);
+}
 
-.facebook-button-1:active {
+.facebook-button-1:active,
+.instagram-button-1:active {
     transform: translateY(0);
     box-shadow: none;
 }
 
-/* =========================
-   HOW IT WORKS - UPGRADE
-========================= */
-
-/* =========================
-   HOW IT WORKS - FINAL
-========================= */
-
 .how-it-works {
     margin: 100px 0;
 }
-
-/* =========================
-   HEADER
-========================= */
 
 .how-header {
     text-align: center;
@@ -169,30 +146,23 @@
     display: inline-block;
     padding: 6px 14px;
     border-radius: 999px;
-
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 1px;
     text-transform: uppercase;
-
     background: rgba(37,99,235,0.1);
     color: #2563eb;
-
     margin-bottom: 10px;
 }
-
-/* 🔥 PREMIUM TITLE */
 
 .how-title {
     font-size: clamp(28px, 5vw, 40px);
     font-weight: 800;
     line-height: 1.2;
     margin-bottom: 10px;
-
     background: linear-gradient(90deg, #2563eb, #22c55e);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-
     letter-spacing: -0.5px;
 }
 
@@ -202,9 +172,7 @@
     width: 80px;
     height: 4px;
     margin: 12px auto 0;
-
     border-radius: 999px;
-
     background: linear-gradient(90deg, #2563eb, #22c55e);
     opacity: 0.8;
 }
@@ -214,31 +182,19 @@
     font-size: 14px;
 }
 
-/* =========================
-   GRID
-========================= */
-
 .steps {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 28px;
 }
 
-/* =========================
-   CARD
-========================= */
-
 .step {
     padding: 30px 24px;
     border-radius: 16px;
-
     background: rgb(33, 52, 72);
     border: 1px solid rgba(255,255,255,0.1);
-
     text-align: center;
-
     transition: 0.2s;
-
     box-shadow: 0 10px 25px rgba(0,0,0,0.5);
 }
 
@@ -247,24 +203,15 @@
     border-color: rgba(255,255,255,0.2);
 }
 
-/* =========================
-   ICON
-========================= */
-
 .step-icon {
     width: 56px;
     height: 56px;
-
     margin: 0 auto 16px auto;
-
     display: flex;
     align-items: center;
     justify-content: center;
-
     font-size: 26px;
-
     border-radius: 12px;
-
     background: linear-gradient(135deg, #2563eb, #3b82f6);
     color: white;
 }
@@ -276,10 +223,6 @@
 .step:nth-child(3) .step-icon {
     background: linear-gradient(135deg, #f59e0b, #fbbf24);
 }
-
-/* =========================
-   TEXT
-========================= */
 
 .step h3 {
     font-size: 17px;
@@ -293,10 +236,6 @@
     color: rgba(226,232,240,0.7);
 }
 
-/* =========================
-   RESPONSIVE
-========================= */
-
 @media (max-width: 900px) {
     .steps {
         grid-template-columns: repeat(2, 1fr);
@@ -307,13 +246,6 @@
     .steps {
         grid-template-columns: 1fr;
     }
-}
-
-/* =========================
-   MOBILE
-========================= */
-
-@media (max-width: 600px) {
 
     .about-desc {
         font-size: 16px;
@@ -326,7 +258,6 @@
     .about-points {
         gap: 10px;
     }
-
 }
 
 .about-founder {
@@ -336,37 +267,21 @@
 .founder-card {
     max-width: 1500px;
     margin: 0 auto;
-
     display: grid;
     grid-template-columns: 340px 1fr;
     gap: 40px;
-
     background: rgba(255, 255, 255, 0.88);
     border: 1px solid rgba(255, 255, 255, 0.7);
-
     border-radius: 32px;
-
     backdrop-filter: blur(12px);
-
     overflow: hidden;
-
-    box-shadow:
-            0 20px 60px rgba(15, 23, 42, 0.08),
-            0 8px 25px rgba(15, 23, 42, 0.04);
+    box-shadow: 0 20px 60px rgba(15, 23, 42, 0.08), 0 8px 25px rgba(15, 23, 42, 0.04);
 }
 
 .founder-left {
     padding: 50px 35px;
-
-    background:
-            linear-gradient(
-                    180deg,
-                    #0f172a 0%,
-                    #1e293b 100%
-            );
-
+    background: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
     color: white;
-
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -375,50 +290,37 @@
 .founder-image-wrapper {
     width: 180px;
     height: 180px;
-
     border-radius: 50%;
-
     overflow: hidden;
-
     border: 5px solid rgba(255,255,255,0.15);
-
-    box-shadow:
-            0 10px 30px rgba(0,0,0,0.25);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
 }
 
 .founder-image-wrapper img {
     width: 100%;
     height: 100%;
-
     object-fit: cover;
     object-position: 80% 20%;
 }
 
 .founder-name {
     margin-top: 28px;
-
     font-size: 2rem;
     font-weight: 700;
-
     text-align: center;
 }
 
 .founder-role {
     margin-top: 10px;
-
     color: rgba(255,255,255,0.7);
-
     font-size: 0.95rem;
     letter-spacing: 1px;
-
     text-transform: uppercase;
 }
 
 .founder-socials {
     margin-top: 40px;
-
     width: 100%;
-
     display: flex;
     flex-direction: column;
     gap: 14px;
@@ -426,23 +328,16 @@
 
 .founder-socials a {
     text-decoration: none;
-
     padding: 14px 18px;
-
     border-radius: 14px;
-
     background: rgba(255,255,255,0.08);
-
     color: white;
-
     font-weight: 600;
-
     transition: 0.3s ease;
 }
 
 .founder-socials a:hover {
     background: rgba(255,255,255,0.16);
-
     transform: translateY(-2px);
 }
 
@@ -456,22 +351,11 @@
 
 .section-label {
     display: inline-block;
-
     margin-bottom: 18px;
-
     padding: 8px 14px;
-
     border-radius: 999px;
-
-    background:
-            linear-gradient(
-                    135deg,
-                    #3b82f6,
-                    #06b6d4
-            );
-
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
     color: white;
-
     font-size: 0.8rem;
     font-weight: 700;
     letter-spacing: 1px;
@@ -479,70 +363,51 @@
 
 .founder-section h3 {
     font-size: 2rem;
-
     line-height: 1.3;
-
     color: #0f172a;
-
     margin-bottom: 22px;
 }
 
 .founder-section p {
     color: #475569;
-
     line-height: 1.8;
-
     font-size: 1.05rem;
 }
 
 .founder-grid {
     display: grid;
-
     grid-template-columns: repeat(2, 1fr);
-
     gap: 20px;
 }
 
 .founder-box {
     padding: 24px;
-
     border-radius: 22px;
-
     background: #f8fafc;
-
     border: 1px solid #e2e8f0;
-
     transition: 0.3s ease;
 }
 
 .founder-box:hover {
     transform: translateY(-4px);
-
-    box-shadow:
-            0 10px 25px rgba(15,23,42,0.06);
+    box-shadow: 0 10px 25px rgba(15,23,42,0.06);
 }
 
 .box-title {
     display: block;
-
     margin-bottom: 12px;
-
     font-size: 0.8rem;
     font-weight: 700;
-
     letter-spacing: 1px;
-
     color: #3b82f6;
 }
 
 .founder-box p {
     color: #334155;
-
     line-height: 1.7;
 }
 
 @media (max-width: 980px) {
-
     .founder-card {
         grid-template-columns: 1fr;
     }
@@ -566,50 +431,36 @@
 
 .founder-contact-section {
     margin-top: 45px;
-
     padding-top: 30px;
-
     border-top: 1px solid #e2e8f0;
 }
 
 .founder-contact-header {
     font-size: 1.1rem;
     font-weight: 700;
-
     color: #0f172a;
-
     margin-bottom: 16px;
 }
 
 .founder-contact-text {
     color: #64748b;
-
     line-height: 1.8;
-
     margin-bottom: 24px;
 }
 
 .founder-contact-grid {
     display: grid;
-
     grid-template-columns: repeat(2, 1fr);
-
     gap: 18px;
 }
 
 .contact-card {
     text-decoration: none;
-
     padding: 22px;
-
     border-radius: 20px;
-
     background: #f8fafc;
-
     border: 1px solid #e2e8f0;
-
     transition: 0.3s ease;
-
     display: flex;
     flex-direction: column;
     gap: 10px;
@@ -617,34 +468,25 @@
 
 .contact-card:hover {
     transform: translateY(-4px);
-
-    box-shadow:
-            0 10px 25px rgba(15,23,42,0.06);
+    box-shadow: 0 10px 25px rgba(15,23,42,0.06);
 }
 
 .contact-title {
     font-size: 0.8rem;
     font-weight: 700;
-
     letter-spacing: 1px;
-
     color: #3b82f6;
-
     text-transform: uppercase;
 }
 
 .contact-value {
     color: #0f172a;
-
     font-weight: 600;
-
     word-break: break-word;
 }
 
 @media (max-width: 700px) {
-
     .founder-contact-grid {
         grid-template-columns: 1fr;
     }
-
 }
