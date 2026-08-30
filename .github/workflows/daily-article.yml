@@ -107,6 +107,14 @@ jobs:
           original_generate_article = base.generate_article
           original_build_facts = base.build_facts
 
+          def fmt_price_2(value):
+              return f"{float(value):.2f}".replace(".", ",")
+
+          def fmt_change_2(value):
+              numeric = float(value)
+              sign = "+" if numeric > 0 else ""
+              return sign + f"{numeric:.2f}".replace(".", ",")
+
           def summarize_day(rows):
               summary = original_summarize_day(rows)
               summary["city_averages"] = [
@@ -118,9 +126,6 @@ jobs:
 
           def build_facts(target, current, previous_day, previous):
               facts = original_build_facts(target, current, previous_day, previous)
-              # This is editorial guidance, not market data. It is passed inside FACTS_JSON
-              # so the model has an explicit newsroom structure while numeric guardrails
-              # continue to validate every decimal value against the real facts.
               facts["editorial_brief"] = {
                   "story_goal": "Lead with the most meaningful observation in the goriva.online sample instead of mechanically listing every metric.",
                   "required_sections": [
@@ -132,6 +137,7 @@ jobs:
                   ],
                   "style": [
                       "Write like a concise Bulgarian business newsroom, not like an AI assistant.",
+                      "All reader-facing fuel prices must use exactly two decimal places.",
                       "Open with a short lead and then give the most important conclusions first.",
                       "Explain why a difference matters; do not repeat the same numbers in multiple sections.",
                       "If the day is quiet, say that stability is the story instead of inventing drama.",
@@ -145,13 +151,11 @@ jobs:
               clean = re.sub(r"\s+", " ", str(text or "")).strip()
               if len(clean) <= max_len:
                   return clean
-
               window = clean[:max_len + 1]
               sentence_breaks = [m.end() for m in re.finditer(r"[.!?](?=\s|$)", window)]
               usable_breaks = [pos for pos in sentence_breaks if pos >= 90]
               if usable_breaks:
                   return window[:usable_breaks[-1]].strip()
-
               cut = window.rsplit(" ", 1)[0].rstrip(" ,;:-")
               if len(cut) > max_len - 1:
                   cut = cut[:max_len - 1].rsplit(" ", 1)[0].rstrip(" ,;:-")
@@ -159,9 +163,7 @@ jobs:
 
           def render_article(date_str, article):
               safe_article = dict(article)
-              safe_article["description"] = smart_meta_description(
-                  safe_article.get("description", "")
-              )
+              safe_article["description"] = smart_meta_description(safe_article.get("description", ""))
               return original_render_article(date_str, safe_article)
 
           def generate_article(facts):
@@ -170,7 +172,6 @@ jobs:
                   "local decimal numbers are not present in prepared facts",
                   "external context must stay qualitative",
               )
-
               for attempt in range(1, MAX_GENERATION_ATTEMPTS + 1):
                   article = original_generate_article(facts)
                   article["body_html"] = base.sanitize_body(article.get("body_html", ""))
@@ -184,17 +185,16 @@ jobs:
                       message = str(exc)
                       if not any(marker in message for marker in retryable_markers):
                           raise
-                      print(
-                          f"Generated draft failed numeric guardrails on attempt {attempt}/{MAX_GENERATION_ATTEMPTS}: {message}"
-                      )
+                      print(f"Generated draft failed numeric guardrails on attempt {attempt}/{MAX_GENERATION_ATTEMPTS}: {message}")
                       if attempt < MAX_GENERATION_ATTEMPTS:
                           print("Regenerating article from the prepared facts...")
-
               raise RuntimeError(
                   "Publication stopped after repeated model numeric-validation failures. "
                   f"Last error: {last_error}"
               )
 
+          base.fmt_price = fmt_price_2
+          base.fmt_change = fmt_change_2
           base.summarize_day = summarize_day
           base.build_facts = build_facts
           base.render_article = render_article
@@ -211,6 +211,12 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
         run: python -m automation.postprocess_daily_article
+
+      - name: Finalize reader-facing layout
+        if: steps.window.outputs.should_run == 'true'
+        env:
+          ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
+        run: python -m automation.finalize_daily_article
 
       - name: Commit generated article
         if: steps.window.outputs.should_run == 'true'
