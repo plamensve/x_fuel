@@ -92,16 +92,18 @@ jobs:
         run: |
           python - <<'PY'
           import re
-          from datetime import datetime
+          from datetime import date, datetime, timedelta
           import automation.generate_daily_article_bg as base
           import automation.generate_daily_article_longform as longform
 
           MIN_CITY_RANKING_COUNT = 3
           META_DESCRIPTION_MAX = 155
-          MAX_GENERATION_ATTEMPTS = 3
+          MAX_GENERATION_ATTEMPTS = 4
           MAJOR_CITIES = ("София", "Пловдив", "Варна", "Бургас", "Русе", "Стара Загора")
 
-          base.SOURCE_MAX_AGE_HOURS = 168
+          # Market context can use recent background articles from the last 14 days.
+          # Invalid/stale sources are filtered instead of aborting the whole publication.
+          base.SOURCE_MAX_AGE_HOURS = 336
           base.PREFERRED_BG_SOURCES = tuple(dict.fromkeys(base.PREFERRED_BG_SOURCES + (
               "forbesbulgaria.com", "profit.bg", "manager.bg", "bloombergtv.bg",
               "24chasa.bg", "trud.bg", "segabg.com", "offnews.bg"
@@ -156,12 +158,14 @@ jobs:
                   "seo_title_rule": "Use a natural consumer-facing SEO title. Never use 'наблюдаваната извадка' in the title.",
                   "target_length_words": "1500-2500 when enough material exists",
                   "minimum_sources_when_available": 4,
+                  "source_window_days": 14,
                   "required_city_sections": list(MAJOR_CITIES),
                   "style": [
                       "Do not repeatedly remind readers that the data is a sample. One concise methodology note is enough.",
                       "All reader-facing fuel prices use exactly two decimals.",
                       "Write for drivers, not analysts: explain practical price differences between cities and fuels.",
                       "Use the major city sections as substantive parts of the article, not token one-sentence mentions.",
+                      "Prefer sources from the last 72 hours; use older sources up to 14 days only as background context.",
                   ],
               }
               return facts
@@ -183,6 +187,56 @@ jobs:
               safe_article["title"] = seo_title(date_str)
               safe_article["description"] = smart_meta_description(safe_article.get("description", ""))
               return original_render_article(date_str, safe_article)
+
+          def normalize_sources_resilient(article, target_day):
+              cleaned = []
+              target_end = datetime.combine(date.fromisoformat(target_day), datetime.max.time(), tzinfo=base.SOFIA)
+              oldest = target_end - timedelta(hours=base.SOURCE_MAX_AGE_HOURS)
+
+              for source in article.get("sources") or []:
+                  url = base.clean_source_url(str(source.get("url") or ""))
+                  if not url.startswith(("https://", "http://")):
+                      print(f"Skipping invalid source URL: {url}")
+                      continue
+                  if not base.is_bulgarian_source(url):
+                      print(f"Skipping non-Bulgarian source: {url}")
+                      continue
+                  try:
+                      published = base.parse_source_date(str(source.get("published_at") or ""), target_day)
+                  except ValueError:
+                      print(f"Skipping source without valid publication date: {url}")
+                      continue
+                  if published < oldest or published > target_end + timedelta(hours=12):
+                      print(f"Skipping source outside 14-day window ({source.get('published_at')}): {url}")
+                      continue
+                  cleaned.append({
+                      "name": source.get("name") or url,
+                      "url": url,
+                      "published_at": published.isoformat(),
+                  })
+
+              # Deduplicate by canonical URL while preserving order.
+              deduped = []
+              seen = set()
+              for source in cleaned:
+                  if source["url"] in seen:
+                      continue
+                  seen.add(source["url"])
+                  deduped.append(source)
+              article["sources"] = deduped[:8]
+
+              if not article["sources"]:
+                  body = article.get("body_html", "")
+                  body = re.sub(
+                      r'<h2\b[^>]*>\s*Пазарен\s+контекст\s+от\s+български\s+източници\s*</h2>.*?(?=<h2\b|$)',
+                      '',
+                      body,
+                      flags=re.I | re.S,
+                  )
+                  article["body_html"] = body
+                  print("No valid recent sources remained; market-context section was removed instead of failing publication.")
+              else:
+                  print(f"Validated {len(article['sources'])} external sources.")
 
           def generate_article(facts):
               last_error = None
@@ -211,6 +265,7 @@ jobs:
           base.build_facts = build_facts
           base.render_article = render_article
           base.generate_article = generate_article
+          base.normalize_and_validate_sources = normalize_sources_resilient
           base.main()
           PY
 
