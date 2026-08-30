@@ -100,9 +100,11 @@ jobs:
 
           MIN_CITY_RANKING_COUNT = 10
           META_DESCRIPTION_MAX = 155
+          MAX_GENERATION_ATTEMPTS = 3
 
           original_summarize_day = base.summarize_day
           original_render_article = base.render_article
+          original_generate_article = base.generate_article
 
           def summarize_day(rows):
               summary = original_summarize_day(rows)
@@ -136,8 +138,40 @@ jobs:
               )
               return original_render_article(date_str, safe_article)
 
+          def generate_article(facts):
+              last_error = None
+              retryable_markers = (
+                  "local decimal numbers are not present in prepared facts",
+                  "external context must stay qualitative",
+              )
+
+              for attempt in range(1, MAX_GENERATION_ATTEMPTS + 1):
+                  article = original_generate_article(facts)
+                  article["body_html"] = base.sanitize_body(article.get("body_html", ""))
+                  try:
+                      base.validate_article(article, facts)
+                      if attempt > 1:
+                          print(f"Article passed numeric guardrails on attempt {attempt}.")
+                      return article
+                  except RuntimeError as exc:
+                      last_error = exc
+                      message = str(exc)
+                      if not any(marker in message for marker in retryable_markers):
+                          raise
+                      print(
+                          f"Generated draft failed numeric guardrails on attempt {attempt}/{MAX_GENERATION_ATTEMPTS}: {message}"
+                      )
+                      if attempt < MAX_GENERATION_ATTEMPTS:
+                          print("Regenerating article from the prepared facts...")
+
+              raise RuntimeError(
+                  "Publication stopped after repeated model numeric-validation failures. "
+                  f"Last error: {last_error}"
+              )
+
           base.summarize_day = summarize_day
           base.render_article = render_article
+          base.generate_article = generate_article
           base.main()
           PY
 
