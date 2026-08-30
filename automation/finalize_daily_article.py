@@ -43,19 +43,25 @@ def extract_chart(section_html: str) -> tuple[str, str]:
     return section_html[:match.start()] + section_html[match.end():], match.group(0)
 
 
-def build_side_image(date_str: str) -> str:
-    png = ROOT / "media" / "daily-news" / f"{date_str}.png"
-    svg = ROOT / "media" / "daily-news" / f"{date_str}.svg"
-    if png.exists():
-        src = f"/media/daily-news/{date_str}.png"
-    elif svg.exists():
-        src = f"/media/daily-news/{date_str}.svg"
-    else:
+def build_side_image(date_str: str, preferred_slug: str | None = None) -> str:
+    candidates: list[tuple[Path, str]] = []
+    if preferred_slug:
+        candidates.append((ROOT / "media" / "daily-news" / date_str / f"section-{preferred_slug}.png", f"/media/daily-news/{date_str}/section-{preferred_slug}.png"))
+    candidates.extend([
+        (ROOT / "media" / "daily-news" / f"{date_str}.png", f"/media/daily-news/{date_str}.png"),
+        (ROOT / "media" / "daily-news" / f"{date_str}.svg", f"/media/daily-news/{date_str}.svg"),
+    ])
+    src = ""
+    for path, rel in candidates:
+        if path.exists():
+            src = rel
+            break
+    if not src:
         return ""
     return (
         '<figure class="editorial-side-image">'
         f'<img src="{html.escape(src, quote=True)}" alt="Визуален контекст към пазара на горива" loading="lazy" decoding="async">'
-        '<figcaption>Визуален контекст към дневния обзор на goriva.online.</figcaption>'
+        '<figcaption>Редакционна илюстрация към дневния обзор на goriva.online.</figcaption>'
         '</figure>'
     )
 
@@ -82,8 +88,9 @@ def reshape_content(body: str, date_str: str) -> str:
         copy_html = copy_html.strip()
 
         if "пазарен контекст" in label:
-            visual = build_side_image(date_str)
+            visual = build_side_image(date_str, "market")
             if visual:
+                copy_html = re.sub(r'<figure\b[^>]*class="[^"]*editorial-inline-ai-image[^"]*"[^>]*>.*?</figure>', '', copy_html, flags=re.I | re.S)
                 sections.append(
                     '<section class="editorial-section editorial-section--split editorial-section--image">'
                     f'<div class="editorial-section-copy">{heading}{copy_html}</div>'
@@ -132,10 +139,12 @@ def enhance_article(date_str: str) -> None:
     text = path.read_text(encoding="utf-8")
     text = round_euro_values(text)
 
-    stylesheet = '/pages/styles/daily-editorial-layout.css?v=20260830-2'
+    stylesheet = '/pages/styles/daily-editorial-layout.css?v=20260830-3'
     if stylesheet not in text:
-        link = f'  <link rel="stylesheet" href="{stylesheet}">\n'
-        text = text.replace("</head>", link + "</head>", 1)
+        text = re.sub(r'/pages/styles/daily-editorial-layout\.css\?v=[^"\']+', stylesheet, text)
+        if stylesheet not in text:
+            link = f'  <link rel="stylesheet" href="{stylesheet}">\n'
+            text = text.replace("</head>", link + "</head>", 1)
 
     content_pattern = re.compile(r'(<div\b[^>]*class="[^"]*article-content-full[^"]*"[^>]*>)(.*?)(</div>\s*</article>)', re.I | re.S)
     match = content_pattern.search(text)
