@@ -1,5 +1,15 @@
+// Site-wide mobile/responsive hardening. Loaded last so it can fix page-specific overflow safely.
 (() => {
-    const navSrc = "/scripts/global-nav.js?v=20260829-1134";
+    if (document.getElementById("goriva-mobile-responsive-css")) return;
+    const link = document.createElement("link");
+    link.id = "goriva-mobile-responsive-css";
+    link.rel = "stylesheet";
+    link.href = "/pages/styles/mobile-responsive.css?v=20260830-mobile-audit1";
+    document.head.appendChild(link);
+})();
+
+(() => {
+    const navSrc = "/scripts/global-nav.js?v=20260830-mobile-audit1";
     if (!window.__GORIVA_GLOBAL_NAV_LOADER__) {
         window.__GORIVA_GLOBAL_NAV_LOADER__ = true;
         const navScript = document.createElement("script");
