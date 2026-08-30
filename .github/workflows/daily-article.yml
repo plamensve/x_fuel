@@ -8,8 +8,6 @@ on:
         required: false
         type: string
   schedule:
-    # 18:00 Sofia = 15:00 UTC in summer and 16:00 UTC in winter.
-    # Both candidates are scheduled and the gate selects the one matching Sofia's UTC offset.
     - cron: "0 15 * * *"
     - cron: "0 16 * * *"
 
@@ -19,7 +17,7 @@ permissions:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
 
     steps:
       - name: Check Sofia publication window
@@ -46,8 +44,6 @@ jobs:
           else:
               should_run = schedule == "0 16 * * *"
 
-          print(f"Sofia time: {now.isoformat()}")
-          print(f"Schedule candidate: {schedule or 'manual'}; UTC offset: +{offset_hours}")
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
               fh.write(f"should_run={'true' if should_run else 'false'}\n")
               fh.write(f"sofia_date={now.date().isoformat()}\n")
@@ -98,14 +94,21 @@ jobs:
           import re
           from datetime import datetime
           import automation.generate_daily_article_bg as base
+          import automation.generate_daily_article_longform as longform
 
-          MIN_CITY_RANKING_COUNT = 10
+          MIN_CITY_RANKING_COUNT = 3
           META_DESCRIPTION_MAX = 155
           MAX_GENERATION_ATTEMPTS = 3
+          MAJOR_CITIES = ("София", "Пловдив", "Варна", "Бургас", "Русе", "Стара Загора")
+
+          base.SOURCE_MAX_AGE_HOURS = 168
+          base.PREFERRED_BG_SOURCES = tuple(dict.fromkeys(base.PREFERRED_BG_SOURCES + (
+              "forbesbulgaria.com", "profit.bg", "manager.bg", "bloombergtv.bg",
+              "24chasa.bg", "trud.bg", "segabg.com", "offnews.bg"
+          )))
 
           original_summarize_day = base.summarize_day
           original_render_article = base.render_article
-          original_generate_article = base.generate_article
           original_build_facts = base.build_facts
 
           def fmt_price_2(value):
@@ -122,59 +125,43 @@ jobs:
               return f"{dt.day} {months[dt.month - 1]} {dt.year}"
 
           def seo_title(date_str):
-              return f"Цени на горивата днес в София – {bg_date(date_str)}"
+              return f"Цени на горивата днес: София и големите градове – {bg_date(date_str)}"
 
           def summarize_day(rows):
               summary = original_summarize_day(rows)
               summary["city_averages"] = [
-                  item
-                  for item in summary.get("city_averages", [])
+                  item for item in summary.get("city_averages", [])
                   if int(item.get("count", 0)) >= MIN_CITY_RANKING_COUNT
               ]
               return summary
 
           def build_facts(target, current, previous_day, previous):
               facts = original_build_facts(target, current, previous_day, previous)
-              sofia = {}
-              for item in current.get("city_averages", []):
-                  if str(item.get("city", "")).strip().lower() != "софия":
-                      continue
-                  fuel = item.get("fuel")
-                  if not fuel:
-                      continue
-                  sofia[fuel] = {
-                      "average": item.get("average"),
-                      "count": item.get("count"),
-                      "display_average": fmt_price_2(item.get("average", 0)),
-                  }
-              facts["sofia"] = {
-                  "city": "София",
-                  "fuels": sofia,
-                  "section_required": True,
-                  "section_heading": "Цени на горивата в София",
-              }
+              major_cities = {}
+              for city in MAJOR_CITIES:
+                  fuel_rows = {}
+                  for item in current.get("city_averages", []):
+                      if str(item.get("city", "")).strip().lower() != city.lower():
+                          continue
+                      fuel = item.get("fuel")
+                      if fuel:
+                          fuel_rows[fuel] = {
+                              "average": item.get("average"),
+                              "count": item.get("count"),
+                              "display_average": fmt_price_2(item.get("average", 0)),
+                          }
+                  major_cities[city] = fuel_rows
+              facts["major_cities"] = major_cities
               facts["editorial_brief"] = {
-                  "seo_title_rule": "The title must start with the exact search phrase 'Цени на горивата днес' and clearly mention Sofia. Keep it concise, factual and reader-oriented.",
-                  "story_goal": "Lead with the most meaningful observation in the goriva.online sample instead of mechanically listing every metric.",
-                  "required_sections": [
-                      "Какви са цените днес?",
-                      "Цени на горивата в София",
-                      "Какво се промени спрямо предходния ден?",
-                      "Къде се зарежда по-евтино?",
-                      "Пазарен контекст от български източници",
-                      "Какво да следим",
-                  ],
+                  "seo_title_rule": "Use a natural consumer-facing SEO title. Never use 'наблюдаваната извадка' in the title.",
+                  "target_length_words": "1500-2500 when enough material exists",
+                  "minimum_sources_when_available": 4,
+                  "required_city_sections": list(MAJOR_CITIES),
                   "style": [
-                      "Write like a concise Bulgarian business newsroom, not like an AI assistant.",
-                      "All reader-facing fuel prices must use exactly two decimal places.",
-                      "The Sofia section is mandatory and must use only facts.sofia data.",
-                      "Use natural SEO wording around: цени на горивата днес, цени на горивата в София, бензин, дизел, LPG.",
-                      "Do not keyword-stuff; readability and factual accuracy come first.",
-                      "Open with a short lead and then give the most important conclusions first.",
-                      "Explain why a difference matters; do not repeat the same numbers in multiple sections.",
-                      "If the day is quiet, say that stability is the story instead of inventing drama.",
-                      "Use short paragraphs and concrete language. Avoid filler, hype and generic conclusions.",
-                      "Treat the automatically generated charts as the primary numeric visual evidence and write analysis around them.",
+                      "Do not repeatedly remind readers that the data is a sample. One concise methodology note is enough.",
+                      "All reader-facing fuel prices use exactly two decimals.",
+                      "Write for drivers, not analysts: explain practical price differences between cities and fuels.",
+                      "Use the major city sections as substantive parts of the article, not token one-sentence mentions.",
                   ],
               }
               return facts
@@ -189,9 +176,7 @@ jobs:
               if usable_breaks:
                   return window[:usable_breaks[-1]].strip()
               cut = window.rsplit(" ", 1)[0].rstrip(" ,;:-")
-              if len(cut) > max_len - 1:
-                  cut = cut[:max_len - 1].rsplit(" ", 1)[0].rstrip(" ,;:-")
-              return cut + "…"
+              return cut[:max_len - 1].rsplit(" ", 1)[0].rstrip(" ,;:-") + "…"
 
           def render_article(date_str, article):
               safe_article = dict(article)
@@ -206,26 +191,19 @@ jobs:
                   "external context must stay qualitative",
               )
               for attempt in range(1, MAX_GENERATION_ATTEMPTS + 1):
-                  article = original_generate_article(facts)
+                  article = longform.generate_article(facts)
                   article["title"] = seo_title(facts["date"])
                   article["body_html"] = base.sanitize_body(article.get("body_html", ""))
                   try:
                       base.validate_article(article, facts)
-                      if attempt > 1:
-                          print(f"Article passed numeric guardrails on attempt {attempt}.")
                       return article
                   except RuntimeError as exc:
                       last_error = exc
                       message = str(exc)
                       if not any(marker in message for marker in retryable_markers):
                           raise
-                      print(f"Generated draft failed numeric guardrails on attempt {attempt}/{MAX_GENERATION_ATTEMPTS}: {message}")
-                      if attempt < MAX_GENERATION_ATTEMPTS:
-                          print("Regenerating article from the prepared facts...")
-              raise RuntimeError(
-                  "Publication stopped after repeated model numeric-validation failures. "
-                  f"Last error: {last_error}"
-              )
+                      print(f"Draft failed numeric guardrails on attempt {attempt}/{MAX_GENERATION_ATTEMPTS}: {message}")
+              raise RuntimeError(f"Publication stopped after repeated validation failures. Last error: {last_error}")
 
           base.fmt_price = fmt_price_2
           base.fmt_change = fmt_change_2
@@ -246,7 +224,7 @@ jobs:
           ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
         run: python -m automation.postprocess_daily_article
 
-      - name: Generate Matplotlib charts and inline AI images
+      - name: Generate city charts and inline AI images
         if: steps.window.outputs.should_run == 'true'
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
