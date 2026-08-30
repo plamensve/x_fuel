@@ -1,5 +1,5 @@
 (() => {
-    const ASSET_VERSION = "20260830-1635";
+    const ASSET_VERSION = "20260830-1650";
     const header = document.querySelector("body > .header-bar");
     const nav = document.querySelector("body > .main-nav");
     const headerContainer = header?.querySelector(".header-container");
@@ -86,30 +86,39 @@
 
     const hero = document.querySelector(".about-project .about-inner");
     const heroCta = hero?.querySelector(".about-cta");
-    if (hero && heroCta && !hero.querySelector(".instagram-follow-hook")) {
+    if (hero && heroCta) {
         heroCta.querySelector(".facebook-button-1")?.remove();
         heroCta.querySelector(".instagram-button-1")?.remove();
 
-        const card = document.createElement("a");
-        card.className = "instagram-follow-hook";
-        card.href = "https://www.instagram.com/goriva.online/";
-        card.target = "_blank";
-        card.rel = "noopener noreferrer";
-        card.setAttribute("aria-label", "Последвай goriva.online в Instagram за ежедневни цени на горивата");
-        card.innerHTML = `
-            <span class="instagram-follow-icon" aria-hidden="true">◎</span>
-            <span class="instagram-follow-copy">
-                <strong>Искаш да виждаш най-ниските цени всеки ден?</strong>
-                <span>Последвай @goriva.online в Instagram за ежедневни цени, сравнения и полезна информация за шофьори.</span>
-            </span>
-            <span class="instagram-follow-action">Последвай ни →</span>
-        `;
-        hero.appendChild(card);
+        let banner = hero.querySelector(".instagram-follow-banner");
+        if (!banner) {
+            banner = document.createElement("a");
+            banner.className = "instagram-follow-banner";
+            banner.href = "https://www.instagram.com/goriva.online/";
+            banner.target = "_blank";
+            banner.rel = "noopener noreferrer";
+            banner.setAttribute("aria-label", "Последвай goriva.online в Instagram за ежедневни цени на горивата");
+            banner.innerHTML = `
+                <span class="instagram-banner-icon" aria-hidden="true">
+                    <span class="instagram-banner-camera">◎</span>
+                </span>
+                <span class="instagram-banner-copy">
+                    <span class="instagram-banner-eyebrow">ЦЕНИТЕ ВСЕКИ ДЕН В INSTAGRAM</span>
+                    <strong>Искаш да си информиран за цените на горивата всеки ден?</strong>
+                    <span class="instagram-banner-text">Следвай <b>@goriva.online</b> и виждай актуални цени, най-евтини бензиностанции и кратки сравнения директно във фийда си.</span>
+                </span>
+                <span class="instagram-banner-action">
+                    <span>Последвай ни</span>
+                    <span aria-hidden="true">→</span>
+                </span>
+            `;
+            heroCta.insertAdjacentElement("afterend", banner);
+        }
     }
 
-    if (!document.getElementById("instagram-follow-hook-styles")) {
+    if (!document.getElementById("instagram-follow-banner-styles")) {
         const style = document.createElement("style");
-        style.id = "instagram-follow-hook-styles";
+        style.id = "instagram-follow-banner-styles";
         style.textContent = `
             .instagram-nav-button {
                 background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045) !important;
@@ -121,73 +130,155 @@
                 color: #fff !important;
                 background: rgba(255,255,255,.14) !important;
             }
-            .instagram-follow-hook {
-                max-width: 760px;
+            .about-project .about-cta {
+                margin-bottom: 0;
+            }
+            .instagram-follow-banner {
+                position: relative;
+                max-width: 820px;
                 margin: 22px auto 0;
-                padding: 16px 18px;
+                padding: 18px 20px;
                 display: grid;
-                grid-template-columns: 42px minmax(0,1fr) auto;
+                grid-template-columns: 54px minmax(0, 1fr) auto;
                 align-items: center;
-                gap: 14px;
-                border: 1px solid rgba(193,53,132,.18);
-                border-radius: 16px;
-                background: linear-gradient(135deg, rgba(131,58,180,.08), rgba(253,29,29,.05), rgba(252,176,69,.08));
+                gap: 16px;
+                overflow: hidden;
+                border: 1px solid rgba(193, 53, 132, .18);
+                border-radius: 18px;
+                background:
+                    radial-gradient(circle at 0% 50%, rgba(131,58,180,.12), transparent 34%),
+                    radial-gradient(circle at 100% 50%, rgba(252,176,69,.13), transparent 38%),
+                    linear-gradient(135deg, rgba(255,255,255,.98), rgba(255,248,251,.96));
                 color: #172033;
                 text-decoration: none;
-                box-shadow: 0 12px 28px rgba(15,23,42,.08);
+                box-shadow: 0 14px 34px rgba(15,23,42,.10), 0 3px 8px rgba(193,53,132,.06);
                 transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+                isolation: isolate;
             }
-            .instagram-follow-hook:hover {
+            .instagram-follow-banner::before {
+                content: "";
+                position: absolute;
+                inset: 0 auto 0 0;
+                width: 4px;
+                background: linear-gradient(180deg, #833ab4, #fd1d1d, #fcb045);
+            }
+            .instagram-follow-banner::after {
+                content: "";
+                position: absolute;
+                width: 180px;
+                height: 180px;
+                right: -90px;
+                top: -95px;
+                border-radius: 50%;
+                background: rgba(252,176,69,.08);
+                z-index: -1;
+            }
+            .instagram-follow-banner:hover {
                 transform: translateY(-2px);
                 border-color: rgba(193,53,132,.32);
-                box-shadow: 0 16px 34px rgba(15,23,42,.12);
+                box-shadow: 0 18px 42px rgba(15,23,42,.13), 0 4px 12px rgba(193,53,132,.10);
             }
-            .instagram-follow-icon {
-                width: 42px;
-                height: 42px;
+            .instagram-banner-icon {
+                width: 54px;
+                height: 54px;
                 display: inline-flex;
                 align-items: center;
                 justify-content: center;
-                border-radius: 12px;
+                border-radius: 16px;
+                background: linear-gradient(135deg, #833ab4 0%, #c13584 35%, #fd1d1d 68%, #fcb045 100%);
+                box-shadow: 0 8px 20px rgba(193,53,132,.22);
+            }
+            .instagram-banner-camera {
+                width: 27px;
+                height: 27px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                border: 2px solid #fff;
+                border-radius: 8px;
                 color: #fff;
-                background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
-                font-size: 24px;
+                font-size: 17px;
+                line-height: 1;
                 font-weight: 800;
             }
-            .instagram-follow-copy {
+            .instagram-banner-copy {
                 min-width: 0;
                 text-align: left;
             }
-            .instagram-follow-copy strong {
+            .instagram-banner-eyebrow {
                 display: block;
                 margin-bottom: 4px;
-                color: #111827;
-                font-size: 15px;
-                line-height: 1.35;
+                color: #a72b72;
+                font-size: 10px;
+                font-weight: 850;
+                letter-spacing: .08em;
             }
-            .instagram-follow-copy span {
+            .instagram-banner-copy strong {
                 display: block;
-                color: #64748b;
-                font-size: 13px;
+                margin-bottom: 5px;
+                color: #172033;
+                font-size: 16px;
+                line-height: 1.35;
+                letter-spacing: -.01em;
+            }
+            .instagram-banner-text {
+                display: block;
+                color: #68758a;
+                font-size: 12px;
                 line-height: 1.5;
             }
-            .instagram-follow-action {
-                white-space: nowrap;
-                padding: 10px 14px;
-                border-radius: 10px;
-                color: #fff;
-                background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
-                font-size: 13px;
+            .instagram-banner-text b {
+                color: #a72b72;
                 font-weight: 750;
             }
-            @media (max-width: 700px) {
-                .instagram-follow-hook {
-                    grid-template-columns: 40px minmax(0,1fr);
-                    padding: 14px;
+            .instagram-banner-action {
+                min-height: 42px;
+                padding: 0 16px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 9px;
+                border-radius: 12px;
+                color: #fff;
+                background: linear-gradient(135deg, #833ab4, #c13584 45%, #fd1d1d 75%, #fcb045);
+                box-shadow: 0 9px 20px rgba(193,53,132,.20);
+                font-size: 13px;
+                font-weight: 800;
+                white-space: nowrap;
+            }
+            .instagram-follow-banner:hover .instagram-banner-action {
+                box-shadow: 0 11px 24px rgba(193,53,132,.28);
+            }
+            @media (max-width: 760px) {
+                .instagram-follow-banner {
+                    grid-template-columns: 48px minmax(0,1fr);
+                    padding: 16px;
+                    gap: 13px;
                 }
-                .instagram-follow-action {
+                .instagram-banner-icon {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 14px;
+                }
+                .instagram-banner-action {
                     grid-column: 1 / -1;
-                    text-align: center;
+                    width: 100%;
+                    min-height: 44px;
+                }
+            }
+            @media (max-width: 520px) {
+                .instagram-follow-banner {
+                    margin-top: 18px;
+                    border-radius: 16px;
+                }
+                .instagram-banner-copy strong {
+                    font-size: 14px;
+                }
+                .instagram-banner-text {
+                    font-size: 11px;
+                }
+                .instagram-banner-eyebrow {
+                    font-size: 9px;
                 }
             }
         `;
