@@ -200,7 +200,7 @@ def enhance_article(date_str: str) -> None:
             link = f'  <link rel="stylesheet" href="{stylesheet}">\n'
             text = text.replace("</head>", link + "</head>", 1)
 
-    engagement_css = '/pages/styles/article-engagement.css?v=20260830-2'
+    engagement_css = '/pages/styles/article-engagement.css?v=20260830-3'
     text = re.sub(r'/pages/styles/article-engagement\.css\?v=[^"\']+', engagement_css, text)
     if engagement_css not in text:
         link = f'  <link rel="stylesheet" href="{engagement_css}">\n'
@@ -214,7 +214,7 @@ def enhance_article(date_str: str) -> None:
 
     text = inject_engagement(text)
 
-    engagement_js = '/scripts/article-engagement.js?v=20260830-2'
+    engagement_js = '/scripts/article-engagement.js?v=20260830-3'
     text = re.sub(r'/scripts/article-engagement\.js\?v=[^"\']+', engagement_js, text)
     if engagement_js not in text:
         text = text.replace('</body>', f'  <script src="{engagement_js}" defer></script>\n</body>', 1)
