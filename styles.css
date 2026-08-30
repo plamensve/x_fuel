@@ -105,8 +105,6 @@ a[class*="button"]:focus-visible,
 
 /* =========================================================
    HOMEPAGE NAV — same business visual language as History.
-   The legacy markup stays intact, but header and navigation
-   are visually composed into one professional navigation bar.
    ========================================================= */
 
 body > .header-bar {
@@ -153,7 +151,7 @@ body > .header-bar .header-text {
     display: none;
 }
 
-body > .header-bar .facebook-button {
+body > .header-bar .instagram-nav-button {
     grid-column: 3;
     min-height: 42px;
     display: inline-flex;
@@ -161,30 +159,36 @@ body > .header-bar .facebook-button {
     justify-content: center;
     gap: 8px;
     padding: 0 16px;
-    border: 1px solid rgba(96, 165, 250, 0.28);
+    border: 1px solid rgba(244, 114, 182, 0.28);
     border-radius: 11px;
-    color: #eff6ff;
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    box-shadow: 0 8px 22px rgba(37, 99, 235, 0.24);
+    color: #fff7fb;
+    background: linear-gradient(135deg, #833ab4 0%, #fd1d1d 58%, #fcb045 100%);
+    box-shadow: 0 8px 22px rgba(193, 53, 132, 0.22);
     text-decoration: none;
     font-size: 13px;
     font-weight: 750;
     white-space: nowrap;
 }
 
-body > .header-bar .facebook-button::before {
-    content: "f";
+body > .header-bar .instagram-nav-button::before {
+    content: "◎";
     width: 20px;
     height: 20px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 50%;
-    color: #2563eb;
-    background: #ffffff;
+    border-radius: 6px;
+    color: #ffffff;
+    border: 1.5px solid rgba(255, 255, 255, 0.88);
     font-family: Arial, sans-serif;
     font-weight: 900;
-    font-size: 14px;
+    font-size: 15px;
+    line-height: 1;
+}
+
+body > .header-bar .instagram-nav-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 24px rgba(193, 53, 132, 0.30);
 }
 
 body > .main-nav {
@@ -435,7 +439,7 @@ a[class*="button"] img.button-icon {
 }
 
 @media (max-width: 860px) {
-    body > .header-bar .facebook-button {
+    body > .header-bar .instagram-nav-button {
         display: none;
     }
 
