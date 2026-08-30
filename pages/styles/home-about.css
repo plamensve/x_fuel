@@ -490,3 +490,94 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* =========================================================
+   HOMEPAGE INSTAGRAM FOLLOW BANNER
+   Works directly with the existing hero markup, without JS.
+   ========================================================= */
+.about-project .facebook-button-1 {
+    display: none !important;
+}
+
+.about-project .about-cta {
+    margin-top: 2px;
+    align-items: stretch;
+}
+
+.about-project .instagram-button-1 {
+    position: relative;
+    width: min(100%, 760px);
+    min-height: 86px;
+    margin-top: 8px;
+    padding: 16px 150px 16px 66px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    overflow: hidden;
+    border: 1px solid rgba(193, 53, 132, 0.18);
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at 92% 10%, rgba(252,176,69,.18), transparent 32%),
+        linear-gradient(135deg, rgba(131,58,180,.08), rgba(253,29,29,.055), rgba(252,176,69,.08));
+    box-shadow: 0 14px 34px rgba(15,23,42,.09);
+    color: transparent;
+    font-size: 0;
+    text-align: left;
+    isolation: isolate;
+}
+
+.about-project .instagram-button-1::before {
+    content: "Искаш да си информиран за цените на горивата всеки ден?\AСледвай @goriva.online за актуални цени, най-евтини бензиностанции и кратки сравнения.";
+    white-space: pre-line;
+    display: block;
+    color: #172033;
+    font-size: 13px;
+    line-height: 1.45;
+    font-weight: 500;
+}
+
+.about-project .instagram-button-1::after {
+    content: "Последвай ни →";
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    padding: 11px 14px;
+    border-radius: 11px;
+    color: #fff;
+    background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045);
+    box-shadow: 0 8px 20px rgba(193,53,132,.22);
+    font-size: 13px;
+    line-height: 1;
+    font-weight: 800;
+    white-space: nowrap;
+}
+
+.about-project .instagram-button-1:hover {
+    transform: translateY(-2px);
+    border-color: rgba(193,53,132,.34);
+    box-shadow: 0 18px 40px rgba(15,23,42,.13);
+}
+
+.about-project .instagram-button-1:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 700px) {
+    .about-project .instagram-button-1 {
+        min-height: 0;
+        padding: 16px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+
+    .about-project .instagram-button-1::after {
+        position: static;
+        transform: none;
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        text-align: center;
+    }
+}
