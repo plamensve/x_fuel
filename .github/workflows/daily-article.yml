@@ -101,8 +101,6 @@ jobs:
           MAX_GENERATION_ATTEMPTS = 4
           MAJOR_CITIES = ("София", "Пловдив", "Варна", "Бургас", "Русе", "Стара Загора")
 
-          # Market context can use recent background articles from the last 14 days.
-          # Invalid/stale sources are filtered instead of aborting the whole publication.
           base.SOURCE_MAX_AGE_HOURS = 336
           base.PREFERRED_BG_SOURCES = tuple(dict.fromkeys(base.PREFERRED_BG_SOURCES + (
               "forbesbulgaria.com", "profit.bg", "manager.bg", "bloombergtv.bg",
@@ -215,7 +213,6 @@ jobs:
                       "published_at": published.isoformat(),
                   })
 
-              # Deduplicate by canonical URL while preserving order.
               deduped = []
               seen = set()
               for source in cleaned:
@@ -287,7 +284,7 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
-        run: python -m automation.enrich_daily_article_visuals
+        run: python -m automation.enrich_daily_article_visuals_minimum
 
       - name: Finalize reader-facing layout
         if: steps.window.outputs.should_run == 'true'
