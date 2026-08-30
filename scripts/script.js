@@ -30,7 +30,7 @@
 
 // Homepage hero + station-map visual redesign.
 (() => {
-    const src = "/scripts/home-hero-map-pro.js?v=20260829-hero-map";
+    const src = "/scripts/home-hero-map-pro.js?v=20260830-instagram-fix1";
 
     if (document.readyState === "loading") {
         document.write(`<script src="${src}"><\/script>`);
@@ -55,6 +55,35 @@
     script.src = src;
     script.async = false;
     document.head.appendChild(script);
+})();
+
+// Normalize Instagram links after all homepage DOM rewrites.
+(() => {
+    const INSTAGRAM_URL = "https://www.instagram.com/goriva.online/";
+
+    const normalizeInstagramLinks = () => {
+        document.querySelectorAll('a[href*="instagram.com"]').forEach(link => {
+            link.href = INSTAGRAM_URL;
+            link.target = "_blank";
+            link.rel = "noopener noreferrer";
+        });
+
+        const founderSocials = document.querySelector('.founder-socials');
+        if (founderSocials && !founderSocials.querySelector('a[href*="instagram.com"]')) {
+            const instagram = document.createElement('a');
+            instagram.href = INSTAGRAM_URL;
+            instagram.target = "_blank";
+            instagram.rel = "noopener noreferrer";
+            instagram.textContent = "Instagram";
+            founderSocials.appendChild(instagram);
+        }
+    };
+
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", normalizeInstagramLinks, { once: true });
+    } else {
+        normalizeInstagramLinks();
+    }
 })();
 
 // Shared newsroom layout for article pages.
