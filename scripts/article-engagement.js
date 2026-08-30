@@ -23,7 +23,7 @@
   }
 
   const VIEW_SEED = seededCount('views');
-  const LIKE_SEED = seededCount('likes');
+  const LIKE_SEED = ((seededCount('likes') - 1) % VIEW_SEED) + 1;
 
   const ICONS = {
     facebook: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.6 1.6-1.6H17V4.8c-.4-.1-1.3-.2-2.4-.2-2.4 0-4.1 1.5-4.1 4.2V11H8v3h2.5v8h3z"/></svg>',
@@ -118,8 +118,9 @@
   function initLikes() {
     const likedKey = storageKey('liked');
     let liked = localStorage.getItem(likedKey) === '1';
-    let likes = LIKE_SEED + (liked ? 1 : 0);
+    let likes = Math.min(VIEW_SEED, LIKE_SEED + (liked ? 1 : 0));
     const sync = () => {
+      likes = Math.min(likes, VIEW_SEED);
       qa('[data-article-likes]').forEach((node) => { node.textContent = likes.toLocaleString('bg-BG'); });
       qa('[data-like-article]').forEach((button) => {
         button.classList.toggle('is-liked', liked);
@@ -132,7 +133,7 @@
     };
     qa('[data-like-article]').forEach((button) => button.addEventListener('click', () => {
       liked = !liked;
-      likes = LIKE_SEED + (liked ? 1 : 0);
+      likes = Math.min(VIEW_SEED, LIKE_SEED + (liked ? 1 : 0));
       localStorage.setItem(likedKey, liked ? '1' : '0');
       sync();
     }));
