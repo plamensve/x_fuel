@@ -1,15 +1,9 @@
 (() => {
   const q = (selector, root = document) => root.querySelector(selector);
   const qa = (selector, root = document) => [...root.querySelectorAll(selector)];
-  const safeParse = (value, fallback) => {
-    try { return JSON.parse(value); } catch { return fallback; }
-  };
+  const safeParse = (value, fallback) => { try { return JSON.parse(value); } catch { return fallback; } };
 
-  const articleKey = (() => {
-    const canonical = q('link[rel="canonical"]')?.href;
-    return canonical || `${location.origin}${location.pathname}`;
-  })();
-
+  const articleKey = q('link[rel="canonical"]')?.href || `${location.origin}${location.pathname}`;
   const storageKey = (suffix) => `goriva:article:${articleKey}:${suffix}`;
 
   function seededCount(salt) {
@@ -25,31 +19,34 @@
   const VIEW_SEED = seededCount('views');
   const LIKE_SEED = ((seededCount('likes') - 1) % VIEW_SEED) + 1;
 
+  // Brand marks use the recognizable production logo geometry for the major networks.
+  // Utility actions keep neutral interface icons.
   const ICONS = {
-    facebook: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.6 1.6-1.6H17V4.8c-.4-.1-1.3-.2-2.4-.2-2.4 0-4.1 1.5-4.1 4.2V11H8v3h2.5v8h3z"/></svg>',
-    x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.9 3H22l-6.8 7.8L23 21h-6.1l-4.8-6.3L6.6 21H3.4l7.2-8.2L3 3h6.3l4.3 5.7L18.9 3zm-1.1 16h1.7L8.4 4.9H6.6L17.8 19z"/></svg>',
-    linkedin: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5.1 7.3A2.1 2.1 0 1 0 5.1 3a2.1 2.1 0 0 0 0 4.3zM3.3 21h3.6V9H3.3v12zM9.1 9v12h3.6v-6.7c0-1.8.3-3.5 2.5-3.5 2.2 0 2.2 2 2.2 3.6V21H21v-7.4c0-3.6-.8-6.3-4.9-6.3-2 0-3.3 1.1-3.8 2.1h-.1V9H9.1z"/></svg>',
-    whatsapp: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 3.5A11.8 11.8 0 0 0 1.9 17.8L.3 23.5l5.9-1.5a11.8 11.8 0 0 0 14.3-18.5zM12 20a9.8 9.8 0 0 1-5-1.4l-.4-.2-3.5.9.9-3.4-.2-.4A9.8 9.8 0 1 1 12 20zm5.4-7.4c-.3-.1-1.8-.9-2-.9-.3-.1-.5-.1-.7.1-.2.3-.8.9-.9 1.1-.2.2-.4.2-.7.1-2-.8-3.4-2.4-4.3-4.1-.2-.3 0-.5.1-.6l.5-.6.2-.5c.1-.2 0-.4 0-.6-.1-.2-.7-1.8-1-2.4-.3-.6-.6-.5-.8-.5h-.7c-.2 0-.6.1-.9.4-.3.4-1.2 1.2-1.2 2.9 0 1.7 1.2 3.3 1.4 3.5.2.2 2.4 3.7 5.8 5.2 2.1.9 2.9 1 3.9.9 1.2-.2 1.8-.8 2.1-1.6.3-.8.3-1.4.2-1.6-.1-.2-.3-.3-.6-.4z"/></svg>',
-    telegram: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21.8 3.2 18.6 20c-.2 1.2-.9 1.5-1.8.9l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.1 13.8l-4.9-1.5c-1.1-.3-1.1-1.1.2-1.6L20.5 3.3c.9-.3 1.6.2 1.3 1.9z"/></svg>',
-    viber: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C6.4 2 2 6 2 11c0 2.9 1.5 5.5 4 7.1V22l3.5-2.1c.8.2 1.7.3 2.5.3 5.6 0 10-4 10-9S17.6 2 12 2zm4.8 13.2c-.3.7-1.6 1.3-2.2 1.4-.6.1-1.4.2-4.1-1-3.4-1.5-5.5-5.2-5.7-5.5-.2-.3-1.3-1.8-1.3-3.4s.8-2.4 1.1-2.8c.3-.3.7-.4 1-.4h.7c.2 0 .5-.1.7.6.3.8 1 2.6 1.1 2.8.1.2.2.5 0 .8-.1.3-.2.5-.5.7l-.7.7c-.2.2-.5.5-.2.9.3.5 1.2 2 2.6 3.2 1.8 1.6 3.3 2.1 3.8 2.3.5.2.8.2 1-.1l1.3-1.5c.3-.3.5-.4.9-.2l2.5 1.2c.4.2.7.3.8.5.1.1.1.8-.2 1.5z"/></svg>',
-    reddit: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.5 12.1c-.1 0-.3 0-.4.1-1.1-1.6-3.1-2.7-5.5-3l1.1-5.1 3.5.8a1.8 1.8 0 1 0 .2-1l-4-.9a.5.5 0 0 0-.6.4l-1.2 5.6H12c-2.5 0-4.7.8-6 2.2-.2-.1-.4-.1-.6-.1a2.4 2.4 0 0 0-1.2 4.5v.6c0 3.4 3.5 6.2 7.8 6.2s7.8-2.8 7.8-6.2v-.5a2.4 2.4 0 0 0 .7-3.6zM8.1 15.2a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6zm6.9 3.4c-.8.8-2 .9-3 .9s-2.2-.1-3-.9a.5.5 0 1 1 .7-.7c.5.5 1.4.6 2.3.6s1.8-.1 2.3-.6a.5.5 0 1 1 .7.7zm.9-3.4a1.3 1.3 0 1 1 0-2.6 1.3 1.3 0 0 1 0 2.6z"/></svg>',
-    pinterest: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.2 2C6.7 2 3 6 3 10.8c0 3.6 2 5.7 3.3 5.7.5 0 .8-1.5.8-1.9 0-.5-1.2-1.5-1.2-3.6 0-3.9 3-6.7 6.8-6.7 3.7 0 5.7 2.1 5.7 5.4 0 2.5-1 7.2-4.3 7.2-1.2 0-2.2-.9-2.2-2.1 0-1.8 1.2-3.5 1.2-5.3 0-3.1-4.4-2.5-4.4 1.2 0 .8.1 1.6.5 2.3l-1.9 8c-.2.7 0 2.3.1 3 .5-.6 1.3-1.8 1.5-2.6l1-3.8c.5.9 1.8 1.7 3.2 1.7 4.2 0 7.1-3.8 7.1-8.8C20.2 5.6 16.4 2 12.2 2z"/></svg>',
-    email: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18c1.1 0 2 .9 2 2v10c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2zm9 7.2L3.5 7h17L12 12.2zM3 17h18V8.5l-9 5.5-9-5.5V17z"/></svg>',
-    copy: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3v3a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-9a3 3 0 0 1 3-3h3zm2 0h4a3 3 0 0 1 3 3v4h3V4H10v3zm4 2H5a1 1 0 0 0-1 1v9c0 .6.4 1 1 1h9c.6 0 1-.4 1-1v-9c0-.6-.4-1-1-1z"/></svg>',
+    facebook: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.025 4.388 11.02 10.125 11.927v-8.437H7.078v-3.49h3.047V9.414c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971h-1.513c-1.49 0-1.956.932-1.956 1.887v2.262h3.328l-.532 3.49h-2.796V24C19.612 23.093 24 18.098 24 12.073z"/></svg>',
+    x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26L22.827 21.75h-6.657l-5.214-6.817-5.967 6.817H1.68l7.73-8.835L1.254 2.25h6.826l4.713 6.231 5.451-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>',
+    linkedin: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.94v5.666H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 1 1 0-4.124 2.062 2.062 0 0 1 0 4.124zM7.119 20.452H3.555V9h3.564v11.452z"/></svg>',
+    whatsapp: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.966-.273-.099-.471-.149-.67.149-.198.297-.767.966-.94 1.164-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.496.099-.198.05-.372-.025-.521-.074-.148-.669-1.611-.916-2.206-.242-.579-.487-.5-.669-.51-.173-.009-.372-.011-.57-.011-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.095 3.2 5.076 4.487.709.306 1.262.489 1.693.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347zM12.004 21.785h-.004a9.78 9.78 0 0 1-4.986-1.365l-.358-.213-3.708.973.99-3.614-.233-.371a9.76 9.76 0 1 1 8.299 4.59zm8.287-17.837A11.853 11.853 0 0 0 12.005.522C5.548.522.298 5.772.295 12.229c0 2.149.561 4.246 1.626 6.092L.195 24l5.833-1.53a11.75 11.75 0 0 0 5.972 1.521h.005c6.456 0 11.707-5.251 11.71-11.708a11.636 11.636 0 0 0-3.424-8.335z"/></svg>',
+    telegram: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.953 4.57a.832.832 0 0 0-1.172-.771L.995 12.208c-.94.367-.929.89-.16 1.126l5.588 1.743 2.15 6.729c.254.703.129.982.865.982.568 0 .818-.259 1.136-.568l2.735-2.66 5.692 4.204c1.048.578 1.803.278 2.064-.973L24 4.57h-.047zM8.793 14.676l10.93-6.897c.546-.331 1.045-.153.635.211l-9.02 8.142-.351 3.764-2.194-5.22z"/></svg>',
+    email: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h16a2 2 0 0 0 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/></svg>',
+    copy: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M16 1H4a2 2 0 0 0-2 2v14h2V3h12V1zm3 4H8a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2zm0 16H8V7h11v14z"/></svg>',
     native: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>'
   };
 
   const SHARE_BUTTONS = [
-    ['facebook', 'Facebook'], ['x', 'X'], ['linkedin', 'LinkedIn'], ['whatsapp', 'WhatsApp'],
-    ['telegram', 'Telegram'], ['viber', 'Viber'], ['reddit', 'Reddit'], ['pinterest', 'Pinterest'],
-    ['email', 'Email'], ['copy', 'Копирай линк'], ['native', 'Още']
+    ['facebook', 'Facebook'],
+    ['x', 'X'],
+    ['linkedin', 'LinkedIn'],
+    ['whatsapp', 'WhatsApp'],
+    ['telegram', 'Telegram'],
+    ['email', 'Email'],
+    ['copy', 'Копирай линк'],
+    ['native', 'Още']
   ];
 
   function readPublishedAt() {
     for (const node of qa('script[type="application/ld+json"]')) {
       const data = safeParse(node.textContent || '', null);
-      const items = Array.isArray(data) ? data : [data];
-      for (const item of items) {
+      for (const item of (Array.isArray(data) ? data : [data])) {
         if (item && (item['@type'] === 'NewsArticle' || item['@type'] === 'Article') && item.datePublished) return item.datePublished;
       }
     }
@@ -60,7 +57,7 @@
     if (!value) return 'Дата не е налична';
     const date = new Date(value);
     if (Number.isNaN(date.getTime())) return value;
-    return new Intl.DateTimeFormat('bg-BG', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(date).replace(' г.', '');
+    return new Intl.DateTimeFormat('bg-BG', { day:'2-digit', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit' }).format(date).replace(' г.', '');
   }
 
   function statsMarkup() {
@@ -150,9 +147,6 @@
       linkedin: `https://www.linkedin.com/sharing/share-offsite/?url=${u}`,
       whatsapp: `https://wa.me/?text=${text}`,
       telegram: `https://t.me/share/url?url=${u}&text=${t}`,
-      viber: `viber://forward?text=${text}`,
-      reddit: `https://www.reddit.com/submit?url=${u}&title=${t}`,
-      pinterest: `https://pinterest.com/pin/create/button/?url=${u}&description=${t}`,
       email: `mailto:?subject=${t}&body=${text}`
     }[network] || null;
   }
@@ -160,12 +154,7 @@
   function decorateShareButton(button, network, label) {
     button.dataset.shareNetwork = network;
     button.className = `article-share-button article-share-button--${network}`;
-    if (network === 'native') {
-      button.setAttribute('aria-expanded', 'false');
-      button.setAttribute('aria-label', 'Покажи още опции за споделяне');
-    } else {
-      button.setAttribute('aria-label', network === 'copy' ? 'Копирай линка към статията' : `Сподели чрез ${label}`);
-    }
+    button.setAttribute('aria-label', network === 'copy' ? 'Копирай линка към статията' : network === 'native' ? 'Още опции за споделяне' : `Сподели чрез ${label}`);
     button.innerHTML = `<span class="article-share-icon">${ICONS[network] || ''}</span><span class="article-share-text">${label}</span>`;
   }
 
@@ -195,20 +184,6 @@
     }
   }
 
-  function toggleMobileOverflow(button) {
-    const row = button.closest('.article-share-row');
-    if (!row) return;
-    const expanded = !row.classList.contains('is-expanded');
-    qa('.article-share-row.is-expanded').forEach((other) => {
-      if (other !== row) {
-        other.classList.remove('is-expanded');
-        q('[data-share-network="native"]', other)?.setAttribute('aria-expanded', 'false');
-      }
-    });
-    row.classList.toggle('is-expanded', expanded);
-    button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-  }
-
   function initSharing() {
     normalizeShareRows();
     const url = q('link[rel="canonical"]')?.href || location.href;
@@ -217,10 +192,6 @@
       const network = button.dataset.shareNetwork;
       if (network === 'copy') return copyLink(button, url);
       if (network === 'native') {
-        if (window.matchMedia('(max-width: 760px)').matches) {
-          toggleMobileOverflow(button);
-          return;
-        }
         if (navigator.share) {
           try { await navigator.share({ title, url }); } catch {}
         } else await copyLink(button, url);
@@ -228,19 +199,9 @@
       }
       const target = shareUrl(network, url, title);
       if (!target) return;
-      if (target.startsWith('mailto:') || target.startsWith('viber:')) location.href = target;
+      if (target.startsWith('mailto:')) location.href = target;
       else window.open(target, '_blank', 'noopener,noreferrer,width=720,height=640');
     }));
-
-    document.addEventListener('click', (event) => {
-      if (!window.matchMedia('(max-width: 760px)').matches) return;
-      qa('.article-share-row.is-expanded').forEach((row) => {
-        if (!row.contains(event.target)) {
-          row.classList.remove('is-expanded');
-          q('[data-share-network="native"]', row)?.setAttribute('aria-expanded', 'false');
-        }
-      });
-    });
   }
 
   function init() {
@@ -252,6 +213,6 @@
     initSharing();
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
   else init();
 })();
