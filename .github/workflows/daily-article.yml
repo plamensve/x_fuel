@@ -19,7 +19,7 @@ permissions:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
 
     steps:
       - name: Check Sofia publication window
@@ -96,6 +96,7 @@ jobs:
         run: |
           python - <<'PY'
           import re
+          from datetime import datetime
           import automation.generate_daily_article_bg as base
 
           MIN_CITY_RANKING_COUNT = 10
@@ -115,6 +116,14 @@ jobs:
               sign = "+" if numeric > 0 else ""
               return sign + f"{numeric:.2f}".replace(".", ",")
 
+          def bg_date(date_str):
+              months = ["януари", "февруари", "март", "април", "май", "юни", "юли", "август", "септември", "октомври", "ноември", "декември"]
+              dt = datetime.fromisoformat(date_str)
+              return f"{dt.day} {months[dt.month - 1]} {dt.year}"
+
+          def seo_title(date_str):
+              return f"Цени на горивата днес в София – {bg_date(date_str)}"
+
           def summarize_day(rows):
               summary = original_summarize_day(rows)
               summary["city_averages"] = [
@@ -126,10 +135,30 @@ jobs:
 
           def build_facts(target, current, previous_day, previous):
               facts = original_build_facts(target, current, previous_day, previous)
+              sofia = {}
+              for item in current.get("city_averages", []):
+                  if str(item.get("city", "")).strip().lower() != "софия":
+                      continue
+                  fuel = item.get("fuel")
+                  if not fuel:
+                      continue
+                  sofia[fuel] = {
+                      "average": item.get("average"),
+                      "count": item.get("count"),
+                      "display_average": fmt_price_2(item.get("average", 0)),
+                  }
+              facts["sofia"] = {
+                  "city": "София",
+                  "fuels": sofia,
+                  "section_required": True,
+                  "section_heading": "Цени на горивата в София",
+              }
               facts["editorial_brief"] = {
+                  "seo_title_rule": "The title must start with the exact search phrase 'Цени на горивата днес' and clearly mention Sofia. Keep it concise, factual and reader-oriented.",
                   "story_goal": "Lead with the most meaningful observation in the goriva.online sample instead of mechanically listing every metric.",
                   "required_sections": [
                       "Какви са цените днес?",
+                      "Цени на горивата в София",
                       "Какво се промени спрямо предходния ден?",
                       "Къде се зарежда по-евтино?",
                       "Пазарен контекст от български източници",
@@ -138,6 +167,9 @@ jobs:
                   "style": [
                       "Write like a concise Bulgarian business newsroom, not like an AI assistant.",
                       "All reader-facing fuel prices must use exactly two decimal places.",
+                      "The Sofia section is mandatory and must use only facts.sofia data.",
+                      "Use natural SEO wording around: цени на горивата днес, цени на горивата в София, бензин, дизел, LPG.",
+                      "Do not keyword-stuff; readability and factual accuracy come first.",
                       "Open with a short lead and then give the most important conclusions first.",
                       "Explain why a difference matters; do not repeat the same numbers in multiple sections.",
                       "If the day is quiet, say that stability is the story instead of inventing drama.",
@@ -163,6 +195,7 @@ jobs:
 
           def render_article(date_str, article):
               safe_article = dict(article)
+              safe_article["title"] = seo_title(date_str)
               safe_article["description"] = smart_meta_description(safe_article.get("description", ""))
               return original_render_article(date_str, safe_article)
 
@@ -174,6 +207,7 @@ jobs:
               )
               for attempt in range(1, MAX_GENERATION_ATTEMPTS + 1):
                   article = original_generate_article(facts)
+                  article["title"] = seo_title(facts["date"])
                   article["body_html"] = base.sanitize_body(article.get("body_html", ""))
                   try:
                       base.validate_article(article, facts)
@@ -202,7 +236,7 @@ jobs:
           base.main()
           PY
 
-      - name: Generate charts, contextual image and update news cards
+      - name: Generate hero image and update news cards
         if: steps.window.outputs.should_run == 'true'
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -211,6 +245,16 @@ jobs:
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
         run: python -m automation.postprocess_daily_article
+
+      - name: Generate Matplotlib charts and inline AI images
+        if: steps.window.outputs.should_run == 'true'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_IMAGE_MODEL: gpt-image-2
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
+        run: python -m automation.enrich_daily_article_visuals
 
       - name: Finalize reader-facing layout
         if: steps.window.outputs.should_run == 'true'
