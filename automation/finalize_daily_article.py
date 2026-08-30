@@ -131,52 +131,43 @@ def reshape_content(body: str, date_str: str) -> str:
     return '<div class="article-editorial-layout">' + intro_block + ''.join(sections) + '</div>'
 
 
-def engagement_block() -> str:
+def engagement_inner() -> str:
     return '''
-      <section class="article-engagement" aria-label="Информация и взаимодействия със статията">
         <div class="article-engagement-top">
           <div class="article-engagement-stats">
             <span class="article-engagement-stat">Публикувана: <strong><time data-article-published>—</time></strong></span>
             <span class="article-engagement-dot" aria-hidden="true"></span>
-            <span class="article-engagement-stat">Прочетена <strong data-article-views>225</strong> пъти</span>
+            <span class="article-engagement-stat">Прочетена <strong data-article-views>—</strong> пъти</span>
             <span class="article-engagement-dot" aria-hidden="true"></span>
-            <span class="article-engagement-stat"><strong data-article-likes>85</strong> харесвания</span>
+            <span class="article-engagement-stat"><strong data-article-likes>—</strong> харесвания</span>
           </div>
-          <button class="article-like-button" type="button" data-like-article aria-pressed="false"><span class="heart" aria-hidden="true">♥</span><span class="article-like-label">Харесай</span></button>
+          <button class="article-like-button" type="button" data-like-article aria-pressed="false"><span class="heart" aria-hidden="true">♡</span><span class="article-like-label">Харесай</span></button>
         </div>
         <div class="article-share-row" aria-label="Споделяне">
-          <span class="article-share-label">Сподели:</span>
-          <button class="article-share-button" type="button" data-share-network="facebook">Facebook</button>
-          <button class="article-share-button" type="button" data-share-network="x">X</button>
-          <button class="article-share-button" type="button" data-share-network="linkedin">LinkedIn</button>
-          <button class="article-share-button" type="button" data-share-network="whatsapp">WhatsApp</button>
-          <button class="article-share-button" type="button" data-share-network="telegram">Telegram</button>
-          <button class="article-share-button" type="button" data-share-network="viber">Viber</button>
-          <button class="article-share-button" type="button" data-share-network="reddit">Reddit</button>
-          <button class="article-share-button" type="button" data-share-network="pinterest">Pinterest</button>
-          <button class="article-share-button" type="button" data-share-network="email">Email</button>
-          <button class="article-share-button" type="button" data-share-network="copy">Копирай линк</button>
-          <button class="article-share-button article-share-button--primary" type="button" data-share-network="native">Още…</button>
-        </div>
-      </section>
-'''
-
-
-def engagement_footer() -> str:
-    return '''
-      <section class="article-engagement-footer" aria-label="Харесване и споделяне на статията">
-        <div class="article-share-row">
-          <button class="article-like-button" type="button" data-like-article aria-pressed="false"><span class="heart" aria-hidden="true">♥</span><span class="article-like-label">Харесай</span>&nbsp; · &nbsp;<span data-article-likes>85</span></button>
           <span class="article-share-label">Сподели статията:</span>
           <button class="article-share-button" type="button" data-share-network="facebook">Facebook</button>
           <button class="article-share-button" type="button" data-share-network="x">X</button>
           <button class="article-share-button" type="button" data-share-network="linkedin">LinkedIn</button>
           <button class="article-share-button" type="button" data-share-network="whatsapp">WhatsApp</button>
           <button class="article-share-button" type="button" data-share-network="telegram">Telegram</button>
+          <button class="article-share-button" type="button" data-share-network="email">Email</button>
           <button class="article-share-button" type="button" data-share-network="copy">Копирай линк</button>
           <button class="article-share-button article-share-button--primary" type="button" data-share-network="native">Още…</button>
         </div>
-      </section>
+'''
+
+
+def engagement_block() -> str:
+    return f'''
+      <section class="article-engagement" aria-label="Информация и взаимодействия със статията">
+{engagement_inner()}      </section>
+'''
+
+
+def engagement_footer() -> str:
+    return f'''
+      <section class="article-engagement-footer" aria-label="Информация и взаимодействия със статията">
+{engagement_inner()}      </section>
 '''
 
 
@@ -209,7 +200,8 @@ def enhance_article(date_str: str) -> None:
             link = f'  <link rel="stylesheet" href="{stylesheet}">\n'
             text = text.replace("</head>", link + "</head>", 1)
 
-    engagement_css = '/pages/styles/article-engagement.css?v=20260830-1'
+    engagement_css = '/pages/styles/article-engagement.css?v=20260830-2'
+    text = re.sub(r'/pages/styles/article-engagement\.css\?v=[^"\']+', engagement_css, text)
     if engagement_css not in text:
         link = f'  <link rel="stylesheet" href="{engagement_css}">\n'
         text = text.replace("</head>", link + "</head>", 1)
@@ -222,7 +214,8 @@ def enhance_article(date_str: str) -> None:
 
     text = inject_engagement(text)
 
-    engagement_js = '/scripts/article-engagement.js?v=20260830-1'
+    engagement_js = '/scripts/article-engagement.js?v=20260830-2'
+    text = re.sub(r'/scripts/article-engagement\.js\?v=[^"\']+', engagement_js, text)
     if engagement_js not in text:
         text = text.replace('</body>', f'  <script src="{engagement_js}" defer></script>\n</body>', 1)
 
