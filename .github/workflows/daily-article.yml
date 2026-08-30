@@ -105,6 +105,7 @@ jobs:
           original_summarize_day = base.summarize_day
           original_render_article = base.render_article
           original_generate_article = base.generate_article
+          original_build_facts = base.build_facts
 
           def summarize_day(rows):
               summary = original_summarize_day(rows)
@@ -114,6 +115,31 @@ jobs:
                   if int(item.get("count", 0)) >= MIN_CITY_RANKING_COUNT
               ]
               return summary
+
+          def build_facts(target, current, previous_day, previous):
+              facts = original_build_facts(target, current, previous_day, previous)
+              # This is editorial guidance, not market data. It is passed inside FACTS_JSON
+              # so the model has an explicit newsroom structure while numeric guardrails
+              # continue to validate every decimal value against the real facts.
+              facts["editorial_brief"] = {
+                  "story_goal": "Lead with the most meaningful observation in the goriva.online sample instead of mechanically listing every metric.",
+                  "required_sections": [
+                      "Какви са цените днес?",
+                      "Какво се промени спрямо предходния ден?",
+                      "Къде се зарежда по-евтино?",
+                      "Пазарен контекст от български източници",
+                      "Какво да следим",
+                  ],
+                  "style": [
+                      "Write like a concise Bulgarian business newsroom, not like an AI assistant.",
+                      "Open with a short lead and then give the most important conclusions first.",
+                      "Explain why a difference matters; do not repeat the same numbers in multiple sections.",
+                      "If the day is quiet, say that stability is the story instead of inventing drama.",
+                      "Use short paragraphs and concrete language. Avoid filler, hype and generic conclusions.",
+                      "Treat the automatically generated charts as the primary numeric visual evidence and write analysis around them.",
+                  ],
+              }
+              return facts
 
           def smart_meta_description(text, max_len=META_DESCRIPTION_MAX):
               clean = re.sub(r"\s+", " ", str(text or "")).strip()
@@ -170,16 +196,19 @@ jobs:
               )
 
           base.summarize_day = summarize_day
+          base.build_facts = build_facts
           base.render_article = render_article
           base.generate_article = generate_article
           base.main()
           PY
 
-      - name: Generate contextual article image and update news cards
+      - name: Generate charts, contextual image and update news cards
         if: steps.window.outputs.should_run == 'true'
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_IMAGE_MODEL: gpt-image-2
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
         run: python automation/postprocess_daily_article.py
 
