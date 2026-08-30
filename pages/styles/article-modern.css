@@ -1,3 +1,4 @@
+@import url("./daily-data-viz.css?v=20260830-1719");
 /* Professional newsroom/editorial layout shared by goriva.online articles */
 body:has(.article-page),body.article-modern-page{background:#f4f6f8;color:#111827}
 body:has(.article-page) main.container,body.article-modern-page main.container{width:min(calc(100% - 28px),1240px)!important;max-width:none!important;margin:0 auto!important;padding:34px 0 72px!important;background:transparent!important;border:0!important;box-shadow:none!important}
