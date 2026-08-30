@@ -9,7 +9,7 @@
 })();
 
 (() => {
-    const navSrc = "/scripts/global-nav.js?v=20260830-mobile-audit1";
+    const navSrc = "/scripts/global-nav.js?v=20260830-privacy1";
     if (!window.__GORIVA_GLOBAL_NAV_LOADER__) {
         window.__GORIVA_GLOBAL_NAV_LOADER__ = true;
         const navScript = document.createElement("script");
