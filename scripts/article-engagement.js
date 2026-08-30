@@ -1,7 +1,4 @@
 (() => {
-  const VIEW_BASE = 225;
-  const LIKE_BASE = 85;
-
   const q = (selector, root = document) => root.querySelector(selector);
   const qa = (selector, root = document) => [...root.querySelectorAll(selector)];
   const safeParse = (value, fallback) => {
@@ -14,6 +11,19 @@
   })();
 
   const storageKey = (suffix) => `goriva:article:${articleKey}:${suffix}`;
+
+  function seededCount(salt) {
+    const input = `${articleKey}|${salt}`;
+    let hash = 2166136261;
+    for (let i = 0; i < input.length; i += 1) {
+      hash ^= input.charCodeAt(i);
+      hash = Math.imul(hash, 16777619);
+    }
+    return (Math.abs(hash >>> 0) % 70) + 1;
+  }
+
+  const VIEW_SEED = seededCount('views');
+  const LIKE_SEED = seededCount('likes');
 
   const ICONS = {
     facebook: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 22v-8h2.7l.4-3h-3.1V9.1c0-.9.3-1.6 1.6-1.6H17V4.8c-.4-.1-1.3-.2-2.4-.2-2.4 0-4.1 1.5-4.1 4.2V11H8v3h2.5v8h3z"/></svg>',
@@ -53,6 +63,46 @@
     return new Intl.DateTimeFormat('bg-BG', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }).format(date).replace(' г.', '');
   }
 
+  function statsMarkup() {
+    return `<div class="article-engagement-stats">
+      <span class="article-engagement-stat article-engagement-stat--date">Публикувана: <strong><time data-article-published>—</time></strong></span>
+      <span class="article-engagement-dot" aria-hidden="true"></span>
+      <span class="article-engagement-stat"><strong data-article-views>${VIEW_SEED}</strong> прочитания</span>
+      <span class="article-engagement-dot" aria-hidden="true"></span>
+      <span class="article-engagement-stat"><strong data-article-likes>${LIKE_SEED}</strong> харесвания</span>
+    </div>`;
+  }
+
+  function likeButtonMarkup() {
+    return '<button class="article-like-button" type="button" data-like-article aria-pressed="false"><span class="heart" aria-hidden="true">♡</span><span class="article-like-label">Харесай</span></button>';
+  }
+
+  function ensureMatchingBlocks() {
+    qa('.article-engagement, .article-engagement-footer').forEach((block) => {
+      block.classList.add('article-engagement-shell');
+      let top = q('.article-engagement-top', block);
+      if (!top) {
+        top = document.createElement('div');
+        top.className = 'article-engagement-top';
+        top.innerHTML = statsMarkup() + likeButtonMarkup();
+        block.prepend(top);
+      } else {
+        if (!q('.article-engagement-stats', top)) top.insertAdjacentHTML('afterbegin', statsMarkup());
+        if (!q('[data-like-article]', top)) top.insertAdjacentHTML('beforeend', likeButtonMarkup());
+      }
+      const row = q('.article-share-row', block);
+      if (row) {
+        let label = q('.article-share-label', row);
+        if (!label) {
+          label = document.createElement('span');
+          label.className = 'article-share-label';
+          row.prepend(label);
+        }
+        label.textContent = 'Сподели статията:';
+      }
+    });
+  }
+
   function initPublished() {
     const publishedAt = readPublishedAt();
     qa('[data-article-published]').forEach((node) => {
@@ -62,35 +112,27 @@
   }
 
   function initViews() {
-    const viewedKey = storageKey('viewed');
-    const countKey = storageKey('views');
-    let views = Number(localStorage.getItem(countKey) || VIEW_BASE);
-    if (!localStorage.getItem(viewedKey)) {
-      views += 1;
-      localStorage.setItem(countKey, String(views));
-      localStorage.setItem(viewedKey, '1');
-    }
-    qa('[data-article-views]').forEach((node) => { node.textContent = views.toLocaleString('bg-BG'); });
+    qa('[data-article-views]').forEach((node) => { node.textContent = VIEW_SEED.toLocaleString('bg-BG'); });
   }
 
   function initLikes() {
     const likedKey = storageKey('liked');
-    const countKey = storageKey('likes');
-    let likes = Number(localStorage.getItem(countKey) || LIKE_BASE);
     let liked = localStorage.getItem(likedKey) === '1';
+    let likes = LIKE_SEED + (liked ? 1 : 0);
     const sync = () => {
       qa('[data-article-likes]').forEach((node) => { node.textContent = likes.toLocaleString('bg-BG'); });
       qa('[data-like-article]').forEach((button) => {
         button.classList.toggle('is-liked', liked);
         button.setAttribute('aria-pressed', liked ? 'true' : 'false');
         const label = q('.article-like-label', button);
+        const heart = q('.heart', button);
         if (label) label.textContent = liked ? 'Харесано' : 'Харесай';
+        if (heart) heart.textContent = liked ? '♥' : '♡';
       });
     };
     qa('[data-like-article]').forEach((button) => button.addEventListener('click', () => {
       liked = !liked;
-      likes = Math.max(LIKE_BASE, likes + (liked ? 1 : -1));
-      localStorage.setItem(countKey, String(likes));
+      likes = LIKE_SEED + (liked ? 1 : 0);
       localStorage.setItem(likedKey, liked ? '1' : '0');
       sync();
     }));
@@ -116,24 +158,20 @@
 
   function decorateShareButton(button, network, label) {
     button.dataset.shareNetwork = network;
-    button.classList.add('article-share-button', `article-share-button--${network}`);
-    if (network === 'native') button.classList.add('article-share-button--primary');
-    button.setAttribute('aria-label', `Сподели чрез ${label}`);
+    button.className = `article-share-button article-share-button--${network}`;
+    button.setAttribute('aria-label', network === 'copy' ? 'Копирай линка към статията' : `Сподели чрез ${label}`);
     button.innerHTML = `<span class="article-share-icon">${ICONS[network] || ''}</span><span class="article-share-text">${label}</span>`;
   }
 
   function normalizeShareRows() {
     qa('.article-share-row').forEach((row) => {
       const labelNode = q('.article-share-label', row);
-      const existing = new Map(qa('[data-share-network]', row).map((button) => [button.dataset.shareNetwork, button]));
+      qa('[data-share-network]', row).forEach((button) => button.remove());
       SHARE_BUTTONS.forEach(([network, label]) => {
-        let button = existing.get(network);
-        if (!button) {
-          button = document.createElement('button');
-          button.type = 'button';
-          row.appendChild(button);
-        }
+        const button = document.createElement('button');
+        button.type = 'button';
         decorateShareButton(button, network, label);
+        row.appendChild(button);
       });
       if (labelNode && labelNode !== row.firstElementChild) row.prepend(labelNode);
     });
@@ -172,7 +210,8 @@
   }
 
   function init() {
-    if (!q('.article-engagement')) return;
+    if (!q('.article-engagement') && !q('.article-engagement-footer')) return;
+    ensureMatchingBlocks();
     initPublished();
     initViews();
     initLikes();
