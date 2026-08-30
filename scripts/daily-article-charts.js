@@ -45,6 +45,18 @@ function ChartTooltip({ active, payload, label }) {
   );
 }
 
+function legendFormatter(value) {
+  return h('span', {
+    style: {
+      display: 'inline-block',
+      marginLeft: '6px',
+      marginRight: '30px',
+      fontSize: '16px',
+      fontWeight: 700
+    }
+  }, value);
+}
+
 function CityChart({ spec }) {
   const data = spec.data || [];
   const keys = spec.series.map(s => s.key);
@@ -72,7 +84,7 @@ function ComparisonChart({ spec }) {
       h(XAxis, { dataKey: 'city', tick: { fontSize: 16, fontWeight: 700 }, interval: 0, height: 56 }),
       h(YAxis, { domain, tickFormatter: v => Number(v).toFixed(2).replace('.', ','), tick: { fontSize: 15 }, width: 66 }),
       h(Tooltip, { content: h(ChartTooltip) }),
-      h(Legend, { wrapperStyle: { fontSize: 16, fontWeight: 700, paddingTop: 12 } }),
+      h(Legend, { iconSize: 14, formatter: legendFormatter, wrapperStyle: { paddingTop: 16 } }),
       ...spec.series.map((s, i) => h(Bar, { key: s.key, dataKey: s.key, name: s.label, fill: COLORS[i % COLORS.length], radius: [7, 7, 0, 0], maxBarSize: 42 }))
     )
   );
@@ -88,7 +100,7 @@ function TrendChart({ spec }) {
       h(XAxis, { dataKey: 'day', tick: { fontSize: 16, fontWeight: 700 } }),
       h(YAxis, { domain, tickFormatter: v => Number(v).toFixed(2).replace('.', ','), tick: { fontSize: 15 }, width: 66 }),
       h(Tooltip, { content: h(ChartTooltip) }),
-      h(Legend, { wrapperStyle: { fontSize: 16, fontWeight: 700 } }),
+      h(Legend, { iconSize: 14, formatter: legendFormatter, wrapperStyle: { paddingTop: 10 } }),
       ...spec.series.map((s, i) => h(Line, { key: s.key, type: 'monotone', dataKey: s.key, name: s.label, stroke: COLORS[i % COLORS.length], strokeWidth: 3, dot: { r: 5 }, activeDot: { r: 7 }, connectNulls: false }))
     )
   );
