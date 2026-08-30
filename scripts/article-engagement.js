@@ -36,7 +36,7 @@
     pinterest: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.2 2C6.7 2 3 6 3 10.8c0 3.6 2 5.7 3.3 5.7.5 0 .8-1.5.8-1.9 0-.5-1.2-1.5-1.2-3.6 0-3.9 3-6.7 6.8-6.7 3.7 0 5.7 2.1 5.7 5.4 0 2.5-1 7.2-4.3 7.2-1.2 0-2.2-.9-2.2-2.1 0-1.8 1.2-3.5 1.2-5.3 0-3.1-4.4-2.5-4.4 1.2 0 .8.1 1.6.5 2.3l-1.9 8c-.2.7 0 2.3.1 3 .5-.6 1.3-1.8 1.5-2.6l1-3.8c.5.9 1.8 1.7 3.2 1.7 4.2 0 7.1-3.8 7.1-8.8C20.2 5.6 16.4 2 12.2 2z"/></svg>',
     email: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5h18c1.1 0 2 .9 2 2v10c0 1.1-.9 2-2 2H3c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2zm9 7.2L3.5 7h17L12 12.2zM3 17h18V8.5l-9 5.5-9-5.5V17z"/></svg>',
     copy: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7V4a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-3v3a3 3 0 0 1-3 3H5a3 3 0 0 1-3-3v-9a3 3 0 0 1 3-3h3zm2 0h4a3 3 0 0 1 3 3v4h3V4H10v3zm4 2H5a1 1 0 0 0-1 1v9c0 .6.4 1 1 1h9c.6 0 1-.4 1-1v-9c0-.6-.4-1-1-1z"/></svg>',
-    native: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16a3 3 0 0 0-2.4 1.2l-7-4.1a3.2 3.2 0 0 0 0-2.2l7-4.1A3 3 0 1 0 15 5c0 .2 0 .4.1.6l-7 4.1a3 3 0 1 0 0 4.6l7 4.1A3 3 0 1 0 18 16z"/></svg>'
+    native: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 10.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm7 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3z"/></svg>'
   };
 
   const SHARE_BUTTONS = [
@@ -160,7 +160,12 @@
   function decorateShareButton(button, network, label) {
     button.dataset.shareNetwork = network;
     button.className = `article-share-button article-share-button--${network}`;
-    button.setAttribute('aria-label', network === 'copy' ? 'Копирай линка към статията' : `Сподели чрез ${label}`);
+    if (network === 'native') {
+      button.setAttribute('aria-expanded', 'false');
+      button.setAttribute('aria-label', 'Покажи още опции за споделяне');
+    } else {
+      button.setAttribute('aria-label', network === 'copy' ? 'Копирай линка към статията' : `Сподели чрез ${label}`);
+    }
     button.innerHTML = `<span class="article-share-icon">${ICONS[network] || ''}</span><span class="article-share-text">${label}</span>`;
   }
 
@@ -190,6 +195,20 @@
     }
   }
 
+  function toggleMobileOverflow(button) {
+    const row = button.closest('.article-share-row');
+    if (!row) return;
+    const expanded = !row.classList.contains('is-expanded');
+    qa('.article-share-row.is-expanded').forEach((other) => {
+      if (other !== row) {
+        other.classList.remove('is-expanded');
+        q('[data-share-network="native"]', other)?.setAttribute('aria-expanded', 'false');
+      }
+    });
+    row.classList.toggle('is-expanded', expanded);
+    button.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  }
+
   function initSharing() {
     normalizeShareRows();
     const url = q('link[rel="canonical"]')?.href || location.href;
@@ -198,6 +217,10 @@
       const network = button.dataset.shareNetwork;
       if (network === 'copy') return copyLink(button, url);
       if (network === 'native') {
+        if (window.matchMedia('(max-width: 760px)').matches) {
+          toggleMobileOverflow(button);
+          return;
+        }
         if (navigator.share) {
           try { await navigator.share({ title, url }); } catch {}
         } else await copyLink(button, url);
@@ -208,6 +231,16 @@
       if (target.startsWith('mailto:') || target.startsWith('viber:')) location.href = target;
       else window.open(target, '_blank', 'noopener,noreferrer,width=720,height=640');
     }));
+
+    document.addEventListener('click', (event) => {
+      if (!window.matchMedia('(max-width: 760px)').matches) return;
+      qa('.article-share-row.is-expanded').forEach((row) => {
+        if (!row.contains(event.target)) {
+          row.classList.remove('is-expanded');
+          q('[data-share-network="native"]', row)?.setAttribute('aria-expanded', 'false');
+        }
+      });
+    });
   }
 
   function init() {
