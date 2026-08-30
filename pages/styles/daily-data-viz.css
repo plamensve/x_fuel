@@ -1,0 +1,13 @@
+/* Data-driven components used by automatically generated daily fuel articles. */
+.article-daily-visual{width:min(100%,1120px);margin:24px auto 0}
+.article-snapshot{width:min(100%,1060px);margin:22px auto 8px;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;font-family:Inter,system-ui,sans-serif}
+.article-snapshot-card{min-width:0;padding:14px 15px;border:1px solid #dfe6ee;border-radius:14px;background:#fff;box-shadow:0 8px 22px rgba(15,23,42,.045)}
+.article-snapshot-card span{display:block;margin-bottom:7px;color:#64748b;font-size:10px;font-weight:850;letter-spacing:.055em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.article-snapshot-card strong{display:block;color:#0f172a;font-size:19px;line-height:1.15;font-weight:850}
+.article-data-chart{margin:24px 0 32px;padding:0;border:1px solid #e2e8f0;border-radius:18px;background:#fff;overflow:hidden;box-shadow:0 14px 36px rgba(15,23,42,.055)}
+.article-data-chart img{display:block;width:100%;height:auto;background:#fff}
+.article-data-chart figcaption{padding:10px 16px 12px;border-top:1px solid #eef2f7;color:#64748b;font-family:Inter,system-ui,sans-serif;font-size:11px;line-height:1.55}
+.article-content-full h2 + .article-data-chart{margin-top:16px}
+.article-content-full .article-modern-end{font-family:Inter,system-ui,sans-serif}
+@media(max-width:900px){.article-snapshot{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:620px){.article-snapshot{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.article-snapshot-card{padding:12px}.article-snapshot-card strong{font-size:17px}.article-data-chart{margin:18px 0 26px;border-radius:12px}.article-data-chart figcaption{font-size:10px}}
