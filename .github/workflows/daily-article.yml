@@ -210,7 +210,7 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
           ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
-        run: python automation/postprocess_daily_article.py
+        run: python -m automation.postprocess_daily_article
 
       - name: Commit generated article
         if: steps.window.outputs.should_run == 'true'
