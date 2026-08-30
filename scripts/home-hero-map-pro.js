@@ -44,6 +44,7 @@
                 <div class="about-cta">
                     <a href="#fuel-form" class="cta-primary">⛽ Сподели цена</a>
                     <a class="facebook-button-1" href="https://www.facebook.com/groups/960591129738525" target="_blank" rel="noopener noreferrer">f&nbsp;&nbsp;Facebook общност</a>
+                    <a class="instagram-button-1" href="https://www.instagram.com/goriva.online/" target="_blank" rel="noopener noreferrer">◎&nbsp;&nbsp;Последвайте ни в Instagram</a>
                 </div>
             </div>
         `;
