@@ -3,6 +3,8 @@
   const qa = (selector, root = document) => [...root.querySelectorAll(selector)];
   const safeParse = (value, fallback) => { try { return JSON.parse(value); } catch { return fallback; } };
 
+  const SUPABASE_URL = 'https://eaqvhxfvozhzatrnbkvx.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH';
   const articleKey = q('link[rel="canonical"]')?.href || `${location.origin}${location.pathname}`;
   const storageKey = (suffix) => `goriva:article:${articleKey}:${suffix}`;
 
@@ -16,11 +18,9 @@
     return (Math.abs(hash >>> 0) % 70) + 1;
   }
 
-  const VIEW_SEED = seededCount('views');
-  const LIKE_SEED = ((seededCount('likes') - 1) % VIEW_SEED) + 1;
+  const FALLBACK_VIEWS = seededCount('views');
+  const FALLBACK_LIKES = ((seededCount('likes') - 1) % FALLBACK_VIEWS) + 1;
 
-  // Brand marks use the recognizable production logo geometry for the major networks.
-  // Utility actions keep neutral interface icons.
   const ICONS = {
     facebook: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073c0 6.025 4.388 11.02 10.125 11.927v-8.437H7.078v-3.49h3.047V9.414c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.971h-1.513c-1.49 0-1.956.932-1.956 1.887v2.262h3.328l-.532 3.49h-2.796V24C19.612 23.093 24 18.098 24 12.073z"/></svg>',
     x: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26L22.827 21.75h-6.657l-5.214-6.817-5.967 6.817H1.68l7.73-8.835L1.254 2.25h6.826l4.713 6.231 5.451-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77z"/></svg>',
@@ -33,14 +33,8 @@
   };
 
   const SHARE_BUTTONS = [
-    ['facebook', 'Facebook'],
-    ['x', 'X'],
-    ['linkedin', 'LinkedIn'],
-    ['whatsapp', 'WhatsApp'],
-    ['telegram', 'Telegram'],
-    ['email', 'Email'],
-    ['copy', 'Копирай линк'],
-    ['native', 'Още']
+    ['facebook', 'Facebook'], ['x', 'X'], ['linkedin', 'LinkedIn'], ['whatsapp', 'WhatsApp'],
+    ['telegram', 'Telegram'], ['email', 'Email'], ['copy', 'Копирай линк'], ['native', 'Още']
   ];
 
   function readPublishedAt() {
@@ -64,9 +58,9 @@
     return `<div class="article-engagement-stats">
       <span class="article-engagement-stat article-engagement-stat--date">Публикувана: <strong><time data-article-published>—</time></strong></span>
       <span class="article-engagement-dot" aria-hidden="true"></span>
-      <span class="article-engagement-stat"><strong data-article-views>${VIEW_SEED}</strong> прочитания</span>
+      <span class="article-engagement-stat"><strong data-article-views>—</strong> прочитания</span>
       <span class="article-engagement-dot" aria-hidden="true"></span>
-      <span class="article-engagement-stat"><strong data-article-likes>${LIKE_SEED}</strong> харесвания</span>
+      <span class="article-engagement-stat"><strong data-article-likes>—</strong> харесвания</span>
     </div>`;
   }
 
@@ -89,6 +83,7 @@
       }
       const row = q('.article-share-row', block);
       if (row) {
+        q('.article-share-row > .article-like-button', block)?.remove();
         let label = q('.article-share-label', row);
         if (!label) {
           label = document.createElement('span');
@@ -108,33 +103,69 @@
     });
   }
 
-  function initViews() {
-    qa('[data-article-views]').forEach((node) => { node.textContent = VIEW_SEED.toLocaleString('bg-BG'); });
+  function setCounts(views, likes) {
+    const safeViews = Number.isFinite(Number(views)) ? Math.max(0, Number(views)) : FALLBACK_VIEWS;
+    const safeLikes = Number.isFinite(Number(likes)) ? Math.max(0, Math.min(safeViews, Number(likes))) : Math.min(safeViews, FALLBACK_LIKES);
+    qa('[data-article-views]').forEach((node) => { node.textContent = safeViews.toLocaleString('bg-BG'); });
+    qa('[data-article-likes]').forEach((node) => { node.textContent = safeLikes.toLocaleString('bg-BG'); });
   }
 
-  function initLikes() {
+  function setLikedState(liked) {
+    qa('[data-like-article]').forEach((button) => {
+      button.classList.toggle('is-liked', liked);
+      button.setAttribute('aria-pressed', liked ? 'true' : 'false');
+      const label = q('.article-like-label', button);
+      const heart = q('.heart', button);
+      if (label) label.textContent = liked ? 'Харесано' : 'Харесай';
+      if (heart) heart.textContent = liked ? '♥' : '♡';
+    });
+  }
+
+  async function rpc(functionName) {
+    const response = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${functionName}`, {
+      method: 'POST',
+      headers: {
+        apikey: SUPABASE_PUBLISHABLE_KEY,
+        Authorization: `Bearer ${SUPABASE_PUBLISHABLE_KEY}`,
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      },
+      body: JSON.stringify({ p_article_key: articleKey }),
+      cache: 'no-store'
+    });
+    if (!response.ok) throw new Error(`Supabase RPC ${functionName} failed: ${response.status}`);
+    const payload = await response.json();
+    return Array.isArray(payload) ? payload[0] : payload;
+  }
+
+  async function initRealtimeEngagement() {
     const likedKey = storageKey('liked');
     let liked = localStorage.getItem(likedKey) === '1';
-    let likes = Math.min(VIEW_SEED, LIKE_SEED + (liked ? 1 : 0));
-    const sync = () => {
-      likes = Math.min(likes, VIEW_SEED);
-      qa('[data-article-likes]').forEach((node) => { node.textContent = likes.toLocaleString('bg-BG'); });
-      qa('[data-like-article]').forEach((button) => {
-        button.classList.toggle('is-liked', liked);
-        button.setAttribute('aria-pressed', liked ? 'true' : 'false');
-        const label = q('.article-like-label', button);
-        const heart = q('.heart', button);
-        if (label) label.textContent = liked ? 'Харесано' : 'Харесай';
-        if (heart) heart.textContent = liked ? '♥' : '♡';
-      });
-    };
-    qa('[data-like-article]').forEach((button) => button.addEventListener('click', () => {
-      liked = !liked;
-      likes = Math.min(VIEW_SEED, LIKE_SEED + (liked ? 1 : 0));
-      localStorage.setItem(likedKey, liked ? '1' : '0');
-      sync();
+    setLikedState(liked);
+    setCounts(FALLBACK_VIEWS, FALLBACK_LIKES);
+
+    try {
+      const row = await rpc('register_article_view');
+      if (row) setCounts(row.views, row.likes);
+    } catch (error) {
+      console.warn('[article-engagement] Could not load global counters.', error);
+    }
+
+    qa('[data-like-article]').forEach((button) => button.addEventListener('click', async () => {
+      const nextLiked = !liked;
+      button.disabled = true;
+      try {
+        const row = await rpc(nextLiked ? 'like_article' : 'unlike_article');
+        liked = nextLiked;
+        localStorage.setItem(likedKey, liked ? '1' : '0');
+        setLikedState(liked);
+        if (row) setCounts(row.views, row.likes);
+      } catch (error) {
+        console.warn('[article-engagement] Could not update like.', error);
+      } finally {
+        qa('[data-like-article]').forEach((item) => { item.disabled = false; });
+      }
     }));
-    sync();
   }
 
   function shareUrl(network, url, title) {
@@ -208,11 +239,10 @@
     if (!q('.article-engagement') && !q('.article-engagement-footer')) return;
     ensureMatchingBlocks();
     initPublished();
-    initViews();
-    initLikes();
     initSharing();
+    initRealtimeEngagement();
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once:true });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
   else init();
 })();
