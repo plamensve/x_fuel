@@ -101,6 +101,12 @@ jobs:
           ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
         run: python -m automation.enrich_sofia_article
 
+      - name: Add sharing and like controls
+        if: steps.window.outputs.should_run == 'true'
+        env:
+          ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
+        run: python -m automation.add_sofia_engagement
+
       - name: Register Sofia article in news manifest
         if: steps.window.outputs.should_run == 'true'
         env:
