@@ -1,0 +1,41 @@
+name: Rebuild news hub after daily article
+
+on:
+  workflow_run:
+    workflows: ["Generate daily fuel article"]
+    types: [completed]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    if: github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Rebuild unified news page
+        run: python -m automation.rebuild_news_page
+
+      - name: Commit news page
+        run: |
+          if git diff --quiet; then
+            echo "News hub already up to date."
+            exit 0
+          fi
+          git config user.name "goriva.online bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add pages/news.html
+          git commit -m "Refresh unified news hub"
+          git pull --rebase origin main
+          git push origin main
