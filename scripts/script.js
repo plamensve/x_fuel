@@ -1,12 +1,12 @@
-// Site-wide mobile/responsive hardening. Keep this tiny bootstrap as the single
-// compatibility layer for legacy pages, but avoid synchronous XHR/eval and
-// defer below-the-fold enhancements until the browser is idle.
+// Site-wide mobile/responsive hardening. Keep this bootstrap small and avoid
+// synchronous XHR/eval. Above-the-fold and layout-defining homepage modules
+// must initialize during parsing so Lighthouse does not see late layout shifts.
 (() => {
     if (!document.getElementById("goriva-mobile-responsive-css")) {
         const link = document.createElement("link");
         link.id = "goriva-mobile-responsive-css";
         link.rel = "stylesheet";
-        link.href = "/pages/styles/mobile-responsive.css?v=20260831-perf1";
+        link.href = "/pages/styles/mobile-responsive.css?v=20260831-perf2";
         document.head.appendChild(link);
     }
 })();
@@ -39,7 +39,8 @@
 
 const gorivaLoadScript = (src, { id = "", defer = true } = {}) => {
     if (id && document.getElementById(id)) return Promise.resolve();
-    const existing = [...document.scripts].find(script => script.src && script.src.includes(src.split("?")[0]));
+    const base = src.split("?")[0];
+    const existing = [...document.scripts].find(script => script.src && script.src.includes(base));
     if (existing) return Promise.resolve();
 
     return new Promise((resolve, reject) => {
@@ -54,27 +55,18 @@ const gorivaLoadScript = (src, { id = "", defer = true } = {}) => {
     });
 };
 
-const gorivaWhenIdle = callback => {
-    if ("requestIdleCallback" in window) {
-        window.requestIdleCallback(callback, { timeout: 1800 });
-    } else {
-        window.setTimeout(callback, 350);
-    }
-};
-
 // Global navigation is needed site-wide. Load it without blocking HTML parsing.
 (() => {
     if (window.__GORIVA_GLOBAL_NAV_LOADER__) return;
     window.__GORIVA_GLOBAL_NAV_LOADER__ = true;
-    gorivaLoadScript("/scripts/global-nav.js?v=20260831-perf1", { id: "goriva-global-nav-script" })
+    gorivaLoadScript("/scripts/global-nav.js?v=20260831-perf2", { id: "goriva-global-nav-script" })
         .catch(error => console.error("Failed to load global navigation", error));
 })();
 
-// Legacy site logic still owns the price table/ticker/form. During parser-time
-// loading keep document.write for deterministic DOMContentLoaded registration,
-// but remove the old synchronous XMLHttpRequest + eval fallback entirely.
+// Legacy site logic owns the price table/ticker/form. Keep deterministic
+// parser-time loading, but never fall back to synchronous XMLHttpRequest/eval.
 (() => {
-    const baseSrc = "/scripts/script-base.js?v=20260831-perf1";
+    const baseSrc = "/scripts/script-base.js?v=20260831-perf2";
     const current = document.currentScript;
     if (document.readyState === "loading" && !current?.defer && !current?.async) {
         document.write(`<script src="${baseSrc}"><\/script>`);
@@ -84,10 +76,12 @@ const gorivaWhenIdle = callback => {
         .catch(error => console.error("Failed to load legacy site script", error));
 })();
 
-// Homepage hero/map shell is above the fold and should be ready immediately.
+// Homepage hero/map shell defines the initial page geometry. It must run during
+// parsing rather than after an idle callback, otherwise the hero/map replacement
+// becomes a late LCP candidate and produces large CLS values.
 (() => {
     if (window.location.pathname !== "/" && !window.location.pathname.endsWith("/index.html")) return;
-    const src = "/scripts/home-hero-map-pro.js?v=20260831-perf1";
+    const src = "/scripts/home-hero-map-pro.js?v=20260831-perf2";
     if (document.readyState === "loading") {
         document.write(`<script src="${src}"><\/script>`);
         return;
@@ -96,17 +90,21 @@ const gorivaWhenIdle = callback => {
         .catch(error => console.error("Failed to load homepage hero/map shell", error));
 })();
 
-// Below-the-fold homepage redesign can wait until the browser has completed the
-// critical rendering path. Nothing is removed; only initialization timing changes.
+// This module rewrites complete homepage sections and injects their layout CSS.
+// Running it at idle caused the page to move after first paint. Initialize it
+// during parsing so the final DOM is established before Lighthouse measures LCP/CLS.
 (() => {
     if (window.location.pathname !== "/" && !window.location.pathname.endsWith("/index.html")) return;
-    gorivaWhenIdle(() => {
-        gorivaLoadScript("/scripts/home-about-modern.js?v=20260831-perf1", { id: "goriva-home-about-modern" })
-            .catch(error => console.error("Failed to load homepage editorial sections", error));
-    });
+    const src = "/scripts/home-about-modern.js?v=20260831-perf2";
+    if (document.readyState === "loading") {
+        document.write(`<script src="${src}"><\/script>`);
+        return;
+    }
+    gorivaLoadScript(src, { id: "goriva-home-about-modern" })
+        .catch(error => console.error("Failed to load homepage editorial sections", error));
 })();
 
-// Normalize Instagram links after homepage DOM rewrites.
+// Normalize Instagram links after homepage DOM rewrites are complete.
 (() => {
     const INSTAGRAM_URL = "https://www.instagram.com/goriva.online/";
     const normalizeInstagramLinks = () => {
@@ -127,19 +125,24 @@ const gorivaWhenIdle = callback => {
         }
     };
 
-    const schedule = () => gorivaWhenIdle(normalizeInstagramLinks);
-    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", schedule, { once: true });
-    else schedule();
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", normalizeInstagramLinks, { once: true });
+    } else {
+        normalizeInstagramLinks();
+    }
 })();
 
-// Shared newsroom layout is not part of the first paint; initialize it after the
-// article HTML is visible.
+// Shared newsroom layout. It changes article structure, so avoid deliberately
+// postponing it until idle; establish the final article geometry promptly.
 (() => {
     if (!window.location.pathname.includes("/pages/articles/")) return;
-    gorivaWhenIdle(() => {
-        gorivaLoadScript("/scripts/article-modern.js?v=20260831-perf1", { id: "goriva-article-modern" })
-            .catch(error => console.error("Failed to load article layout", error));
-    });
+    const src = "/scripts/article-modern.js?v=20260831-perf2";
+    if (document.readyState === "loading") {
+        document.write(`<script src="${src}"><\/script>`);
+        return;
+    }
+    gorivaLoadScript(src, { id: "goriva-article-modern" })
+        .catch(error => console.error("Failed to load article layout", error));
 })();
 
 // Business clients CTA.
