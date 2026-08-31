@@ -8,6 +8,9 @@ import {
 const h = React.createElement;
 const COLORS = ['#2563eb', '#0f766e', '#d97706', '#7c3aed'];
 const money = (v) => Number.isFinite(Number(v)) ? `${Number(v).toFixed(2).replace('.', ',')} €` : '—';
+const axisTick = { fontSize: 14, fontWeight: 700 };
+const xAxisProps = { tick: axisTick, interval: 0, angle: -45, textAnchor: 'end', height: 92 };
+const yAxisProps = { tick: axisTick, angle: -45, textAnchor: 'end', width: 82 };
 
 function valueDomain(data, keys) {
   const values = [];
@@ -61,11 +64,11 @@ function CityChart({ spec }) {
   const data = spec.data || [];
   const keys = spec.series.map(s => s.key);
   const domain = valueDomain(data, keys);
-  return h(ResponsiveContainer, { width: '100%', height: 430 },
-    h(BarChart, { data, margin: { top: 42, right: 28, left: 12, bottom: 42 } },
+  return h(ResponsiveContainer, { width: '100%', height: 455 },
+    h(BarChart, { data, margin: { top: 42, right: 28, left: 20, bottom: 82 } },
       h(CartesianGrid, { strokeDasharray: '3 3', vertical: false, opacity: 0.25 }),
-      h(XAxis, { dataKey: 'fuel', tick: { fontSize: 16, fontWeight: 700 }, interval: 0, angle: -6, height: 58 }),
-      h(YAxis, { domain, tickFormatter: v => Number(v).toFixed(2).replace('.', ','), tick: { fontSize: 15 }, width: 66 }),
+      h(XAxis, { dataKey: 'fuel', ...xAxisProps }),
+      h(YAxis, { domain, tickFormatter: v => Number(v).toFixed(2).replace('.', ','), ...yAxisProps }),
       h(Tooltip, { content: h(ChartTooltip) }),
       ...spec.series.map((s, i) => h(Bar, { key: s.key, dataKey: s.key, name: s.label, fill: COLORS[i % COLORS.length], radius: [8, 8, 0, 0], maxBarSize: 76 },
         h(LabelList, { dataKey: s.key, content: h(ValueLabel) })
@@ -78,11 +81,11 @@ function ComparisonChart({ spec }) {
   const data = spec.data || [];
   const keys = spec.series.map(s => s.key);
   const domain = valueDomain(data, keys);
-  return h(ResponsiveContainer, { width: '100%', height: 520 },
-    h(BarChart, { data, margin: { top: 42, right: 24, left: 10, bottom: 58 } },
+  return h(ResponsiveContainer, { width: '100%', height: 550 },
+    h(BarChart, { data, margin: { top: 42, right: 24, left: 20, bottom: 90 } },
       h(CartesianGrid, { strokeDasharray: '3 3', vertical: false, opacity: 0.25 }),
-      h(XAxis, { dataKey: 'city', tick: { fontSize: 16, fontWeight: 700 }, interval: 0, height: 56 }),
-      h(YAxis, { domain, tickFormatter: v => Number(v).toFixed(2).replace('.', ','), tick: { fontSize: 15 }, width: 66 }),
+      h(XAxis, { dataKey: 'city', ...xAxisProps }),
+      h(YAxis, { domain, tickFormatter: v => Number(v).toFixed(2).replace('.', ','), ...yAxisProps }),
       h(Tooltip, { content: h(ChartTooltip) }),
       h(Legend, { iconSize: 14, formatter: legendFormatter, wrapperStyle: { paddingTop: 16 } }),
       ...spec.series.map((s, i) => h(Bar, { key: s.key, dataKey: s.key, name: s.label, fill: COLORS[i % COLORS.length], radius: [7, 7, 0, 0], maxBarSize: 42 }))
@@ -94,11 +97,11 @@ function TrendChart({ spec }) {
   const data = spec.data || [];
   const keys = spec.series.map(s => s.key);
   const domain = valueDomain(data, keys);
-  return h(ResponsiveContainer, { width: '100%', height: 450 },
-    h(LineChart, { data, margin: { top: 38, right: 30, left: 12, bottom: 28 } },
+  return h(ResponsiveContainer, { width: '100%', height: 480 },
+    h(LineChart, { data, margin: { top: 38, right: 30, left: 20, bottom: 84 } },
       h(CartesianGrid, { strokeDasharray: '3 3', opacity: 0.25 }),
-      h(XAxis, { dataKey: 'day', tick: { fontSize: 16, fontWeight: 700 } }),
-      h(YAxis, { domain, tickFormatter: v => Number(v).toFixed(2).replace('.', ','), tick: { fontSize: 15 }, width: 66 }),
+      h(XAxis, { dataKey: 'day', ...xAxisProps }),
+      h(YAxis, { domain, tickFormatter: v => Number(v).toFixed(2).replace('.', ','), ...yAxisProps }),
       h(Tooltip, { content: h(ChartTooltip) }),
       h(Legend, { iconSize: 14, formatter: legendFormatter, wrapperStyle: { paddingTop: 10 } }),
       ...spec.series.map((s, i) => h(Line, { key: s.key, type: 'monotone', dataKey: s.key, name: s.label, stroke: COLORS[i % COLORS.length], strokeWidth: 3, dot: { r: 5 }, activeDot: { r: 7 }, connectNulls: false }))
