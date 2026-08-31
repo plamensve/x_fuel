@@ -1,6 +1,26 @@
 (() => {
     if (!window.location.pathname.includes('/pages/articles/')) return;
 
+    const normalizeLegacyCurrency = root => {
+        if (!window.location.pathname.includes('/pages/articles/daily/')) return;
+        const replaceCurrency = value => String(value || '')
+            .replace(/(\d[\d\s.,]*)\s*(?:лв\.?|лева|левове|BGN)\b/gi, '$1 €')
+            .replace(/\b(?:лв\.?|лева|левове|BGN)\s*\/\s*(литър|л|кг|kg)/gi, '€ / $1');
+
+        const walker = document.createTreeWalker(root || document.body, NodeFilter.SHOW_TEXT);
+        const nodes = [];
+        while (walker.nextNode()) nodes.push(walker.currentNode);
+        nodes.forEach(node => {
+            const updated = replaceCurrency(node.nodeValue);
+            if (updated !== node.nodeValue) node.nodeValue = updated;
+        });
+
+        document.querySelectorAll('meta[name="description"], meta[property="og:description"], meta[name="twitter:description"]').forEach(meta => {
+            const updated = replaceCurrency(meta.content);
+            if (updated !== meta.content) meta.content = updated;
+        });
+    };
+
     const loadStyles = () => {
         if (!document.getElementById('article-modern-css')) {
             const link = document.createElement('link');
@@ -38,10 +58,9 @@
         }
         if (!article || document.body.classList.contains('article-modern-page')) return;
 
+        normalizeLegacyCurrency(article);
         document.body.classList.add('article-modern-page');
-        if (window.location.pathname.includes('/pages/articles/daily/')) {
-            document.body.classList.add('daily-article-page');
-        }
+        if (window.location.pathname.includes('/pages/articles/daily/')) document.body.classList.add('daily-article-page');
         loadStyles();
 
         const title = article.querySelector('.article-title, .page-title, h1');
@@ -93,7 +112,6 @@
                 const side = document.createElement('aside');
                 side.className = 'article-news-side';
                 side.innerHTML = `<strong>Още от goriva.online</strong><a href="/pages/news.html">Последни новини и анализи</a><a href="/pages/trends.html">История на цените</a><a href="/">Актуални цени днес</a><a href="/pages/business-clients.html">Решения за бизнеса</a>`;
-
                 content.before(layout);
                 main.appendChild(content);
                 const shareBottom = article.querySelector('.share-section-2');
