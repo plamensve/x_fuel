@@ -31,19 +31,16 @@ jobs:
           import os
           from datetime import datetime
           from zoneinfo import ZoneInfo
-
           event = os.environ.get("EVENT_NAME", "")
           schedule = os.environ.get("EVENT_SCHEDULE", "")
           now = datetime.now(ZoneInfo("Europe/Sofia"))
           offset_hours = int(now.utcoffset().total_seconds() // 3600)
-
           if event == "workflow_dispatch":
               should_run = True
           elif offset_hours == 3:
               should_run = schedule == "20 15 * * *"
           else:
               should_run = schedule == "20 16 * * *"
-
           with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as fh:
               fh.write(f"should_run={'true' if should_run else 'false'}\n")
               fh.write(f"sofia_date={now.date().isoformat()}\n")
@@ -94,6 +91,41 @@ jobs:
           MIN_SOFIA_STATIONS: "8"
         run: python -m automation.generate_sofia_article
 
+      - name: Register Sofia article in news manifest
+        if: steps.window.outputs.should_run == 'true'
+        env:
+          ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
+        run: |
+          python - <<'PY'
+          import html, json, os, re
+          from pathlib import Path
+          root = Path('.')
+          date = os.environ.get('ARTICLE_DATE','').strip()
+          if not date:
+              candidates = sorted(p.parent.name for p in (root/'pages/articles/sofia').glob('*/index.html'))
+              if not candidates:
+                  raise SystemExit('No Sofia article found')
+              date = candidates[-1]
+          path = root/'pages/articles/sofia'/date/'index.html'
+          text = path.read_text(encoding='utf-8')
+          def grab(pattern, fallback=''):
+              m = re.search(pattern, text, flags=re.I|re.S)
+              return html.unescape(re.sub(r'<[^>]+>', ' ', m.group(1)).strip()) if m else fallback
+          title = grab(r'<h1[^>]*>(.*?)</h1>', f'Цените на горивата днес в София – {date}')
+          description = grab(r'<meta\s+name="description"\s+content="([^"]*)"', '')
+          manifest_path = root/'data/generated-news.json'
+          items = json.loads(manifest_path.read_text(encoding='utf-8')) if manifest_path.exists() else []
+          url = f'/pages/articles/sofia/{date}/'
+          items = [x for x in items if x.get('url') != url]
+          items.append({'date': date, 'title': title, 'description': description, 'url': url, 'type': 'sofia', 'label': 'София'})
+          items.sort(key=lambda x: (x.get('date',''), x.get('url','')), reverse=True)
+          manifest_path.write_text(json.dumps(items[:120], ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+          PY
+
+      - name: Rebuild news hub
+        if: steps.window.outputs.should_run == 'true'
+        run: python -m automation.rebuild_news_page
+
       - name: Commit generated Sofia article
         if: steps.window.outputs.should_run == 'true'
         run: |
@@ -103,7 +135,7 @@ jobs:
           fi
           git config user.name "goriva.online bot"
           git config user.email "actions@users.noreply.github.com"
-          git add pages/articles/sofia sitemap.xml
+          git add pages/articles/sofia pages/news.html data/generated-news.json sitemap.xml
           git commit -m "Publish Sofia fuel price article"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push
