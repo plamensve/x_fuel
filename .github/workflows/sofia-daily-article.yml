@@ -91,7 +91,7 @@ jobs:
           MIN_SOFIA_STATIONS: "8"
         run: python -m automation.generate_sofia_article
 
-      - name: Build professional layout, charts and editorial images
+      - name: Build professional layout and editorial visuals
         if: steps.window.outputs.should_run == 'true'
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -106,6 +106,14 @@ jobs:
         env:
           ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
         run: python -m automation.add_sofia_engagement
+
+      - name: Remove charts and add section images
+        if: steps.window.outputs.should_run == 'true'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_IMAGE_MODEL: gpt-image-2
+          ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
+        run: python -m automation.refine_sofia_article
 
       - name: Register Sofia article in news manifest
         if: steps.window.outputs.should_run == 'true'
