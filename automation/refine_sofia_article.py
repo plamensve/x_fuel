@@ -74,6 +74,10 @@ def refine(date_str: str) -> None:
     media = ROOT / "media" / "sofia-news" / date_str
     media.mkdir(parents=True, exist_ok=True)
 
+    editorial_css = '/pages/styles/sofia-editorial-images.css?v=20260831-1'
+    if editorial_css not in text:
+        text = text.replace('</head>', f'  <link rel="stylesheet" href="{editorial_css}">\n</head>', 1)
+
     # Remove the chart dashboard completely. The article should read like an editorial story,
     # not like a compressed analytics dashboard.
     text = re.sub(
