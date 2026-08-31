@@ -25,7 +25,17 @@ jobs:
           python-version: "3.12"
 
       - name: Rebuild unified news page
-        run: python -m automation.rebuild_news_page
+        run: |
+          python -m automation.rebuild_news_page
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('pages/news.html')
+          text = path.read_text(encoding='utf-8')
+          href = 'styles/news-latest.css?v=20260831-1'
+          if href not in text:
+              text = text.replace('</head>', f'<link rel="stylesheet" href="{href}">\n</head>', 1)
+          path.write_text(text, encoding='utf-8')
+          PY
 
       - name: Commit news page
         run: |
