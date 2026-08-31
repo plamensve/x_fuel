@@ -17,7 +17,7 @@ permissions:
 jobs:
   generate:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 40
 
     steps:
       - name: Check Sofia publication window
@@ -91,6 +91,16 @@ jobs:
           MIN_SOFIA_STATIONS: "8"
         run: python -m automation.generate_sofia_article
 
+      - name: Build professional layout, charts and editorial images
+        if: steps.window.outputs.should_run == 'true'
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_IMAGE_MODEL: gpt-image-2
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
+        run: python -m automation.enrich_sofia_article
+
       - name: Register Sofia article in news manifest
         if: steps.window.outputs.should_run == 'true'
         env:
@@ -113,11 +123,12 @@ jobs:
               return html.unescape(re.sub(r'<[^>]+>', ' ', m.group(1)).strip()) if m else fallback
           title = grab(r'<h1[^>]*>(.*?)</h1>', f'Цените на горивата днес в София – {date}')
           description = grab(r'<meta\s+name="description"\s+content="([^"]*)"', '')
+          hero = f'/media/sofia-news/{date}/hero.png'
           manifest_path = root/'data/generated-news.json'
           items = json.loads(manifest_path.read_text(encoding='utf-8')) if manifest_path.exists() else []
           url = f'/pages/articles/sofia/{date}/'
           items = [x for x in items if x.get('url') != url]
-          items.append({'date': date, 'title': title, 'description': description, 'url': url, 'type': 'sofia', 'label': 'София'})
+          items.append({'date': date, 'title': title, 'description': description, 'url': url, 'type': 'sofia', 'label': 'София', 'image': hero})
           items.sort(key=lambda x: (x.get('date',''), x.get('url','')), reverse=True)
           manifest_path.write_text(json.dumps(items[:120], ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
           PY
@@ -135,7 +146,7 @@ jobs:
           fi
           git config user.name "goriva.online bot"
           git config user.email "actions@users.noreply.github.com"
-          git add pages/articles/sofia pages/news.html data/generated-news.json sitemap.xml
-          git commit -m "Publish Sofia fuel price article"
+          git add pages/articles/sofia pages/news.html data/generated-news.json sitemap.xml media/sofia-news
+          git commit -m "Publish professional Sofia fuel price article"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push
