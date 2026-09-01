@@ -102,6 +102,88 @@
         })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
     </script>
 
+    <style>
+        .prices-card {
+            margin-bottom: 32px;
+        }
+
+        .price-submit-section {
+            margin: 0 0 42px;
+            padding: 0;
+            display: block;
+        }
+
+        .price-submit-section .submit-card {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            margin: 0;
+            padding: clamp(24px, 4vw, 38px);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at 100% 0%, rgba(59, 130, 246, 0.12), transparent 32%),
+                linear-gradient(145deg, rgba(18, 34, 52, 0.98), rgba(10, 22, 38, 0.99));
+            box-shadow: 0 18px 46px rgba(2, 6, 23, 0.22);
+        }
+
+        .price-submit-section .submit-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 auto 0 0;
+            width: 3px;
+            background: linear-gradient(180deg, #3b82f6, #22c55e);
+        }
+
+        .price-submit-section .card-header {
+            max-width: 780px;
+            margin-bottom: 24px;
+        }
+
+        .price-submit-section .card-header::before {
+            content: "СПОДЕЛИ АКТУАЛНА ЦЕНА";
+            display: inline-flex;
+            margin-bottom: 10px;
+            color: #60a5fa;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.11em;
+        }
+
+        .price-submit-section .card-header h2 {
+            margin: 0 0 8px;
+            color: #f8fafc;
+            font-size: clamp(24px, 3vw, 32px);
+            line-height: 1.18;
+            letter-spacing: -0.025em;
+        }
+
+        .price-submit-section .card-header p {
+            margin: 0;
+            color: #94a3b8;
+            line-height: 1.65;
+        }
+
+        .price-submit-section #fuel-form {
+            max-width: 900px;
+        }
+
+        @media (max-width: 640px) {
+            .prices-card {
+                margin-bottom: 22px;
+            }
+
+            .price-submit-section {
+                margin-bottom: 30px;
+            }
+
+            .price-submit-section .submit-card {
+                padding: 20px 17px;
+                border-radius: 18px;
+            }
+        }
+    </style>
+
 </head>
 
 
@@ -312,63 +394,63 @@
             </div>
             <div id="pagination"></div>
         </div>
+    </section>
 
-        <section class="main-grid">
-            <div class="submit-card">
-                <div class="card-header">
-                    <h2>Сподели цената на горивото, което зареди днес</h2>
-                    <p>Помогнете на другите потребители като споделите актуална цена от бензиностанция.</p>
-                </div>
+    <section class="main-grid price-submit-section" aria-labelledby="fuel-submit-title">
+        <div class="submit-card">
+            <div class="card-header">
+                <h2 id="fuel-submit-title">Сподели цената на горивото, което зареди днес</h2>
+                <p>Помогнете на другите потребители като споделите актуална цена от бензиностанция.</p>
+            </div>
 
-                <form id="fuel-form">
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="region">Област</label>
-                            <select id="region" name="region" required>
-                                <option value="">Избери област</option>
-                                <option>Благоевград</option><option>Бургас</option><option>Варна</option><option>Велико Търново</option><option>Видин</option><option>Враца</option><option>Габрово</option><option>Добрич</option><option>Кърджали</option><option>Кюстендил</option><option>Ловеч</option><option>Монтана</option><option>Пазарджик</option><option>Перник</option><option>Плевен</option><option>Пловдив</option><option>Разград</option><option>Русе</option><option>Силистра</option><option>Сливен</option><option>Смолян</option><option>София</option><option>София област</option><option>Стара Загора</option><option>Търговище</option><option>Хасково</option><option>Шумен</option><option>Ямбол</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="city">Град</label>
-                            <input type="text" id="city" name="city" pattern="[А-Яа-я\s\-]+" placeholder="Например София" required>
-                        </div>
-                    </div>
-
+            <form id="fuel-form">
+                <div class="form-row">
                     <div class="form-group">
-                        <label for="station">Бензиностанция</label>
-                        <select id="station" name="station" required>
-                            <option value="">Избери</option>
-                            <option>ХИМОЙЛ</option><option>ПЕТРОЛ</option><option>ЛУКОЙЛ</option><option>SHELL</option><option>ЕКО</option><option>OMV</option><option>РОМПЕТРОЛ</option><option>КРУИЗ</option><option>ЕКО ПЕТРОЛ</option><option>ДИЗЕЛОР</option><option>ИНСА ОЙЛ</option><option>БУЛМАРКЕТ</option><option>АНТИМ</option><option>БЕНИТА</option><option>VM PETROLEUM</option><option>AVIVA</option><option>ТОПЛИВО</option>
+                        <label for="region">Област</label>
+                        <select id="region" name="region" required>
+                            <option value="">Избери област</option>
+                            <option>Благоевград</option><option>Бургас</option><option>Варна</option><option>Велико Търново</option><option>Видин</option><option>Враца</option><option>Габрово</option><option>Добрич</option><option>Кърджали</option><option>Кюстендил</option><option>Ловеч</option><option>Монтана</option><option>Пазарджик</option><option>Перник</option><option>Плевен</option><option>Пловдив</option><option>Разград</option><option>Русе</option><option>Силистра</option><option>Сливен</option><option>Смолян</option><option>София</option><option>София област</option><option>Стара Загора</option><option>Търговище</option><option>Хасково</option><option>Шумен</option><option>Ямбол</option>
                         </select>
                     </div>
-
                     <div class="form-group">
-                        <label for="location">Локация (по избор)</label>
-                        <input type="text" id="location" name="location" placeholder="Например: кв. Възраждане, АМ Хемус">
+                        <label for="city">Град</label>
+                        <input type="text" id="city" name="city" pattern="[А-Яа-я\s\-]+" placeholder="Например София" required>
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label>Вид гориво</label>
-                        <div class="radio-group">
-                            <label><input type="radio" name="fuel" value="Бензин A95" required> A95</label>
-                            <label><input type="radio" name="fuel" value="Дизел"> Дизел</label>
-                            <label><input type="radio" name="fuel" value="Пропан Бутан"> LPG</label>
-                            <label><input type="radio" name="fuel" value="Бензин A100"> A100</label>
-                            <label><input type="radio" name="fuel" value="Дизел премиум"> Дизел +</label>
-                            <label><input type="radio" name="fuel" value="Метан"> Метан</label>
-                        </div>
+                <div class="form-group">
+                    <label for="station">Бензиностанция</label>
+                    <select id="station" name="station" required>
+                        <option value="">Избери</option>
+                        <option>ХИМОЙЛ</option><option>ПЕТРОЛ</option><option>ЛУКОЙЛ</option><option>SHELL</option><option>ЕКО</option><option>OMV</option><option>РОМПЕТРОЛ</option><option>КРУИЗ</option><option>ЕКО ПЕТРОЛ</option><option>ДИЗЕЛОР</option><option>ИНСА ОЙЛ</option><option>БУЛМАРКЕТ</option><option>АНТИМ</option><option>БЕНИТА</option><option>VM PETROLEUM</option><option>AVIVA</option><option>ТОПЛИВО</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="location">Локация (по избор)</label>
+                    <input type="text" id="location" name="location" placeholder="Например: кв. Възраждане, АМ Хемус">
+                </div>
+
+                <div class="form-group">
+                    <label>Вид гориво</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="fuel" value="Бензин A95" required> A95</label>
+                        <label><input type="radio" name="fuel" value="Дизел"> Дизел</label>
+                        <label><input type="radio" name="fuel" value="Пропан Бутан"> LPG</label>
+                        <label><input type="radio" name="fuel" value="Бензин A100"> A100</label>
+                        <label><input type="radio" name="fuel" value="Дизел премиум"> Дизел +</label>
+                        <label><input type="radio" name="fuel" value="Метан"> Метан</label>
                     </div>
+                </div>
 
-                    <div class="form-group">
-                        <label for="price">Цена (€/литър)</label>
-                        <input type="number" id="price" name="price" step="0.01" min="0.30" max="2.20" placeholder="1.55" required>
-                    </div>
+                <div class="form-group">
+                    <label for="price">Цена (€/литър)</label>
+                    <input type="number" id="price" name="price" step="0.01" min="0.30" max="2.20" placeholder="1.55" required>
+                </div>
 
-                    <button type="submit" class="submit-button">Изпрати цена</button>
-                </form>
-            </div>
-        </section>
+                <button type="submit" class="submit-button">Изпрати цена</button>
+            </form>
+        </div>
     </section>
 
     <section class="how-it-works">
