@@ -7,9 +7,6 @@ on:
         description: "Optional date in YYYY-MM-DD. Leave empty to use the latest viable day."
         required: false
         type: string
-  schedule:
-    - cron: "0 15 * * *"
-    - cron: "0 16 * * *"
 
 permissions:
   contents: write
