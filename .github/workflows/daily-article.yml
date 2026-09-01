@@ -238,14 +238,14 @@ jobs:
           def remove_unsupported_numeric_content(article, facts):
               """Drop only blocks/sentences that contain decimal claims outside prepared facts."""
               allowed = base.allowed_numbers(facts)
-              context_heading = r"<h2\\b[^>]*>\\s*Пазарен\\s+контекст\\s+от\\s+български\\s+източници\\s*</h2>"
+              context_heading = r"<h2\b[^>]*>\s*Пазарен\s+контекст\s+от\s+български\s+източници\s*</h2>"
               body = article.get("body_html", "")
               marker = re.search(context_heading, body, flags=re.I)
               local_html = body[:marker.start()] if marker else body
               external_html = body[marker.start():] if marker else ""
 
               def clean_blocks(fragment, allowed_values):
-                  block_pattern = r"<(p|li|blockquote)\\b[^>]*>.*?</\\1>"
+                  block_pattern = r"<(p|li|blockquote)\b[^>]*>.*?</\1>"
 
                   def keep_or_drop(match):
                       plain = re.sub(r"<[^>]+>", " ", match.group(0))
@@ -262,7 +262,7 @@ jobs:
               external_html = clean_blocks(external_html, None)
 
               deck = str(article.get("deck", ""))
-              deck_sentences = re.split(r"(?<=[.!?])\\s+", deck)
+              deck_sentences = re.split(r"(?<=[.!?])\s+", deck)
               article["deck"] = " ".join(
                   sentence for sentence in deck_sentences
                   if all(number in allowed for number in base.decimal_numbers(sentence))
