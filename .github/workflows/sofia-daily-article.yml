@@ -7,9 +7,6 @@ on:
         description: "Optional date in YYYY-MM-DD. Leave empty to use the latest viable Sofia dataset."
         required: false
         type: string
-  schedule:
-    - cron: "20 15 * * *"
-    - cron: "20 16 * * *"
 
 permissions:
   contents: write
