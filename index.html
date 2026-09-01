@@ -67,16 +67,10 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css">
 
-    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6YJNGGFR2"></script>
-
     <script>
         window.dataLayer = window.dataLayer || [];
-
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-
+        function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
         gtag('config', 'G-F6YJNGGFR2');
     </script>
@@ -84,15 +78,11 @@
     <script async
             src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3478773231642095"
             crossorigin="anonymous"></script>
-
     <meta name="google-adsense-account" content="ca-pub-3478773231642095">
 
-    <!-- Hotjar Tracking Code for goriva.online -->
     <script>
         (function (h, o, t, j, a, r) {
-            h.hj = h.hj || function () {
-                (h.hj.q = h.hj.q || []).push(arguments)
-            };
+            h.hj = h.hj || function () {(h.hj.q = h.hj.q || []).push(arguments)};
             h._hjSettings = {hjid: 6686373, hjsv: 6};
             a = o.getElementsByTagName('head')[0];
             r = o.createElement('script');
@@ -103,14 +93,15 @@
     </script>
 
     <style>
-        .prices-card {
-            margin-bottom: 32px;
-        }
+        .prices-card { margin-bottom: 32px; }
 
         .price-submit-section {
             margin: 0 0 42px;
             padding: 0;
-            display: block;
+            display: grid;
+            grid-template-columns: minmax(0, 1.7fr) minmax(280px, .72fr);
+            gap: 24px;
+            align-items: start;
         }
 
         .price-submit-section .submit-card {
@@ -135,10 +126,7 @@
             background: linear-gradient(180deg, #3b82f6, #22c55e);
         }
 
-        .price-submit-section .card-header {
-            max-width: 780px;
-            margin-bottom: 24px;
-        }
+        .price-submit-section .card-header { max-width: 780px; margin-bottom: 24px; }
 
         .price-submit-section .card-header::before {
             content: "СПОДЕЛИ АКТУАЛНА ЦЕНА";
@@ -158,71 +146,137 @@
             letter-spacing: -0.025em;
         }
 
-        .price-submit-section .card-header p {
-            margin: 0;
+        .price-submit-section .card-header p { margin: 0; color: #94a3b8; line-height: 1.65; }
+        .price-submit-section #fuel-form { max-width: 900px; }
+
+        .why-share-card {
+            position: relative;
+            overflow: hidden;
+            padding: 30px 26px;
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            border-radius: 22px;
+            background:
+                radial-gradient(circle at 100% 0%, rgba(34, 197, 94, 0.11), transparent 38%),
+                linear-gradient(160deg, rgba(14, 29, 43, 0.98), rgba(8, 20, 31, 0.99));
+            box-shadow: 0 18px 46px rgba(2, 6, 23, 0.18);
+        }
+
+        .why-share-card::before {
+            content: "";
+            position: absolute;
+            inset: 0 0 auto 0;
+            height: 3px;
+            background: linear-gradient(90deg, #22c55e, #3b82f6);
+        }
+
+        .why-share-label {
+            display: inline-flex;
+            margin-bottom: 12px;
+            color: #4ade80;
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: .11em;
+        }
+
+        .why-share-card h3 {
+            margin: 0 0 10px;
+            color: #f8fafc;
+            font-size: 24px;
+            line-height: 1.2;
+            letter-spacing: -.02em;
+        }
+
+        .why-share-intro {
+            margin: 0 0 24px;
             color: #94a3b8;
             line-height: 1.65;
         }
 
-        .price-submit-section #fuel-form {
-            max-width: 900px;
+        .why-share-list {
+            display: grid;
+            gap: 16px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .why-share-item {
+            display: grid;
+            grid-template-columns: 42px 1fr;
+            gap: 13px;
+            align-items: start;
+            padding: 14px 0;
+            border-top: 1px solid rgba(148, 163, 184, 0.11);
+        }
+
+        .why-share-item:first-child { border-top: 0; padding-top: 0; }
+
+        .why-share-icon {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border: 1px solid rgba(96, 165, 250, .16);
+            border-radius: 12px;
+            background: rgba(30, 64, 175, .12);
+            font-size: 20px;
+        }
+
+        .why-share-item strong {
+            display: block;
+            margin-bottom: 4px;
+            color: #e2e8f0;
+            font-size: 15px;
+        }
+
+        .why-share-item span:last-child {
+            color: #94a3b8;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .why-share-note {
+            margin: 22px 0 0;
+            padding: 14px 16px;
+            border-radius: 14px;
+            background: rgba(34, 197, 94, .07);
+            color: #a7f3d0;
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+        @media (max-width: 900px) {
+            .price-submit-section { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 640px) {
-            .prices-card {
-                margin-bottom: 22px;
-            }
-
-            .price-submit-section {
-                margin-bottom: 30px;
-            }
-
-            .price-submit-section .submit-card {
-                padding: 20px 17px;
-                border-radius: 18px;
-            }
+            .prices-card { margin-bottom: 22px; }
+            .price-submit-section { margin-bottom: 30px; gap: 18px; }
+            .price-submit-section .submit-card { padding: 20px 17px; border-radius: 18px; }
+            .why-share-card { padding: 22px 18px; border-radius: 18px; }
+            .why-share-card h3 { font-size: 22px; }
         }
     </style>
 
 </head>
-
-
 <body id="top">
-
 <div class="background"></div>
 
-
 <header class="header-bar">
-
     <div class="header-container">
-
         <img src="media/2logo.png" alt="goriva.online logo" class="header-logo">
-
         <div class="header-text">
             <strong>Цени на горивата в България</strong>
             <span>Следете актуални цени и споделяйте информация от бензиностанции в цялата страна</span>
             <span>Цените в сайта са подадени от потребителите. Разчитаме на коретно изпратена информация.</span>
         </div>
-
-        <a class="facebook-button"
-           href="https://www.facebook.com/groups/960591129738525"
-           target="_blank">
-            Facebook група
-        </a>
-
+        <a class="facebook-button" href="https://www.facebook.com/groups/960591129738525" target="_blank">Facebook група</a>
     </div>
-
 </header>
 
-
 <nav class="main-nav">
-
     <button id="menu-toggle" class="menu-toggle">☰</button>
-
     <div id="nav-menu" class="nav-container">
-
-        <!--        <button id="theme-toggle">🌙</button>-->
-
         <a href="index.html">Начало</a>
         <a href="pages/useful.html">Полезно</a>
         <a href="pages/trends.html">История на цените</a>
@@ -230,165 +284,64 @@
         <a href="pages/business-clients.html">Бизнес клиенти</a>
         <a href="pages/news.html">Новини</a>
         <a href="pages/rules.html">Общи условия</a>
-
     </div>
-
 </nav>
 
-<div class="ticker">
-    <div id="ticker-content" class="ticker-content"></div>
-</div>
-
+<div class="ticker"><div id="ticker-content" class="ticker-content"></div></div>
 
 <main class="container">
-
     <section class="about-project">
-
         <div class="about-inner">
-
-            <h1 class="about-title how-title">
-                Намери най-евтиното гориво близо до теб
-            </h1>
-
-            <p class="about-desc">
-                goriva.online събира реални цени на горивата в България,
-                подадени директно от шофьори.
-            </p>
-
+            <h1 class="about-title how-title">Намери най-евтиното гориво близо до теб</h1>
+            <p class="about-desc">goriva.online събира реални цени на горивата в България, подадени директно от шофьори.</p>
             <div class="about-points">
                 <span>⛽ Реални цени от потребители</span>
                 <span>📍 По области и градове</span>
                 <span>📊 Средни и най-ниски стойности</span>
             </div>
-
             <div class="about-cta">
                 <a href="#fuel-form" class="cta-primary">Сподели цена</a>
-
-                <a class="facebook-button-1"
-                   href="https://www.facebook.com/groups/960591129738525"
-                   target="_blank">
-                    Facebook общност
-                </a>
-
-                <a class="instagram-button-1"
-                   href="https://www.instagram.com/goriva.online/"
-                   target="_blank"
-                   rel="noopener noreferrer">
-                    Последвайте ни в Instagram
-                </a>
+                <a class="facebook-button-1" href="https://www.facebook.com/groups/960591129738525" target="_blank">Facebook общност</a>
+                <a class="instagram-button-1" href="https://www.instagram.com/goriva.online/" target="_blank" rel="noopener noreferrer">Последвайте ни в Instagram</a>
             </div>
-
-
         </div>
-
     </section>
 
     <section class="station-map-section">
-
-        <h2 class="section-title">
-            Карта на бензиностанциите
-        </h2>
-
+        <h2 class="section-title">Карта на бензиностанциите</h2>
         <div id="station-map"></div>
-
     </section>
 
     <section class="business-promo">
-
         <div class="business-promo-content">
-
-            <span class="business-promo-label">
-                РЕШЕНИЯ ЗА БИЗНЕСА
-            </span>
-
-            <h2>
-                Намалете разходите за гориво на Вашия автопарк
-            </h2>
-
-            <p>
-                Получавайте детайлни отчети, анализ на зарежданията
-                и персонализирани решения за Вашата компания.
-            </p>
-
-            <a href="pages/business-clients.html"
-               class="business-promo-button">
-                Научете повече
-            </a>
-
+            <span class="business-promo-label">РЕШЕНИЯ ЗА БИЗНЕСА</span>
+            <h2>Намалете разходите за гориво на Вашия автопарк</h2>
+            <p>Получавайте детайлни отчети, анализ на зарежданията и персонализирани решения за Вашата компания.</p>
+            <a href="pages/business-clients.html" class="business-promo-button">Научете повече</a>
         </div>
-
         <a href="https://goriva.online/pages/business-clients.html">
-            <div class="business-promo-image">
-                <img src="media/business-clients-banner.png"
-                     alt="Анализ на разходите за гориво за бизнес клиенти">
-            </div>
+            <div class="business-promo-image"><img src="media/business-clients-banner.png" alt="Анализ на разходите за гориво за бизнес клиенти"></div>
         </a>
-
     </section>
 
     <section class="prices-card">
-
-        <h2>
-            Днешни цени по области и градове
-            <span id="prices-date"></span>
-        </h2>
-
-        <p class="info-helper">
-            Посочените цени са изчислени като средна стойност на информацията, подадена от потребителите.
-        </p>
-
-        <p class="info-helper">
-            Избери област, град или бензиностанция за да филтрираш информацията
-        </p>
-
-        <!-- VIEW TOGGLE -->
+        <h2>Днешни цени по области и градове <span id="prices-date"></span></h2>
+        <p class="info-helper">Посочените цени са изчислени като средна стойност на информацията, подадена от потребителите.</p>
+        <p class="info-helper">Избери област, град или бензиностанция за да филтрираш информацията</p>
         <div class="view-toggle">
             <button class="view-btn active" data-view="cards">Карти</button>
             <button class="view-btn" data-view="table">Таблица</button>
         </div>
-
-        <!-- FILTERS -->
         <div class="city-filter">
-
-            <div class="filt">
-                <label for="region-select">Област</label>
-                <select id="region-select">
-                    <option value="all">Всички области</option>
-                </select>
-            </div>
-
-            <div class="filt">
-                <label for="city-select">Град</label>
-                <select id="city-select">
-                    <option value="all">Всички градове</option>
-                </select>
-            </div>
-
-            <div class="filt">
-                <label for="station-select">Бензиностанция</label>
-                <select id="station-select">
-                    <option value="all">Всички бензиностанции</option>
-                </select>
-            </div>
-
+            <div class="filt"><label for="region-select">Област</label><select id="region-select"><option value="all">Всички области</option></select></div>
+            <div class="filt"><label for="city-select">Град</label><select id="city-select"><option value="all">Всички градове</option></select></div>
+            <div class="filt"><label for="station-select">Бензиностанция</label><select id="station-select"><option value="all">Всички бензиностанции</option></select></div>
         </div>
-
         <div id="prices-container" class="show-table">
             <div id="cards-container" class="cards-grid"></div>
             <div class="table-wrapper">
                 <table class="price-table">
-                    <thead>
-                    <tr>
-                        <th>Бензиностанция</th>
-                        <th>Локация</th>
-                        <th>A95</th>
-                        <th>A100</th>
-                        <th>Дизел</th>
-                        <th>Дизел +</th>
-                        <th>Пропан Бутан</th>
-                        <th>Метан</th>
-                    </tr>
-                    </thead>
+                    <thead><tr><th>Бензиностанция</th><th>Локация</th><th>A95</th><th>A100</th><th>Дизел</th><th>Дизел +</th><th>Пропан Бутан</th><th>Метан</th></tr></thead>
                     <tbody id="prices-body"></tbody>
                 </table>
             </div>
@@ -402,7 +355,6 @@
                 <h2 id="fuel-submit-title">Сподели цената на горивото, което зареди днес</h2>
                 <p>Помогнете на другите потребители като споделите актуална цена от бензиностанция.</p>
             </div>
-
             <form id="fuel-form">
                 <div class="form-row">
                     <div class="form-group">
@@ -417,7 +369,6 @@
                         <input type="text" id="city" name="city" pattern="[А-Яа-я\s\-]+" placeholder="Например София" required>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label for="station">Бензиностанция</label>
                     <select id="station" name="station" required>
@@ -425,12 +376,10 @@
                         <option>ХИМОЙЛ</option><option>ПЕТРОЛ</option><option>ЛУКОЙЛ</option><option>SHELL</option><option>ЕКО</option><option>OMV</option><option>РОМПЕТРОЛ</option><option>КРУИЗ</option><option>ЕКО ПЕТРОЛ</option><option>ДИЗЕЛОР</option><option>ИНСА ОЙЛ</option><option>БУЛМАРКЕТ</option><option>АНТИМ</option><option>БЕНИТА</option><option>VM PETROLEUM</option><option>AVIVA</option><option>ТОПЛИВО</option>
                     </select>
                 </div>
-
                 <div class="form-group">
                     <label for="location">Локация (по избор)</label>
                     <input type="text" id="location" name="location" placeholder="Например: кв. Възраждане, АМ Хемус">
                 </div>
-
                 <div class="form-group">
                     <label>Вид гориво</label>
                     <div class="radio-group">
@@ -442,23 +391,39 @@
                         <label><input type="radio" name="fuel" value="Метан"> Метан</label>
                     </div>
                 </div>
-
                 <div class="form-group">
                     <label for="price">Цена (€/литър)</label>
                     <input type="number" id="price" name="price" step="0.01" min="0.30" max="2.20" placeholder="1.55" required>
                 </div>
-
                 <button type="submit" class="submit-button">Изпрати цена</button>
             </form>
         </div>
+
+        <aside class="why-share-card" aria-labelledby="why-share-title">
+            <span class="why-share-label">ОБЩНОСТТА ПРАВИ ДАННИТЕ ПО-ДОБРИ</span>
+            <h3 id="why-share-title">Защо да споделиш цена?</h3>
+            <p class="why-share-intro">Всяка актуална цена помага на goriva.online да бъде по-полезен за шофьорите в България.</p>
+            <ul class="why-share-list">
+                <li class="why-share-item">
+                    <span class="why-share-icon" aria-hidden="true">⛽</span>
+                    <span><strong>Помагаш на други шофьори</strong><span>Хората виждат по-актуална информация преди да заредят.</span></span>
+                </li>
+                <li class="why-share-item">
+                    <span class="why-share-icon" aria-hidden="true">📊</span>
+                    <span><strong>Подобряваш данните за твоя град</strong><span>Повече реални сигнали означават по-надеждна картина на местните цени.</span></span>
+                </li>
+                <li class="why-share-item">
+                    <span class="why-share-icon" aria-hidden="true">⚡</span>
+                    <span><strong>Отнема само няколко секунди</strong><span>Въвеждаш бензиностанцията, горивото и цената — без регистрация.</span></span>
+                </li>
+            </ul>
+            <p class="why-share-note">Благодарим, че допринасяш за по-прозрачна и полезна информация за цените на горивата.</p>
+        </aside>
     </section>
 
     <section class="how-it-works">
         <div class="container">
-            <div class="how-header">
-                <h2 class="how-title">Как функционира goriva.online</h2>
-                <p class="how-subtitle">Прост процес, базиран на реални данни от потребители</p>
-            </div>
+            <div class="how-header"><h2 class="how-title">Как функционира goriva.online</h2><p class="how-subtitle">Прост процес, базиран на реални данни от потребители</p></div>
             <div class="steps">
                 <div class="step"><div class="step-icon">⛽</div><h3>Споделяш цена</h3><p>Въвеждаш цената от бензиностанцията, от която си заредил.</p></div>
                 <div class="step"><div class="step-icon">📊</div><h3>Системата обработва</h3><p>Данните се анализират и се изчисляват средни и най-ниски стойности.</p></div>
@@ -479,7 +444,6 @@
                     <a href="https://www.instagram.com/goriva.online/" target="_blank" rel="noopener noreferrer">Instagram</a>
                 </div>
             </div>
-
             <div class="founder-right">
                 <div class="founder-section">
                     <span class="section-label">ЗА ПРОЕКТА</span>
@@ -503,7 +467,6 @@
             </div>
         </div>
     </section>
-
 </main>
 
 <footer class="site-footer">
@@ -511,9 +474,7 @@
         <div class="footer-column footer-brand"><img src="media/footer-logo.png" alt="goriva.online logo" class="footer-logo"></div>
         <div class="footer-column">
             <h4>Навигация</h4>
-            <ul class="footer-links">
-                <li><a href="#top">Начало</a></li><li><a href="pages/useful.html">Полезно</a></li><li><a href="pages/trends.html">История на цените</a></li><li><a href="pages/business-clients.html">Бизнес клиенти</a></li><li><a href="pages/news.html">Новини</a></li><li><a href="pages/rules.html">Общи условия</a></li>
-            </ul>
+            <ul class="footer-links"><li><a href="#top">Начало</a></li><li><a href="pages/useful.html">Полезно</a></li><li><a href="pages/trends.html">История на цените</a></li><li><a href="pages/business-clients.html">Бизнес клиенти</a></li><li><a href="pages/news.html">Новини</a></li><li><a href="pages/rules.html">Общи условия</a></li></ul>
         </div>
         <div class="footer-column">
             <h4>Контакти</h4>
@@ -542,8 +503,6 @@
 <script src="scripts/script.js?v=20260830-1239"></script>
 <script src="scripts/ecopetrol_prices.js?v=20260830-1239"></script>
 <script src="scripts/eco_filter.js?v=20260830-1239"></script>
-
 <script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="qwan" data-description="Подкрепете goriva.online" data-message="Ако goriva.online Ви е полезен, можете да подкрепите развитието на проекта." data-color="#FF813F" data-position="Right" data-x_margin="18" data-y_margin="10"></script>
-
 </body>
 </html>
