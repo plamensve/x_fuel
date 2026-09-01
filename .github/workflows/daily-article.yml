@@ -235,6 +235,46 @@ jobs:
               else:
                   print(f"Validated {len(article['sources'])} external sources.")
 
+          def remove_unsupported_numeric_content(article, facts):
+              """Drop only blocks/sentences that contain decimal claims outside prepared facts."""
+              allowed = base.allowed_numbers(facts)
+              context_heading = r"<h2\\b[^>]*>\\s*Пазарен\\s+контекст\\s+от\\s+български\\s+източници\\s*</h2>"
+              body = article.get("body_html", "")
+              marker = re.search(context_heading, body, flags=re.I)
+              local_html = body[:marker.start()] if marker else body
+              external_html = body[marker.start():] if marker else ""
+
+              def clean_blocks(fragment, allowed_values):
+                  block_pattern = r"<(p|li|blockquote)\\b[^>]*>.*?</\\1>"
+
+                  def keep_or_drop(match):
+                      plain = re.sub(r"<[^>]+>", " ", match.group(0))
+                      decimals = set(base.decimal_numbers(plain))
+                      unsupported = decimals if allowed_values is None else {n for n in decimals if n not in allowed_values}
+                      if unsupported:
+                          print(f"Removed unsupported numeric block: {sorted(unsupported)}")
+                          return ""
+                      return match.group(0)
+
+                  return re.sub(block_pattern, keep_or_drop, fragment, flags=re.I | re.S)
+
+              local_html = clean_blocks(local_html, allowed)
+              external_html = clean_blocks(external_html, None)
+
+              deck = str(article.get("deck", ""))
+              deck_sentences = re.split(r"(?<=[.!?])\\s+", deck)
+              article["deck"] = " ".join(
+                  sentence for sentence in deck_sentences
+                  if all(number in allowed for number in base.decimal_numbers(sentence))
+              ).strip()
+              if not article["deck"]:
+                  article["deck"] = (
+                      "Дневен преглед на цените в наблюдаваните обекти и основните разлики между градовете."
+                  )
+
+              article["body_html"] = (local_html + external_html).strip()
+              return article
+
           def generate_article(facts):
               last_error = None
               retryable_markers = (
@@ -245,6 +285,7 @@ jobs:
                   article = longform.generate_article(facts)
                   article["title"] = seo_title(facts["date"])
                   article["body_html"] = base.sanitize_body(article.get("body_html", ""))
+                  article = remove_unsupported_numeric_content(article, facts)
                   try:
                       base.validate_article(article, facts)
                       return article
