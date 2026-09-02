@@ -20,7 +20,7 @@
         inner.innerHTML = `
             <div class="hero-v2-grid">
                 <div class="hero-v2-visual" aria-hidden="true">
-                    <img src="media/hero-woman-station.webp?v=20260902-2" alt="" class="hero-v2-model">
+                    <img src="media/hero-woman-station.webp?v=20260902-hq1" alt="" class="hero-v2-model">
                     <div class="hero-v2-visual-fade"></div>
                 </div>
 
