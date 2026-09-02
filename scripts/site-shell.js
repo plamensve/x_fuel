@@ -26,4 +26,23 @@
     } catch (error) {
         console.error("Failed to load site shell", error);
     }
+
+    const loadReliableTrendChart = () => {
+        if (!window.location.pathname.endsWith("/pages/trends.html")) return;
+        if (document.getElementById("goriva-reliable-trend-chart")) return;
+
+        const script = document.createElement("script");
+        script.id = "goriva-reliable-trend-chart";
+        script.src = "/scripts/trends-reliable-chart.js?v=20260902-1";
+        script.async = false;
+        document.head.appendChild(script);
+    };
+
+    if (document.readyState === "loading") {
+        window.addEventListener("DOMContentLoaded", () => {
+            window.setTimeout(loadReliableTrendChart, 0);
+        }, { once: true });
+    } else {
+        window.setTimeout(loadReliableTrendChart, 0);
+    }
 })();
