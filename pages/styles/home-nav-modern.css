@@ -108,3 +108,60 @@
         font-size: 15px;
     }
 }
+
+/* Final hero visual cleanup: keep the woman + station, hide UI fragments baked into the source image. */
+.about-project.hero-v3,
+.about-project.hero-v3 .about-inner,
+.hero-v3-grid {
+    background: #fff !important;
+}
+
+.hero-v3-visual {
+    position: relative !important;
+    overflow: hidden !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: #fff !important;
+}
+
+.hero-v3-model {
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    object-fit: cover !important;
+    object-position: left center !important;
+}
+
+/* remove the title fragment in the upper-right of the source visual */
+.hero-v3-visual::before {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    z-index: 5 !important;
+    top: 14% !important;
+    right: 0 !important;
+    width: 24% !important;
+    height: 17% !important;
+    background: #fff !important;
+    pointer-events: none !important;
+}
+
+/* remove the feature-card / Instagram fragments in the lower-right of the source visual */
+.hero-v3-visual::after {
+    content: "" !important;
+    display: block !important;
+    position: absolute !important;
+    z-index: 5 !important;
+    top: 54% !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    width: 31% !important;
+    background: #fff !important;
+    pointer-events: none !important;
+}
+
+@media (max-width: 840px) {
+    .hero-v3-visual::before { width: 22% !important; }
+    .hero-v3-visual::after { width: 29% !important; top: 55% !important; }
+}
