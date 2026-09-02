@@ -23,7 +23,7 @@
             "@type": "Organization",
             "name": "goriva.online",
             "url": "https://goriva.online",
-            "logo": "https://goriva.online/media/og-3.png",
+            "logo": "https://goriva.online/media/brand-mark.png",
             "sameAs": [
                 "https://www.facebook.com/groups/960591129738525",
                 "https://www.instagram.com/goriva.online/",
@@ -40,7 +40,7 @@
     <script src="//fuelo.net/js/widget-bg.min.js"></script>
 
     <link rel="stylesheet" href="styles.css?v=20260830-1239">
-    <link rel="stylesheet" href="pages/styles/home-about.css?v=20260830-1239">
+    <link rel="stylesheet" href="pages/styles/home-about.css?v=20260902-hero">
     <link rel="stylesheet" href="pages/styles/home-nav-modern.css?v=20260830-1705">
 
     <meta property="og:title" content="Текущи цени на горивата в България">
@@ -61,7 +61,7 @@
           content="Актуални цени на бензин, дизел, пропан бутан и метан в България. Проверете цените по бензиностанции във вашия град и споделете информация за най-евтиното гориво.">
 
     <link rel="canonical" href="https://goriva.online/">
-    <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
+    <link rel="icon" type="image/png" href="/media/brand-mark.png">
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css">
@@ -292,17 +292,40 @@
 <main class="container">
     <section class="about-project">
         <div class="about-inner">
-            <h1 class="about-title how-title">Намери най-евтиното гориво близо до теб</h1>
-            <p class="about-desc">goriva.online събира реални цени на горивата в България, подадени директно от шофьори.</p>
-            <div class="about-points">
-                <span>⛽ Реални цени от потребители</span>
-                <span>📍 По области и градове</span>
-                <span>📊 Средни и най-ниски стойности</span>
+            <div class="about-visual" aria-hidden="true">
+                <div class="about-visual-bg"></div>
+                <div class="about-model-placeholder">
+                    <span>Добави рекламния аватар тук</span>
+                </div>
             </div>
-            <div class="about-cta">
-                <a href="#fuel-form" class="cta-primary">Сподели цена</a>
-                <a class="facebook-button-1" href="https://www.facebook.com/groups/960591129738525" target="_blank">Facebook общност</a>
-                <a class="instagram-button-1" href="https://www.instagram.com/goriva.online/" target="_blank" rel="noopener noreferrer">Последвайте ни в Instagram</a>
+
+            <div class="about-copy">
+                <div class="about-brand">
+                    <img src="media/brand-mark.png" alt="">
+                    <div class="about-brand-text">
+                        <strong>goriva.online</strong>
+                        <span>Актуални цени в България</span>
+                    </div>
+                </div>
+
+                <div class="about-badge">АКТУАЛНИ ЦЕНИ ОТ ШОФЬОРИ, ЗА ШОФЬОРИ</div>
+                <h1 class="about-title">Намери най-евтиното гориво близо до теб</h1>
+                <p class="about-desc">goriva.online събира реални цени на горивата в България, подадени директно от шофьори.</p>
+
+                <div class="about-points">
+                    <span>Реални цени от потребители<small>Актуална информация за деня</small></span>
+                    <span>По области и градове<small>Бензиностанции в цялата страна</small></span>
+                    <span>Средни и най-ниски стойности<small>Сравни и избери по-добра цена</small></span>
+                </div>
+
+                <div class="about-cta">
+                    <a href="#fuel-form" class="cta-primary">Сподели цена</a>
+                    <a class="facebook-button-1" href="https://www.facebook.com/groups/960591129738525" target="_blank">Facebook общност</a>
+                    <a class="instagram-button-1" href="https://www.instagram.com/goriva.online/" target="_blank" rel="noopener noreferrer">
+                        <span class="about-instagram-logo"><img src="media/brand-mark.png" alt=""></span>
+                        Последвайте ни в Instagram
+                    </a>
+                </div>
             </div>
         </div>
     </section>
