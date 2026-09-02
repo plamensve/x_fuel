@@ -37,6 +37,143 @@
     };
 })();
 
+// EKO fallback: the main price table intentionally requests only today's rows.
+// For a specific EKO station that has no row at all today, append the newest
+// historical rows available for that station (one latest row per fuel type).
+// The database is not modified: only the frontend response is enriched.
+(() => {
+    if (window.__GORIVA_EKO_FALLBACK__ || typeof window.fetch !== "function") return;
+    window.__GORIVA_EKO_FALLBACK__ = true;
+
+    const upstreamFetch = window.fetch.bind(window);
+    const EKO_NAME = "ЕКО";
+    const PAGE_SIZE = 1000;
+
+    const normalize = value => (value || "").toString().trim().toUpperCase();
+    const stationKey = row => normalize(row?.location) || `${normalize(row?.city)}|${normalize(row?.station)}`;
+    const fuelKey = row => `${stationKey(row)}|${normalize(row?.fuel)}`;
+
+    const isTodayFuelPricesRequest = (url, init) => {
+        const method = (init?.method || "GET").toUpperCase();
+        return method === "GET" &&
+            url.includes(".supabase.co/rest/v1/fuel_prices") &&
+            url.includes("created_at=gte.") &&
+            url.includes("created_at=lt.") &&
+            !url.includes("station=eq.");
+    };
+
+    const readHeader = (input, init, name) => {
+        const headers = new Headers(init?.headers || (typeof input !== "string" ? input?.headers : undefined) || {});
+        return headers.get(name) || "";
+    };
+
+    async function fetchAllHistoricalEko(baseUrl, apiKey, beforeIso) {
+        const rows = [];
+        let offset = 0;
+
+        while (true) {
+            const historyUrl =
+                `${baseUrl}/rest/v1/fuel_prices` +
+                `?select=*` +
+                `&station=eq.${encodeURIComponent(EKO_NAME)}` +
+                `&created_at=lt.${encodeURIComponent(beforeIso)}` +
+                `&order=created_at.desc` +
+                `&limit=${PAGE_SIZE}` +
+                `&offset=${offset}`;
+
+            const response = await upstreamFetch(historyUrl, {
+                headers: { apikey: apiKey }
+            });
+
+            if (!response.ok) {
+                throw new Error(`EKO fallback request failed: ${response.status}`);
+            }
+
+            const batch = await response.json();
+            rows.push(...batch);
+
+            if (batch.length < PAGE_SIZE) break;
+            offset += PAGE_SIZE;
+        }
+
+        return rows;
+    }
+
+    window.fetch = async (input, init = {}) => {
+        const url = typeof input === "string" ? input : input?.url || "";
+        const response = await upstreamFetch(input, init);
+
+        if (!response.ok || !isTodayFuelPricesRequest(url, init)) {
+            return response;
+        }
+
+        try {
+            const apiKey = readHeader(input, init, "apikey");
+            if (!apiKey) return response;
+
+            const todayRows = await response.clone().json();
+            if (!Array.isArray(todayRows)) return response;
+
+            const requestUrl = new URL(url);
+            const lowerBoundParam = [...requestUrl.searchParams.entries()]
+                .find(([key]) => key === "created_at")?.[1];
+
+            // PostgREST query is encoded as created_at=gte.<ISO>. Extract the
+            // lower bound directly from the URL because it marks today's start.
+            const gteMatch = decodeURIComponent(url).match(/created_at=gte\.([^&]+)/);
+            if (!gteMatch) return response;
+            const todayStartIso = gteMatch[1];
+
+            const origin = requestUrl.origin;
+            const historicalEko = await fetchAllHistoricalEko(origin, apiKey, todayStartIso);
+
+            const todayEkoStations = new Set(
+                todayRows
+                    .filter(row => normalize(row.station) === EKO_NAME)
+                    .map(stationKey)
+            );
+
+            const selectedFallbackRows = new Map();
+
+            // historicalEko is ordered newest first. The first row encountered
+            // for station+fuel is therefore the latest available observation.
+            for (const row of historicalEko) {
+                const key = stationKey(row);
+                if (!key || todayEkoStations.has(key)) continue;
+
+                const keyWithFuel = fuelKey(row);
+                if (!selectedFallbackRows.has(keyWithFuel)) {
+                    selectedFallbackRows.set(keyWithFuel, row);
+                }
+            }
+
+            if (selectedFallbackRows.size === 0) return response;
+
+            const displayTimestamp = new Date().toISOString();
+            const fallbackRows = [...selectedFallbackRows.values()].map(row => ({
+                ...row,
+                _eko_fallback: true,
+                _source_created_at: row.created_at,
+                created_at: displayTimestamp
+            }));
+
+            const merged = [...todayRows, ...fallbackRows];
+            const headers = new Headers(response.headers);
+            headers.set("Content-Type", "application/json");
+            headers.delete("Content-Length");
+
+            return new Response(JSON.stringify(merged), {
+                status: response.status,
+                statusText: response.statusText,
+                headers
+            });
+        } catch (error) {
+            console.warn("EKO latest-price fallback skipped", error);
+            return response;
+        }
+    };
+})();
+
 const gorivaLoadScript = (src, { id = "", defer = true } = {}) => {
     if (id && document.getElementById(id)) return Promise.resolve();
     const base = src.split("?")[0];
