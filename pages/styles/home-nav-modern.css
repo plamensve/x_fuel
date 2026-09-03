@@ -109,7 +109,9 @@
     }
 }
 
-/* Fuel price form: ultra-thin left gradient accent. */
+/* Fuel price form: force the left accent to render 10x thinner. */
 .price-submit-section .submit-card::before {
-    width: 0.1px !important;
+    width: 1px !important;
+    transform: scaleX(0.1) !important;
+    transform-origin: left center !important;
 }
