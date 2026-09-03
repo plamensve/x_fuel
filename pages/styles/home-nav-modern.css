@@ -108,3 +108,8 @@
         font-size: 15px;
     }
 }
+
+/* Fuel price form: ultra-thin left gradient accent. */
+.price-submit-section .submit-card::before {
+    width: 0.1px !important;
+}
