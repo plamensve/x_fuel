@@ -81,8 +81,8 @@
                         ${navItems.map(item => `<a href="${item.href}" data-symbol="${item.symbol}" ${isActive(item) ? 'class="is-active" aria-current="page"' : ""}><span class="goriva-nav-symbol" aria-hidden="true">${item.symbol}</span><span>${item.label}</span></a>`).join("")}
                     </div>
                 </nav>
-                <div class="goriva-global-actions">
-                    <a class="goriva-share-price-cta" href="/#fuel-form"><span aria-hidden="true">＋</span>Сподели цена</a>
+                <div class="goriva-global-actions" aria-label="Статус на данните">
+                    <span class="goriva-data-status" role="status"><span class="goriva-data-status-dot" aria-hidden="true"></span><span>Актуални данни днес</span></span>
                 </div>
             </div>`;
 
