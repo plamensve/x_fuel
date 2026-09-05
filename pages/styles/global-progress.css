@@ -1,3 +1,36 @@
 .goriva-scroll-progress{position:fixed;top:0;left:0;z-index:20000;width:100%;height:3px;pointer-events:none;background:rgba(15,23,42,.06)}
 .goriva-scroll-progress-bar{display:block;width:100%;height:100%;transform:scaleX(0);transform-origin:left center;background:linear-gradient(90deg,#2563eb 0%,#0ea5e9 48%,#22c55e 100%);box-shadow:0 1px 10px rgba(37,99,235,.32);will-change:transform}
+
+/* Global navigation: keep the user on-site and make the primary action visually distinct. */
+.goriva-facebook-cta{display:none!important}
+.goriva-global-actions{gap:0!important}
+.goriva-share-price-cta{
+  color:#fff!important;
+  border:1px solid rgba(255,255,255,.24)!important;
+  background:linear-gradient(135deg,#833ab4 0%,#c13584 28%,#e1306c 52%,#f56040 76%,#f77737 100%)!important;
+  box-shadow:0 10px 26px rgba(193,53,132,.24),inset 0 1px 0 rgba(255,255,255,.28)!important;
+  text-shadow:0 1px 1px rgba(44,10,48,.18)!important;
+}
+.goriva-share-price-cta>span{
+  color:#fff!important;
+  background:rgba(255,255,255,.16)!important;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)!important;
+}
+.goriva-share-price-cta:hover{
+  filter:saturate(1.08) brightness(1.03)!important;
+  box-shadow:0 14px 32px rgba(193,53,132,.31),inset 0 1px 0 rgba(255,255,255,.30)!important;
+}
+
+/* Daily prices date badge: force strong contrast even when older theme rules are cached. */
+html body.has-goriva-global-nav main.container>section.prices-card h2>span#prices-date,
+html body main.container>section.prices-card h2 span#prices-date{
+  color:#111827!important;
+  -webkit-text-fill-color:#111827!important;
+  background:linear-gradient(135deg,#fff7ed 0%,#fdf2f8 48%,#eef2ff 100%)!important;
+  border:1px solid #d8b4fe!important;
+  box-shadow:0 4px 12px rgba(126,34,206,.10)!important;
+  text-shadow:none!important;
+  opacity:1!important;
+}
+
 @media (prefers-reduced-motion:reduce){.goriva-scroll-progress-bar{transition:none!important}}
