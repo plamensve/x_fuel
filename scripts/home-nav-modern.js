@@ -111,26 +111,26 @@
             .home-top10-card.rank-1 .home-top4-ad-banner {
                 position: absolute;
                 z-index: 3;
-                top: 52%;
-                left: 57%;
+                top: calc(52% - 26px);
+                left: 58%;
                 right: auto;
                 transform: translate(-50%, -50%);
-                width: min(44%, 560px);
-                min-width: 360px;
-                padding: 22px 24px;
+                width: min(54%, 760px);
+                min-width: 430px;
+                padding: 22px 26px;
                 border: 1px solid rgba(96,165,250,.20);
                 border-radius: 18px;
                 background:
                     radial-gradient(circle at 100% 0%, rgba(59,130,246,.15), transparent 42%),
                     linear-gradient(145deg, rgba(15,29,47,.90), rgba(10,22,38,.95));
                 box-shadow: 0 16px 34px rgba(2,6,23,.20), inset 0 1px 0 rgba(255,255,255,.03);
-                text-align: center;
+                text-align: left;
             }
 
             .home-top4-ad-banner .home-top4-ad-label {
                 display: inline-flex;
                 align-items: center;
-                justify-content: center;
+                justify-content: flex-start;
                 gap: 6px;
                 margin-bottom: 10px;
                 padding: 6px 10px;
@@ -154,25 +154,52 @@
             }
 
             .home-top4-ad-banner p {
-                max-width: 500px;
-                margin: 0 auto;
+                max-width: none;
+                margin: 0;
                 color: #a8b8ca;
                 font-size: 13px;
                 line-height: 1.6;
             }
 
+            .home-top4-ad-banner .home-top4-ad-contact {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                gap: 8px 18px;
+                margin-top: 14px;
+                padding-top: 12px;
+                border-top: 1px solid rgba(148,163,184,.12);
+            }
+
+            .home-top4-ad-contact a,
+            .home-top4-ad-contact span {
+                color: #f8fafc;
+                font-size: 12px;
+                font-weight: 850;
+                letter-spacing: .005em;
+                text-decoration: none;
+            }
+
+            .home-top4-ad-contact a:hover {
+                color: #93c5fd;
+            }
+
             .home-top4-ad-banner .home-top4-ad-accent {
                 display: inline-block;
-                margin-top: 12px;
+                margin-top: 11px;
                 color: #93c5fd;
                 font-size: 11px;
                 font-weight: 850;
             }
 
-            /* Give the winner badge and selected fuel clear visual separation. */
+            /* Keep the selected product in its original right-side position. */
             .home-top10-card.rank-1 .home-top10-fuel-pill {
-                position: relative;
-                top: 32px;
+                position: static;
+                top: auto;
+                right: auto;
+                justify-self: end;
+                align-self: center;
+                margin: 0;
                 padding: 8px 13px;
                 font-size: 12px;
                 line-height: 1;
@@ -182,12 +209,12 @@
                 background: rgba(34,197,94,.085);
             }
 
-            @media (max-width: 1100px) {
+            @media (max-width: 1180px) {
                 .home-top10-card.rank-1 .home-top4-ad-banner {
-                    left: 60%;
-                    width: min(43%, 500px);
-                    min-width: 320px;
-                    padding: 19px 20px;
+                    left: 59%;
+                    width: min(52%, 650px);
+                    min-width: 390px;
+                    padding: 20px 22px;
                 }
 
                 .home-top4-ad-banner strong { font-size: 20px; }
@@ -221,8 +248,16 @@
                 .home-top4-ad-banner strong { font-size: 18px; }
                 .home-top4-ad-banner p { font-size: 12px; }
 
+                .home-top4-ad-contact {
+                    flex-direction: column;
+                    align-items: flex-start !important;
+                    gap: 6px !important;
+                }
+
+                .home-top4-ad-contact a,
+                .home-top4-ad-contact span { font-size: 11px; }
+
                 .home-top10-card.rank-1 .home-top10-fuel-pill {
-                    top: 22px;
                     padding: 7px 11px;
                     font-size: 11px;
                 }
@@ -242,6 +277,10 @@
             <span class="home-top4-ad-label">Реклама</span>
             <strong>Място за Вашата реклама</strong>
             <p>Предлагаме продуктово позициониране и брандирано присъствие пред аудитория, която активно сравнява цени и услуги за автомобили.</p>
+            <div class="home-top4-ad-contact">
+                <a href="mailto:svetoslavov.plamen@gmail.com">svetoslavov.plamen@gmail.com</a>
+                <span>59883427273</span>
+            </div>
             <span class="home-top4-ad-accent">Продуктово позициониране · Бранд присъствие</span>
         `;
 
