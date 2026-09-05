@@ -49,16 +49,16 @@
         const header = document.createElement("div");
         header.className = "pro-map-header";
         header.innerHTML = `
-            <div class="pro-map-heading"><span class="pro-map-pin">⌖</span><div><h2>Карта на бензиностанциите</h2><p>Кликни върху клъстер или маркер за повече информация</p></div></div>
-            <div class="pro-map-tools"><div class="pro-map-chip">Карта на България</div><div class="pro-map-legend" aria-label="Легенда за клъстерите"><span><i class="legend-dot low"></i> 1–20</span><span><i class="legend-dot mid"></i> 21–100</span><span><i class="legend-dot high"></i> 101+</span></div></div>`;
+            <div class="pro-map-heading"><span class="pro-map-pin">⌖</span><div><h2>Карта на бензиностанциите EKO</h2><p>Картата показва само обектите на EKO в България. Кликни върху маркер за адрес, телефон, предлагани горива и актуални цени.</p></div></div>
+            <div class="pro-map-tools"><div class="pro-map-chip">Само обекти EKO</div><div class="pro-map-legend" aria-label="Легенда за клъстерите"><span><i class="legend-dot low"></i> 1–20</span><span><i class="legend-dot mid"></i> 21–100</span><span><i class="legend-dot high"></i> 101+</span></div></div>`;
 
         const stats = document.createElement("aside");
         stats.className = "pro-map-stats";
         stats.innerHTML = `
-            <div><h3>Обща статистика</h3><p>Данни за картата</p></div>
+            <div><h3>Обща статистика</h3><p>Данни за EKO картата</p></div>
             <div class="map-stat-grid">
-                <div class="map-stat-card"><span class="map-stat-icon">⛽</span><div><span class="map-stat-label">Бензиностанции</span><strong class="map-stat-value" id="map-stat-stations">—</strong><span class="map-stat-note">На картата</span></div></div>
-                <div class="map-stat-card"><span class="map-stat-icon">▤</span><div><span class="map-stat-label">Цени днес</span><strong class="map-stat-value" id="map-stat-prices">—</strong><span class="map-stat-note">Записи в базата</span></div></div>
+                <div class="map-stat-card"><span class="map-stat-icon">⛽</span><div><span class="map-stat-label">EKO обекти</span><strong class="map-stat-value" id="map-stat-stations">—</strong><span class="map-stat-note">На картата</span></div></div>
+                <div class="map-stat-card"><span class="map-stat-icon">▤</span><div><span class="map-stat-label">EKO цени днес</span><strong class="map-stat-value" id="map-stat-prices">—</strong><span class="map-stat-note">Записи в базата</span></div></div>
                 <div class="map-stat-card"><span class="map-stat-icon">⌖</span><div><span class="map-stat-label">Градове</span><strong class="map-stat-value" id="map-stat-cities">—</strong><span class="map-stat-note">Покритие на картата</span></div></div>
                 <div class="map-stat-card"><span class="map-stat-icon">◷</span><div><span class="map-stat-label">Последна проверка</span><strong class="map-stat-value" id="map-stat-updated">—</strong><span class="map-stat-note" id="map-stat-updated-note">Зареждане при показване…</span></div></div>
             </div>
@@ -75,6 +75,18 @@
 
     const formatNumber = value => new Intl.NumberFormat("bg-BG").format(value);
 
+    const guessCity = station => {
+        const address = String(station?.address || "").trim();
+        const firstAddressPart = address.split(",")[0]?.trim() || "";
+        if (firstAddressPart && !/^(АМ|AM|Главен път|8-ми км|Магистрала)/i.test(firstAddressPart)) {
+            return firstAddressPart.replace(/^гр\.\s*/i, "").replace(/^с\.\s*/i, "").trim();
+        }
+        return String(station?.name || "")
+            .replace(/^ЕКО\s+\d+\s*/i, "")
+            .split(/[,-]/)[0]
+            .trim();
+    };
+
     async function loadMapStats() {
         if (window.__GORIVA_MAP_STATS_LOADING__) return;
         window.__GORIVA_MAP_STATS_LOADING__ = true;
@@ -85,32 +97,32 @@
         const updatedNoteEl = document.getElementById("map-stat-updated-note");
 
         try {
-            const response = await fetch("/data/export.geojson", { cache: "force-cache" });
-            if (!response.ok) throw new Error("GeoJSON request failed");
+            const response = await fetch("/data/eko_stations.json", { cache: "force-cache" });
+            if (!response.ok) throw new Error("EKO registry request failed");
             const data = await response.json();
-            const features = Array.isArray(data.features) ? data.features : [];
-            const cities = new Set();
-            features.forEach(feature => {
-                const p = feature.properties || {};
-                const city = p["addr:city"] || p["addr:place"] || p.city || "";
-                if (String(city).trim()) cities.add(String(city).trim().toLocaleLowerCase("bg-BG"));
-            });
-            if (stationsEl) stationsEl.textContent = formatNumber(features.length);
+            const stations = Object.values(data?.stations || {});
+            const cities = new Set(
+                stations
+                    .map(guessCity)
+                    .filter(Boolean)
+                    .map(city => city.toLocaleLowerCase("bg-BG"))
+            );
+            if (stationsEl) stationsEl.textContent = formatNumber(stations.length);
             if (citiesEl) citiesEl.textContent = formatNumber(cities.size);
         } catch (error) {
-            console.warn("Map stats unavailable", error);
+            console.warn("EKO map stats unavailable", error);
         }
 
         try {
             const now = new Date();
             const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0).toISOString();
             const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0).toISOString();
-            const url = `${SUPABASE_URL}/rest/v1/fuel_prices?select=id&created_at=gte.${encodeURIComponent(start)}&created_at=lt.${encodeURIComponent(end)}&limit=1`;
+            const url = `${SUPABASE_URL}/rest/v1/fuel_prices?select=id&station=eq.${encodeURIComponent("ЕКО")}&created_at=gte.${encodeURIComponent(start)}&created_at=lt.${encodeURIComponent(end)}&limit=1`;
             const response = await fetch(url, { headers: { apikey: SUPABASE_KEY, Prefer: "count=exact" } });
             const total = Number((response.headers.get("content-range") || "").split("/")[1]);
             if (pricesEl && Number.isFinite(total)) pricesEl.textContent = formatNumber(total);
         } catch (error) {
-            console.warn("Price stats unavailable", error);
+            console.warn("EKO price stats unavailable", error);
         }
 
         const now = new Date();
