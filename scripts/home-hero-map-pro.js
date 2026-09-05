@@ -9,6 +9,77 @@
         link.rel = "stylesheet";
         link.href = "/pages/styles/home-hero-map-pro.css?v=20260831-perf1";
         document.head.appendChild(link);
+
+        if (!document.getElementById("eko-map-promo-css")) {
+            const promoStyle = document.createElement("style");
+            promoStyle.id = "eko-map-promo-css";
+            promoStyle.textContent = `
+                .pro-home-hero .eko-map-promo {
+                    max-width: 850px;
+                    margin: 16px auto 0;
+                    padding: 15px 17px;
+                    display: grid;
+                    grid-template-columns: 42px minmax(0, 1fr) auto;
+                    align-items: center;
+                    gap: 14px;
+                    border: 1px solid rgba(37, 99, 235, .14);
+                    border-radius: 14px;
+                    background: linear-gradient(135deg, rgba(239, 246, 255, .96), rgba(240, 253, 244, .92));
+                    color: #172033;
+                    text-align: left;
+                    text-decoration: none;
+                    box-shadow: 0 10px 28px rgba(15, 23, 42, .07);
+                    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+                }
+                .pro-home-hero .eko-map-promo:hover {
+                    transform: translateY(-2px);
+                    border-color: rgba(37, 99, 235, .26);
+                    box-shadow: 0 14px 32px rgba(15, 23, 42, .11);
+                }
+                .eko-map-promo-icon {
+                    width: 42px;
+                    height: 42px;
+                    display: grid;
+                    place-items: center;
+                    border-radius: 12px;
+                    background: #e8f1ff;
+                    color: #2563eb;
+                    font-size: 21px;
+                    font-weight: 800;
+                }
+                .eko-map-promo-copy strong,
+                .eko-map-promo-copy small {
+                    display: block;
+                }
+                .eko-map-promo-copy strong {
+                    font-size: 14px;
+                    line-height: 1.3;
+                }
+                .eko-map-promo-copy small {
+                    margin-top: 4px;
+                    color: #64748b;
+                    font-size: 11px;
+                    line-height: 1.45;
+                }
+                .eko-map-promo-action {
+                    color: #2563eb;
+                    font-size: 12px;
+                    font-weight: 850;
+                    white-space: nowrap;
+                }
+                @media (max-width: 760px) {
+                    .pro-home-hero .eko-map-promo {
+                        max-width: 520px;
+                        grid-template-columns: 40px minmax(0, 1fr);
+                    }
+                    .eko-map-promo-action {
+                        grid-column: 2;
+                        white-space: normal;
+                    }
+                }
+            `;
+            document.head.appendChild(promoStyle);
+        }
     }
 
     function buildHero() {
@@ -29,8 +100,15 @@
                 <div class="about-cta">
                     <a href="#fuel-form" class="cta-primary">⛽ Сподели цена</a>
                     <a class="facebook-button-1" href="https://www.facebook.com/groups/960591129738525" target="_blank" rel="noopener noreferrer">f&nbsp;&nbsp;Facebook общност</a>
-                    <a class="instagram-button-1" href="https://www.instagram.com/goriva.online/" target="_blank" rel="noopener noreferrer">◎&nbsp;&nbsp;Последвайте ни в Instagram</a>
                 </div>
+                <a class="eko-map-promo" href="#station-map">
+                    <span class="eko-map-promo-icon" aria-hidden="true">⌖</span>
+                    <span class="eko-map-promo-copy">
+                        <strong>102 EKO бензиностанции на едно място</strong>
+                        <small>Виж къде се намират обектите, какви горива предлагат и какви са актуалните им цени.</small>
+                    </span>
+                    <span class="eko-map-promo-action">Разгледай картата →</span>
+                </a>
             </div>`;
     }
 
@@ -50,19 +128,18 @@
         header.className = "pro-map-header";
         header.innerHTML = `
             <div class="pro-map-heading"><span class="pro-map-pin">⌖</span><div><h2>Карта на бензиностанциите EKO</h2><p>Картата показва само обектите на EKO в България. Кликни върху маркер за адрес, телефон, предлагани горива и актуални цени.</p></div></div>
-            <div class="pro-map-tools"><div class="pro-map-chip">Само обекти EKO</div><div class="pro-map-legend" aria-label="Легенда за клъстерите"><span><i class="legend-dot low"></i> 1–20</span><span><i class="legend-dot mid"></i> 21–100</span><span><i class="legend-dot high"></i> 101+</span></div></div>`;
+            <div class="pro-map-tools"><div class="pro-map-legend" aria-label="Легенда за клъстерите"><span><i class="legend-dot low"></i> 1–20</span><span><i class="legend-dot mid"></i> 21–100</span><span><i class="legend-dot high"></i> 101+</span></div></div>`;
 
         const stats = document.createElement("aside");
         stats.className = "pro-map-stats";
         stats.innerHTML = `
-            <div><h3>Обща статистика</h3><p>Данни за EKO картата</p></div>
+            <div><h3>Обща статистика</h3></div>
             <div class="map-stat-grid">
                 <div class="map-stat-card"><span class="map-stat-icon">⛽</span><div><span class="map-stat-label">EKO обекти</span><strong class="map-stat-value" id="map-stat-stations">—</strong><span class="map-stat-note">На картата</span></div></div>
                 <div class="map-stat-card"><span class="map-stat-icon">▤</span><div><span class="map-stat-label">EKO цени днес</span><strong class="map-stat-value" id="map-stat-prices">—</strong><span class="map-stat-note">Записи в базата</span></div></div>
                 <div class="map-stat-card"><span class="map-stat-icon">⌖</span><div><span class="map-stat-label">Градове</span><strong class="map-stat-value" id="map-stat-cities">—</strong><span class="map-stat-note">Покритие на картата</span></div></div>
                 <div class="map-stat-card"><span class="map-stat-icon">◷</span><div><span class="map-stat-label">Последна проверка</span><strong class="map-stat-value" id="map-stat-updated">—</strong><span class="map-stat-note" id="map-stat-updated-note">Зареждане при показване…</span></div></div>
-            </div>
-            <a class="map-stats-link" href="#prices-container">Виж актуалните цени →</a>`;
+            </div>`;
 
         const layout = document.createElement("div");
         layout.className = "pro-map-layout";
