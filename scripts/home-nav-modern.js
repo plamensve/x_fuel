@@ -111,68 +111,99 @@
             .home-top10-card.rank-1 .home-top4-ad-banner {
                 position: absolute;
                 z-index: 3;
-                top: 78px;
-                right: 24px;
-                width: min(38%, 430px);
-                min-width: 300px;
-                padding: 16px 17px;
-                border: 1px solid rgba(96,165,250,.18);
-                border-radius: 15px;
+                top: 52%;
+                left: 57%;
+                right: auto;
+                transform: translate(-50%, -50%);
+                width: min(44%, 560px);
+                min-width: 360px;
+                padding: 22px 24px;
+                border: 1px solid rgba(96,165,250,.20);
+                border-radius: 18px;
                 background:
-                    radial-gradient(circle at 100% 0%, rgba(59,130,246,.13), transparent 42%),
-                    linear-gradient(145deg, rgba(15,29,47,.86), rgba(10,22,38,.92));
-                box-shadow: 0 12px 28px rgba(2,6,23,.16), inset 0 1px 0 rgba(255,255,255,.025);
-                text-align: left;
+                    radial-gradient(circle at 100% 0%, rgba(59,130,246,.15), transparent 42%),
+                    linear-gradient(145deg, rgba(15,29,47,.90), rgba(10,22,38,.95));
+                box-shadow: 0 16px 34px rgba(2,6,23,.20), inset 0 1px 0 rgba(255,255,255,.03);
+                text-align: center;
             }
 
             .home-top4-ad-banner .home-top4-ad-label {
                 display: inline-flex;
                 align-items: center;
+                justify-content: center;
                 gap: 6px;
-                margin-bottom: 8px;
-                padding: 5px 8px;
-                border: 1px solid rgba(250,204,21,.16);
+                margin-bottom: 10px;
+                padding: 6px 10px;
+                border: 1px solid rgba(250,204,21,.18);
                 border-radius: 999px;
                 color: #fde68a;
-                background: rgba(250,204,21,.055);
-                font-size: 9px;
+                background: rgba(250,204,21,.065);
+                font-size: 10px;
                 font-weight: 900;
-                letter-spacing: .09em;
+                letter-spacing: .10em;
                 text-transform: uppercase;
             }
 
             .home-top4-ad-banner strong {
                 display: block;
-                margin: 0 0 6px;
+                margin: 0 0 8px;
                 color: #f8fafc;
-                font-size: 17px;
-                line-height: 1.25;
-                letter-spacing: -.015em;
+                font-size: clamp(21px, 2vw, 26px);
+                line-height: 1.18;
+                letter-spacing: -.02em;
             }
 
             .home-top4-ad-banner p {
-                margin: 0;
-                color: #9fb0c2;
-                font-size: 11px;
-                line-height: 1.55;
+                max-width: 500px;
+                margin: 0 auto;
+                color: #a8b8ca;
+                font-size: 13px;
+                line-height: 1.6;
             }
 
             .home-top4-ad-banner .home-top4-ad-accent {
                 display: inline-block;
-                margin-top: 10px;
+                margin-top: 12px;
                 color: #93c5fd;
-                font-size: 10px;
-                font-weight: 800;
+                font-size: 11px;
+                font-weight: 850;
+            }
+
+            /* Give the winner badge and selected fuel clear visual separation. */
+            .home-top10-card.rank-1 .home-top10-fuel-pill {
+                position: relative;
+                top: 32px;
+                padding: 8px 13px;
+                font-size: 12px;
+                line-height: 1;
+                font-weight: 900;
+                letter-spacing: .025em;
+                border-color: rgba(34,197,94,.22);
+                background: rgba(34,197,94,.085);
+            }
+
+            @media (max-width: 1100px) {
+                .home-top10-card.rank-1 .home-top4-ad-banner {
+                    left: 60%;
+                    width: min(43%, 500px);
+                    min-width: 320px;
+                    padding: 19px 20px;
+                }
+
+                .home-top4-ad-banner strong { font-size: 20px; }
+                .home-top4-ad-banner p { font-size: 12px; }
             }
 
             @media (max-width: 980px) {
                 .home-top10-card.rank-1 .home-top4-ad-banner {
                     position: relative;
                     top: auto;
+                    left: auto;
                     right: auto;
+                    transform: none;
                     width: 100%;
                     min-width: 0;
-                    margin-top: 18px;
+                    margin-top: 22px;
                 }
 
                 .home-top10-card.rank-1 .home-top10-card-copy h3,
@@ -183,11 +214,18 @@
 
             @media (max-width: 560px) {
                 .home-top10-card.rank-1 .home-top4-ad-banner {
-                    padding: 14px;
-                    border-radius: 13px;
+                    padding: 16px;
+                    border-radius: 14px;
                 }
 
-                .home-top4-ad-banner strong { font-size: 15px; }
+                .home-top4-ad-banner strong { font-size: 18px; }
+                .home-top4-ad-banner p { font-size: 12px; }
+
+                .home-top10-card.rank-1 .home-top10-fuel-pill {
+                    top: 22px;
+                    padding: 7px 11px;
+                    font-size: 11px;
+                }
             }
         `;
         document.head.appendChild(style);
