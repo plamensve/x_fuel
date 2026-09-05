@@ -56,17 +56,18 @@ main.container > .prices-card > h2 {
 main.container > .prices-card #prices-date {
     display: inline-flex !important;
     align-items: center !important;
-    min-height: 31px !important;
-    margin-left: 9px !important;
-    padding: 0 11px !important;
+    min-height: 36px !important;
+    margin-left: 10px !important;
+    padding: 0 14px !important;
     color: #111827 !important;
     -webkit-text-fill-color: #111827 !important;
     background: linear-gradient(135deg, #f6e9ff 0%, #fff0f4 48%, #fff4df 100%) !important;
     border: 1px solid rgba(168, 85, 247, .28) !important;
     border-radius: 999px !important;
     box-shadow: 0 5px 14px rgba(15,23,42,.06) !important;
-    font-size: 12px !important;
-    font-weight: 850 !important;
+    font-size: 14px !important;
+    font-weight: 900 !important;
+    line-height: 1 !important;
     vertical-align: middle !important;
 }
 
@@ -265,24 +266,26 @@ main.container > .prices-card .price-values {
 }
 
 main.container > .prices-card .price-badge {
-    min-height: 62px !important;
+    min-height: 68px !important;
     display: flex !important;
     flex-direction: column !important;
     align-items: center !important;
     justify-content: center !important;
-    gap: 4px !important;
-    padding: 9px !important;
+    gap: 5px !important;
+    padding: 10px !important;
     color: #536276 !important;
     background: #e9eef4 !important;
     border: 1px solid #d1d9e3 !important;
     border-radius: 11px !important;
-    font-size: 12px !important;
+    font-size: 14px !important;
     line-height: 1.2 !important;
+    font-weight: 650 !important;
 }
 
 main.container > .prices-card .price-badge strong {
     color: #111827 !important;
-    font-size: 14px !important;
+    font-size: 17px !important;
+    line-height: 1.1 !important;
     font-weight: 900 !important;
 }
 
@@ -381,6 +384,8 @@ main.container > .prices-card #pagination .active-page {
 
     main.container > .prices-card #prices-date {
         margin: 8px 0 0 !important;
+        min-height: 34px !important;
+        font-size: 13px !important;
     }
 
     main.container > .prices-card .view-toggle {
@@ -404,5 +409,14 @@ main.container > .prices-card #pagination .active-page {
 
     main.container > .prices-card .price-card {
         padding: 18px !important;
+    }
+
+    main.container > .prices-card .price-badge {
+        min-height: 66px !important;
+        font-size: 13px !important;
+    }
+
+    main.container > .prices-card .price-badge strong {
+        font-size: 16px !important;
     }
 }
