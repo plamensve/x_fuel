@@ -3,83 +3,265 @@
     const SUPABASE_KEY = "sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH";
 
     function ensureStyles() {
-        if (document.getElementById("home-hero-map-pro-css")) return;
-        const link = document.createElement("link");
-        link.id = "home-hero-map-pro-css";
-        link.rel = "stylesheet";
-        link.href = "/pages/styles/home-hero-map-pro.css?v=20260831-perf1";
-        document.head.appendChild(link);
+        if (!document.getElementById("home-hero-map-pro-css")) {
+            const link = document.createElement("link");
+            link.id = "home-hero-map-pro-css";
+            link.rel = "stylesheet";
+            link.href = "/pages/styles/home-hero-map-pro.css?v=20260905-eko-redesign";
+            document.head.appendChild(link);
+        }
 
-        if (!document.getElementById("eko-map-promo-css")) {
-            const promoStyle = document.createElement("style");
-            promoStyle.id = "eko-map-promo-css";
-            promoStyle.textContent = `
-                .pro-home-hero .eko-map-promo {
-                    max-width: 850px;
-                    margin: 16px auto 0;
-                    padding: 15px 17px;
-                    display: grid;
-                    grid-template-columns: 42px minmax(0, 1fr) auto;
-                    align-items: center;
-                    gap: 14px;
-                    border: 1px solid rgba(37, 99, 235, .14);
-                    border-radius: 14px;
-                    background: linear-gradient(135deg, rgba(239, 246, 255, .96), rgba(240, 253, 244, .92));
-                    color: #172033;
-                    text-align: left;
-                    text-decoration: none;
-                    box-shadow: 0 10px 28px rgba(15, 23, 42, .07);
-                    transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+        if (!document.getElementById("eko-map-redesign-css")) {
+            const style = document.createElement("style");
+            style.id = "eko-map-redesign-css";
+            style.textContent = `
+                .header-bar .facebook-button { display: none !important; }
+
+                .pro-home-hero .about-cta {
+                    justify-content: center;
                 }
+
+                .pro-home-hero .eko-map-promo {
+                    position: relative;
+                    overflow: hidden;
+                    max-width: 850px;
+                    margin: 18px auto 0;
+                    padding: 2px;
+                    display: block;
+                    border-radius: 17px;
+                    background: linear-gradient(120deg, #833ab4 0%, #c13584 28%, #e1306c 50%, #fd1d1d 70%, #f77737 86%, #fcb045 100%);
+                    text-decoration: none;
+                    box-shadow: 0 14px 34px rgba(131, 58, 180, .18);
+                    transition: transform .2s ease, box-shadow .2s ease;
+                }
+
                 .pro-home-hero .eko-map-promo:hover {
                     transform: translateY(-2px);
-                    border-color: rgba(37, 99, 235, .26);
-                    box-shadow: 0 14px 32px rgba(15, 23, 42, .11);
+                    box-shadow: 0 18px 42px rgba(193, 53, 132, .24);
                 }
+
+                .eko-map-promo-inner {
+                    min-height: 82px;
+                    padding: 14px 15px;
+                    display: grid;
+                    grid-template-columns: 46px minmax(0, 1fr) auto;
+                    align-items: center;
+                    gap: 15px;
+                    border-radius: 15px;
+                    background: rgba(255,255,255,.97);
+                    text-align: left;
+                }
+
                 .eko-map-promo-icon {
-                    width: 42px;
-                    height: 42px;
+                    width: 46px;
+                    height: 46px;
                     display: grid;
                     place-items: center;
-                    border-radius: 12px;
-                    background: #e8f1ff;
-                    color: #2563eb;
+                    border-radius: 13px;
+                    color: #fff;
+                    background: linear-gradient(135deg, #833ab4, #e1306c 58%, #f77737);
                     font-size: 21px;
-                    font-weight: 800;
+                    font-weight: 900;
+                    box-shadow: 0 8px 18px rgba(193,53,132,.22);
                 }
+
                 .eko-map-promo-copy strong,
-                .eko-map-promo-copy small {
-                    display: block;
-                }
+                .eko-map-promo-copy small { display: block; }
+
                 .eko-map-promo-copy strong {
-                    font-size: 14px;
+                    color: #172033;
+                    font-size: 15px;
                     line-height: 1.3;
                 }
+
                 .eko-map-promo-copy small {
                     margin-top: 4px;
                     color: #64748b;
                     font-size: 11px;
-                    line-height: 1.45;
+                    line-height: 1.5;
                 }
+
                 .eko-map-promo-action {
-                    color: #2563eb;
+                    min-height: 42px;
+                    padding: 0 16px;
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 7px;
+                    border-radius: 12px;
+                    color: #fff;
+                    background: linear-gradient(120deg, #833ab4 0%, #c13584 35%, #e1306c 62%, #f77737 100%);
+                    box-shadow: 0 9px 20px rgba(193,53,132,.22);
                     font-size: 12px;
                     font-weight: 850;
                     white-space: nowrap;
+                    transition: transform .18s ease, box-shadow .18s ease;
                 }
+
+                .eko-map-promo:hover .eko-map-promo-action {
+                    transform: translateX(2px);
+                    box-shadow: 0 11px 24px rgba(193,53,132,.28);
+                }
+
+                .station-map-section.pro-station-map {
+                    border: 2px solid transparent !important;
+                    background:
+                        linear-gradient(145deg, #0b1b30 0%, #071424 100%) padding-box,
+                        linear-gradient(125deg, #833ab4 0%, #c13584 28%, #e1306c 52%, #fd1d1d 72%, #f77737 88%, #fcb045 100%) border-box !important;
+                    box-shadow: 0 20px 50px rgba(131,58,180,.17), 0 16px 42px rgba(15,23,42,.18) !important;
+                    scroll-margin-top: 14px;
+                }
+
+                .pro-map-layout {
+                    align-items: stretch;
+                }
+
+                .pro-map-stats {
+                    display: flex !important;
+                    flex-direction: column;
+                    gap: 14px;
+                    padding: 16px !important;
+                }
+
+                .eko-panel-head {
+                    margin: 0;
+                    padding: 0 1px 2px;
+                }
+
+                .eko-panel-eyebrow {
+                    display: block;
+                    margin-bottom: 5px;
+                    color: #f0abfc;
+                    font-size: 9px;
+                    font-weight: 850;
+                    letter-spacing: .1em;
+                    text-transform: uppercase;
+                }
+
+                .eko-panel-head h3 {
+                    margin: 0 0 5px;
+                    font-size: 15px;
+                    color: #f8fafc;
+                }
+
+                .eko-panel-head p {
+                    margin: 0;
+                    color: #8fa2b8;
+                    font-size: 10px;
+                    line-height: 1.45;
+                }
+
+                .map-stat-grid {
+                    display: grid;
+                    grid-template-columns: 1fr;
+                    gap: 8px !important;
+                    margin: 0;
+                }
+
+                .map-stat-card {
+                    min-height: 64px !important;
+                    margin: 0 !important;
+                    padding: 10px 11px !important;
+                }
+
+                .eko-map-help {
+                    margin: 0;
+                    padding: 12px;
+                    border: 1px solid rgba(244,114,182,.16);
+                    border-radius: 12px;
+                    background: linear-gradient(145deg, rgba(131,58,180,.11), rgba(225,48,108,.06));
+                }
+
+                .eko-map-help strong {
+                    display: block;
+                    margin: 0 0 8px;
+                    color: #f8fafc;
+                    font-size: 11px;
+                }
+
+                .eko-map-help-list {
+                    display: grid;
+                    gap: 7px;
+                    margin: 0;
+                    padding: 0;
+                    list-style: none;
+                }
+
+                .eko-map-help-list li {
+                    display: grid;
+                    grid-template-columns: 22px minmax(0, 1fr);
+                    gap: 7px;
+                    align-items: start;
+                    color: #b8c5d4;
+                    font-size: 10px;
+                    line-height: 1.4;
+                }
+
+                .eko-map-help-list i {
+                    width: 22px;
+                    height: 22px;
+                    display: grid;
+                    place-items: center;
+                    border-radius: 7px;
+                    background: rgba(255,255,255,.06);
+                    font-style: normal;
+                    font-size: 11px;
+                }
+
+                .eko-map-freshness {
+                    margin-top: auto;
+                    padding-top: 11px;
+                    border-top: 1px solid rgba(148,163,184,.12);
+                    color: #8091a6;
+                    font-size: 9px;
+                    line-height: 1.45;
+                }
+
+                .eko-map-freshness strong {
+                    color: #d9e4ef;
+                    font-weight: 750;
+                }
+
+                @media (max-width: 980px) {
+                    .pro-map-stats { display: block !important; }
+                    .eko-panel-head { margin-bottom: 12px; }
+                    .map-stat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+                    .eko-map-help { margin-top: 12px; }
+                    .eko-map-freshness { margin-top: 12px; }
+                }
+
                 @media (max-width: 760px) {
-                    .pro-home-hero .eko-map-promo {
-                        max-width: 520px;
-                        grid-template-columns: 40px minmax(0, 1fr);
+                    .pro-home-hero .eko-map-promo { max-width: 520px; }
+                    .eko-map-promo-inner {
+                        grid-template-columns: 42px minmax(0, 1fr);
+                        gap: 12px;
                     }
+                    .eko-map-promo-icon { width: 42px; height: 42px; }
                     .eko-map-promo-action {
                         grid-column: 2;
-                        white-space: normal;
+                        width: fit-content;
+                        min-height: 38px;
+                        margin-top: 2px;
+                        padding: 0 13px;
                     }
+                    .map-stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+                    .map-stat-card:last-child { grid-column: 1 / -1; }
+                }
+
+                @media (max-width: 460px) {
+                    .eko-map-promo-inner { padding: 12px; }
+                    .eko-map-promo-copy strong { font-size: 13px; }
+                    .eko-map-promo-copy small { font-size: 10px; }
+                    .map-stat-grid { grid-template-columns: 1fr; }
+                    .map-stat-card:last-child { grid-column: auto; }
                 }
             `;
-            document.head.appendChild(promoStyle);
+            document.head.appendChild(style);
         }
+    }
+
+    function simplifyHeader() {
+        document.querySelector(".header-bar .facebook-button")?.remove();
     }
 
     function buildHero() {
@@ -99,17 +281,35 @@
                 </div>
                 <div class="about-cta">
                     <a href="#fuel-form" class="cta-primary">⛽ Сподели цена</a>
-                    <a class="facebook-button-1" href="https://www.facebook.com/groups/960591129738525" target="_blank" rel="noopener noreferrer">f&nbsp;&nbsp;Facebook общност</a>
                 </div>
-                <a class="eko-map-promo" href="#station-map">
-                    <span class="eko-map-promo-icon" aria-hidden="true">⌖</span>
-                    <span class="eko-map-promo-copy">
-                        <strong>102 EKO бензиностанции на едно място</strong>
-                        <small>Виж къде се намират обектите, какви горива предлагат и какви са актуалните им цени.</small>
+                <a class="eko-map-promo" href="#station-map" aria-label="Разгледай картата на бензиностанциите EKO">
+                    <span class="eko-map-promo-inner">
+                        <span class="eko-map-promo-icon" aria-hidden="true">⌖</span>
+                        <span class="eko-map-promo-copy">
+                            <strong><span id="eko-promo-count">102</span> EKO бензиностанции на едно място</strong>
+                            <small>Виж къде се намират обектите, какви горива предлагат и какви са актуалните им цени.</small>
+                        </span>
+                        <span class="eko-map-promo-action">Разгледай картата <span aria-hidden="true">→</span></span>
                     </span>
-                    <span class="eko-map-promo-action">Разгледай картата →</span>
                 </a>
             </div>`;
+
+        hero.querySelector(".eko-map-promo")?.addEventListener("click", event => {
+            event.preventDefault();
+            const section = document.querySelector(".station-map-section");
+            if (!section) return;
+
+            const rect = section.getBoundingClientRect();
+            const viewport = window.innerHeight || document.documentElement.clientHeight;
+            const sectionHeight = rect.height;
+            const topPadding = sectionHeight <= viewport - 24 ? 12 : 8;
+            const targetTop = window.scrollY + rect.top - topPadding;
+
+            window.scrollTo({
+                top: Math.max(0, targetTop),
+                behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+            });
+        });
     }
 
     function buildMapShell() {
@@ -127,19 +327,31 @@
         const header = document.createElement("div");
         header.className = "pro-map-header";
         header.innerHTML = `
-            <div class="pro-map-heading"><span class="pro-map-pin">⌖</span><div><h2>Карта на бензиностанциите EKO</h2><p>Картата показва само обектите на EKO в България. Кликни върху маркер за адрес, телефон, предлагани горива и актуални цени.</p></div></div>
+            <div class="pro-map-heading"><span class="pro-map-pin">⌖</span><div><h2>Карта на бензиностанциите EKO</h2><p>Кликни върху маркер за точен адрес, предлагани горива и актуални цени за деня.</p></div></div>
             <div class="pro-map-tools"><div class="pro-map-legend" aria-label="Легенда за клъстерите"><span><i class="legend-dot low"></i> 1–20</span><span><i class="legend-dot mid"></i> 21–100</span><span><i class="legend-dot high"></i> 101+</span></div></div>`;
 
         const stats = document.createElement("aside");
         stats.className = "pro-map-stats";
         stats.innerHTML = `
-            <div><h3>Обща статистика</h3></div>
+            <div class="eko-panel-head">
+                <span class="eko-panel-eyebrow">EKO · България</span>
+                <h3>Полезна информация</h3>
+                <p>Актуален преглед на обектите и ценовите записи, които виждаш на картата.</p>
+            </div>
             <div class="map-stat-grid">
-                <div class="map-stat-card"><span class="map-stat-icon">⛽</span><div><span class="map-stat-label">EKO обекти</span><strong class="map-stat-value" id="map-stat-stations">—</strong><span class="map-stat-note">На картата</span></div></div>
-                <div class="map-stat-card"><span class="map-stat-icon">▤</span><div><span class="map-stat-label">EKO цени днес</span><strong class="map-stat-value" id="map-stat-prices">—</strong><span class="map-stat-note">Записи в базата</span></div></div>
-                <div class="map-stat-card"><span class="map-stat-icon">⌖</span><div><span class="map-stat-label">Градове</span><strong class="map-stat-value" id="map-stat-cities">—</strong><span class="map-stat-note">Покритие на картата</span></div></div>
-                <div class="map-stat-card"><span class="map-stat-icon">◷</span><div><span class="map-stat-label">Последна проверка</span><strong class="map-stat-value" id="map-stat-updated">—</strong><span class="map-stat-note" id="map-stat-updated-note">Зареждане при показване…</span></div></div>
-            </div>`;
+                <div class="map-stat-card"><span class="map-stat-icon">⛽</span><div><span class="map-stat-label">EKO обекти</span><strong class="map-stat-value" id="map-stat-stations">—</strong><span class="map-stat-note">Проверени локации</span></div></div>
+                <div class="map-stat-card"><span class="map-stat-icon">€</span><div><span class="map-stat-label">Ценови записи днес</span><strong class="map-stat-value" id="map-stat-prices">—</strong><span class="map-stat-note">Динамично от базата</span></div></div>
+                <div class="map-stat-card"><span class="map-stat-icon">⌖</span><div><span class="map-stat-label">Покрити локации</span><strong class="map-stat-value" id="map-stat-cities">—</strong><span class="map-stat-note">Градове и райони</span></div></div>
+            </div>
+            <div class="eko-map-help">
+                <strong>Какво ще видиш при клик?</strong>
+                <ul class="eko-map-help-list">
+                    <li><i>📍</i><span>Точния адрес на избрания EKO обект.</span></li>
+                    <li><i>⛽</i><span>Горивата, които се предлагат на конкретната бензиностанция.</span></li>
+                    <li><i>€</i><span>Актуалните импортнати цени за днешния ден.</span></li>
+                </ul>
+            </div>
+            <div class="eko-map-freshness">Последна проверка: <strong id="map-stat-updated">сега</strong><br><span id="map-stat-updated-note">Данните се обновяват при зареждане на картата.</span></div>`;
 
         const layout = document.createElement("div");
         layout.className = "pro-map-layout";
@@ -172,6 +384,7 @@
         const pricesEl = document.getElementById("map-stat-prices");
         const updatedEl = document.getElementById("map-stat-updated");
         const updatedNoteEl = document.getElementById("map-stat-updated-note");
+        const promoCountEl = document.getElementById("eko-promo-count");
 
         try {
             const response = await fetch("/data/eko_stations.json", { cache: "force-cache" });
@@ -186,6 +399,7 @@
             );
             if (stationsEl) stationsEl.textContent = formatNumber(stations.length);
             if (citiesEl) citiesEl.textContent = formatNumber(cities.size);
+            if (promoCountEl) promoCountEl.textContent = formatNumber(stations.length);
         } catch (error) {
             console.warn("EKO map stats unavailable", error);
         }
@@ -204,7 +418,9 @@
 
         const now = new Date();
         if (updatedEl) updatedEl.textContent = "сега";
-        if (updatedNoteEl) updatedNoteEl.textContent = now.toLocaleDateString("bg-BG", { day: "2-digit", month: "short" }) + ", " + now.toLocaleTimeString("bg-BG", { hour: "2-digit", minute: "2-digit" });
+        if (updatedNoteEl) {
+            updatedNoteEl.textContent = now.toLocaleDateString("bg-BG", { day: "2-digit", month: "short" }) + ", " + now.toLocaleTimeString("bg-BG", { hour: "2-digit", minute: "2-digit" });
+        }
     }
 
     function scheduleMapStats() {
@@ -225,6 +441,7 @@
 
     function init() {
         ensureStyles();
+        simplifyHeader();
         buildHero();
         buildMapShell();
         scheduleMapStats();
