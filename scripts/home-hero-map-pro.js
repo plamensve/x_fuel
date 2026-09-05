@@ -290,8 +290,8 @@
         hero.innerHTML = `
             <div class="about-inner">
                 <div class="pro-hero-kicker">Актуални цени от шофьори, за шофьори</div>
-                <h1 class="about-title how-title">Намери най-евтиното гориво <span class="hero-gradient">близо до теб</span></h1>
-                <p class="about-desc">goriva.online събира реални цени на горивата в България, подадени директно от шофьори.</p>
+                <h1 class="about-title how-title">Цени на горивата <span class="hero-gradient">днес в България</span></h1>
+                <p class="about-desc">Намери най-евтиното гориво близо до теб. goriva.online събира актуални цени на бензин, дизел, LPG и метан по градове и бензиностанции в цялата страна.</p>
                 <div class="about-points">
                     <div class="hero-benefit"><span class="hero-benefit-icon">⛽</span><span><strong>Реални цени от потребители</strong><small>Актуална информация за деня</small></span></div>
                     <div class="hero-benefit"><span class="hero-benefit-icon">⌖</span><span><strong>По области и градове</strong><small>Бензиностанции в цялата страна</small></span></div>
