@@ -108,6 +108,21 @@
         const style = document.createElement("style");
         style.id = "home-top4-ad-style";
         style.textContent = `
+            /* Keep city controls on the left and fuel controls anchored to the far right. */
+            .home-top10-controls {
+                grid-template-columns: minmax(0, 1fr) max-content !important;
+            }
+
+            .home-top10-controls .home-top10-control-group:last-child {
+                width: max-content;
+                max-width: 100%;
+                justify-self: end;
+            }
+
+            .home-top10-controls .home-top10-control-group:last-child .home-top10-tabs {
+                justify-content: flex-end;
+            }
+
             .home-top10-card.rank-1 .home-top4-ad-banner {
                 position: absolute;
                 z-index: 3;
@@ -239,6 +254,21 @@
                 }
             }
 
+            @media (max-width: 820px) {
+                .home-top10-controls {
+                    grid-template-columns: 1fr !important;
+                }
+
+                .home-top10-controls .home-top10-control-group:last-child {
+                    width: 100%;
+                    justify-self: stretch;
+                }
+
+                .home-top10-controls .home-top10-control-group:last-child .home-top10-tabs {
+                    justify-content: flex-start;
+                }
+            }
+
             @media (max-width: 560px) {
                 .home-top10-card.rank-1 .home-top4-ad-banner {
                     padding: 16px;
@@ -279,7 +309,7 @@
             <p>Предлагаме продуктово позициониране и брандирано присъствие пред аудитория, която активно сравнява цени и услуги за автомобили.</p>
             <div class="home-top4-ad-contact">
                 <a href="mailto:svetoslavov.plamen@gmail.com">svetoslavov.plamen@gmail.com</a>
-                <span>59883427273</span>
+                <a href="tel:+359883427273">(+359) 883 42 72 73</a>
             </div>
             <span class="home-top4-ad-accent">Продуктово позициониране · Бранд присъствие</span>
         `;
