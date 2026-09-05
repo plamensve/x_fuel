@@ -9,6 +9,7 @@
     const SUPABASE_KEY = "sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH";
     const EKO_STATION = "ЕКО";
     const PAGE_SIZE = 1000;
+    const SOFIA_TIME_ZONE = "Europe/Sofia";
 
     const escapeHtml = value => String(value ?? "")
         .replaceAll("&", "&amp;")
@@ -48,30 +49,49 @@
         return match ? match[1] : null;
     };
 
-    const todayBounds = () => {
-        const now = new Date();
-        const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-        const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
-        return { start: start.toISOString(), end: end.toISOString() };
+    const sofiaDateKey = value => {
+        const date = value instanceof Date ? value : new Date(value);
+        if (Number.isNaN(date.getTime())) return null;
+
+        const parts = new Intl.DateTimeFormat("en-CA", {
+            timeZone: SOFIA_TIME_ZONE,
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit"
+        }).formatToParts(date);
+
+        const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
+        return `${values.year}-${values.month}-${values.day}`;
     };
 
-    async function fetchAllTodayEkoPrices() {
-        const { start, end } = todayBounds();
+    const formatBgDate = dateKey => {
+        if (!dateKey) return "";
+        const [year, month, day] = dateKey.split("-").map(Number);
+        const date = new Date(Date.UTC(year, month - 1, day, 12, 0, 0));
+        return new Intl.DateTimeFormat("bg-BG", {
+            timeZone: SOFIA_TIME_ZONE,
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        }).format(date);
+    };
+
+    async function fetchLatestAvailableEkoPrices() {
         const rows = [];
         let offset = 0;
+        let latestDateKey = null;
 
         while (true) {
             const url =
                 `${SUPABASE_URL}/rest/v1/fuel_prices` +
                 `?select=station,location,fuel,price,created_at` +
                 `&station=eq.${encodeURIComponent(EKO_STATION)}` +
-                `&created_at=gte.${encodeURIComponent(start)}` +
-                `&created_at=lt.${encodeURIComponent(end)}` +
                 `&order=created_at.desc` +
                 `&limit=${PAGE_SIZE}` +
                 `&offset=${offset}`;
 
             const response = await fetch(url, {
+                cache: "no-store",
                 headers: { apikey: SUPABASE_KEY }
             });
 
@@ -80,12 +100,25 @@
             }
 
             const batch = await response.json();
-            rows.push(...batch);
+            if (!Array.isArray(batch) || batch.length === 0) break;
+
+            for (const row of batch) {
+                const rowDateKey = sofiaDateKey(row.created_at);
+                if (!rowDateKey) continue;
+
+                if (!latestDateKey) latestDateKey = rowDateKey;
+                if (rowDateKey !== latestDateKey) {
+                    return { rows, dateKey: latestDateKey };
+                }
+
+                rows.push(row);
+            }
+
             if (batch.length < PAGE_SIZE) break;
             offset += PAGE_SIZE;
         }
 
-        return rows;
+        return { rows, dateKey: latestDateKey };
     }
 
     function buildLivePricesByStation(rows) {
@@ -162,11 +195,21 @@
         return timestamps[0];
     }
 
-    function buildPopup(station, products, livePrices) {
+    function buildPopup(station, products, livePrices, isCurrentDay) {
         const updated = latestPriceTimestamp(livePrices);
         const updatedText = updated
-            ? updated.toLocaleString("bg-BG", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })
+            ? updated.toLocaleString("bg-BG", {
+                timeZone: SOFIA_TIME_ZONE,
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+                hour: "2-digit",
+                minute: "2-digit"
+            })
             : null;
+
+        const priceHeading = isCurrentDay ? "Актуални цени днес" : "Последни налични цени";
+        const updatedLabel = isCurrentDay ? "Последно обновяване" : "Последен импорт";
 
         return `
             <div style="font-size:14px;line-height:1.5;min-width:255px;max-width:320px">
@@ -176,21 +219,21 @@
                 ${station.phone ? `<div style="margin:5px 0">📞 <a href="tel:${escapeHtml(station.phone)}">${escapeHtml(station.phone)}</a></div>` : ""}
 
                 <div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(148,163,184,.25)">
-                    <strong style="display:block;margin-bottom:4px">Актуални цени днес</strong>
+                    <strong style="display:block;margin-bottom:4px">${priceHeading}</strong>
                     ${buildPriceRows(products, livePrices)}
                 </div>
 
                 <div style="margin-top:8px;font-size:12px;color:#64748b">
-                    ${updatedText ? `Последно обновяване: ${escapeHtml(updatedText)}` : "Няма импортнати актуални цени за днес."}
+                    ${updatedText ? `${updatedLabel}: ${escapeHtml(updatedText)}` : "Няма импортнати EKO цени."}
                 </div>
             </div>`;
     }
 
     async function loadEkoMapData() {
-        const [stationsResponse, productsResponse, priceRows] = await Promise.all([
+        const [stationsResponse, productsResponse, latestPrices] = await Promise.all([
             fetch("/data/eko_stations.json", { cache: "force-cache" }),
             fetch("/data/eko_products.json", { cache: "force-cache" }),
-            fetchAllTodayEkoPrices()
+            fetchLatestAvailableEkoPrices()
         ]);
 
         if (!stationsResponse.ok) throw new Error(`EKO station registry request failed: ${stationsResponse.status}`);
@@ -199,20 +242,26 @@
         const registry = await stationsResponse.json();
         const productData = await productsResponse.json();
         const productsByStation = productData?.products_by_station || {};
+        const priceRows = latestPrices.rows || [];
+        const priceDateKey = latestPrices.dateKey || null;
+        const todayDateKey = sofiaDateKey(new Date());
+        const isCurrentDay = Boolean(priceDateKey && priceDateKey === todayDateKey);
         const livePricesByStation = buildLivePricesByStation(priceRows);
 
         return {
             registry,
             productsByStation,
             livePricesByStation,
-            priceRows
+            priceRows,
+            priceDateKey,
+            isCurrentDay
         };
     }
 
     const mapElement = document.getElementById("station-map");
     if (mapElement) mapElement.id = "station-map-eko";
 
-    function updateMapHeader(stationCount, priceCount) {
+    function updateMapHeader(stationCount, priceCount, priceDateKey, isCurrentDay) {
         const section = document.querySelector(".station-map-section");
         if (!section) return;
 
@@ -235,12 +284,12 @@
         const stationLabel = stationValue?.closest(".map-stat-card")?.querySelector(".map-stat-label");
         const priceLabel = priceValue?.closest(".map-stat-card")?.querySelector(".map-stat-label");
         if (stationLabel) stationLabel.textContent = "EKO обекти";
-        if (priceLabel) priceLabel.textContent = "EKO цени днес";
+        if (priceLabel) priceLabel.textContent = isCurrentDay ? "EKO цени днес" : "EKO цени · последен импорт";
         if (stationValue) stationValue.textContent = new Intl.NumberFormat("bg-BG").format(stationCount);
         if (priceValue) priceValue.textContent = new Intl.NumberFormat("bg-BG").format(priceCount);
 
-        if (updatedValue) updatedValue.textContent = "сега";
-        if (updatedNote) updatedNote.textContent = new Date().toLocaleString("bg-BG", { day: "2-digit", month: "short", hour: "2-digit", minute: "2-digit" });
+        if (updatedValue) updatedValue.textContent = priceDateKey ? formatBgDate(priceDateKey) : "—";
+        if (updatedNote) updatedNote.textContent = isCurrentDay ? "Актуални за днес" : "Последни налични данни";
 
         if (cityValue && window.__EKO_CITY_COUNT__) {
             cityValue.textContent = new Intl.NumberFormat("bg-BG").format(window.__EKO_CITY_COUNT__);
@@ -254,7 +303,15 @@
         element.id = "station-map";
 
         try {
-            const { registry, productsByStation, livePricesByStation, priceRows } = await loadEkoMapData();
+            const {
+                registry,
+                productsByStation,
+                livePricesByStation,
+                priceRows,
+                priceDateKey,
+                isCurrentDay
+            } = await loadEkoMapData();
+
             const stations = Object.values(registry?.stations || {})
                 .filter(station => Number.isFinite(Number(station?.latitude)) && Number.isFinite(Number(station?.longitude)));
 
@@ -278,16 +335,17 @@
                 marker.bindPopup(buildPopup(
                     station,
                     productsByStation[stationId] || [],
-                    livePricesByStation[stationId] || {}
+                    livePricesByStation[stationId] || {},
+                    isCurrentDay
                 ));
                 markers.addLayer(marker);
             });
 
             stationMap.addLayer(markers);
-            updateMapHeader(stations.length, priceRows.length);
+            updateMapHeader(stations.length, priceRows.length, priceDateKey, isCurrentDay);
         } catch (error) {
             console.error("Failed to initialize EKO Leaflet map", error);
-            updateMapHeader(0, 0);
+            updateMapHeader(0, 0, null, false);
         }
     }
 
