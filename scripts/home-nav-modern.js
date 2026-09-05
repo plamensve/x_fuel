@@ -207,21 +207,33 @@
                 font-weight: 850;
             }
 
-            /* Keep the selected product in its original right-side position. */
-            .home-top10-card.rank-1 .home-top10-fuel-pill {
+            .home-top10-card.rank-1 .home-top10-price-meta {
+                display: inline-flex;
+                flex-direction: column;
+                align-items: flex-start;
+                justify-content: flex-end;
+                gap: 6px;
+                margin-left: 1px;
+                transform: translateY(-1px);
+            }
+
+            .home-top10-card.rank-1 .home-top10-price-meta .home-top10-fuel-pill {
                 position: static;
-                top: auto;
-                right: auto;
-                justify-self: end;
-                align-self: center;
                 margin: 0;
-                padding: 8px 13px;
-                font-size: 12px;
+                padding: 7px 11px;
+                font-size: 11px;
                 line-height: 1;
                 font-weight: 900;
                 letter-spacing: .025em;
                 border-color: rgba(34,197,94,.22);
                 background: rgba(34,197,94,.085);
+            }
+
+            .home-top10-card.rank-1 .home-top10-price-meta > span:last-child {
+                color: #c6b96e;
+                font-size: 12px;
+                font-weight: 650;
+                line-height: 1;
             }
 
             @media (max-width: 1180px) {
@@ -287,9 +299,9 @@
                 .home-top4-ad-contact a,
                 .home-top4-ad-contact span { font-size: 11px; }
 
-                .home-top10-card.rank-1 .home-top10-fuel-pill {
-                    padding: 7px 11px;
-                    font-size: 11px;
+                .home-top10-card.rank-1 .home-top10-price-meta .home-top10-fuel-pill {
+                    padding: 6px 10px;
+                    font-size: 10px;
                 }
             }
         `;
@@ -319,10 +331,33 @@
         else winner.appendChild(banner);
     };
 
-    const init = () => {
+    const moveWinnerFuelLabel = () => {
+        const winner = document.querySelector(".home-top10-card.rank-1");
+        if (!winner) return;
+
+        const price = winner.querySelector(".home-top10-card-price");
+        const fuelPill = winner.querySelector(".home-top10-fuel-pill");
+        if (!price || !fuelPill || price.querySelector(".home-top10-price-meta")) return;
+
+        const unit = [...price.children].find(el => el.tagName === "SPAN" && el !== fuelPill);
+        if (!unit) return;
+
+        const meta = document.createElement("span");
+        meta.className = "home-top10-price-meta";
+        price.insertBefore(meta, unit);
+        meta.appendChild(fuelPill);
+        meta.appendChild(unit);
+    };
+
+    const syncWinnerCard = () => {
         addAdvertisingBanner();
+        moveWinnerFuelLabel();
+    };
+
+    const init = () => {
+        syncWinnerCard();
         const root = document.querySelector(".home-top10-card-grid") || document.body;
-        const observer = new MutationObserver(addAdvertisingBanner);
+        const observer = new MutationObserver(syncWinnerCard);
         observer.observe(root, { childList: true, subtree: true });
     };
 
