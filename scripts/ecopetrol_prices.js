@@ -99,7 +99,6 @@
             if (!stationId || !fuel || !Number.isFinite(price) || price <= 0.1) return;
 
             result[stationId] ||= {};
-            // Rows are ordered newest first. Keep the latest valid observation.
             if (!result[stationId][fuel]) {
                 result[stationId][fuel] = {
                     price,
@@ -175,7 +174,6 @@
 
                 ${station.address ? `<div style="margin:5px 0">📍 ${escapeHtml(station.address)}</div>` : ""}
                 ${station.phone ? `<div style="margin:5px 0">📞 <a href="tel:${escapeHtml(station.phone)}">${escapeHtml(station.phone)}</a></div>` : ""}
-                ${station.maps_url ? `<div style="margin:5px 0"><a href="${escapeHtml(station.maps_url)}" target="_blank" rel="noopener noreferrer">🧭 Отвори в Google Maps</a></div>` : ""}
 
                 <div style="margin-top:10px;padding-top:8px;border-top:1px solid rgba(148,163,184,.25)">
                     <strong style="display:block;margin-bottom:4px">Актуални цени днес</strong>
@@ -211,8 +209,6 @@
         };
     }
 
-    // Prevent the legacy all-brand Leaflet initializer in script-base.js from
-    // taking ownership of this element. We restore the id when building EKO map.
     const mapElement = document.getElementById("station-map");
     if (mapElement) mapElement.id = "station-map-eko";
 
