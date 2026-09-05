@@ -502,10 +502,10 @@
     padding-right: 46px;
 }
 
-/* Shift the advertising panel 100px left on desktop without changing its vertical placement. */
+/* Shift the advertising panel 130px left on desktop without changing its vertical placement. */
 @media (min-width: 981px) {
     .home-top10-card.rank-1 .home-top4-ad-banner {
-        transform: translate(calc(-50% - 100px), -50%) !important;
+        transform: translate(calc(-50% - 130px), -50%) !important;
     }
 }
 
