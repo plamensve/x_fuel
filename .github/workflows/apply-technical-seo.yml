@@ -1,13 +1,6 @@
 name: Apply technical SEO improvements
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - "automation/apply_technical_seo.py"
-      - "automation/rebuild_sitemap.py"
-      - ".github/workflows/apply-technical-seo.yml"
   workflow_dispatch:
 
 permissions:
