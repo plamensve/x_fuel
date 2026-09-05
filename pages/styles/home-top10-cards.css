@@ -455,6 +455,43 @@
 
 .home-top10-card-grid .home-top10-empty { grid-column: 1 / -1; }
 
+/* Secondary cards: show only numeric rank badges in the upper-right corner. */
+.home-top10-card:not(.rank-1) .home-top10-rank-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 4;
+    width: 34px;
+    height: 34px;
+    border: 1px solid rgba(148,163,184,.18);
+    border-radius: 10px;
+    color: transparent;
+    background: rgba(8,20,34,.72);
+    box-shadow: 0 7px 18px rgba(2,6,23,.18), inset 0 1px 0 rgba(255,255,255,.035);
+    font-size: 0;
+}
+
+.home-top10-card:not(.rank-1) .home-top10-rank-badge::after {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #e7eef7;
+    font-size: 16px;
+    font-weight: 900;
+    line-height: 1;
+}
+
+.home-top10-card.rank-2 .home-top10-rank-badge::after { content: "2"; }
+.home-top10-card.rank-3 .home-top10-rank-badge::after { content: "3"; }
+.home-top10-card.rank-4 .home-top10-rank-badge::after { content: "4"; }
+
+.home-top10-card:not(.rank-1) .home-top10-card-top {
+    min-height: 46px;
+    padding-right: 46px;
+}
+
 @media (max-width: 980px) {
     .home-top10-card-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
     .home-top10-card.rank-1 { grid-column: 1 / -1; }
@@ -525,6 +562,17 @@
     .home-top10-card-top {
         grid-template-columns: auto minmax(0,1fr) auto;
         gap: 9px;
+    }
+
+    .home-top10-card:not(.rank-1) .home-top10-rank-badge {
+        top: 14px;
+        right: 14px;
+        width: 32px;
+        height: 32px;
+    }
+
+    .home-top10-card:not(.rank-1) .home-top10-rank-badge::after {
+        font-size: 15px;
     }
 
     .home-top10-station-logo-wrap,
