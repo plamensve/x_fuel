@@ -7,7 +7,7 @@
             const link = document.createElement("link");
             link.id = "home-hero-map-pro-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/home-hero-map-pro.css?v=20260905-eko-redesign";
+            link.href = "/pages/styles/home-hero-map-pro.css?v=20260905-eko-cleanup";
             document.head.appendChild(link);
         }
 
@@ -88,6 +88,7 @@
                     align-items: center;
                     justify-content: center;
                     gap: 7px;
+                    border: 1px solid rgba(255,255,255,.24);
                     border-radius: 12px;
                     color: #fff;
                     background: linear-gradient(120deg, #833ab4 0%, #c13584 35%, #e1306c 62%, #f77737 100%);
@@ -99,17 +100,20 @@
                 }
 
                 .eko-map-promo:hover .eko-map-promo-action {
-                    transform: translateX(2px);
+                    transform: translateX(3px);
                     box-shadow: 0 11px 24px rgba(193,53,132,.28);
                 }
 
                 .station-map-section.pro-station-map {
-                    border: 2px solid transparent !important;
-                    background:
-                        linear-gradient(145deg, #0b1b30 0%, #071424 100%) padding-box,
-                        linear-gradient(125deg, #833ab4 0%, #c13584 28%, #e1306c 52%, #fd1d1d 72%, #f77737 88%, #fcb045 100%) border-box !important;
-                    box-shadow: 0 20px 50px rgba(131,58,180,.17), 0 16px 42px rgba(15,23,42,.18) !important;
-                    scroll-margin-top: 14px;
+                    margin-top: 46px !important;
+                    border: 1px solid rgba(148,163,184,.16) !important;
+                    background: linear-gradient(145deg, #0b1b30 0%, #071424 100%) !important;
+                    box-shadow: 0 18px 44px rgba(15,23,42,.20) !important;
+                    scroll-margin-top: 170px;
+                }
+
+                .pro-map-header {
+                    padding-right: 22px !important;
                 }
 
                 .pro-map-layout {
@@ -119,19 +123,19 @@
                 .pro-map-stats {
                     display: flex !important;
                     flex-direction: column;
-                    gap: 14px;
+                    gap: 13px;
                     padding: 16px !important;
                 }
 
                 .eko-panel-head {
                     margin: 0;
-                    padding: 0 1px 2px;
+                    padding: 0 1px 3px;
                 }
 
                 .eko-panel-eyebrow {
                     display: block;
                     margin-bottom: 5px;
-                    color: #f0abfc;
+                    color: #93c5fd;
                     font-size: 9px;
                     font-weight: 850;
                     letter-spacing: .1em;
@@ -167,9 +171,9 @@
                 .eko-map-help {
                     margin: 0;
                     padding: 12px;
-                    border: 1px solid rgba(244,114,182,.16);
+                    border: 1px solid rgba(96,165,250,.14);
                     border-radius: 12px;
-                    background: linear-gradient(145deg, rgba(131,58,180,.11), rgba(225,48,108,.06));
+                    background: rgba(59,130,246,.055);
                 }
 
                 .eko-map-help strong {
@@ -208,18 +212,30 @@
                     font-size: 11px;
                 }
 
-                .eko-map-freshness {
-                    margin-top: auto;
-                    padding-top: 11px;
-                    border-top: 1px solid rgba(148,163,184,.12);
-                    color: #8091a6;
-                    font-size: 9px;
-                    line-height: 1.45;
+                .station-map-section .leaflet-popup-content-wrapper {
+                    border-radius: 15px;
+                    box-shadow: 0 16px 38px rgba(15,23,42,.24);
                 }
 
-                .eko-map-freshness strong {
-                    color: #d9e4ef;
-                    font-weight: 750;
+                .station-map-section .leaflet-popup-content {
+                    margin: 15px 16px;
+                }
+
+                .station-map-section .leaflet-popup-content > div {
+                    min-width: 270px !important;
+                    line-height: 1.45 !important;
+                }
+
+                .station-map-section .leaflet-popup-content strong:first-child {
+                    color: #0f172a;
+                    font-size: 17px !important;
+                    letter-spacing: -.01em;
+                }
+
+                .station-map-section .leaflet-popup-content a {
+                    color: #2563eb;
+                    font-weight: 700;
+                    text-decoration: none;
                 }
 
                 @media (max-width: 980px) {
@@ -227,10 +243,10 @@
                     .eko-panel-head { margin-bottom: 12px; }
                     .map-stat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
                     .eko-map-help { margin-top: 12px; }
-                    .eko-map-freshness { margin-top: 12px; }
                 }
 
                 @media (max-width: 760px) {
+                    .station-map-section.pro-station-map { margin-top: 34px !important; }
                     .pro-home-hero .eko-map-promo { max-width: 520px; }
                     .eko-map-promo-inner {
                         grid-template-columns: 42px minmax(0, 1fr);
@@ -244,16 +260,18 @@
                         margin-top: 2px;
                         padding: 0 13px;
                     }
-                    .map-stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-                    .map-stat-card:last-child { grid-column: 1 / -1; }
+                    .map-stat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+                }
+
+                @media (max-width: 560px) {
+                    .map-stat-grid { grid-template-columns: 1fr; }
                 }
 
                 @media (max-width: 460px) {
                     .eko-map-promo-inner { padding: 12px; }
                     .eko-map-promo-copy strong { font-size: 13px; }
                     .eko-map-promo-copy small { font-size: 10px; }
-                    .map-stat-grid { grid-template-columns: 1fr; }
-                    .map-stat-card:last-child { grid-column: auto; }
+                    .station-map-section .leaflet-popup-content > div { min-width: 235px !important; }
                 }
             `;
             document.head.appendChild(style);
@@ -300,10 +318,8 @@
             if (!section) return;
 
             const rect = section.getBoundingClientRect();
-            const viewport = window.innerHeight || document.documentElement.clientHeight;
-            const sectionHeight = rect.height;
-            const topPadding = sectionHeight <= viewport - 24 ? 12 : 8;
-            const targetTop = window.scrollY + rect.top - topPadding;
+            const extraTopOffset = 165;
+            const targetTop = window.scrollY + rect.top - extraTopOffset;
 
             window.scrollTo({
                 top: Math.max(0, targetTop),
@@ -327,8 +343,7 @@
         const header = document.createElement("div");
         header.className = "pro-map-header";
         header.innerHTML = `
-            <div class="pro-map-heading"><span class="pro-map-pin">⌖</span><div><h2>Карта на бензиностанциите EKO</h2><p>Кликни върху маркер за точен адрес, предлагани горива и актуални цени за деня.</p></div></div>
-            <div class="pro-map-tools"><div class="pro-map-legend" aria-label="Легенда за клъстерите"><span><i class="legend-dot low"></i> 1–20</span><span><i class="legend-dot mid"></i> 21–100</span><span><i class="legend-dot high"></i> 101+</span></div></div>`;
+            <div class="pro-map-heading"><span class="pro-map-pin">⌖</span><div><h2>Карта на бензиностанциите EKO</h2><p>Кликни върху маркер за точен адрес, предлагани горива и актуални цени за деня.</p></div></div>`;
 
         const stats = document.createElement("aside");
         stats.className = "pro-map-stats";
@@ -336,7 +351,7 @@
             <div class="eko-panel-head">
                 <span class="eko-panel-eyebrow">EKO · България</span>
                 <h3>Полезна информация</h3>
-                <p>Актуален преглед на обектите и ценовите записи, които виждаш на картата.</p>
+                <p>Картата използва официалните EKO локации и актуалните ценови записи за деня.</p>
             </div>
             <div class="map-stat-grid">
                 <div class="map-stat-card"><span class="map-stat-icon">⛽</span><div><span class="map-stat-label">EKO обекти</span><strong class="map-stat-value" id="map-stat-stations">—</strong><span class="map-stat-note">Проверени локации</span></div></div>
@@ -344,14 +359,13 @@
                 <div class="map-stat-card"><span class="map-stat-icon">⌖</span><div><span class="map-stat-label">Покрити локации</span><strong class="map-stat-value" id="map-stat-cities">—</strong><span class="map-stat-note">Градове и райони</span></div></div>
             </div>
             <div class="eko-map-help">
-                <strong>Какво ще видиш при клик?</strong>
+                <strong>Какво ще видиш при клик върху обект?</strong>
                 <ul class="eko-map-help-list">
-                    <li><i>📍</i><span>Точния адрес на избрания EKO обект.</span></li>
-                    <li><i>⛽</i><span>Горивата, които се предлагат на конкретната бензиностанция.</span></li>
+                    <li><i>📍</i><span>Точния адрес и телефон на избраната бензиностанция.</span></li>
+                    <li><i>⛽</i><span>Горивата, които се предлагат на конкретния EKO обект.</span></li>
                     <li><i>€</i><span>Актуалните импортнати цени за днешния ден.</span></li>
                 </ul>
-            </div>
-            <div class="eko-map-freshness">Последна проверка: <strong id="map-stat-updated">сега</strong><br><span id="map-stat-updated-note">Данните се обновяват при зареждане на картата.</span></div>`;
+            </div>`;
 
         const layout = document.createElement("div");
         layout.className = "pro-map-layout";
@@ -382,8 +396,6 @@
         const stationsEl = document.getElementById("map-stat-stations");
         const citiesEl = document.getElementById("map-stat-cities");
         const pricesEl = document.getElementById("map-stat-prices");
-        const updatedEl = document.getElementById("map-stat-updated");
-        const updatedNoteEl = document.getElementById("map-stat-updated-note");
         const promoCountEl = document.getElementById("eko-promo-count");
 
         try {
@@ -414,12 +426,6 @@
             if (pricesEl && Number.isFinite(total)) pricesEl.textContent = formatNumber(total);
         } catch (error) {
             console.warn("EKO price stats unavailable", error);
-        }
-
-        const now = new Date();
-        if (updatedEl) updatedEl.textContent = "сега";
-        if (updatedNoteEl) {
-            updatedNoteEl.textContent = now.toLocaleDateString("bg-BG", { day: "2-digit", month: "short" }) + ", " + now.toLocaleTimeString("bg-BG", { hour: "2-digit", minute: "2-digit" });
         }
     }
 
