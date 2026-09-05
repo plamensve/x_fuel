@@ -1,0 +1,71 @@
+name: Update EKO Leaflet station data
+
+on:
+  push:
+    paths:
+      - "automation/update_eko_geojson.py"
+      - ".github/workflows/update-eko-geojson.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-eko-map:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install updater dependency
+        run: pip install "requests>=2.32.0,<3.0.0"
+
+      - name: Update EKO registry and Leaflet GeoJSON
+        run: python -m automation.update_eko_geojson
+
+      - name: Validate generated data
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          geo = json.loads(Path('data/export.geojson').read_text(encoding='utf-8'))
+          registry = json.loads(Path('data/eko_stations.json').read_text(encoding='utf-8'))
+
+          stations = registry.get('stations', {})
+          features = geo.get('features', [])
+          eko = [f for f in features if (f.get('properties') or {}).get('eko:station_id')]
+
+          if len(stations) < 95:
+              raise SystemExit(f'Too few EKO registry stations: {len(stations)}')
+          if len(eko) < 90:
+              raise SystemExit(f'Too few canonical EKO GeoJSON features: {len(eko)}')
+
+          ids = [str((f.get('properties') or {}).get('eko:station_id')) for f in eko]
+          if len(ids) != len(set(ids)):
+              raise SystemExit('Duplicate EKO station IDs found in GeoJSON')
+
+          print(f'EKO registry stations: {len(stations)}')
+          print(f'EKO GeoJSON features: {len(eko)}')
+          print(f'Total GeoJSON features: {len(features)}')
+          PY
+
+      - name: Commit updated EKO map data
+        run: |
+          if git diff --quiet -- data/export.geojson data/eko_stations.json && [ -z "$(git status --porcelain data/export.geojson data/eko_stations.json)" ]; then
+            echo "No EKO map changes to commit."
+            exit 0
+          fi
+          git config user.name "goriva.online bot"
+          git config user.email "actions@users.noreply.github.com"
+          git add data/export.geojson data/eko_stations.json
+          git commit -m "Update EKO stations in Leaflet map"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push
