@@ -34,7 +34,7 @@ jobs:
           python-version: "3.12"
 
       - name: Apply non-visual SEO improvements
-        run: python automation/apply_technical_seo.py
+        run: PYTHONPATH=. python automation/apply_technical_seo.py
 
       - name: Show changed files
         run: git status --short
