@@ -40,7 +40,7 @@
             padding: 0 13px !important;
             color: #ffffff !important;
             -webkit-text-fill-color: #ffffff !important;
-            background: linear-gradient(120deg, #7c3aed 0%, #db2777 52%, #f97316 100%) !important;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 36%, #db2777 70%, #ea580c 100%) !important;
             border: 1px solid rgba(255,255,255,.28) !important;
             border-radius: 999px !important;
             box-shadow: 0 8px 20px rgba(124,58,237,.18), inset 0 1px 0 rgba(255,255,255,.24) !important;
@@ -76,40 +76,4 @@
         }
     `;
     document.head.appendChild(style);
-})();
-
-// Apply the final homepage palette after all legacy and component styles.
-(() => {
-    if (document.querySelector('link[data-home-palette-sync]')) return;
-
-    const style = document.createElement("link");
-    style.rel = "stylesheet";
-    style.href = "/pages/styles/home-palette-sync.css?v=20260905-2145";
-    style.dataset.homePaletteSync = "true";
-    document.head.appendChild(style);
-})();
-
-// Keep the daily-price date clean: the badge itself provides the visual grouping,
-// so parentheses around the date are redundant.
-(() => {
-    const cleanDate = () => {
-        const date = document.getElementById("prices-date");
-        if (!date) return;
-        const clean = date.textContent.trim().replace(/^\(\s*/, "").replace(/\s*\)$/, "");
-        if (clean !== date.textContent) date.textContent = clean;
-    };
-
-    const init = () => {
-        cleanDate();
-        const date = document.getElementById("prices-date");
-        if (!date) return;
-        const observer = new MutationObserver(cleanDate);
-        observer.observe(date, { childList: true, characterData: true, subtree: true });
-    };
-
-    if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", init, { once: true });
-    } else {
-        init();
-    }
 })();
