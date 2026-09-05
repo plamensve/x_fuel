@@ -45,7 +45,7 @@ const HOME_FUEL_ALIASES = {
 };
 
 const HOME_FUEL_ORDER = ["A95", "Дизел", "LPG", "A100", "Дизел +", "Метан"];
-const HOME_TOP10_CITIES = ["София", "Пловдив", "Варна", "Бургас", "Русе"];
+const HOME_TOP10_CITIES = ["София", "Пловдив", "Варна", "Бургас", "Русе", "Стара Загора"];
 
 const HOME_STATION_LOGOS = [
     {match: ["еко петрол", "екопетрол", "ecopetrol"], src: "images/station_logos/ecopetrol.svg"},
