@@ -398,6 +398,244 @@ body > .main-nav .nav-container a[href="index.html"] {
     background: rgba(255, 255, 255, 0.025);
 }
 
+/* =========================================================
+   HOMEPAGE DAILY PRICES — LIGHT DATA WORKSPACE
+   ========================================================= */
+
+.prices-card {
+    position: relative;
+    overflow: hidden;
+    margin-top: 34px;
+    padding: clamp(24px, 3.5vw, 34px);
+    color: #1e293b;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 22px;
+    box-shadow: 0 16px 42px rgba(15, 23, 42, 0.08);
+    backdrop-filter: none;
+}
+
+.prices-card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(90deg, #2563eb, #38bdf8);
+}
+
+.prices-card > h2 {
+    max-width: 980px;
+    margin: 0 0 10px;
+    color: #0f172a;
+    font-size: clamp(26px, 3vw, 34px);
+    line-height: 1.18;
+    letter-spacing: -0.03em;
+}
+
+.prices-card #prices-date {
+    display: inline-flex;
+    align-items: center;
+    margin-left: 8px;
+    padding: 6px 10px;
+    border: 1px solid #dbeafe;
+    border-radius: 999px;
+    color: #1d4ed8;
+    background: #eff6ff;
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0;
+    vertical-align: middle;
+}
+
+.prices-card .info-helper {
+    max-width: 900px;
+    margin: 0 0 5px;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.prices-card .info-helper + .info-helper {
+    margin-bottom: 22px;
+    color: #475569;
+    font-weight: 650;
+}
+
+.prices-card .city-filter {
+    margin: 0 0 18px;
+    padding: 16px;
+    gap: 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 16px;
+    background: #f8fafc;
+}
+
+.prices-card .filt {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 7px;
+}
+
+.prices-card .filt label {
+    color: #475569;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+
+.prices-card .filt select {
+    min-height: 44px;
+    padding: 0 12px;
+    color: #0f172a;
+    background: #ffffff;
+    border: 1px solid #cbd5e1;
+    border-radius: 11px;
+    font-size: 13px;
+    font-weight: 650;
+    box-shadow: 0 1px 2px rgba(15,23,42,.03);
+}
+
+.prices-card .filt select:hover {
+    border-color: #94a3b8;
+}
+
+.prices-card .filt select:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59,130,246,.12);
+}
+
+.prices-card .view-toggle {
+    display: inline-flex;
+    gap: 4px;
+    margin: 0 0 16px;
+    padding: 4px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+}
+
+.prices-card .view-toggle .view-btn {
+    min-height: 36px;
+    padding: 0 12px;
+    border: 0;
+    border-radius: 9px;
+    color: #64748b;
+    background: transparent;
+    font-size: 12px;
+    font-weight: 800;
+    box-shadow: none;
+}
+
+.prices-card .view-toggle .view-btn:hover {
+    color: #1d4ed8;
+    background: #eff6ff;
+}
+
+.prices-card .view-toggle .view-btn.active {
+    color: #ffffff;
+    background: #2563eb;
+    box-shadow: 0 6px 14px rgba(37,99,235,.18);
+}
+
+.prices-card .cards-grid {
+    gap: 14px;
+}
+
+.prices-card .price-card {
+    color: #1e293b;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 8px 24px rgba(15,23,42,.06);
+}
+
+.prices-card .price-card:hover {
+    border-color: #bfdbfe;
+    box-shadow: 0 12px 28px rgba(15,23,42,.09);
+}
+
+.prices-card .price-card h3,
+.prices-card .price-card-title h3 {
+    color: #0f172a;
+}
+
+.prices-card .price-card-location,
+.prices-card .price-card > div:last-child {
+    color: #64748b;
+}
+
+.prices-card .price-badge {
+    color: #334155;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+}
+
+.prices-card .price-badge strong {
+    color: #0f172a;
+}
+
+.prices-card .price-table {
+    color: #1e293b;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.prices-card .price-table th {
+    color: #334155;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+    font-weight: 800;
+}
+
+.prices-card .price-table td {
+    color: #334155;
+    border-bottom-color: #eef2f7;
+}
+
+.prices-card .price-table tr:hover {
+    background: #f8fafc;
+}
+
+.prices-card #pagination button {
+    color: #334155;
+    background: #ffffff;
+    border: 1px solid #dbe2ea;
+}
+
+.prices-card #pagination button:hover,
+.prices-card #pagination .active-page {
+    color: #ffffff;
+    background: #2563eb;
+    border-color: #2563eb;
+}
+
+@media (max-width: 760px) {
+    .prices-card {
+        padding: 20px 16px;
+        border-radius: 18px;
+    }
+
+    .prices-card #prices-date {
+        margin: 8px 0 0;
+    }
+
+    .prices-card .city-filter {
+        padding: 12px;
+    }
+
+    .prices-card .view-toggle {
+        width: 100%;
+    }
+
+    .prices-card .view-toggle .view-btn {
+        flex: 1;
+    }
+}
+
 /* Icon visibility: monochrome SVGs and footer icons use the button foreground color. */
 button svg,
 a[class*="button"] svg,
