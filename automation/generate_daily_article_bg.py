@@ -515,6 +515,7 @@ def render_article(date_str: str, article: dict) -> str:
     body = sanitize_body(article["body_html"])
     url = f"https://goriva.online/pages/articles/daily/{date_str}/"
     published = publication_timestamp(date_str)
+    image_url = f"https://goriva.online/media/daily-news/{date_str}.png"
     schema = {
         "@context": "https://schema.org",
         "@type": "NewsArticle",
@@ -522,10 +523,26 @@ def render_article(date_str: str, article: dict) -> str:
         "description": article["description"],
         "datePublished": published,
         "dateModified": published,
-        "mainEntityOfPage": url,
+        "image": [image_url],
+        "mainEntityOfPage": {"@type": "WebPage", "@id": url},
         "inLanguage": "bg-BG",
-        "author": {"@type": "Organization", "name": "goriva.online"},
-        "publisher": {"@type": "Organization", "name": "goriva.online", "url": "https://goriva.online/"},
+        "articleSection": "Цени на горивата",
+        "author": {"@type": "Organization", "name": "goriva.online", "url": "https://goriva.online/"},
+        "publisher": {
+            "@type": "Organization",
+            "name": "goriva.online",
+            "url": "https://goriva.online/",
+            "logo": {"@type": "ImageObject", "url": "https://goriva.online/media/2logo.png"},
+        },
+    }
+    breadcrumbs = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Начало", "item": "https://goriva.online/"},
+            {"@type": "ListItem", "position": 2, "name": "Новини", "item": "https://goriva.online/pages/news.html"},
+            {"@type": "ListItem", "position": 3, "name": "Дневен обзор", "item": url},
+        ],
     }
     return f'''<!DOCTYPE html>
 <html lang="bg">
@@ -534,17 +551,26 @@ def render_article(date_str: str, article: dict) -> str:
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{title} | goriva.online</title>
   <meta name="description" content="{description}">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
   <link rel="canonical" href="{url}">
   <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
   <meta property="og:type" content="article">
+  <meta property="og:site_name" content="goriva.online">
   <meta property="og:locale" content="bg_BG">
   <meta property="og:title" content="{title}">
   <meta property="og:description" content="{description}">
   <meta property="og:url" content="{url}">
-  <meta property="og:image" content="https://goriva.online/media/og-3.png">
+  <meta property="og:image" content="{image_url}">
+  <meta property="article:published_time" content="{published}">
+  <meta property="article:modified_time" content="{published}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{title}">
+  <meta name="twitter:description" content="{description}">
+  <meta name="twitter:image" content="{image_url}">
   <link rel="stylesheet" href="/styles.css">
   <link rel="stylesheet" href="/pages/styles/article-modern.css?v=20260829-newsroom1">
   <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
+  <script type="application/ld+json">{json.dumps(breadcrumbs, ensure_ascii=False)}</script>
 </head>
 <body>
   <main class="article-page">
@@ -614,15 +640,8 @@ def update_news_page() -> None:
 
 
 def update_sitemap(url: str, date_str: str) -> None:
-    path = ROOT / "sitemap.xml"
-    if not path.exists():
-        return
-    text = path.read_text(encoding="utf-8")
-    if url in text:
-        return
-    node = f"  <url>\n    <loc>{html.escape(url)}</loc>\n    <lastmod>{date_str}</lastmod>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n"
-    text = text.replace("</urlset>", node + "</urlset>")
-    path.write_text(text, encoding="utf-8")
+    from automation.rebuild_sitemap import rebuild_sitemap
+    rebuild_sitemap()
 
 
 def main() -> None:

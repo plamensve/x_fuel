@@ -170,6 +170,17 @@ def render(items: list[dict]) -> str:
         "@type": "CollectionPage",
         "name": "Новини и анализи за горивата | goriva.online",
         "url": "https://goriva.online/pages/news.html",
+        "description": "Последни новини, дневни обзори и анализи за цените на горивата в България.",
+        "inLanguage": "bg-BG",
+        "dateModified": latest.get("date"),
+        "isPartOf": {"@type": "WebSite", "name": "goriva.online", "url": "https://goriva.online/"},
+        "breadcrumb": {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+                {"@type": "ListItem", "position": 1, "name": "Начало", "item": "https://goriva.online/"},
+                {"@type": "ListItem", "position": 2, "name": "Новини", "item": "https://goriva.online/pages/news.html"},
+            ],
+        },
         "mainEntity": {
             "@type": "ItemList",
             "itemListElement": [
@@ -185,8 +196,10 @@ def render(items: list[dict]) -> str:
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Новини, анализи и цени на горивата | goriva.online</title>
 <meta name="description" content="Последни новини, дневни обзори и анализи за цените на бензин, дизел и LPG в България. Търсене и филтриране на всички публикации на goriva.online.">
+<meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="canonical" href="https://goriva.online/pages/news.html"><link rel="icon" type="image/svg+xml" href="/media/fav.svg">
-<meta property="og:title" content="Новини и анализи за горивата | goriva.online"><meta property="og:description" content="Дневни обзори, анализи по градове и практически материали за горивата."><meta property="og:image" content="https://goriva.online/media/og-3.png"><meta property="og:url" content="https://goriva.online/pages/news.html"><meta property="og:type" content="website"><meta property="og:locale" content="bg_BG">
+<meta property="og:site_name" content="goriva.online"><meta property="og:title" content="Новини и анализи за горивата | goriva.online"><meta property="og:description" content="Дневни обзори, анализи по градове и практически материали за горивата."><meta property="og:image" content="https://goriva.online/media/og-3.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://goriva.online/pages/news.html"><meta property="og:type" content="website"><meta property="og:locale" content="bg_BG">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Новини и анализи за горивата | goriva.online"><meta name="twitter:description" content="Дневни обзори, анализи по градове и практически материали за горивата."><meta name="twitter:image" content="https://goriva.online/media/og-3.png">
 <link rel="stylesheet" href="../styles.css?v=20260831-newsroom1"><link rel="stylesheet" href="styles/news.css?v=20260831-newsroom1">
 <script type="application/ld+json">{json.dumps(item_list, ensure_ascii=False)}</script>
 </head>

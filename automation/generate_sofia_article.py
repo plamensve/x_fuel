@@ -368,6 +368,7 @@ def render_article(date_str: str, article: dict, facts: dict) -> str:
     published = base.publication_timestamp(date_str)
     sources = base.render_sources(article.get("sources", []))
     ranking = station_table(facts)
+    image_url = f"https://goriva.online/media/sofia-news/{date_str}/hero.png"
     schema = {
         "@context": "https://schema.org",
         "@type": "NewsArticle",
@@ -375,11 +376,27 @@ def render_article(date_str: str, article: dict, facts: dict) -> str:
         "description": article["description"],
         "datePublished": published,
         "dateModified": published,
-        "mainEntityOfPage": url,
+        "image": [image_url],
+        "mainEntityOfPage": {"@type": "WebPage", "@id": url},
         "inLanguage": "bg-BG",
+        "articleSection": "Цени на горивата в София",
         "about": ["Цени на горивата в София", "Цена на бензина в София", "Цена на дизела в София", "LPG София"],
-        "author": {"@type": "Organization", "name": "goriva.online"},
-        "publisher": {"@type": "Organization", "name": "goriva.online", "url": "https://goriva.online/"},
+        "author": {"@type": "Organization", "name": "goriva.online", "url": "https://goriva.online/"},
+        "publisher": {
+            "@type": "Organization",
+            "name": "goriva.online",
+            "url": "https://goriva.online/",
+            "logo": {"@type": "ImageObject", "url": "https://goriva.online/media/2logo.png"},
+        },
+    }
+    breadcrumbs = {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Начало", "item": "https://goriva.online/"},
+            {"@type": "ListItem", "position": 2, "name": "Новини", "item": "https://goriva.online/pages/news.html"},
+            {"@type": "ListItem", "position": 3, "name": "Цени на горивата в София", "item": url},
+        ],
     }
     return f'''<!DOCTYPE html>
 <html lang="bg">
@@ -391,16 +408,24 @@ def render_article(date_str: str, article: dict, facts: dict) -> str:
   <meta name="robots" content="index,follow,max-image-preview:large">
   <link rel="canonical" href="{url}">
   <meta property="og:type" content="article">
+  <meta property="og:site_name" content="goriva.online">
   <meta property="og:locale" content="bg_BG">
   <meta property="og:title" content="{title}">
   <meta property="og:description" content="{description}">
   <meta property="og:url" content="{url}">
+  <meta property="og:image" content="{image_url}">
+  <meta property="article:published_time" content="{published}">
+  <meta property="article:modified_time" content="{published}">
   <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{title}">
+  <meta name="twitter:description" content="{description}">
+  <meta name="twitter:image" content="{image_url}">
   <link rel="stylesheet" href="/style.css">
   <link rel="stylesheet" href="/pages/styles/daily-editorial-layout.css?v=20260831-padding-euro1">
   <link rel="stylesheet" href="/pages/styles/article-engagement.css?v=20260830-3">
   <link rel="stylesheet" href="/pages/styles/sofia-daily-article.css?v=20260831-1">
   <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
+  <script type="application/ld+json">{json.dumps(breadcrumbs, ensure_ascii=False)}</script>
 </head>
 <body>
   <header class="site-header"><div class="container"><a class="brand" href="/">goriva.online</a></div></header>
@@ -461,20 +486,8 @@ def summary_cards(facts: dict) -> str:
 
 
 def update_sitemap(date_str: str) -> None:
-    path = ROOT / "sitemap.xml"
-    url = f"https://goriva.online/pages/articles/sofia/{date_str}/"
-    text = path.read_text(encoding="utf-8")
-    if url in text:
-        return
-    node = (
-        "  <url>\n"
-        f"    <loc>{url}</loc>\n"
-        f"    <lastmod>{date_str}</lastmod>\n"
-        "    <changefreq>daily</changefreq>\n"
-        "    <priority>0.8</priority>\n"
-        "  </url>\n"
-    )
-    path.write_text(text.replace("</urlset>", node + "</urlset>"), encoding="utf-8")
+    from automation.rebuild_sitemap import rebuild_sitemap
+    rebuild_sitemap()
 
 
 def main() -> None:
