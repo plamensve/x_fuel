@@ -36,9 +36,6 @@ body > .main-nav::before,
     will-change: box-shadow;
 }
 
-/* Keep the same painted background while scrolling. Changing a blurred,
-   translucent background at the first scroll threshold caused a one-frame flash
-   in Chromium. Only the shadow is strengthened after scrolling. */
 .goriva-global-header.is-scrolled {
     box-shadow: 0 14px 38px rgba(2,6,23,.34);
 }
@@ -178,6 +175,34 @@ body > .main-nav::before,
     gap: 8px;
 }
 
+.goriva-data-status {
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    padding: 0 14px;
+    border: 1px solid rgba(148,163,184,.16);
+    border-radius: 12px;
+    color: #dce7f3;
+    background: linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.028));
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 8px 20px rgba(2,6,23,.14);
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .01em;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.goriva-data-status-dot {
+    width: 8px;
+    height: 8px;
+    flex: 0 0 auto;
+    border-radius: 50%;
+    background: #22c55e;
+    box-shadow: 0 0 0 4px rgba(34,197,94,.10), 0 0 12px rgba(34,197,94,.32);
+}
+
 .goriva-share-price-cta,
 .goriva-facebook-cta {
     min-height: 42px;
@@ -191,49 +216,11 @@ body > .main-nav::before,
     font-size: 12px;
     font-weight: 850;
     white-space: nowrap;
-    transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
 }
 
-.goriva-share-price-cta {
-    color: #07131f;
-    border: 1px solid rgba(110,231,183,.34);
-    background: linear-gradient(135deg, #6ee7b7 0%, #34d399 48%, #22c55e 100%);
-    box-shadow: 0 10px 24px rgba(34,197,94,.18), inset 0 1px 0 rgba(255,255,255,.32);
-}
-
-.goriva-share-price-cta > span {
-    width: 20px;
-    height: 20px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 7px;
-    background: rgba(7,19,31,.10);
-}
-
+.goriva-share-price-cta,
 .goriva-facebook-cta {
-    color: #edf5ff;
-    border: 1px solid rgba(96,165,250,.25);
-    background: rgba(37,99,235,.14);
-}
-
-.goriva-facebook-cta > span {
-    width: 21px;
-    height: 21px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 7px;
-    color: #2563eb;
-    background: #fff;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    font-weight: 900;
-}
-
-.goriva-share-price-cta:hover,
-.goriva-facebook-cta:hover {
-    transform: translateY(-2px);
+    display: none !important;
 }
 
 .goriva-global-menu-toggle {
@@ -251,10 +238,10 @@ body > .main-nav::before,
         font-size: 10px;
     }
     .goriva-nav-symbol { display: none; }
-    .goriva-facebook-cta {
-        width: 42px;
-        padding: 0;
-        font-size: 0;
+    .goriva-data-status {
+        min-height: 40px;
+        padding: 0 12px;
+        font-size: 10px;
     }
 }
 
