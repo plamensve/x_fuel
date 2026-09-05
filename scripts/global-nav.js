@@ -83,7 +83,6 @@
                 </nav>
                 <div class="goriva-global-actions">
                     <a class="goriva-share-price-cta" href="/#fuel-form"><span aria-hidden="true">＋</span>Сподели цена</a>
-                    <a class="goriva-facebook-cta" href="https://www.facebook.com/groups/960591129738525" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">f</span>Facebook</a>
                 </div>
             </div>`;
 
@@ -165,10 +164,6 @@
         buildScrollProgress();
     }
 
-    // script.js is loaded near the end of body on the legacy pages, so the DOM
-    // targets normally already exist. Initialize immediately instead of waiting
-    // for DOMContentLoaded; the latter made the complete header replacement a
-    // measurable post-paint layout shift on mobile Lighthouse.
     if (document.body && (document.querySelector("body > .header-bar") || document.querySelector("body > .main-nav") || document.querySelector("body > .business-header"))) {
         initGlobalShell();
     } else if (document.readyState === "loading") {
