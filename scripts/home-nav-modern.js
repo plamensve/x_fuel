@@ -19,7 +19,7 @@
 
     const style = document.createElement("link");
     style.rel = "stylesheet";
-    style.href = "/pages/styles/home-prices-light-pro.css?v=20260905-1818";
+    style.href = "/pages/styles/home-prices-light-pro.css?v=20260905-2135";
     style.dataset.homePricesLightPro = "true";
     document.head.appendChild(style);
 })();
