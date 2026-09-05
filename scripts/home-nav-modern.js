@@ -207,33 +207,95 @@
                 font-weight: 850;
             }
 
-            .home-top10-card.rank-1 .home-top10-price-meta {
+            /* All ranking cards: keep the fuel badge and / litre next to the euro sign. */
+            .home-top10-card .home-top10-card-top {
+                grid-template-columns: auto minmax(0, 1fr) !important;
+            }
+
+            .home-top10-card .home-top10-card-price {
+                align-items: center !important;
+                gap: 9px !important;
+            }
+
+            .home-top10-card .home-top10-price-meta {
                 display: inline-flex;
                 flex-direction: column;
                 align-items: flex-start;
-                justify-content: flex-end;
-                gap: 6px;
-                margin-left: 1px;
-                transform: translateY(-1px);
+                justify-content: center;
+                align-self: center;
+                gap: 5px;
+                margin-left: 0;
+                transform: translateY(1px);
             }
 
-            .home-top10-card.rank-1 .home-top10-price-meta .home-top10-fuel-pill {
+            .home-top10-card .home-top10-price-meta .home-top10-fuel-pill {
                 position: static;
                 margin: 0;
                 padding: 7px 11px;
+                border-color: rgba(34,197,94,.22);
+                background: rgba(34,197,94,.085);
                 font-size: 11px;
                 line-height: 1;
                 font-weight: 900;
                 letter-spacing: .025em;
-                border-color: rgba(34,197,94,.22);
-                background: rgba(34,197,94,.085);
+                white-space: nowrap;
+            }
+
+            .home-top10-card .home-top10-price-meta > span:last-child {
+                color: #9fb0c2;
+                font-size: 12px;
+                font-weight: 720;
+                line-height: 1;
+                white-space: nowrap;
+            }
+
+            .home-top10-card.rank-1 .home-top10-price-meta {
+                gap: 6px;
+                transform: translateY(2px);
+            }
+
+            .home-top10-card.rank-1 .home-top10-price-meta .home-top10-fuel-pill {
+                padding: 8px 12px;
+                font-size: 12px;
             }
 
             .home-top10-card.rank-1 .home-top10-price-meta > span:last-child {
                 color: #c6b96e;
-                font-size: 12px;
-                font-weight: 650;
+                font-size: 13px;
+                font-weight: 720;
+            }
+
+            /* Give cards #2–#4 stronger typography so the ranking reads better. */
+            .home-top10-card:not(.rank-1) .home-top10-card-copy h3 {
+                font-size: 19px !important;
+                line-height: 1.28;
+            }
+
+            .home-top10-card:not(.rank-1) .home-top10-card-copy p {
+                margin-top: 8px;
+                font-size: 13px !important;
+                line-height: 1.5;
+            }
+
+            .home-top10-card:not(.rank-1) .home-top10-card-price {
+                margin-top: 18px;
+            }
+
+            .home-top10-card:not(.rank-1) .home-top10-card-price strong {
+                font-size: 32px !important;
                 line-height: 1;
+            }
+
+            .home-top10-card:not(.rank-1) .home-top10-card-footer {
+                margin-top: 17px;
+                padding-top: 13px;
+                font-size: 12px !important;
+            }
+
+            .home-top10-card:not(.rank-1) .home-top10-rank-badge {
+                width: 40px;
+                height: 40px;
+                font-size: 17px;
             }
 
             @media (max-width: 1180px) {
@@ -299,9 +361,27 @@
                 .home-top4-ad-contact a,
                 .home-top4-ad-contact span { font-size: 11px; }
 
+                .home-top10-card .home-top10-card-price {
+                    gap: 7px !important;
+                }
+
+                .home-top10-card .home-top10-price-meta .home-top10-fuel-pill,
                 .home-top10-card.rank-1 .home-top10-price-meta .home-top10-fuel-pill {
-                    padding: 6px 10px;
+                    padding: 6px 9px;
                     font-size: 10px;
+                }
+
+                .home-top10-card .home-top10-price-meta > span:last-child,
+                .home-top10-card.rank-1 .home-top10-price-meta > span:last-child {
+                    font-size: 11px;
+                }
+
+                .home-top10-card:not(.rank-1) .home-top10-card-copy h3 {
+                    font-size: 18px !important;
+                }
+
+                .home-top10-card:not(.rank-1) .home-top10-card-price strong {
+                    font-size: 30px !important;
                 }
             }
         `;
@@ -331,33 +411,32 @@
         else winner.appendChild(banner);
     };
 
-    const moveWinnerFuelLabel = () => {
-        const winner = document.querySelector(".home-top10-card.rank-1");
-        if (!winner) return;
+    const moveFuelLabelsToPrice = () => {
+        document.querySelectorAll(".home-top10-card").forEach(card => {
+            const price = card.querySelector(".home-top10-card-price");
+            const fuelPill = card.querySelector(".home-top10-fuel-pill");
+            if (!price || !fuelPill || price.querySelector(".home-top10-price-meta")) return;
 
-        const price = winner.querySelector(".home-top10-card-price");
-        const fuelPill = winner.querySelector(".home-top10-fuel-pill");
-        if (!price || !fuelPill || price.querySelector(".home-top10-price-meta")) return;
+            const unit = [...price.children].find(el => el.tagName === "SPAN" && el !== fuelPill);
+            if (!unit) return;
 
-        const unit = [...price.children].find(el => el.tagName === "SPAN" && el !== fuelPill);
-        if (!unit) return;
-
-        const meta = document.createElement("span");
-        meta.className = "home-top10-price-meta";
-        price.insertBefore(meta, unit);
-        meta.appendChild(fuelPill);
-        meta.appendChild(unit);
+            const meta = document.createElement("span");
+            meta.className = "home-top10-price-meta";
+            price.insertBefore(meta, unit);
+            meta.appendChild(fuelPill);
+            meta.appendChild(unit);
+        });
     };
 
-    const syncWinnerCard = () => {
+    const syncTop4Cards = () => {
         addAdvertisingBanner();
-        moveWinnerFuelLabel();
+        moveFuelLabelsToPrice();
     };
 
     const init = () => {
-        syncWinnerCard();
+        syncTop4Cards();
         const root = document.querySelector(".home-top10-card-grid") || document.body;
-        const observer = new MutationObserver(syncWinnerCard);
+        const observer = new MutationObserver(syncTop4Cards);
         observer.observe(root, { childList: true, subtree: true });
     };
 
