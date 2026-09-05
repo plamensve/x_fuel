@@ -1,0 +1,264 @@
+/* goriva.online homepage — synchronized color system
+   Roles:
+   - navy/slate = structure
+   - purple/pink/orange = brand accent
+   - blue/teal = functional actions
+   - green = live/valid status
+   - gold = #1 ranking only
+*/
+
+:root {
+    --go-navy-950: #0b1220;
+    --go-navy-900: #132238;
+    --go-slate-800: #1e293b;
+    --go-slate-600: #64748b;
+    --go-surface: #f8fafc;
+    --go-surface-soft: #f1f5f9;
+    --go-border: #e2e8f0;
+    --go-brand-purple: #7c3aed;
+    --go-brand-pink: #db2777;
+    --go-brand-orange: #f97316;
+    --go-action-blue: #2563eb;
+    --go-action-teal: #14b8a6;
+    --go-success: #22c55e;
+    --go-gold: #facc15;
+    --go-brand-gradient: linear-gradient(120deg, #7c3aed 0%, #db2777 52%, #f97316 100%);
+    --go-action-gradient: linear-gradient(120deg, #2563eb 0%, #14b8a6 100%);
+    --go-dark-gradient: linear-gradient(145deg, #132238 0%, #0b1220 100%);
+}
+
+body {
+    background: linear-gradient(180deg, #eef2f7 0%, #f8fafc 46%, #eef2f7 100%) !important;
+}
+
+/* Global shell */
+.goriva-global-header {
+    background:
+        radial-gradient(circle at 15% -40%, rgba(124,58,237,.10), transparent 34%),
+        linear-gradient(180deg, rgba(19,34,56,.98), rgba(11,18,32,.98)) !important;
+    border-bottom-color: rgba(148,163,184,.14) !important;
+}
+
+.goriva-global-menu {
+    background: linear-gradient(180deg, rgba(30,41,59,.88), rgba(11,18,32,.88)) !important;
+}
+
+.goriva-global-menu a.is-active {
+    border-color: rgba(37,99,235,.26) !important;
+    background: linear-gradient(135deg, rgba(37,99,235,.20), rgba(20,184,166,.10)) !important;
+}
+
+.goriva-nav-status {
+    color: #dbe7f4 !important;
+    background: rgba(255,255,255,.045) !important;
+    border-color: rgba(148,163,184,.16) !important;
+}
+
+.goriva-nav-status::before { background: var(--go-success) !important; }
+
+/* Hero */
+.about-project.pro-home-hero {
+    background:
+        radial-gradient(circle at 12% 8%, rgba(124,58,237,.16), transparent 27%),
+        radial-gradient(circle at 88% 22%, rgba(219,39,119,.09), transparent 25%),
+        var(--go-dark-gradient) !important;
+}
+
+.pro-home-hero::before { border-color: rgba(124,58,237,.08) !important; }
+
+.pro-hero-kicker {
+    color: #d6e0eb !important;
+    border-color: rgba(148,163,184,.16) !important;
+    background: rgba(255,255,255,.045) !important;
+}
+.pro-hero-kicker::before { background: var(--go-success) !important; }
+
+.pro-home-hero .about-title { color: #f8fafc !important; }
+.pro-home-hero .about-title .hero-gradient {
+    background: var(--go-brand-gradient) !important;
+    -webkit-background-clip: text !important;
+    background-clip: text !important;
+    color: transparent !important;
+}
+.pro-home-hero .about-desc { color: #aab8c9 !important; }
+
+.pro-home-hero .about-points .hero-benefit {
+    border-color: rgba(148,163,184,.13) !important;
+    background: rgba(255,255,255,.045) !important;
+    box-shadow: 0 10px 26px rgba(2,6,23,.18) !important;
+}
+.hero-benefit strong { color: #eef4fb !important; }
+.hero-benefit small { color: #8fa1b5 !important; }
+.hero-benefit-icon,
+.hero-benefit:nth-child(2) .hero-benefit-icon,
+.hero-benefit:nth-child(3) .hero-benefit-icon {
+    color: #eaf8f7 !important;
+    background: linear-gradient(135deg, rgba(37,99,235,.30), rgba(20,184,166,.22)) !important;
+}
+
+.pro-home-hero .cta-primary {
+    color: #fff !important;
+    border-color: rgba(37,99,235,.25) !important;
+    background: var(--go-action-gradient) !important;
+    box-shadow: 0 10px 24px rgba(37,99,235,.18) !important;
+}
+
+.pro-home-hero .eko-map-promo,
+.pro-home-hero .eko-map-promo-action,
+.eko-map-promo-icon {
+    background: var(--go-brand-gradient) !important;
+}
+
+/* EKO map */
+.station-map-section.pro-station-map {
+    background:
+        radial-gradient(circle at 86% -10%, rgba(37,99,235,.13), transparent 31%),
+        var(--go-dark-gradient) !important;
+}
+.pro-map-pin,
+.map-stat-icon,
+.map-stat-card:nth-child(2) .map-stat-icon,
+.map-stat-card:nth-child(3) .map-stat-icon {
+    color: #ecfeff !important;
+    background: linear-gradient(135deg, rgba(37,99,235,.40), rgba(20,184,166,.30)) !important;
+}
+.map-stat-card {
+    border-color: rgba(148,163,184,.11) !important;
+    background: rgba(255,255,255,.035) !important;
+}
+.eko-panel-eyebrow { color: #67e8f9 !important; }
+.eko-map-help {
+    border-color: rgba(20,184,166,.16) !important;
+    background: rgba(20,184,166,.055) !important;
+}
+
+/* Top 4 — gold belongs only to the winner; everything else stays neutral */
+.home-top10-cards-section {
+    background:
+        radial-gradient(circle at 92% 0%, rgba(37,99,235,.11), transparent 34%),
+        var(--go-dark-gradient) !important;
+}
+.home-top10-cards-section::before {
+    background: linear-gradient(90deg, var(--go-gold), var(--go-action-blue), var(--go-action-teal)) !important;
+}
+.home-top10-eyebrow { color: var(--go-gold) !important; }
+.home-city-tab.is-active,
+.home-top10-tab.is-active {
+    color: #efffff !important;
+    border-color: rgba(20,184,166,.28) !important;
+    background: linear-gradient(135deg, rgba(37,99,235,.23), rgba(20,184,166,.12)) !important;
+}
+.home-top10-card {
+    background: linear-gradient(145deg, rgba(30,41,59,.98), rgba(11,18,32,.98)) !important;
+}
+.home-top10-card.rank-1 {
+    border-color: rgba(250,204,21,.27) !important;
+    background:
+        radial-gradient(circle at 88% 12%, rgba(250,204,21,.10), transparent 24%),
+        linear-gradient(135deg, #22344c 0%, #132238 52%, #0b1220 100%) !important;
+}
+.home-top10-card.rank-2::after,
+.home-top10-card.rank-3::after { background: #94a3b8 !important; opacity: .035 !important; }
+.home-top10-fuel-pill {
+    color: #ccfbf1 !important;
+    border-color: rgba(20,184,166,.18) !important;
+    background: rgba(20,184,166,.07) !important;
+}
+
+/* Daily prices */
+main.container > .prices-card {
+    background:
+        radial-gradient(circle at 94% -8%, rgba(37,99,235,.06), transparent 30%),
+        linear-gradient(145deg, #f1f5f9 0%, #e9eef5 100%) !important;
+}
+main.container > .prices-card::before {
+    background: linear-gradient(90deg, var(--go-navy-900), var(--go-action-blue), var(--go-action-teal)) !important;
+}
+main.container > .prices-card #prices-date {
+    color: #fff !important;
+    -webkit-text-fill-color: #fff !important;
+    background: var(--go-brand-gradient) !important;
+    border-color: rgba(255,255,255,.28) !important;
+    box-shadow: 0 8px 20px rgba(124,58,237,.16), inset 0 1px 0 rgba(255,255,255,.22) !important;
+}
+main.container > .prices-card .view-toggle .view-btn.active,
+main.container > .prices-card .map-btn,
+main.container > .prices-card #pagination button.active-page,
+main.container > .prices-card #pagination .active-page {
+    color: #fff !important;
+    background: var(--go-action-gradient) !important;
+    border-color: transparent !important;
+}
+main.container > .prices-card .status-dot { background: var(--go-success) !important; }
+
+/* Business and price submission */
+.business-promo,
+.price-submit-section .submit-card,
+.why-share-card {
+    background:
+        radial-gradient(circle at 100% 0%, rgba(37,99,235,.10), transparent 34%),
+        var(--go-dark-gradient) !important;
+}
+.business-promo-label,
+.price-submit-section .card-header::before { color: #67e8f9 !important; }
+.business-promo-button,
+.price-submit-section .submit-button,
+.price-submit-section button[type="submit"] {
+    color: #fff !important;
+    background: var(--go-action-gradient) !important;
+    border-color: transparent !important;
+}
+.price-submit-section .submit-card::before,
+.why-share-card::before {
+    background: linear-gradient(180deg, var(--go-action-blue), var(--go-action-teal)) !important;
+}
+.why-share-label { color: #67e8f9 !important; }
+.why-share-note {
+    color: #ccfbf1 !important;
+    background: rgba(20,184,166,.075) !important;
+}
+
+/* How it works / founder: neutral surfaces + functional accent */
+.how-it-works .step-icon,
+.how-it-works .step-tag {
+    color: #fff !important;
+    background: var(--go-action-gradient) !important;
+    border-color: transparent !important;
+}
+.how-it-works .step,
+.founder-box,
+.contact-card {
+    border-color: var(--go-border) !important;
+    background: var(--go-surface) !important;
+}
+.how-eyebrow,
+.section-label,
+.box-title { color: var(--go-action-blue) !important; }
+
+.partnership-badge {
+    color: #fff !important;
+    background: var(--go-brand-gradient) !important;
+    border-color: transparent !important;
+}
+.partner-primary {
+    color: #fff !important;
+    background: var(--go-action-gradient) !important;
+    border-color: transparent !important;
+}
+
+/* Footer */
+.site-footer,
+.goriva-global-footer {
+    background:
+        radial-gradient(circle at 10% 0%, rgba(124,58,237,.07), transparent 30%),
+        var(--go-dark-gradient) !important;
+}
+.site-footer::before,
+.goriva-global-footer::before {
+    background: linear-gradient(90deg, var(--go-brand-purple), var(--go-brand-pink), var(--go-brand-orange)) !important;
+}
+.footer-status::before { background: var(--go-success) !important; }
+
+@media (max-width: 760px) {
+    .about-project.pro-home-hero { background: var(--go-dark-gradient) !important; }
+}
