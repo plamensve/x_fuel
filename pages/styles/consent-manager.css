@@ -1,1 +1,563 @@
-.goriva-consent-backdrop{position:fixed;inset:0;z-index:99998;background:rgba(2,8,18,.72);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .22s ease}.goriva-consent-backdrop.is-open{opacity:1;pointer-events:auto}.goriva-consent-modal{width:min(920px,100%);max-height:min(760px,calc(100vh - 48px));overflow:hidden;display:grid;grid-template-columns:.9fr 1.1fr;border:1px solid rgba(229,178,79,.58);border-radius:28px;background:#f8fafc;box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 0 4px rgba(229,178,79,.06),0 28px 70px rgba(0,0,0,.42),0 0 24px rgba(229,178,79,.11);transform:translateY(12px) scale(.985);transition:transform .22s ease}.goriva-consent-backdrop.is-open .goriva-consent-modal{transform:none}.goriva-consent-brand{position:relative;overflow:hidden;padding:42px 38px;color:#f8fafc;background:radial-gradient(circle at 25% 10%,rgba(245,190,67,.16),transparent 28%),linear-gradient(160deg,#071421,#0b2030 58%,#07131f)}.goriva-consent-brand:after{content:"";position:absolute;inset:auto -70px -90px 15%;height:240px;background:radial-gradient(circle,rgba(218,164,58,.16),transparent 68%)}.goriva-consent-logo{display:flex;align-items:center;gap:12px;margin-bottom:52px}.goriva-consent-logo img{width:52px;height:52px;object-fit:contain}.goriva-consent-logo strong{font-size:25px;letter-spacing:-.03em}.goriva-consent-logo strong span{color:#d9a63f}.goriva-consent-brand h2{margin:0 0 18px;font-size:clamp(32px,4.2vw,48px);line-height:1.08;letter-spacing:-.045em;overflow-wrap:normal;word-break:normal;hyphens:none}.goriva-consent-brand h2 span{color:#e5b24f}.goriva-consent-brand p{margin:0;color:#c7d2df;line-height:1.68;font-size:15px}.goriva-consent-benefits{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:34px}.goriva-consent-benefit{font-size:12px;text-align:center;color:#dbe5ef}.goriva-consent-benefit b{display:grid;place-items:center;width:42px;height:42px;margin:0 auto 8px;border-radius:50%;border:1px solid rgba(229,178,79,.55);color:#e5b24f;font-size:18px}.goriva-consent-panel{position:relative;min-height:0;overflow-y:auto;overflow-x:hidden;margin:10px 10px 10px 0;padding:24px 24px 24px 34px;color:#102030;background:linear-gradient(180deg,#fff,#f7f9fc);border-radius:0 20px 20px 0;scrollbar-width:thin;scrollbar-color:#d8a13a #e9eef4}.goriva-consent-panel::-webkit-scrollbar{width:10px}.goriva-consent-panel::-webkit-scrollbar-track{background:#e9eef4;border-radius:999px;margin:14px 0}.goriva-consent-panel::-webkit-scrollbar-thumb{background:linear-gradient(180deg,#efc464,#d39b31);border:2px solid #e9eef4;border-radius:999px}.goriva-consent-panel::-webkit-scrollbar-thumb:hover{background:linear-gradient(180deg,#f4ce78,#c99027)}.goriva-consent-close{position:absolute;right:18px;top:16px;width:36px;height:36px;border:0;background:transparent;color:#23374a;font-size:28px;cursor:pointer}.goriva-consent-tabs{display:flex;gap:22px;padding:0 38px 12px 0;border-bottom:1px solid #e5eaf0;margin-bottom:18px;font-size:13px}.goriva-consent-tabs b{color:#172536;border-bottom:2px solid #d9a63f;padding-bottom:10px}.goriva-consent-category{display:grid;grid-template-columns:46px 1fr auto;gap:14px;align-items:center;padding:16px;border:1px solid #e2e8f0;border-radius:15px;background:#fff;margin-bottom:12px}.goriva-consent-icon{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:#eef3f7;font-size:20px}.goriva-consent-category strong{display:block;margin-bottom:4px;font-size:15px}.goriva-consent-category small{display:block;color:#667789;line-height:1.45}.goriva-consent-switch{position:relative;width:52px;height:30px;display:inline-block}.goriva-consent-switch input{opacity:0;width:0;height:0}.goriva-consent-slider{position:absolute;inset:0;border-radius:999px;background:#c7d0da;cursor:pointer;transition:.2s}.goriva-consent-slider:before{content:"";position:absolute;width:24px;height:24px;left:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 2px 7px rgba(0,0,0,.18);transition:.2s}.goriva-consent-switch input:checked+.goriva-consent-slider{background:#d7a43b}.goriva-consent-switch input:checked+.goriva-consent-slider:before{transform:translateX(22px)}.goriva-consent-switch input:disabled+.goriva-consent-slider{background:#aeb8c3;cursor:not-allowed}.goriva-consent-actions{display:grid;gap:10px;margin-top:20px}.goriva-consent-actions button{min-height:49px;border-radius:12px;font-weight:800;font-size:14px;cursor:pointer}.goriva-consent-accept{border:1px solid #d6a23c;background:linear-gradient(180deg,#ebbe5e,#d8a13a);color:#111827}.goriva-consent-reject,.goriva-consent-save{border:1px solid #263c51;background:#fff;color:#1a2b3c}.goriva-consent-save{display:none}.goriva-consent-panel.is-settings .goriva-consent-save{display:block}.goriva-consent-meta{margin-top:16px;text-align:center;color:#708090;font-size:11px;line-height:1.55}.goriva-consent-meta a{color:#365b7d}.goriva-privacy-settings-link{display:inline;background:none!important;border:0!important;margin:0!important;padding:0!important;color:inherit!important;font:inherit!important;font-size:inherit!important;font-weight:inherit!important;line-height:inherit!important;cursor:pointer;text-decoration:none!important;box-shadow:none!important}.goriva-privacy-settings-link:hover,.goriva-privacy-settings-link:focus{text-decoration:none!important;color:inherit!important}@media(max-width:760px){.goriva-consent-backdrop{align-items:flex-end;padding:10px;backdrop-filter:none;-webkit-backdrop-filter:none}.goriva-consent-modal{grid-template-columns:1fr;max-height:92vh;border-radius:22px}.goriva-consent-brand{padding:24px 22px}.goriva-consent-logo{margin-bottom:18px}.goriva-consent-brand h2{font-size:32px;max-width:100%}.goriva-consent-benefits{margin-top:20px}.goriva-consent-panel{margin:0 8px 8px;padding:22px 16px 24px 18px;border-radius:0 0 14px 14px}.goriva-consent-tabs{padding-right:32px;gap:14px}.goriva-consent-category{grid-template-columns:40px 1fr auto;padding:13px;gap:10px}.goriva-consent-category small{font-size:11px}}
+.goriva-consent-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 99998;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    opacity: 0;
+    pointer-events: none;
+    background: rgba(2, 8, 18, 0.72);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    transition: opacity 0.22s ease;
+}
+
+.goriva-consent-backdrop.is-open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.goriva-consent-modal {
+    width: min(920px, 100%);
+    max-height: min(760px, calc(100vh - 48px));
+    min-height: 0;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    border: 1px solid rgba(229, 178, 79, 0.58);
+    border-radius: 28px;
+    background: #f8fafc;
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.08),
+        0 0 0 4px rgba(229, 178, 79, 0.06),
+        0 28px 70px rgba(0, 0, 0, 0.42),
+        0 0 24px rgba(229, 178, 79, 0.11);
+    transform: translateY(12px) scale(0.985);
+    transition: transform 0.22s ease;
+}
+
+.goriva-consent-backdrop.is-open .goriva-consent-modal {
+    transform: none;
+}
+
+.goriva-consent-brand {
+    position: relative;
+    overflow: hidden;
+    padding: 42px 38px;
+    color: #f8fafc;
+    background:
+        radial-gradient(circle at 25% 10%, rgba(245, 190, 67, 0.16), transparent 28%),
+        linear-gradient(160deg, #071421, #0b2030 58%, #07131f);
+}
+
+.goriva-consent-brand::after {
+    content: "";
+    position: absolute;
+    inset: auto -70px -90px 15%;
+    height: 240px;
+    background: radial-gradient(circle, rgba(218, 164, 58, 0.16), transparent 68%);
+}
+
+.goriva-consent-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 52px;
+}
+
+.goriva-consent-logo img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+}
+
+.goriva-consent-logo strong {
+    font-size: 25px;
+    letter-spacing: -0.03em;
+}
+
+.goriva-consent-logo strong span {
+    color: #d9a63f;
+}
+
+.goriva-consent-brand h2 {
+    margin: 0 0 18px;
+    font-size: clamp(32px, 4.2vw, 48px);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    overflow-wrap: normal;
+    word-break: normal;
+    hyphens: none;
+}
+
+.goriva-consent-brand h2 span {
+    color: #e5b24f;
+}
+
+.goriva-consent-brand p {
+    margin: 0;
+    color: #c7d2df;
+    line-height: 1.68;
+    font-size: 15px;
+}
+
+.goriva-consent-benefits {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-top: 34px;
+}
+
+.goriva-consent-benefit {
+    color: #dbe5ef;
+    font-size: 12px;
+    text-align: center;
+}
+
+.goriva-consent-benefit b {
+    width: 42px;
+    height: 42px;
+    margin: 0 auto 8px;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(229, 178, 79, 0.55);
+    border-radius: 50%;
+    color: #e5b24f;
+    font-size: 18px;
+}
+
+.goriva-consent-panel {
+    position: relative;
+    min-width: 0;
+    min-height: 0;
+    margin: 10px 10px 10px 0;
+    padding: 24px 24px 24px 34px;
+    overflow: hidden;
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr) auto auto;
+    color: #102030;
+    background: linear-gradient(180deg, #fff, #f7f9fc);
+    border-radius: 0 20px 20px 0;
+}
+
+.goriva-consent-close {
+    position: absolute;
+    z-index: 5;
+    top: 12px;
+    right: 12px;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    color: #23374a;
+    background: rgba(255, 255, 255, 0.92);
+    font-size: 29px;
+    line-height: 1;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.goriva-consent-close:hover,
+.goriva-consent-close:focus-visible {
+    border-color: #d8e0e8;
+    background: #ffffff;
+    outline: none;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.10);
+}
+
+.goriva-consent-tabs {
+    min-width: 0;
+    display: flex;
+    gap: 22px;
+    padding: 0 48px 12px 0;
+    margin-bottom: 14px;
+    overflow-x: auto;
+    border-bottom: 1px solid #e5eaf0;
+    font-size: 13px;
+    scrollbar-width: none;
+}
+
+.goriva-consent-tabs::-webkit-scrollbar {
+    display: none;
+}
+
+.goriva-consent-tabs b,
+.goriva-consent-tabs span {
+    flex: 0 0 auto;
+    white-space: nowrap;
+}
+
+.goriva-consent-tabs b {
+    padding-bottom: 10px;
+    color: #172536;
+    border-bottom: 2px solid #d9a63f;
+}
+
+.goriva-consent-options {
+    min-width: 0;
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-right: 4px;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: #d8a13a #e9eef4;
+}
+
+.goriva-consent-options::-webkit-scrollbar {
+    width: 9px;
+}
+
+.goriva-consent-options::-webkit-scrollbar-track {
+    margin: 8px 0;
+    background: #e9eef4;
+    border-radius: 999px;
+}
+
+.goriva-consent-options::-webkit-scrollbar-thumb {
+    border: 2px solid #e9eef4;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #efc464, #d39b31);
+}
+
+.goriva-consent-category {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: center;
+    padding: 16px;
+    margin-bottom: 12px;
+    border: 1px solid #e2e8f0;
+    border-radius: 15px;
+    background: #fff;
+}
+
+.goriva-consent-category:last-child {
+    margin-bottom: 0;
+}
+
+.goriva-consent-icon {
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    border-radius: 12px;
+    background: #eef3f7;
+    font-size: 20px;
+}
+
+.goriva-consent-category strong {
+    display: block;
+    margin-bottom: 4px;
+    font-size: 15px;
+}
+
+.goriva-consent-category small {
+    display: block;
+    color: #667789;
+    line-height: 1.45;
+}
+
+.goriva-consent-switch {
+    position: relative;
+    width: 52px;
+    height: 30px;
+    display: inline-block;
+}
+
+.goriva-consent-switch input {
+    width: 0;
+    height: 0;
+    opacity: 0;
+}
+
+.goriva-consent-slider {
+    position: absolute;
+    inset: 0;
+    border-radius: 999px;
+    background: #c7d0da;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.goriva-consent-slider::before {
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: #fff;
+    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.18);
+    transition: 0.2s;
+}
+
+.goriva-consent-switch input:checked + .goriva-consent-slider {
+    background: #d7a43b;
+}
+
+.goriva-consent-switch input:checked + .goriva-consent-slider::before {
+    transform: translateX(22px);
+}
+
+.goriva-consent-switch input:disabled + .goriva-consent-slider {
+    background: #aeb8c3;
+    cursor: not-allowed;
+}
+
+.goriva-consent-actions {
+    display: grid;
+    gap: 10px;
+    margin-top: 16px;
+    padding-top: 4px;
+}
+
+.goriva-consent-actions button {
+    width: 100%;
+    min-height: 49px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 800;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.goriva-consent-accept {
+    border: 1px solid #d6a23c;
+    color: #111827;
+    background: linear-gradient(180deg, #ebbe5e, #d8a13a);
+}
+
+.goriva-consent-reject,
+.goriva-consent-save {
+    border: 1px solid #263c51;
+    color: #1a2b3c;
+    background: #fff;
+}
+
+/* Keep all actions visible. Saving the current selection is valid even before a switch changes. */
+.goriva-consent-save {
+    display: block;
+}
+
+.goriva-consent-meta {
+    margin-top: 12px;
+    color: #708090;
+    font-size: 11px;
+    line-height: 1.55;
+    text-align: center;
+}
+
+.goriva-consent-meta a {
+    color: #365b7d;
+}
+
+.goriva-privacy-settings-link {
+    display: inline;
+    margin: 0 !important;
+    padding: 0 !important;
+    border: 0 !important;
+    color: inherit !important;
+    background: none !important;
+    box-shadow: none !important;
+    font: inherit !important;
+    font-size: inherit !important;
+    font-weight: inherit !important;
+    line-height: inherit !important;
+    cursor: pointer;
+    text-decoration: none !important;
+}
+
+.goriva-privacy-settings-link:hover,
+.goriva-privacy-settings-link:focus {
+    color: inherit !important;
+    text-decoration: none !important;
+}
+
+@media (max-width: 760px) {
+    .goriva-consent-backdrop {
+        align-items: stretch;
+        padding:
+            max(8px, env(safe-area-inset-top))
+            max(8px, env(safe-area-inset-right))
+            max(8px, env(safe-area-inset-bottom))
+            max(8px, env(safe-area-inset-left));
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+    }
+
+    .goriva-consent-modal {
+        width: 100%;
+        max-height: calc(100vh - 16px);
+        max-height: calc(100dvh - 16px);
+        margin: auto 0 0;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto minmax(0, 1fr);
+        border-radius: 22px;
+    }
+
+    .goriva-consent-brand {
+        padding: 18px 18px 14px;
+    }
+
+    .goriva-consent-logo {
+        gap: 9px;
+        margin-bottom: 10px;
+    }
+
+    .goriva-consent-logo img {
+        width: 42px;
+        height: 42px;
+    }
+
+    .goriva-consent-logo strong {
+        font-size: 21px;
+    }
+
+    .goriva-consent-brand h2 {
+        max-width: 100%;
+        margin-bottom: 9px;
+        font-size: clamp(23px, 7vw, 28px);
+        line-height: 1.08;
+    }
+
+    .goriva-consent-brand p {
+        font-size: 13px;
+        line-height: 1.48;
+    }
+
+    .goriva-consent-benefits {
+        display: none;
+    }
+
+    .goriva-consent-panel {
+        min-height: 0;
+        margin: 0 6px 6px;
+        padding: 16px 12px calc(12px + env(safe-area-inset-bottom));
+        border-radius: 0 0 15px 15px;
+        grid-template-rows: auto minmax(0, 1fr) auto auto;
+    }
+
+    .goriva-consent-close {
+        top: 8px;
+        right: 8px;
+        width: 44px;
+        height: 44px;
+        border-color: #e2e8f0;
+        background: #fff;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    }
+
+    .goriva-consent-tabs {
+        gap: 12px;
+        margin-bottom: 10px;
+        padding: 0 48px 9px 0;
+        font-size: 12px;
+    }
+
+    .goriva-consent-tabs b {
+        padding-bottom: 7px;
+    }
+
+    .goriva-consent-options {
+        padding-right: 2px;
+    }
+
+    .goriva-consent-category {
+        grid-template-columns: 38px minmax(0, 1fr) auto;
+        gap: 9px;
+        padding: 10px;
+        margin-bottom: 8px;
+        border-radius: 12px;
+    }
+
+    .goriva-consent-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        font-size: 17px;
+    }
+
+    .goriva-consent-category strong {
+        margin-bottom: 2px;
+        font-size: 13px;
+    }
+
+    .goriva-consent-category small {
+        font-size: 10.5px;
+        line-height: 1.32;
+    }
+
+    .goriva-consent-switch {
+        width: 48px;
+        height: 28px;
+    }
+
+    .goriva-consent-slider::before {
+        width: 22px;
+        height: 22px;
+    }
+
+    .goriva-consent-switch input:checked + .goriva-consent-slider::before {
+        transform: translateX(20px);
+    }
+
+    .goriva-consent-actions {
+        gap: 7px;
+        margin-top: 10px;
+        padding-top: 0;
+    }
+
+    .goriva-consent-actions button {
+        min-height: 44px;
+        font-size: 13px;
+    }
+
+    .goriva-consent-meta {
+        margin-top: 8px;
+        font-size: 10px;
+        line-height: 1.4;
+    }
+}
+
+@media (max-width: 380px), (max-width: 760px) and (max-height: 650px) {
+    .goriva-consent-brand {
+        padding: 12px 14px 9px;
+    }
+
+    .goriva-consent-logo {
+        margin-bottom: 5px;
+    }
+
+    .goriva-consent-logo img {
+        width: 34px;
+        height: 34px;
+    }
+
+    .goriva-consent-logo strong {
+        font-size: 18px;
+    }
+
+    .goriva-consent-brand h2 {
+        margin-bottom: 0;
+        font-size: 21px;
+    }
+
+    .goriva-consent-brand p {
+        display: none;
+    }
+
+    .goriva-consent-panel {
+        padding-top: 12px;
+    }
+
+    .goriva-consent-meta {
+        display: none;
+    }
+}

@@ -6,7 +6,13 @@
   const VERSION = 1;
   const GA_ID = 'G-F6YJNGGFR2';
   const ADSENSE_CLIENT = 'ca-pub-3478773231642095';
-  const defaults = { necessary: true, analytics: false, ads: false, functional: false, version: VERSION };
+  const defaults = {
+    necessary: true,
+    analytics: false,
+    ads: false,
+    functional: false,
+    version: VERSION
+  };
 
   const loadStored = () => {
     try {
@@ -15,12 +21,14 @@
       const parsed = JSON.parse(raw);
       if (parsed.version !== VERSION) return null;
       return { ...defaults, ...parsed, necessary: true };
-    } catch (_) { return null; }
+    } catch (_) {
+      return null;
+    }
   };
 
   const ensureGtag = () => {
     window.dataLayer = window.dataLayer || [];
-    window.gtag = window.gtag || function(){ window.dataLayer.push(arguments); };
+    window.gtag = window.gtag || function () { window.dataLayer.push(arguments); };
   };
 
   function updateGoogleConsent(state) {
@@ -37,10 +45,14 @@
   }
 
   function loadGoogleAnalyticsOnce() {
-    if (window.__GORIVA_GA_LOADED__ || document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${GA_ID}"]`)) {
+    if (
+      window.__GORIVA_GA_LOADED__ ||
+      document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${GA_ID}"]`)
+    ) {
       window.__GORIVA_GA_LOADED__ = true;
       return;
     }
+
     window.__GORIVA_GA_LOADED__ = true;
     ensureGtag();
     const script = document.createElement('script');
@@ -52,10 +64,14 @@
   }
 
   function loadAdsenseOnce() {
-    if (window.__GORIVA_ADSENSE_LOADED__ || document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]')) {
+    if (
+      window.__GORIVA_ADSENSE_LOADED__ ||
+      document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]')
+    ) {
       window.__GORIVA_ADSENSE_LOADED__ = true;
       return;
     }
+
     window.__GORIVA_ADSENSE_LOADED__ = true;
     const script = document.createElement('script');
     script.async = true;
@@ -65,14 +81,19 @@
   }
 
   function loadHotjarOnce() {
-    const existingHotjar = [...document.scripts].some(script => script.src && script.src.includes('static.hotjar.com/c/hotjar-'));
+    const existingHotjar = [...document.scripts].some(
+      script => script.src && script.src.includes('static.hotjar.com/c/hotjar-')
+    );
+
     if (window.__GORIVA_HOTJAR_LOADED__ || existingHotjar) {
       window.__GORIVA_HOTJAR_LOADED__ = true;
       return;
     }
+
     window.__GORIVA_HOTJAR_LOADED__ = true;
-    window.hj = window.hj || function(){ (window.hj.q = window.hj.q || []).push(arguments); };
+    window.hj = window.hj || function () { (window.hj.q = window.hj.q || []).push(arguments); };
     window._hjSettings = { hjid: 6686373, hjsv: 6 };
+
     const script = document.createElement('script');
     script.async = true;
     script.src = `https://static.hotjar.com/c/hotjar-${window._hjSettings.hjid}.js?sv=${window._hjSettings.hjsv}`;
@@ -87,10 +108,6 @@
     if (state.ads) loadAdsenseOnce();
   }
 
-  // Returning visitors may already have analytics/ads consent. Do not let those
-  // third-party scripts compete with HTML/CSS/hero resources on every page load.
-  // Consent state is applied immediately; optional services start after load and
-  // during an idle slice (or a short timeout where requestIdleCallback is absent).
   function scheduleGrantedServices(state) {
     if (!state.analytics && !state.ads) return;
 
@@ -108,73 +125,181 @@
   }
 
   function persist(state) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, version: VERSION, savedAt: new Date().toISOString() }));
-    updateGoogleConsent(state);
-    scheduleGrantedServices(state);
-    window.dispatchEvent(new CustomEvent('goriva:consent-changed', { detail: state }));
+    const normalized = { ...defaults, ...state, necessary: true, version: VERSION };
+
+    try {
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify({ ...normalized, savedAt: new Date().toISOString() })
+      );
+    } catch (_) {
+      // A blocked/unavailable localStorage must never trap the visitor in the modal.
+    }
+
+    updateGoogleConsent(normalized);
+    scheduleGrantedServices(normalized);
+    window.dispatchEvent(new CustomEvent('goriva:consent-changed', { detail: normalized }));
+    return normalized;
   }
 
   function createModal() {
     if (document.getElementById('goriva-consent')) return;
+
     const wrapper = document.createElement('div');
     wrapper.id = 'goriva-consent';
     wrapper.className = 'goriva-consent-backdrop';
     wrapper.setAttribute('role', 'dialog');
     wrapper.setAttribute('aria-modal', 'true');
     wrapper.setAttribute('aria-labelledby', 'goriva-consent-title');
+
     wrapper.innerHTML = `
       <div class="goriva-consent-modal">
         <section class="goriva-consent-brand">
-          <div class="goriva-consent-logo"><img src="/media/2logo.png" alt=""><strong><span>goriva</span>.online</strong></div>
+          <div class="goriva-consent-logo">
+            <img src="/media/2logo.png" alt="">
+            <strong><span>goriva</span>.online</strong>
+          </div>
           <h2 id="goriva-consent-title">Вашата поверителност <span>е важна</span></h2>
           <p>Използваме бисквитки и сходни технологии, за да осигурим работата на сайта, да разбираме как се използва и, при ваше съгласие, да показваме реклами.</p>
-          <div class="goriva-consent-benefits"><div class="goriva-consent-benefit"><b>▥</b>По-добро изживяване</div><div class="goriva-consent-benefit"><b>⌁</b>Защитени данни</div><div class="goriva-consent-benefit"><b>✓</b>Вие избирате</div></div>
+          <div class="goriva-consent-benefits">
+            <div class="goriva-consent-benefit"><b>▥</b>По-добро изживяване</div>
+            <div class="goriva-consent-benefit"><b>⌁</b>Защитени данни</div>
+            <div class="goriva-consent-benefit"><b>✓</b>Вие избирате</div>
+          </div>
         </section>
+
         <section class="goriva-consent-panel">
-          <button class="goriva-consent-close" type="button" aria-label="Затвори">×</button>
-          <div class="goriva-consent-tabs"><b>Категории</b><span>Подробности</span><span>За бисквитките</span></div>
-          <div class="goriva-consent-category"><span class="goriva-consent-icon">⚙</span><div><strong>Необходими</strong><small>Нужни са за основната работа и сигурността на сайта.</small></div><label class="goriva-consent-switch"><input type="checkbox" checked disabled><span class="goriva-consent-slider"></span></label></div>
-          <div class="goriva-consent-category"><span class="goriva-consent-icon">▥</span><div><strong>Аналитични</strong><small>Помагат ни да разбираме посещаемостта и използването на сайта.</small></div><label class="goriva-consent-switch"><input id="goriva-consent-analytics" type="checkbox"><span class="goriva-consent-slider"></span></label></div>
-          <div class="goriva-consent-category"><span class="goriva-consent-icon">◁</span><div><strong>Рекламни</strong><small>Използват се за рекламни услуги и персонализиране, когато е приложимо.</small></div><label class="goriva-consent-switch"><input id="goriva-consent-ads" type="checkbox"><span class="goriva-consent-slider"></span></label></div>
-          <div class="goriva-consent-category"><span class="goriva-consent-icon">☰</span><div><strong>Функционални</strong><small>Запомнят допълнителни предпочитания и настройки.</small></div><label class="goriva-consent-switch"><input id="goriva-consent-functional" type="checkbox"><span class="goriva-consent-slider"></span></label></div>
-          <div class="goriva-consent-actions"><button class="goriva-consent-accept" type="button">Приемам всички</button><button class="goriva-consent-reject" type="button">Отказвам всички</button><button class="goriva-consent-save" type="button">Запази моите настройки</button></div>
-          <div class="goriva-consent-meta">Можете да промените избора си по всяко време от footer-а.<br><a href="/pages/privacy.html">Политика за поверителност</a> · <a href="/pages/rules.html">Общи условия</a></div>
-        </section>`;
+          <button class="goriva-consent-close" type="button" aria-label="Затвори настройките за поверителност">×</button>
+
+          <div class="goriva-consent-tabs">
+            <b>Категории</b><span>Подробности</span><span>За бисквитките</span>
+          </div>
+
+          <div class="goriva-consent-options">
+            <div class="goriva-consent-category">
+              <span class="goriva-consent-icon">⚙</span>
+              <div><strong>Необходими</strong><small>Нужни са за основната работа и сигурността на сайта.</small></div>
+              <label class="goriva-consent-switch"><input type="checkbox" checked disabled><span class="goriva-consent-slider"></span></label>
+            </div>
+            <div class="goriva-consent-category">
+              <span class="goriva-consent-icon">▥</span>
+              <div><strong>Аналитични</strong><small>Помагат ни да разбираме посещаемостта и използването на сайта.</small></div>
+              <label class="goriva-consent-switch"><input id="goriva-consent-analytics" type="checkbox"><span class="goriva-consent-slider"></span></label>
+            </div>
+            <div class="goriva-consent-category">
+              <span class="goriva-consent-icon">◁</span>
+              <div><strong>Рекламни</strong><small>Използват се за рекламни услуги и персонализиране, когато е приложимо.</small></div>
+              <label class="goriva-consent-switch"><input id="goriva-consent-ads" type="checkbox"><span class="goriva-consent-slider"></span></label>
+            </div>
+            <div class="goriva-consent-category">
+              <span class="goriva-consent-icon">☰</span>
+              <div><strong>Функционални</strong><small>Запомнят допълнителни предпочитания и настройки.</small></div>
+              <label class="goriva-consent-switch"><input id="goriva-consent-functional" type="checkbox"><span class="goriva-consent-slider"></span></label>
+            </div>
+          </div>
+
+          <div class="goriva-consent-actions">
+            <button class="goriva-consent-accept" type="button">Приемам всички</button>
+            <button class="goriva-consent-reject" type="button">Отказвам всички</button>
+            <button class="goriva-consent-save" type="button">Запази моите настройки</button>
+          </div>
+
+          <div class="goriva-consent-meta">
+            Можете да промените избора си по всяко време от footer-а.<br>
+            <a href="/pages/privacy.html">Политика за поверителност</a> · <a href="/pages/rules.html">Общи условия</a>
+          </div>
+        </section>
+      </div>`;
+
     document.body.appendChild(wrapper);
 
     const panel = wrapper.querySelector('.goriva-consent-panel');
+    const closeButton = wrapper.querySelector('.goriva-consent-close');
     const analytics = wrapper.querySelector('#goriva-consent-analytics');
     const ads = wrapper.querySelector('#goriva-consent-ads');
     const functional = wrapper.querySelector('#goriva-consent-functional');
     const switches = [analytics, ads, functional];
-    switches.forEach(input => input.addEventListener('change', () => panel.classList.add('is-settings')));
 
-    const close = () => wrapper.classList.remove('is-open');
-    const apply = state => { persist(state); close(); };
-    wrapper.querySelector('.goriva-consent-accept').addEventListener('click', () => apply({ necessary:true, analytics:true, ads:true, functional:true }));
-    wrapper.querySelector('.goriva-consent-reject').addEventListener('click', () => apply({ necessary:true, analytics:false, ads:false, functional:false }));
-    wrapper.querySelector('.goriva-consent-save').addEventListener('click', () => apply({ necessary:true, analytics:analytics.checked, ads:ads.checked, functional:functional.checked }));
-    wrapper.querySelector('.goriva-consent-close').addEventListener('click', () => { if (loadStored()) close(); });
+    const close = () => {
+      wrapper.classList.remove('is-open');
+      wrapper.setAttribute('aria-hidden', 'true');
+    };
 
-    window.gorivaOpenPrivacySettings = () => {
+    const apply = state => {
+      persist(state);
+      close();
+    };
+
+    const closeWithoutOptionalConsent = () => {
+      const stored = loadStored();
+      if (stored) {
+        close();
+        return;
+      }
+
+      apply({ necessary: true, analytics: false, ads: false, functional: false });
+    };
+
+    const open = (settingsMode = false) => {
       const state = loadStored() || defaults;
       analytics.checked = !!state.analytics;
       ads.checked = !!state.ads;
       functional.checked = !!state.functional;
-      panel.classList.add('is-settings');
+      panel.classList.toggle('is-settings', settingsMode);
+      wrapper.removeAttribute('aria-hidden');
       wrapper.classList.add('is-open');
+
+      window.requestAnimationFrame(() => {
+        try { closeButton.focus({ preventScroll: true }); }
+        catch (_) { closeButton.focus(); }
+      });
     };
+
+    switches.forEach(input => {
+      input.addEventListener('change', () => panel.classList.add('is-settings'));
+    });
+
+    wrapper.querySelector('.goriva-consent-accept').addEventListener('click', () => {
+      apply({ necessary: true, analytics: true, ads: true, functional: true });
+    });
+
+    wrapper.querySelector('.goriva-consent-reject').addEventListener('click', () => {
+      apply({ necessary: true, analytics: false, ads: false, functional: false });
+    });
+
+    wrapper.querySelector('.goriva-consent-save').addEventListener('click', () => {
+      apply({
+        necessary: true,
+        analytics: analytics.checked,
+        ads: ads.checked,
+        functional: functional.checked
+      });
+    });
+
+    closeButton.addEventListener('click', closeWithoutOptionalConsent);
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && wrapper.classList.contains('is-open')) {
+        closeWithoutOptionalConsent();
+      }
+    });
+
+    window.gorivaOpenPrivacySettings = () => open(true);
 
     const stored = loadStored();
     if (stored) {
       updateGoogleConsent(stored);
       scheduleGrantedServices(stored);
+      wrapper.setAttribute('aria-hidden', 'true');
     } else {
       updateGoogleConsent(defaults);
-      requestAnimationFrame(() => wrapper.classList.add('is-open'));
+      window.requestAnimationFrame(() => open(false));
     }
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', createModal, { once:true });
-  else createModal();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', createModal, { once: true });
+  } else {
+    createModal();
+  }
 })();
