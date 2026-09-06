@@ -1,0 +1,179 @@
+name: Optimize web performance assets
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/performance-optimize-assets.yml"
+      - "**/*.png"
+      - "**/*.jpg"
+      - "**/*.jpeg"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: performance-asset-optimization
+  cancel-in-progress: false
+
+jobs:
+  optimize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install image optimizers
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq pngquant jpegoptim
+
+      - name: Optimize large images without changing dimensions or filenames
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import os
+          import shutil
+          import subprocess
+          import tempfile
+
+          roots = [Path("media"), Path("images"), Path("pages")]
+          threshold = 180 * 1024
+          changed = 0
+          before_total = 0
+          after_total = 0
+
+          def png_quality(path: Path) -> str:
+              p = path.as_posix().lower()
+              # Logos/icons get a very conservative palette conversion so their
+              # appearance stays effectively unchanged. Photographic/editorial
+              # PNGs use a high-quality web setting for a much smaller payload.
+              if "station_logos/" in p or path.name.lower() in {
+                  "2logo.png", "logo.png", "footer-logo.png"
+              }:
+                  return "92-100"
+              return "80-94"
+
+          for root in roots:
+              if not root.exists():
+                  continue
+              for path in root.rglob("*"):
+                  if not path.is_file() or path.stat().st_size < threshold:
+                      continue
+                  suffix = path.suffix.lower()
+                  if suffix not in {".png", ".jpg", ".jpeg"}:
+                      continue
+
+                  original_size = path.stat().st_size
+                  before_total += original_size
+
+                  if suffix == ".png":
+                      fd, tmp_name = tempfile.mkstemp(suffix=".png", dir=str(path.parent))
+                      os.close(fd)
+                      tmp = Path(tmp_name)
+                      try:
+                          result = subprocess.run(
+                              [
+                                  "pngquant",
+                                  "--quality", png_quality(path),
+                                  "--speed", "1",
+                                  "--strip",
+                                  "--force",
+                                  "--output", str(tmp),
+                                  "--", str(path),
+                              ],
+                              stdout=subprocess.DEVNULL,
+                              stderr=subprocess.DEVNULL,
+                          )
+                          if result.returncode == 0 and tmp.exists() and tmp.stat().st_size < original_size * 0.97:
+                              os.replace(tmp, path)
+                              changed += 1
+                          else:
+                              tmp.unlink(missing_ok=True)
+                      finally:
+                          tmp.unlink(missing_ok=True)
+                  else:
+                      backup = path.with_suffix(path.suffix + ".perf-backup")
+                      shutil.copy2(path, backup)
+                      subprocess.run(
+                          ["jpegoptim", "--strip-all", "--max=90", "--quiet", str(path)],
+                          stdout=subprocess.DEVNULL,
+                          stderr=subprocess.DEVNULL,
+                      )
+                      if path.stat().st_size >= original_size * 0.97:
+                          shutil.move(str(backup), str(path))
+                      else:
+                          backup.unlink(missing_ok=True)
+                          changed += 1
+
+                  after_total += path.stat().st_size
+
+          saved = max(0, before_total - after_total)
+          print(f"Optimized files: {changed}")
+          print(f"Payload before: {before_total / 1024 / 1024:.2f} MiB")
+          print(f"Payload after:  {after_total / 1024 / 1024:.2f} MiB")
+          print(f"Saved:          {saved / 1024 / 1024:.2f} MiB")
+          PY
+
+      - name: Add CSS dependency preloads to HTML documents
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          marker = "data-goriva-css-preload"
+          preloads = (
+              '  <link rel="preload" href="/styles-legacy.css" as="style" data-goriva-css-preload>\n'
+              '  <link rel="preload" href="/pages/styles/site-shell.css" as="style" data-goriva-css-preload>\n'
+              '  <link rel="preload" href="/pages/styles/site-shell-legacy.css" as="style" data-goriva-css-preload>\n'
+          )
+
+          changed = 0
+          for path in [Path("index.html"), *Path("pages").rglob("*.html"), *Path("stations").rglob("*.html")]:
+              if not path.exists():
+                  continue
+              text = path.read_text(encoding="utf-8")
+              if marker in text or "styles.css" not in text:
+                  continue
+
+              lines = text.splitlines(keepends=True)
+              insert_at = None
+              for i, line in enumerate(lines):
+                  if "rel=\"stylesheet\"" in line and "styles.css" in line and "styles-legacy.css" not in line:
+                      insert_at = i
+                      break
+              if insert_at is None:
+                  continue
+
+              lines.insert(insert_at, preloads)
+              path.write_text("".join(lines), encoding="utf-8")
+              changed += 1
+
+          print(f"HTML files with CSS preloads added: {changed}")
+          PY
+
+      - name: Show performance changes
+        run: |
+          git status --short
+          git diff --stat
+
+      - name: Commit optimized assets
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "No additional performance changes required."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add media images pages stations index.html
+          git commit -m "Optimize site payload and CSS loading [skip ci]"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push
