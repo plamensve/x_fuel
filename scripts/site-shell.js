@@ -8,6 +8,15 @@
         document.head.appendChild(navScript);
     }
 
+    const stationsNavSrc = "/scripts/stations-nav.js?v=20260906-1";
+    if (!window.__GORIVA_STATIONS_NAV_LOADER__) {
+        window.__GORIVA_STATIONS_NAV_LOADER__ = true;
+        const stationsNavScript = document.createElement("script");
+        stationsNavScript.src = stationsNavSrc;
+        stationsNavScript.async = false;
+        document.head.appendChild(stationsNavScript);
+    }
+
     const baseSrc = "/scripts/site-shell-base.js?v=20260828-2108";
     const current = document.currentScript;
 
