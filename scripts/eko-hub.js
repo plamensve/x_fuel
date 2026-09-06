@@ -162,19 +162,19 @@
     const phoneDisplay = phone ? phone.replace(/^\+359/, '+359 ') : '';
     const hasPrices = state.pricesByStation.has(id);
     const dateLabel = hasPrices && state.latestDate ? `Цени към дата ${displayDateKey(state.latestDate)}` : 'Няма налични цени за последната дата';
+    const addressLabel = station.address || 'Адресът не е наличен';
 
     return `<article class="eko-station-card">
       <div class="eko-station-head">
         <span class="eko-station-logo"><img src="${EKO_CARD_ICON}" alt="EKO" loading="lazy" width="48" height="48" decoding="async"></span>
-        <div><strong>${escapeHtml(station.name || `EKO ${id}`)}</strong><span>EKO ${escapeHtml(id)}</span></div>
+        <div><strong>${escapeHtml(station.name || `EKO ${id}`)}</strong><span>${escapeHtml(addressLabel)}</span></div>
       </div>
-      <p class="eko-station-address">${escapeHtml(station.address || 'Адресът не е наличен')}</p>
+      <p class="eko-station-address">${escapeHtml(dateLabel)}</p>
       <div class="eko-station-status${hasPrices ? '' : ' is-missing'}" aria-label="${hasPrices ? 'Има налични цени' : 'Няма налични цени'}"><span aria-hidden="true"></span></div>
       ${priceMarkup(id)}
       <div class="eko-station-actions">
         ${phone ? `<a href="tel:${escapeHtml(phone)}">☎ ${escapeHtml(phoneDisplay)}</a>` : ''}
       </div>
-      <div class="eko-station-date">${escapeHtml(dateLabel)}</div>
     </article>`;
   }
 
