@@ -8,6 +8,7 @@
     const nativeFetch = window.fetch.bind(window);
     const EKO_NAME = "ЕКО";
     const HISTORY_LIMIT = 1200;
+    const COMPLETE_STATION_THRESHOLD = 95;
     const historyCache = new Map();
 
     const normalize = value => (value || "").toString().trim().toUpperCase();
@@ -76,15 +77,20 @@
             const todayRows = await response.clone().json();
             if (!Array.isArray(todayRows)) return response;
 
-            const requestUrl = new URL(url);
-            const historicalEko = await fetchRecentHistoricalEko(requestUrl.origin, apiKey, todayStartIso);
-
             const todayEkoStations = new Set(
                 todayRows
                     .filter(row => normalize(row.station) === EKO_NAME)
                     .map(stationKey)
                     .filter(Boolean)
             );
+
+            // A normal direct EKO import covers roughly the full network. When
+            // coverage is already healthy there is nothing to backfill, so avoid
+            // an additional historical network request entirely.
+            if (todayEkoStations.size >= COMPLETE_STATION_THRESHOLD) return response;
+
+            const requestUrl = new URL(url);
+            const historicalEko = await fetchRecentHistoricalEko(requestUrl.origin, apiKey, todayStartIso);
 
             const selectedFallbackRows = new Map();
             for (const row of historicalEko) {
