@@ -77,6 +77,16 @@ def git_lastmod(path: Path) -> str | None:
 
 def lastmod_for(path: Path, source: str) -> str:
     today = datetime.now(SOFIA).date().isoformat()
+    normalized = "/" + path.relative_to(ROOT).as_posix()
+
+    # Dated article URLs are immutable archive pages. Their URL date is the
+    # safest lastmod signal and prevents bulk technical edits from making the
+    # entire article archive appear freshly updated to search engines.
+    if "/pages/articles/" in normalized:
+        match = PATH_DATE_RE.search(normalized)
+        if match:
+            return match.group(1)
+
     if changed_in_worktree(path):
         return today
 
@@ -85,7 +95,6 @@ def lastmod_for(path: Path, source: str) -> str:
         if match:
             return match.group(1)
 
-    normalized = "/" + path.relative_to(ROOT).as_posix()
     match = PATH_DATE_RE.search(normalized)
     if match:
         return match.group(1)
