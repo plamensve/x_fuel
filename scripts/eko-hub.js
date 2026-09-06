@@ -3,6 +3,7 @@
   const SUPABASE_KEY = 'sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH';
   const PAGE_SIZE = 18;
   const PRICE_LIMIT = 1600;
+  const EKO_PAGE_LOGO = '/images/station_logos/eko-page-logo.svg?v=20260906-2';
 
   const state = {
     stations: [],
@@ -125,8 +126,7 @@
     if (state.latestDate && rows.length) {
       const representative = rows.find(row => priceDateKey(row.created_at) === state.latestDate);
       const dateText = representative ? humanDateFormatter.format(new Date(representative.created_at)) : state.latestDate;
-      const pricedStations = new Set(rows.map(stationIdFromRow).filter(Boolean)).size;
-      status.textContent = `Данни за ${dateText} · ${pricedStations} EKO станции с налични цени`;
+      status.textContent = `Последни налични данни: ${dateText}`;
     } else {
       status.textContent = 'В момента няма налични EKO цени за визуализиране.';
     }
@@ -156,10 +156,9 @@
     const products = state.products[id] || [];
     const phone = station.phone || '';
     const phoneDisplay = phone ? phone.replace(/^\+359/, '+359 ') : '';
-    const mapUrl = station.maps_url || (station.latitude && station.longitude ? `https://www.google.com/maps/dir/?api=1&destination=${station.latitude},${station.longitude}` : '');
     return `<article class="eko-station-card">
       <div class="eko-station-head">
-        <span class="eko-station-logo"><img src="/images/station_logos/eko.svg" alt="" loading="lazy" width="42" height="24"></span>
+        <span class="eko-station-logo"><img src="${EKO_PAGE_LOGO}" alt="" loading="lazy" width="46" height="46" decoding="async"></span>
         <div><strong>${escapeHtml(station.name || `ЕКО ${id}`)}</strong><span>Станция № ${escapeHtml(id)}</span></div>
       </div>
       <p class="eko-station-address">${escapeHtml(station.address || 'Адресът не е наличен')}</p>
@@ -167,7 +166,6 @@
       ${priceMarkup(id)}
       <div class="eko-station-actions">
         ${phone ? `<a href="tel:${escapeHtml(phone)}">☎ ${escapeHtml(phoneDisplay)}</a>` : ''}
-        ${mapUrl ? `<a href="${escapeHtml(mapUrl)}" target="_blank" rel="noopener noreferrer">⌖ Карта</a>` : ''}
       </div>
     </article>`;
   }
