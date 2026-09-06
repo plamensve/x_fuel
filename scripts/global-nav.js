@@ -58,7 +58,7 @@
         const link = document.createElement("link");
         link.id = "goriva-global-progress-css";
         link.rel = "stylesheet";
-        link.href = "/pages/styles/global-progress.css?v=20260906-eko-fix3";
+        link.href = "/pages/styles/global-progress.css?v=20260906-eko-fix4";
         document.head.appendChild(link);
     }
 
