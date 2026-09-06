@@ -31,6 +31,23 @@
         item.querySelector(".goriva-stations-nav-toggle")?.setAttribute("aria-expanded", "false");
     }
 
+    function wireItem(item) {
+        if (!item || item.dataset.stationsNavWired === "true") return;
+        item.dataset.stationsNavWired = "true";
+        const toggle = item.querySelector(".goriva-stations-nav-toggle");
+        toggle?.addEventListener("click", event => {
+            event.stopPropagation();
+            const open = item.classList.toggle("is-open");
+            toggle.setAttribute("aria-expanded", String(open));
+        });
+        document.addEventListener("click", event => {
+            if (!item.isConnected || !item.contains(event.target)) closeDropdown(item);
+        });
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape") closeDropdown(item);
+        });
+    }
+
     function findMenuAndHome() {
         const globalMenu = document.querySelector(".goriva-global-menu");
         if (globalMenu) {
@@ -51,16 +68,8 @@
         return null;
     }
 
-    function install() {
-        const target = findMenuAndHome();
-        if (!target) return false;
-        if (target.menu.querySelector(".goriva-stations-nav-item")) return true;
-
-        ensureStyles();
-
-        const item = document.createElement("div");
-        item.className = "goriva-stations-nav-item";
-        item.innerHTML = `
+    function stationItemMarkup() {
+        return `
             <button class="goriva-stations-nav-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="goriva-stations-dropdown">
                 <span class="goriva-nav-symbol" aria-hidden="true">⛽</span>
                 <span>Бензиностанции</span>
@@ -70,28 +79,24 @@
                 <button class="goriva-stations-nav-option" type="button" role="menuitem" aria-disabled="true"><span>Всички бензиностанции</span><small>скоро</small></button>
                 <button class="goriva-stations-nav-option" type="button" role="menuitem" aria-disabled="true"><span>EKO</span><small>скоро</small></button>
             </div>`;
+    }
 
-        target.home.after(item);
+    function install() {
+        const target = findMenuAndHome();
+        if (!target) return false;
+        ensureStyles();
 
-        const toggle = item.querySelector(".goriva-stations-nav-toggle");
-        toggle.addEventListener("click", event => {
-            event.stopPropagation();
-            const open = item.classList.toggle("is-open");
-            toggle.setAttribute("aria-expanded", String(open));
-        });
-
-        document.addEventListener("click", event => {
-            if (!item.isConnected || !item.contains(event.target)) closeDropdown(item);
-        });
-        document.addEventListener("keydown", event => {
-            if (event.key === "Escape") closeDropdown(item);
-        });
-
+        let item = target.menu.querySelector(".goriva-stations-nav-item");
+        if (!item) {
+            item = document.createElement("div");
+            item.className = "goriva-stations-nav-item";
+            item.innerHTML = stationItemMarkup();
+            target.home.after(item);
+        }
+        wireItem(item);
         return true;
     }
 
-    // The global navigation can replace the legacy header after this script runs.
-    // Keep watching briefly so the stations item is re-installed into the final menu.
     install();
     const observer = new MutationObserver(() => install());
     observer.observe(document.documentElement, { childList: true, subtree: true });
