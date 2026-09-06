@@ -1,14 +1,21 @@
-/* EKO directory cards mirror the visual language of the homepage daily-price cards.
-   Data/filter logic remains owned by eko-hub.js. */
+/* EKO directory cards aligned to the homepage daily-price card system.
+   Every card reserves the same vertical space for title, address, price grid,
+   action and date so content length cannot shift controls between cards. */
 .eko-stations-grid{
   grid-template-columns:repeat(4,minmax(0,1fr))!important;
   gap:16px!important;
+  align-items:stretch!important;
 }
 
 .eko-station-card{
   position:relative;
   overflow:hidden;
-  min-height:0!important;
+  box-sizing:border-box;
+  height:486px!important;
+  min-height:486px!important;
+  display:grid!important;
+  grid-template-rows:60px 46px 20px 204px 42px 18px;
+  row-gap:10px;
   padding:20px!important;
   border:1px solid #cbd5e1!important;
   border-radius:18px!important;
@@ -35,17 +42,22 @@
 
 .eko-station-head{
   display:grid!important;
-  grid-template-columns:minmax(0,1fr) 42px;
+  grid-template-columns:minmax(0,1fr) 48px;
   align-items:start!important;
   gap:12px!important;
+  min-height:0!important;
 }
 
-.eko-station-head>div{order:1;min-width:0}
+.eko-station-head>div{
+  order:1;
+  min-width:0;
+  overflow:hidden;
+}
 
 .eko-station-logo{
   order:2;
   display:flex!important;
-  width:42px!important;
+  width:48px!important;
   height:48px!important;
   flex:none!important;
   align-items:flex-start!important;
@@ -54,11 +66,12 @@
   border:0!important;
   border-radius:0!important;
   background:transparent!important;
+  overflow:hidden;
 }
 
 .eko-station-logo img{
   display:block!important;
-  width:42px!important;
+  width:48px!important;
   height:48px!important;
   max-width:none!important;
   max-height:none!important;
@@ -66,6 +79,10 @@
 }
 
 .eko-station-head strong{
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
   color:#111827!important;
   font-size:15px!important;
   line-height:1.35!important;
@@ -81,27 +98,34 @@
   background:none!important;
   color:#64748b!important;
   font-size:11px!important;
+  line-height:1.25!important;
   font-weight:650!important;
 }
 
 .eko-station-address{
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:3;
+  overflow:hidden;
   min-height:0!important;
-  margin:5px 50px 0 0!important;
+  height:46px!important;
+  margin:0!important;
   padding:0!important;
   border:0!important;
   color:#64748b!important;
   font-size:11px!important;
-  line-height:1.45!important;
+  line-height:1.4!important;
 }
 
-/* Availability is still used for filtering, but the chips are omitted visually
-   so the cards match the compact homepage layout. */
+/* Availability remains part of the data/filter model; chips are hidden so the
+   visual hierarchy remains identical to the compact homepage cards. */
 .eko-fuel-chips{display:none!important}
 
 .eko-station-status{
-  height:30px;
-  display:flex;
+  height:20px!important;
+  display:flex!important;
   align-items:center;
+  margin:0!important;
 }
 
 .eko-station-status span{
@@ -119,19 +143,24 @@
 }
 
 .eko-station-prices{
+  height:204px!important;
   display:grid!important;
   grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-template-rows:repeat(3,62px)!important;
   gap:9px!important;
   margin:0!important;
 }
 
 .eko-station-price{
-  min-height:68px;
+  min-width:0;
+  height:62px!important;
+  min-height:62px!important;
+  box-sizing:border-box;
   display:flex!important;
   flex-direction:column;
   align-items:center;
   justify-content:center;
-  padding:10px 8px!important;
+  padding:8px!important;
   border:1px solid #cbd5e1!important;
   border-radius:12px!important;
   background:#eaf0f7!important;
@@ -158,16 +187,26 @@
 .eko-station-price.is-missing strong{color:#64748b!important}
 
 .eko-station-actions{
+  min-height:42px!important;
+  height:42px!important;
   display:flex!important;
+  align-items:stretch!important;
   gap:8px!important;
-  margin-top:16px!important;
+  margin:0!important;
 }
 
-.eko-station-actions:empty{display:none!important}
+/* Empty action areas deliberately remain present so cards without a telephone
+   keep the same price/date alignment as cards that have one. */
+.eko-station-actions:empty{
+  display:block!important;
+  visibility:hidden;
+}
 
 .eko-station-actions a{
   width:100%!important;
   min-height:42px!important;
+  height:42px!important;
+  box-sizing:border-box;
   display:inline-flex!important;
   align-items:center!important;
   justify-content:center!important;
@@ -189,10 +228,14 @@
 }
 
 .eko-station-date{
-  margin-top:12px;
+  height:18px!important;
+  margin:0!important;
+  overflow:hidden;
   color:#64748b;
   font-size:11px;
-  line-height:1.4;
+  line-height:18px;
+  white-space:nowrap;
+  text-overflow:ellipsis;
 }
 
 @media(max-width:1180px){
@@ -205,5 +248,9 @@
 
 @media(max-width:560px){
   .eko-stations-grid{grid-template-columns:1fr!important}
-  .eko-station-card{padding:18px!important}
+  .eko-station-card{
+    height:478px!important;
+    min-height:478px!important;
+    padding:18px!important;
+  }
 }
