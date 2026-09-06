@@ -1,5 +1,6 @@
 (() => {
     const STYLE_ID = "goriva-stations-nav-css";
+    const EKO_URL = "/stations/eko/";
 
     function ensureStyles() {
         if (document.getElementById(STYLE_ID)) return;
@@ -8,15 +9,15 @@
         style.textContent = `
 .goriva-stations-nav-item{position:relative;display:inline-flex;align-items:stretch}
 .goriva-stations-nav-toggle{min-height:40px;padding:0 10px;display:inline-flex;align-items:center;gap:7px;border:0;border-radius:10px;color:#cbd5e1;background:transparent;font:inherit;font-size:12px;font-weight:650;white-space:nowrap;cursor:pointer}
-.goriva-stations-nav-toggle:hover,.goriva-stations-nav-toggle:focus-visible,.goriva-stations-nav-item.is-open>.goriva-stations-nav-toggle{color:#fff;background:rgba(255,255,255,.065);outline:none}
+.goriva-stations-nav-toggle:hover,.goriva-stations-nav-toggle:focus-visible,.goriva-stations-nav-item.is-open>.goriva-stations-nav-toggle,.goriva-stations-nav-item.is-current>.goriva-stations-nav-toggle{color:#fff;background:rgba(255,255,255,.065);outline:none}
 .goriva-stations-nav-toggle .goriva-nav-symbol{font-size:13px;opacity:.82}
 .goriva-stations-nav-caret{font-size:10px;line-height:1;transition:transform .18s ease}
 .goriva-stations-nav-item.is-open .goriva-stations-nav-caret{transform:rotate(180deg)}
 .goriva-stations-nav-dropdown{position:absolute;top:calc(100% + 8px);left:0;z-index:7000;min-width:230px;padding:8px;border:1px solid rgba(148,163,184,.16);border-radius:14px;background:rgba(8,17,31,.98);box-shadow:0 18px 42px rgba(2,6,23,.36);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);opacity:0;visibility:hidden;transform:translateY(-4px);transition:opacity .16s ease,transform .16s ease,visibility .16s ease}
 .goriva-stations-nav-item.is-open .goriva-stations-nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}
-.goriva-stations-nav-option{width:100%;min-height:42px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;border-radius:9px;color:#dbe7f4;background:transparent;font:inherit;font-size:12px;font-weight:650;text-align:left}
+.goriva-stations-nav-option{width:100%;min-height:42px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;border-radius:9px;color:#dbe7f4;background:transparent;font:inherit;font-size:12px;font-weight:650;text-align:left;text-decoration:none;cursor:pointer}
 .goriva-stations-nav-option+.goriva-stations-nav-option{margin-top:3px}
-.goriva-stations-nav-option:hover,.goriva-stations-nav-option:focus-visible{color:#fff;background:rgba(255,255,255,.06);outline:none}
+.goriva-stations-nav-option:hover,.goriva-stations-nav-option:focus-visible,.goriva-stations-nav-option.is-current{color:#fff;background:rgba(255,255,255,.06);outline:none}
 .goriva-stations-nav-option[aria-disabled="true"]{cursor:default}
 .goriva-stations-nav-option small{color:#64748b;font-size:10px;font-weight:700;letter-spacing:.02em}
 @media (min-width:901px){.goriva-stations-nav-item:hover .goriva-stations-nav-dropdown,.goriva-stations-nav-item:focus-within .goriva-stations-nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}}
@@ -39,6 +40,9 @@
             event.stopPropagation();
             const open = item.classList.toggle("is-open");
             toggle.setAttribute("aria-expanded", String(open));
+        });
+        item.addEventListener("click", event => {
+            if (event.target.closest("a.goriva-stations-nav-option")) closeDropdown(item);
         });
         document.addEventListener("click", event => {
             if (!item.isConnected || !item.contains(event.target)) closeDropdown(item);
@@ -77,8 +81,36 @@
             </button>
             <div id="goriva-stations-dropdown" class="goriva-stations-nav-dropdown" role="menu" aria-label="Бензиностанции">
                 <button class="goriva-stations-nav-option" type="button" role="menuitem" aria-disabled="true"><span>Всички бензиностанции</span><small>скоро</small></button>
-                <button class="goriva-stations-nav-option" type="button" role="menuitem" aria-disabled="true"><span>EKO</span><small>скоро</small></button>
+                <a class="goriva-stations-nav-option" href="${EKO_URL}" role="menuitem"><span>EKO</span><small>цени и обекти</small></a>
             </div>`;
+    }
+
+    function ensureEkoLink(item) {
+        if (!item) return;
+        const options = Array.from(item.querySelectorAll(".goriva-stations-nav-option"));
+        let eko = options.find(node => (node.querySelector("span")?.textContent || node.textContent || "").trim().toUpperCase() === "EKO");
+        if (!eko) return;
+
+        if (eko.tagName !== "A") {
+            const link = document.createElement("a");
+            link.className = "goriva-stations-nav-option";
+            link.href = EKO_URL;
+            link.setAttribute("role", "menuitem");
+            link.innerHTML = "<span>EKO</span><small>цени и обекти</small>";
+            eko.replaceWith(link);
+            eko = link;
+        } else {
+            eko.href = EKO_URL;
+            eko.removeAttribute("aria-disabled");
+            const small = eko.querySelector("small");
+            if (small) small.textContent = "цени и обекти";
+        }
+
+        const isCurrent = window.location.pathname === EKO_URL || window.location.pathname.startsWith(EKO_URL);
+        item.classList.toggle("is-current", isCurrent);
+        eko.classList.toggle("is-current", isCurrent);
+        if (isCurrent) eko.setAttribute("aria-current", "page");
+        else eko.removeAttribute("aria-current");
     }
 
     function install() {
@@ -93,6 +125,7 @@
             item.innerHTML = stationItemMarkup();
             target.home.after(item);
         }
+        ensureEkoLink(item);
         wireItem(item);
         return true;
     }
