@@ -3,7 +3,7 @@
   const SUPABASE_KEY = 'sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH';
   const PAGE_SIZE = 18;
   const PRICE_LIMIT = 1600;
-  const EKO_CARD_ICON = '/images/station_logos/eko.svg';
+  const EKO_CARD_ICON = '/images/station_logos/eko-page-logo.png?v=20260906-2';
 
   const state = {
     stations: [],
@@ -165,7 +165,7 @@
 
     return `<article class="eko-station-card">
       <div class="eko-station-head">
-        <span class="eko-station-logo"><img src="${EKO_CARD_ICON}" alt="" loading="lazy" width="42" height="48" decoding="async"></span>
+        <span class="eko-station-logo"><img src="${EKO_CARD_ICON}" alt="EKO" loading="lazy" width="48" height="48" decoding="async"></span>
         <div><strong>${escapeHtml(station.name || `EKO ${id}`)}</strong><span>EKO ${escapeHtml(id)}</span></div>
       </div>
       <p class="eko-station-address">${escapeHtml(station.address || 'Адресът не е наличен')}</p>
