@@ -12,6 +12,19 @@
         { href: "/pages/rules.html", label: "Условия", symbol: "✓", match: ["/pages/rules.html"] }
     ];
 
+    const stationsNavMarkup = `
+        <div class="goriva-stations-nav-item">
+            <button class="goriva-stations-nav-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="goriva-stations-dropdown">
+                <span class="goriva-nav-symbol" aria-hidden="true">⛽</span>
+                <span>Бензиностанции</span>
+                <span class="goriva-stations-nav-caret" aria-hidden="true">▾</span>
+            </button>
+            <div id="goriva-stations-dropdown" class="goriva-stations-nav-dropdown" role="menu" aria-label="Бензиностанции">
+                <button class="goriva-stations-nav-option" type="button" role="menuitem" aria-disabled="true"><span>Всички бензиностанции</span><small>скоро</small></button>
+                <button class="goriva-stations-nav-option" type="button" role="menuitem" aria-disabled="true"><span>EKO</span><small>скоро</small></button>
+            </div>
+        </div>`;
+
     const normalizePath = value => {
         const path = (value || "/").replace(/\/+/g, "/");
         return path !== "/" ? path.replace(/\/$/, "") : path;
@@ -21,6 +34,13 @@
         const path = normalizePath(window.location.pathname);
         return item.match.some(match => match.endsWith("/") ? path.startsWith(match) : path === normalizePath(match));
     };
+
+    function renderNavigationItems() {
+        return navItems.map((item, index) => {
+            const link = `<a href="${item.href}" data-symbol="${item.symbol}" ${isActive(item) ? 'class="is-active" aria-current="page"' : ""}><span class="goriva-nav-symbol" aria-hidden="true">${item.symbol}</span><span>${item.label}</span></a>`;
+            return index === 0 ? link + stationsNavMarkup : link;
+        }).join("");
+    }
 
     function ensureStyles() {
         if (document.getElementById("goriva-global-progress-css")) return;
@@ -36,7 +56,7 @@
         window.__GORIVA_STATIONS_NAV_LOADER__ = true;
         const script = document.createElement("script");
         script.id = "goriva-stations-nav-script";
-        script.src = "/scripts/stations-nav.js?v=20260906-4";
+        script.src = "/scripts/stations-nav.js?v=20260906-5";
         script.async = false;
         document.head.appendChild(script);
     }
@@ -89,7 +109,7 @@
                         <span class="goriva-global-menu-icon" aria-hidden="true"><b></b><b></b><b></b></span>
                     </button>
                     <div id="goriva-global-menu" class="goriva-global-menu">
-                        ${navItems.map(item => `<a href="${item.href}" data-symbol="${item.symbol}" ${isActive(item) ? 'class="is-active" aria-current="page"' : ""}><span class="goriva-nav-symbol" aria-hidden="true">${item.symbol}</span><span>${item.label}</span></a>`).join("")}
+                        ${renderNavigationItems()}
                     </div>
                 </nav>
                 <div class="goriva-global-actions" aria-label="Статус на данните">
