@@ -63,7 +63,8 @@
         const legacyHeader = document.querySelector("body > .header-bar");
         const legacyNav = document.querySelector("body > .main-nav");
         const businessHeader = document.querySelector("body > .business-header");
-        const target = legacyHeader || businessHeader || legacyNav || document.body.firstElementChild;
+        const articleHeader = document.querySelector("body > .site-header");
+        const target = legacyHeader || businessHeader || articleHeader || legacyNav || document.body.firstElementChild;
 
         const header = document.createElement("header");
         header.className = "goriva-global-header";
@@ -88,7 +89,7 @@
 
         if (target) target.before(header);
         else document.body.prepend(header);
-        [legacyHeader, legacyNav, businessHeader].forEach(node => node?.remove());
+        [legacyHeader, legacyNav, businessHeader, articleHeader].forEach(node => node?.remove());
         document.body.classList.add("has-goriva-global-nav");
 
         const toggle = header.querySelector(".goriva-global-menu-toggle");
@@ -164,7 +165,7 @@
         buildScrollProgress();
     }
 
-    if (document.body && (document.querySelector("body > .header-bar") || document.querySelector("body > .main-nav") || document.querySelector("body > .business-header"))) {
+    if (document.body && (document.querySelector("body > .header-bar") || document.querySelector("body > .main-nav") || document.querySelector("body > .business-header") || document.querySelector("body > .site-header"))) {
         initGlobalShell();
     } else if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", initGlobalShell, { once: true });
