@@ -451,7 +451,7 @@ def render_article(date_str: str, article: dict, facts: dict) -> str:
       </div>
     </article>
   </main>
-  <script src="/scripts/article-engagement.js?v=20260906-eko-fix1" defer></script>
+  <script src="/scripts/article-engagement.js?v=20260906-eko-fix2" defer></script>
 </body>
 </html>'''
 
