@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-NAV_VERSION = "20260906-eko-fix2"
+NAV_VERSION = "20260906-eko-fix3"
 
 
 def normalize_html(path: Path) -> bool:
@@ -20,8 +20,6 @@ def normalize_html(path: Path) -> bool:
     )
 
     # Homepage only: install the bounded/cached EKO fallback before script.js.
-    # This sets the legacy guard so script.js does not install its old unbounded
-    # historical pagination wrapper.
     if path == ROOT / "index.html" and "/scripts/eko-fallback-efficient.js" not in updated:
         marker = f'<script src="/scripts/script.js?v={NAV_VERSION}"></script>'
         replacement = (
@@ -30,7 +28,6 @@ def normalize_html(path: Path) -> bool:
         )
         updated = updated.replace(marker, replacement, 1)
 
-    # Pages using the business/site shell get the same versioned entry point.
     updated = re.sub(
         r'(<script\b[^>]*\bsrc=["\'])(?:\.\./|/)?scripts/site-shell\.js(?:\?[^"\']*)?(["\'][^>]*></script>)',
         rf'\1/scripts/site-shell.js?v={NAV_VERSION}\2',
@@ -38,7 +35,6 @@ def normalize_html(path: Path) -> bool:
         flags=re.I,
     )
 
-    # Articles use article-engagement as their navigation bootstrap.
     updated = re.sub(
         r'(<script\b[^>]*\bsrc=["\'])(?:\.\./|/)?scripts/article-engagement\.js(?:\?[^"\']*)?(["\'][^>]*></script>)',
         rf'\1/scripts/article-engagement.js?v={NAV_VERSION}\2',
@@ -46,7 +42,6 @@ def normalize_html(path: Path) -> bool:
         flags=re.I,
     )
 
-    # Standalone station hubs may load the global navigation directly.
     updated = re.sub(
         r'(<script\b[^>]*\bsrc=["\'])(?:\.\./|/)?scripts/global-nav\.js(?:\?[^"\']*)?(["\'][^>]*></script>)',
         rf'\1/scripts/global-nav.js?v={NAV_VERSION}\2',
@@ -54,7 +49,6 @@ def normalize_html(path: Path) -> bool:
         flags=re.I,
     )
 
-    # Keep the homepage performance guard versioned as well.
     updated = re.sub(
         r'(<script\b[^>]*\bsrc=["\'])/scripts/eko-fallback-efficient\.js(?:\?[^"\']*)?(["\'][^>]*></script>)',
         rf'\1/scripts/eko-fallback-efficient.js?v={NAV_VERSION}\2',
@@ -62,8 +56,8 @@ def normalize_html(path: Path) -> bool:
         flags=re.I,
     )
 
-    # stations-nav is no longer loaded directly. Global navigation owns the
-    # stations dropdown markup, styles and mobile behavior.
+    # Global navigation owns the stations dropdown. Never load the legacy
+    # stations-nav bootstrap directly from HTML.
     updated = re.sub(
         r'\s*<script\b[^>]*\bsrc=["\'](?:\.\./|/)?scripts/stations-nav\.js(?:\?[^"\']*)?["\'][^>]*></script>',
         '',
@@ -95,6 +89,11 @@ def normalize_text_file(path: Path) -> bool:
     updated = re.sub(
         r'/scripts/article-engagement\.js\?v=[A-Za-z0-9._-]+',
         f'/scripts/article-engagement.js?v={NAV_VERSION}',
+        updated,
+    )
+    updated = re.sub(
+        r'/pages/styles/global-progress\.css\?v=[A-Za-z0-9._-]+',
+        f'/pages/styles/global-progress.css?v={NAV_VERSION}',
         updated,
     )
     if updated == source:
