@@ -34,12 +34,29 @@
         item.querySelector(".goriva-stations-nav-toggle")?.setAttribute("aria-expanded", "false");
     }
 
-    function install() {
-        const menu = document.querySelector(".goriva-global-menu");
-        if (!menu || menu.querySelector(".goriva-stations-nav-item")) return false;
+    function findMenuAndHome() {
+        const globalMenu = document.querySelector(".goriva-global-menu");
+        if (globalMenu) {
+            const home = Array.from(globalMenu.children).find(node => node.matches?.('a[href="/"]'));
+            if (home) return { menu: globalMenu, home };
+        }
 
-        const homeLink = Array.from(menu.children).find(node => node.matches?.('a[href="/"]'));
-        if (!homeLink) return false;
+        const legacyMenu = document.getElementById("nav-menu");
+        if (legacyMenu) {
+            const home = Array.from(legacyMenu.children).find(node => {
+                if (!node.matches?.("a")) return false;
+                const href = node.getAttribute("href") || "";
+                return href === "index.html" || href === "/" || href.endsWith("/index.html");
+            });
+            if (home) return { menu: legacyMenu, home };
+        }
+
+        return null;
+    }
+
+    function install() {
+        const target = findMenuAndHome();
+        if (!target || target.menu.querySelector(".goriva-stations-nav-item")) return false;
 
         ensureStyles();
 
@@ -56,7 +73,7 @@
                 <button class="goriva-stations-nav-option" type="button" role="menuitem" aria-disabled="true"><span>EKO</span><small>скоро</small></button>
             </div>`;
 
-        homeLink.after(item);
+        target.home.after(item);
 
         const toggle = item.querySelector(".goriva-stations-nav-toggle");
         toggle.addEventListener("click", event => {
