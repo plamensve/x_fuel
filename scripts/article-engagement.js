@@ -1,4 +1,15 @@
 (() => {
+  if (!window.__GORIVA_GLOBAL_NAV_LOADER__) {
+    window.__GORIVA_GLOBAL_NAV_LOADER__ = true;
+    const navScript = document.createElement('script');
+    navScript.id = 'goriva-global-nav-script';
+    navScript.src = '/scripts/global-nav.js?v=20260906-3';
+    navScript.async = false;
+    document.head.appendChild(navScript);
+  }
+})();
+
+(() => {
   const q = (selector, root = document) => root.querySelector(selector);
   const qa = (selector, root = document) => [...root.querySelectorAll(selector)];
   const safeParse = (value, fallback) => { try { return JSON.parse(value); } catch { return fallback; } };
