@@ -321,8 +321,6 @@
             const hasCoarsePointer = window.matchMedia?.("(pointer: coarse)").matches || "ontouchstart" in window;
             const stationMap = L.map(element, {
                 preferCanvas: true,
-                // On touch devices a marker tap may be followed by a synthetic map click.
-                // Leaflet would treat that second event as a request to close the popup.
                 closePopupOnClick: !hasCoarsePointer
             }).setView([42.7339, 25.4858], 7);
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -343,13 +341,23 @@
                     productsByStation[stationId] || [],
                     livePricesByStation[stationId] || {},
                     isCurrentDay
-                ));
+                ), {
+                    closeOnClick: false,
+                    autoClose: true,
+                    closeButton: true
+                });
 
-                if (hasCoarsePointer) {
-                    marker.on("click", event => {
-                        if (event.originalEvent) L.DomEvent.stopPropagation(event.originalEvent);
-                    });
+                if (hasCoarsePointer && marker._openPopup) {
+                    marker.off("click", marker._openPopup);
                 }
+
+                marker.on("click", event => {
+                    if (event.originalEvent) {
+                        L.DomEvent.stopPropagation(event.originalEvent);
+                        L.DomEvent.preventDefault(event.originalEvent);
+                    }
+                    marker.openPopup();
+                });
 
                 markers.addLayer(marker);
             });
