@@ -2,6 +2,16 @@
   if (window.__GORIVA_CONSENT_MANAGER__) return;
   window.__GORIVA_CONSENT_MANAGER__ = true;
 
+  // Load the lightweight performance guard as soon as the shared shell starts.
+  // It keeps large ticker datasets from creating thousands of animated DOM nodes.
+  if (!document.getElementById('goriva-performance-guard')) {
+    const perf = document.createElement('script');
+    perf.id = 'goriva-performance-guard';
+    perf.src = '/scripts/performance-guard.js?v=20260906-1';
+    perf.async = true;
+    document.head.appendChild(perf);
+  }
+
   const STORAGE_KEY = 'goriva_consent_v1';
   const VERSION = 1;
 
