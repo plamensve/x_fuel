@@ -56,7 +56,7 @@
         window.__GORIVA_STATIONS_NAV_LOADER__ = true;
         const script = document.createElement("script");
         script.id = "goriva-stations-nav-script";
-        script.src = "/scripts/stations-nav.js?v=20260906-5";
+        script.src = "/scripts/stations-nav.js?v=20260906-nav5";
         script.async = false;
         document.head.appendChild(script);
     }
