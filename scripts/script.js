@@ -115,8 +115,6 @@
             if (!Array.isArray(todayRows)) return response;
 
             const requestUrl = new URL(url);
-            const lowerBoundParam = [...requestUrl.searchParams.entries()]
-                .find(([key]) => key === "created_at")?.[1];
 
             // PostgREST query is encoded as created_at=gte.<ISO>. Extract the
             // lower bound directly from the URL because it marks today's start.
@@ -196,7 +194,7 @@ const gorivaLoadScript = (src, { id = "", defer = true } = {}) => {
 (() => {
     if (window.__GORIVA_GLOBAL_NAV_LOADER__) return;
     window.__GORIVA_GLOBAL_NAV_LOADER__ = true;
-    gorivaLoadScript("/scripts/global-nav.js?v=20260906-3", { id: "goriva-global-nav-script" })
+    gorivaLoadScript("/scripts/global-nav.js?v=20260906-5", { id: "goriva-global-nav-script" })
         .catch(error => console.error("Failed to load global navigation", error));
 })();
 
