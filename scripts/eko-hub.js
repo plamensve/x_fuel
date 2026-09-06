@@ -3,7 +3,7 @@
   const SUPABASE_KEY = 'sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH';
   const PAGE_SIZE = 18;
   const PRICE_LIMIT = 1600;
-  const EKO_PAGE_LOGO = '/images/station_logos/eko-page-logo.png?v=20260906-1';
+  const EKO_CARD_ICON = '/images/station_logos/eko.svg';
 
   const state = {
     stations: [],
@@ -39,6 +39,7 @@
     if (fuel.includes('пропан') || fuel.includes('lpg')) return 'LPG';
     if (fuel.includes('премиум') && fuel.includes('дизел')) return 'Дизел +';
     if (fuel.includes('дизел')) return 'Дизел';
+    if (fuel.includes('метан')) return 'Метан';
     return value || 'Гориво';
   }
 
@@ -47,9 +48,15 @@
     return Number.isNaN(date.getTime()) ? null : dateFormatter.format(date);
   }
 
+  function displayDateKey(value) {
+    if (!value) return '';
+    const match = String(value).match(/^(\d{4})-(\d{2})-(\d{2})$/);
+    return match ? `${match[3]}-${match[2]}-${match[1]}` : String(value);
+  }
+
   function formatPrice(value) {
     const number = Number(value);
-    return Number.isFinite(number) ? `${number.toFixed(2)} €` : '—';
+    return Number.isFinite(number) ? `${number.toFixed(2)}€` : '-';
   }
 
   async function loadJson(url) {
@@ -134,12 +141,10 @@
 
   function priceMarkup(id) {
     const stationPrices = state.pricesByStation.get(String(id));
-    const fuels = ['A95', 'Дизел', 'LPG', 'A100', 'Дизел +'];
-    const available = fuels.filter(fuel => stationPrices?.has(fuel));
-    if (!available.length) return `<div class="eko-station-prices"><div class="eko-station-price is-missing"><span>Последни цени</span><strong>—</strong></div></div>`;
-    return `<div class="eko-station-prices">${available.map(fuel => {
-      const row = stationPrices.get(fuel);
-      return `<div class="eko-station-price"><span>${fuel}</span><strong>${formatPrice(row.price)}</strong></div>`;
+    const fuels = ['Дизел', 'A95', 'Дизел +', 'A100', 'LPG', 'Метан'];
+    return `<div class="eko-station-prices">${fuels.map(fuel => {
+      const row = stationPrices?.get(fuel);
+      return `<div class="eko-station-price${row ? '' : ' is-missing'}"><span>${fuel}</span><strong>${row ? formatPrice(row.price) : '-'}</strong></div>`;
     }).join('')}</div>`;
   }
 
@@ -153,20 +158,23 @@
 
   function stationCard(station) {
     const id = String(station.station_id);
-    const products = state.products[id] || [];
     const phone = station.phone || '';
     const phoneDisplay = phone ? phone.replace(/^\+359/, '+359 ') : '';
+    const hasPrices = state.pricesByStation.has(id);
+    const dateLabel = hasPrices && state.latestDate ? `Цени към дата ${displayDateKey(state.latestDate)}` : 'Няма налични цени за последната дата';
+
     return `<article class="eko-station-card">
       <div class="eko-station-head">
-        <span class="eko-station-logo"><img src="${EKO_PAGE_LOGO}" alt="" loading="lazy" width="46" height="46" decoding="async"></span>
-        <div><strong>${escapeHtml(station.name || `ЕКО ${id}`)}</strong><span>Станция № ${escapeHtml(id)}</span></div>
+        <span class="eko-station-logo"><img src="${EKO_CARD_ICON}" alt="" loading="lazy" width="42" height="48" decoding="async"></span>
+        <div><strong>${escapeHtml(station.name || `EKO ${id}`)}</strong><span>EKO ${escapeHtml(id)}</span></div>
       </div>
       <p class="eko-station-address">${escapeHtml(station.address || 'Адресът не е наличен')}</p>
-      <div class="eko-fuel-chips">${products.map(product => `<span class="eko-fuel-chip">${escapeHtml(fuelLabel(product))}</span>`).join('')}</div>
+      <div class="eko-station-status${hasPrices ? '' : ' is-missing'}" aria-label="${hasPrices ? 'Има налични цени' : 'Няма налични цени'}"><span aria-hidden="true"></span></div>
       ${priceMarkup(id)}
       <div class="eko-station-actions">
         ${phone ? `<a href="tel:${escapeHtml(phone)}">☎ ${escapeHtml(phoneDisplay)}</a>` : ''}
       </div>
+      <div class="eko-station-date">${escapeHtml(dateLabel)}</div>
     </article>`;
   }
 
