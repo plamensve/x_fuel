@@ -1,0 +1,61 @@
+name: Diagnose EKO 2026-09-05
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/diagnose-eko-2026-09-05.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Inspect 5 September rows
+        shell: bash
+        run: |
+          python - <<'PY'
+          import collections
+          import json
+          import urllib.parse
+          import urllib.request
+
+          base = 'https://eaqvhxfvozhzatrnbkvx.supabase.co/rest/v1/fuel_prices'
+          key = 'sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH'
+
+          def fetch(params):
+              url = base + '?' + urllib.parse.urlencode(params)
+              req = urllib.request.Request(url, headers={'apikey': key, 'Prefer':'count=exact'})
+              with urllib.request.urlopen(req, timeout=20) as r:
+                  data = json.loads(r.read().decode('utf-8'))
+                  print('status=', r.status, 'content-range=', r.headers.get('Content-Range'), 'rows=', len(data))
+                  return data
+
+          windows = [
+              ('utc-day', '2026-09-05T00:00:00+00:00', '2026-09-06T00:00:00+00:00'),
+              ('sofia-day', '2026-09-04T21:00:00+00:00', '2026-09-05T21:00:00+00:00'),
+          ]
+
+          for label, start, end in windows:
+              print('\n###', label, start, end)
+              rows = fetch({
+                  'select':'station,location,city,region,fuel,price,created_at',
+                  'created_at': f'gte.{start}',
+                  'created_at': f'gte.{start}',
+                  'order':'created_at.desc',
+                  'limit':'3000',
+              })
+              # Python urlencode cannot represent two created_at params with this dict,
+              # so filter the upper bound locally as a diagnostic.
+              rows = [r for r in rows if str(r.get('created_at','')) < end]
+              counts = collections.Counter(str(r.get('station')) for r in rows)
+              print('station-counts=', json.dumps(counts, ensure_ascii=False, sort_keys=True))
+              candidates = [r for r in rows if any(x in str(r).upper() for x in ('EKO','ЕКО'))]
+              print('eko-text-candidates=', len(candidates))
+              for row in candidates[:20]:
+                  print(json.dumps(row, ensure_ascii=False, sort_keys=True))
+          PY
