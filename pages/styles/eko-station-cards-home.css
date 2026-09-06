@@ -11,10 +11,10 @@
   position:relative;
   overflow:hidden;
   box-sizing:border-box;
-  height:486px!important;
-  min-height:486px!important;
+  height:458px!important;
+  min-height:458px!important;
   display:grid!important;
-  grid-template-rows:82px 46px 20px 204px 42px 18px;
+  grid-template-rows:82px 28px 20px 204px 42px;
   row-gap:10px;
   padding:0 20px 20px!important;
   border:1px solid #cbd5e1!important;
@@ -94,30 +94,35 @@
 }
 
 .eko-station-head div>span{
-  display:block!important;
+  display:-webkit-box!important;
+  -webkit-box-orient:vertical;
+  -webkit-line-clamp:2;
+  overflow:hidden;
   margin-top:5px!important;
   padding:0!important;
   border-radius:0!important;
   background:none!important;
-  color:rgba(255,255,255,.82)!important;
+  color:rgba(255,255,255,.88)!important;
   font-size:11px!important;
   line-height:1.25!important;
   font-weight:650!important;
 }
 
 .eko-station-address{
-  display:-webkit-box!important;
-  -webkit-box-orient:vertical;
-  -webkit-line-clamp:3;
+  display:flex!important;
+  align-items:center!important;
   overflow:hidden;
   min-height:0!important;
-  height:46px!important;
+  height:28px!important;
   margin:0!important;
   padding:0!important;
   border:0!important;
-  color:#64748b!important;
+  color:#111827!important;
   font-size:11px!important;
   line-height:1.4!important;
+  font-weight:650!important;
+  white-space:nowrap;
+  text-overflow:ellipsis;
 }
 
 /* Availability remains part of the data/filter model; chips are hidden so the
@@ -230,17 +235,6 @@
   transform:translateY(-1px);
 }
 
-.eko-station-date{
-  height:18px!important;
-  margin:0!important;
-  overflow:hidden;
-  color:#64748b;
-  font-size:11px;
-  line-height:18px;
-  white-space:nowrap;
-  text-overflow:ellipsis;
-}
-
 @media(max-width:1180px){
   .eko-stations-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
 }
@@ -252,8 +246,8 @@
 @media(max-width:560px){
   .eko-stations-grid{grid-template-columns:1fr!important}
   .eko-station-card{
-    height:486px!important;
-    min-height:486px!important;
+    height:458px!important;
+    min-height:458px!important;
     padding:0 18px 18px!important;
   }
   .eko-station-head{
