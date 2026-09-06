@@ -60,7 +60,9 @@
   }
 
   async function loadJson(url) {
-    const response = await fetch(url, { cache: 'no-store' });
+    // Static station registries are versioned by the deployment itself. Let the
+    // browser/CDN cache them instead of forcing a full network download on every visit.
+    const response = await fetch(url);
     if (!response.ok) throw new Error(`${url} returned ${response.status}`);
     return response.json();
   }
@@ -218,6 +220,11 @@
 
   async function init() {
     bindFilters();
+
+    // Start independent I/O at the same time. Previously the Supabase request
+    // waited for both static JSON files, which made the cards feel sequential.
+    const pricesPromise = loadPrices();
+
     try {
       await loadStations();
       renderStations(true);
@@ -228,10 +235,10 @@
     }
 
     try {
-      const rows = await loadPrices();
+      const rows = await pricesPromise;
       indexPrices(rows);
       renderSummary(rows);
-      renderStations(false);
+      if (state.stations.length) renderStations(false);
     } catch (error) {
       console.warn('[eko-hub] Failed to load current EKO prices', error);
       renderSummary([]);
