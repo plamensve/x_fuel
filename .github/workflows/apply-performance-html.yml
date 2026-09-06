@@ -34,8 +34,8 @@ jobs:
 
           changed = []
 
-          # Homepage: Leaflet/MarkerCluster and EKO map logic are below the hero.
-          # Replace eager third-party CSS/JS with the local viewport-aware loader.
+          # Homepage: replace eager Leaflet/MarkerCluster/EKO scripts with the
+          # viewport-aware local loader. The visual map shell stays unchanged.
           path = Path("index.html")
           html = path.read_text(encoding="utf-8")
           for pattern in [
@@ -52,15 +52,14 @@ jobs:
 
           loader = '<script defer src="/scripts/home-map-loader.js?v=20260906-perf1"></script>'
           if loader not in html:
-              anchor = '<script defer src="scripts/home-nav-modern.js?v=20260905-2218"></script>'
-              if anchor not in html:
+              match = re.search(r'<script defer src="scripts/home-nav-modern\.js[^\"]*"></script>', html)
+              if not match:
                   raise SystemExit("Homepage map loader insertion anchor not found")
-              html = html.replace(anchor, loader + "\n" + anchor, 1)
+              html = html[:match.start()] + loader + "\n" + html[match.start():]
           if write_if_changed(path, html): changed.append(str(path))
 
-          # Utility and weather pages still boot Google Analytics before the
-          # consent manager. Remove that legacy duplicate and make bottom scripts
-          # non parser-blocking while preserving their execution order.
+          # Utility and weather pages: analytics is owned by consent-manager.js.
+          # Remove the legacy eager GA bootstrap and make bottom scripts deferred.
           for filename in ["pages/useful.html", "pages/weather.html"]:
               path = Path(filename)
               html = path.read_text(encoding="utf-8")
@@ -77,24 +76,29 @@ jobs:
               html = re.sub(r'<script\s+src="(/scripts/script\.js[^\"]*)"></script>', r'<script defer src="\1"></script>', html)
               if write_if_changed(path, html): changed.append(str(path))
 
-          # History page: remove old eager Hotjar/AdSense bootstraps. The shared
-          # consent manager now owns both and starts them after the critical load.
-          path = Path("pages/trends.html")
-          html = path.read_text(encoding="utf-8")
-          html = re.sub(
-              r'\s*<script>\s*\(function \(h, o, t, j, a, r\) \{.*?static\.hotjar\.com.*?</script>\s*',
-              "\n",
-              html,
-              flags=re.S,
-          )
-          html = re.sub(
-              r'\s*<script\s+async\s+src="https://pagead2\.googlesyndication\.com/pagead/js/adsbygoogle\.js\?client=ca-pub-3478773231642095"\s+crossorigin="anonymous"></script>\s*',
-              "\n",
-              html,
-          )
-          html = re.sub(r'\s*<link rel="stylesheet" href="styles/site-shell\.css">\s*', "\n", html)
-          html = html.replace('<script data-name="BMC-Widget"', '<script async data-name="BMC-Widget"', 1)
-          if write_if_changed(path, html): changed.append(str(path))
+          def remove_legacy_hotjar_adsense(html):
+              html = re.sub(
+                  r'\s*<script>\s*\(function \(h, o, t, j, a, r\) \{.*?static\.hotjar\.com.*?</script>\s*',
+                  "\n",
+                  html,
+                  flags=re.S,
+              )
+              html = re.sub(
+                  r'\s*<script\s+async\s+src="https://pagead2\.googlesyndication\.com/pagead/js/adsbygoogle\.js\?client=ca-pub-3478773231642095"\s+crossorigin="anonymous"></script>\s*',
+                  "\n",
+                  html,
+              )
+              return html
+
+          # History and business pages still had old eager Hotjar + AdSense in
+          # <head>. Their shared global navigation already loads consent-manager.
+          for filename in ["pages/trends.html", "pages/business-clients.html"]:
+              path = Path(filename)
+              html = remove_legacy_hotjar_adsense(path.read_text(encoding="utf-8"))
+              if filename.endswith("trends.html"):
+                  html = re.sub(r'\s*<link rel="stylesheet" href="styles/site-shell\.css">\s*', "\n", html)
+                  html = html.replace('<script data-name="BMC-Widget"', '<script async data-name="BMC-Widget"', 1)
+              if write_if_changed(path, html): changed.append(str(path))
 
           print("Changed:", ", ".join(changed) if changed else "none")
           PY
@@ -108,6 +112,8 @@ jobs:
           ! grep -q 'googletagmanager.com/gtag/js?id=G-F6YJNGGFR2' pages/weather.html
           ! grep -q 'static.hotjar.com/c/hotjar-' pages/trends.html
           ! grep -q 'pagead2.googlesyndication.com/pagead/js/adsbygoogle.js' pages/trends.html
+          ! grep -q 'static.hotjar.com/c/hotjar-' pages/business-clients.html
+          ! grep -q 'pagead2.googlesyndication.com/pagead/js/adsbygoogle.js' pages/business-clients.html
           grep -q '<script defer src="../scripts/weather.js' pages/weather.html
           grep -q '<script defer src="../scripts/useful.js' pages/useful.html
 
@@ -120,7 +126,7 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add index.html pages/useful.html pages/weather.html pages/trends.html
+          git add index.html pages/useful.html pages/weather.html pages/trends.html pages/business-clients.html
           git commit -m "Move non-critical frontend resources off critical path [skip ci]"
           git pull --rebase origin "${GITHUB_REF_NAME}"
           git push origin "${GITHUB_REF_NAME}"
