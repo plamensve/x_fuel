@@ -29,7 +29,7 @@
         { href: "/pages/news.html", label: "Новини", symbol: "▤", match: ["/pages/news.html", "/pages/articles/"] },
         { href: "/pages/rules.html", label: "Условия", symbol: "✓", match: ["/pages/rules.html"] }
     ];
-    const normalizePath=value=>{const path=(value||"/").replace(/\\+/g,"/");return path!=="/"?path.replace(/\/$/,""):path;};
+    const normalizePath=value=>{const path=(value||"/").replace(/\/+/g,"/");return path!=="/"?path.replace(/\/$/,""):path;};
     const currentPath=normalizePath(window.location.pathname);
     const stationsCurrent=currentPath==="/stations"||currentPath.startsWith("/stations/");
     const ekoCurrent=currentPath==="/stations/eko"||currentPath.startsWith("/stations/eko/");
