@@ -112,6 +112,12 @@ jobs:
           ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
         run: python -m automation.refine_sofia_article
 
+      - name: Finalize SEO meta description
+        if: steps.window.outputs.should_run == 'true'
+        env:
+          ARTICLE_DATE: ${{ steps.article.outputs.target_date }}
+        run: python -m automation.fix_sofia_meta_description
+
       - name: Register Sofia article in news manifest
         if: steps.window.outputs.should_run == 'true'
         env:
