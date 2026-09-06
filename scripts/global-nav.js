@@ -21,7 +21,7 @@
             </button>
             <div id="goriva-stations-dropdown" class="goriva-stations-nav-dropdown" role="menu" aria-label="Бензиностанции">
                 <button class="goriva-stations-nav-option" type="button" role="menuitem" aria-disabled="true"><span>Всички бензиностанции</span><small>скоро</small></button>
-                <button class="goriva-stations-nav-option" type="button" role="menuitem" aria-disabled="true"><span>EKO</span><small>скоро</small></button>
+                <a class="goriva-stations-nav-option" href="/stations/eko/" role="menuitem"><span>EKO</span><small>цени и обекти</small></a>
             </div>
         </div>`;
 
@@ -56,7 +56,7 @@
         window.__GORIVA_STATIONS_NAV_LOADER__ = true;
         const script = document.createElement("script");
         script.id = "goriva-stations-nav-script";
-        script.src = "/scripts/stations-nav.js?v=20260906-eko1";
+        script.src = "/scripts/stations-nav.js?v=20260906-eko2";
         script.async = false;
         document.head.appendChild(script);
     }
