@@ -178,45 +178,16 @@
             letter-spacing: .11em;
         }
 
-        .why-share-card h3 {
-            margin: 0 0 10px;
-            color: #f8fafc;
-            font-size: 24px;
-            line-height: 1.2;
-            letter-spacing: -.02em;
-        }
-
-        .why-share-intro {
-            margin: 0 0 24px;
-            color: #94a3b8;
-            line-height: 1.65;
-        }
-
-        .why-share-list {
-            display: grid;
-            gap: 16px;
-            margin: 0;
-            padding: 0;
-            list-style: none;
-        }
-
-        .why-share-item {
-            display: grid;
-            grid-template-columns: 42px 1fr;
-            gap: 13px;
-            align-items: start;
-            padding: 14px 0;
-            border-top: 1px solid rgba(148, 163, 184, 0.11);
-        }
-
-        .why-share-item:first-child { border-top: 0; padding-top: 0; }
-
+        .why-share-card h3 { margin: 0 0 10px; color: #f8fafc; font-size: 24px; line-height: 1.2; }
+        .why-share-intro { margin: 0; color: #a8b5c7; line-height: 1.6; }
+        .why-share-list { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 16px; }
+        .why-share-item { display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 13px; align-items: start; }
         .why-share-icon {
-            display: grid;
-            place-items: center;
-            width: 42px;
-            height: 42px;
-            border: 1px solid rgba(96, 165, 250, .16);
+            width: 44px;
+            height: 44px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             border-radius: 12px;
             background: rgba(30, 64, 175, .12);
             font-size: 20px;
@@ -500,6 +471,7 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 <script src="scripts/home-nav-modern.js?v=20260830-1645"></script>
+<script src="scripts/stations-nav.js?v=20260906-1"></script>
 <script src="scripts/station-icons.js?v=20260830-1239"></script>
 <script src="scripts/script.js?v=20260830-1239"></script>
 <script src="scripts/ecopetrol_prices.js?v=20260830-1239"></script>
