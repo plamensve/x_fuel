@@ -3,7 +3,7 @@
   const SUPABASE_KEY = 'sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH';
   const PAGE_SIZE = 18;
   const PRICE_LIMIT = 1600;
-  const EKO_PAGE_LOGO = '/images/station_logos/eko-page-logo.svg?v=20260906-2';
+  const EKO_PAGE_LOGO = '/images/station_logos/eko-page-logo.png?v=20260906-1';
 
   const state = {
     stations: [],
