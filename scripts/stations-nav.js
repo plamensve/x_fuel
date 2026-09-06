@@ -22,7 +22,7 @@
 .goriva-stations-nav-option[aria-disabled="true"]{cursor:default}
 .goriva-stations-nav-option small{color:#64748b;font-size:10px;font-weight:700;letter-spacing:.02em}
 .goriva-stations-nav-brand{display:inline-flex;min-width:0;align-items:center;gap:8px}
-.goriva-stations-nav-brand-logo{width:26px;height:26px;flex:0 0 26px;padding:2px;border-radius:6px;background:#fff;object-fit:contain}
+.goriva-stations-nav-brand-logo{width:28px;height:28px;flex:0 0 28px;padding:0;border:0;border-radius:0;background:transparent;object-fit:contain;filter:none}
 .goriva-stations-nav-brand-label{white-space:nowrap}
 @media (min-width:901px){.goriva-stations-nav-item:hover .goriva-stations-nav-dropdown,.goriva-stations-nav-item:focus-within .goriva-stations-nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}}
 @media (max-width:900px){.goriva-stations-nav-item{display:flex;width:100%;flex-direction:column}.goriva-stations-nav-toggle{width:100%;justify-content:flex-start}.goriva-stations-nav-dropdown{position:static;display:none;width:100%;min-width:0;margin:3px 0 4px;padding:6px 6px 6px 28px;border:0;border-radius:10px;background:rgba(255,255,255,.025);box-shadow:none;opacity:1;visibility:visible;transform:none;backdrop-filter:none;-webkit-backdrop-filter:none}.goriva-stations-nav-item.is-open .goriva-stations-nav-dropdown{display:block}.goriva-stations-nav-option{min-height:42px}}
@@ -31,7 +31,7 @@
     }
 
     function ekoMarkup() {
-        return `<span class="goriva-stations-nav-brand"><img class="goriva-stations-nav-brand-logo" src="${EKO_LOGO_URL}" alt="" width="26" height="26" loading="lazy" decoding="async"><span class="goriva-stations-nav-brand-label">EKO</span></span><small>цени и обекти</small>`;
+        return `<span class="goriva-stations-nav-brand"><img class="goriva-stations-nav-brand-logo" src="${EKO_LOGO_URL}" alt="" width="28" height="28" loading="lazy" decoding="async"><span class="goriva-stations-nav-brand-label">EKO</span></span><small>цени и обекти</small>`;
     }
 
     function closeDropdown(item) {
