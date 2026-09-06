@@ -36,17 +36,21 @@
         if (!item || item.dataset.stationsNavWired === "true") return;
         item.dataset.stationsNavWired = "true";
         const toggle = item.querySelector(".goriva-stations-nav-toggle");
+
         toggle?.addEventListener("click", event => {
             event.stopPropagation();
             const open = item.classList.toggle("is-open");
             toggle.setAttribute("aria-expanded", String(open));
         });
+
         item.addEventListener("click", event => {
             if (event.target.closest("a.goriva-stations-nav-option")) closeDropdown(item);
         });
+
         document.addEventListener("click", event => {
-            if (!item.isConnected || !item.contains(event.target)) closeDropdown(item);
+            if (item.isConnected && !item.contains(event.target)) closeDropdown(item);
         });
+
         document.addEventListener("keydown", event => {
             if (event.key === "Escape") closeDropdown(item);
         });
@@ -99,11 +103,6 @@
             link.innerHTML = "<span>EKO</span><small>цени и обекти</small>";
             eko.replaceWith(link);
             eko = link;
-        } else {
-            eko.href = EKO_URL;
-            eko.removeAttribute("aria-disabled");
-            const small = eko.querySelector("small");
-            if (small) small.textContent = "цени и обекти";
         }
 
         const isCurrent = window.location.pathname === EKO_URL || window.location.pathname.startsWith(EKO_URL);
@@ -125,16 +124,23 @@
             item.innerHTML = stationItemMarkup();
             target.home.after(item);
         }
+
         ensureEkoLink(item);
         wireItem(item);
         return true;
     }
 
-    install();
-    const observer = new MutationObserver(() => install());
-    observer.observe(document.documentElement, { childList: true, subtree: true });
-    window.setTimeout(() => {
-        install();
-        observer.disconnect();
-    }, 15000);
+    // global-nav.js builds the final menu before it loads this script, so a
+    // document-wide MutationObserver is unnecessary and expensive. Keep only a
+    // lightweight one-time fallback for legacy/early loading paths.
+    if (!install()) {
+        const retry = () => {
+            if (!install()) window.requestAnimationFrame(() => install());
+        };
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", retry, { once: true });
+        } else {
+            retry();
+        }
+    }
 })();
