@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-NAV_VERSION = "20260906-eko2"
+NAV_VERSION = "20260906-perf1"
 
 
 def normalize_html(path: Path) -> bool:
@@ -18,6 +18,17 @@ def normalize_html(path: Path) -> bool:
         updated,
         flags=re.I,
     )
+
+    # Homepage only: install the bounded/cached EKO fallback before script.js.
+    # This sets the legacy guard so script.js does not install its old unbounded
+    # historical pagination wrapper.
+    if path == ROOT / "index.html" and "/scripts/eko-fallback-efficient.js" not in updated:
+        marker = f'<script src="/scripts/script.js?v={NAV_VERSION}"></script>'
+        replacement = (
+            f'<script src="/scripts/eko-fallback-efficient.js?v={NAV_VERSION}"></script>\n'
+            f'{marker}'
+        )
+        updated = updated.replace(marker, replacement, 1)
 
     # Pages using the business/site shell get the same versioned entry point.
     updated = re.sub(
@@ -39,6 +50,14 @@ def normalize_html(path: Path) -> bool:
     updated = re.sub(
         r'(<script\b[^>]*\bsrc=["\'])(?:\.\./|/)?scripts/global-nav\.js(?:\?[^"\']*)?(["\'][^>]*></script>)',
         rf'\1/scripts/global-nav.js?v={NAV_VERSION}\2',
+        updated,
+        flags=re.I,
+    )
+
+    # Keep the homepage performance guard versioned as well.
+    updated = re.sub(
+        r'(<script\b[^>]*\bsrc=["\'])/scripts/eko-fallback-efficient\.js(?:\?[^"\']*)?(["\'][^>]*></script>)',
+        rf'\1/scripts/eko-fallback-efficient.js?v={NAV_VERSION}\2',
         updated,
         flags=re.I,
     )
