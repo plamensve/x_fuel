@@ -1,5 +1,5 @@
 (() => {
-    const navSrc = "/scripts/global-nav.js?v=20260906-perf1";
+    const navSrc = "/scripts/global-nav.js?v=20260906-perf2";
     if (!window.__GORIVA_GLOBAL_NAV_LOADER__) {
         window.__GORIVA_GLOBAL_NAV_LOADER__ = true;
         const navScript = document.createElement("script");
@@ -8,7 +8,7 @@
         document.head.appendChild(navScript);
     }
 
-    const stationsNavSrc = "/scripts/stations-nav.js?v=20260906-perf1";
+    const stationsNavSrc = "/scripts/stations-nav.js?v=20260906-perf2";
     if (!window.__GORIVA_STATIONS_NAV_LOADER__) {
         window.__GORIVA_STATIONS_NAV_LOADER__ = true;
         const stationsNavScript = document.createElement("script");
