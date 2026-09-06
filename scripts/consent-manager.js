@@ -2,20 +2,12 @@
   if (window.__GORIVA_CONSENT_MANAGER__) return;
   window.__GORIVA_CONSENT_MANAGER__ = true;
 
-  // Load the lightweight performance guard as soon as the shared shell starts.
-  // It keeps large ticker datasets from creating thousands of animated DOM nodes.
-  if (!document.getElementById('goriva-performance-guard')) {
-    const perf = document.createElement('script');
-    perf.id = 'goriva-performance-guard';
-    perf.src = '/scripts/performance-guard.js?v=20260906-1';
-    perf.async = true;
-    document.head.appendChild(perf);
-  }
-
   const STORAGE_KEY = 'goriva_consent_v1';
   const VERSION = 1;
-
+  const GA_ID = 'G-F6YJNGGFR2';
+  const ADSENSE_CLIENT = 'ca-pub-3478773231642095';
   const defaults = { necessary: true, analytics: false, ads: false, functional: false, version: VERSION };
+
   const loadStored = () => {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
@@ -44,16 +36,40 @@
     });
   }
 
-  function loadHotjarOnce() {
-    const existingHotjar = [...document.scripts].some(script =>
-      script.src && script.src.includes('static.hotjar.com/c/hotjar-')
-    );
+  function loadGoogleAnalyticsOnce() {
+    if (window.__GORIVA_GA_LOADED__ || document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${GA_ID}"]`)) {
+      window.__GORIVA_GA_LOADED__ = true;
+      return;
+    }
+    window.__GORIVA_GA_LOADED__ = true;
+    ensureGtag();
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+    document.head.appendChild(script);
+    window.gtag('js', new Date());
+    window.gtag('config', GA_ID);
+  }
 
+  function loadAdsenseOnce() {
+    if (window.__GORIVA_ADSENSE_LOADED__ || document.querySelector('script[src*="pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"]')) {
+      window.__GORIVA_ADSENSE_LOADED__ = true;
+      return;
+    }
+    window.__GORIVA_ADSENSE_LOADED__ = true;
+    const script = document.createElement('script');
+    script.async = true;
+    script.crossOrigin = 'anonymous';
+    script.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`;
+    document.head.appendChild(script);
+  }
+
+  function loadHotjarOnce() {
+    const existingHotjar = [...document.scripts].some(script => script.src && script.src.includes('static.hotjar.com/c/hotjar-'));
     if (window.__GORIVA_HOTJAR_LOADED__ || existingHotjar) {
       window.__GORIVA_HOTJAR_LOADED__ = true;
       return;
     }
-
     window.__GORIVA_HOTJAR_LOADED__ = true;
     window.hj = window.hj || function(){ (window.hj.q = window.hj.q || []).push(arguments); };
     window._hjSettings = { hjid: 6686373, hjsv: 6 };
@@ -63,10 +79,18 @@
     document.head.appendChild(script);
   }
 
+  function activateGrantedServices(state) {
+    if (state.analytics) {
+      loadGoogleAnalyticsOnce();
+      loadHotjarOnce();
+    }
+    if (state.ads) loadAdsenseOnce();
+  }
+
   function persist(state) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, version: VERSION, savedAt: new Date().toISOString() }));
     updateGoogleConsent(state);
-    if (state.analytics) loadHotjarOnce();
+    activateGrantedServices(state);
     window.dispatchEvent(new CustomEvent('goriva:consent-changed', { detail: state }));
   }
 
@@ -103,19 +127,14 @@
     const ads = wrapper.querySelector('#goriva-consent-ads');
     const functional = wrapper.querySelector('#goriva-consent-functional');
     const switches = [analytics, ads, functional];
-
-    const syncSaveButton = () => panel.classList.add('is-settings');
-    switches.forEach(input => input.addEventListener('change', syncSaveButton));
+    switches.forEach(input => input.addEventListener('change', () => panel.classList.add('is-settings')));
 
     const close = () => wrapper.classList.remove('is-open');
     const apply = state => { persist(state); close(); };
-
     wrapper.querySelector('.goriva-consent-accept').addEventListener('click', () => apply({ necessary:true, analytics:true, ads:true, functional:true }));
     wrapper.querySelector('.goriva-consent-reject').addEventListener('click', () => apply({ necessary:true, analytics:false, ads:false, functional:false }));
     wrapper.querySelector('.goriva-consent-save').addEventListener('click', () => apply({ necessary:true, analytics:analytics.checked, ads:ads.checked, functional:functional.checked }));
-    wrapper.querySelector('.goriva-consent-close').addEventListener('click', () => {
-      if (loadStored()) close();
-    });
+    wrapper.querySelector('.goriva-consent-close').addEventListener('click', () => { if (loadStored()) close(); });
 
     window.gorivaOpenPrivacySettings = () => {
       const state = loadStored() || defaults;
@@ -129,8 +148,9 @@
     const stored = loadStored();
     if (stored) {
       updateGoogleConsent(stored);
-      if (stored.analytics) loadHotjarOnce();
+      activateGrantedServices(stored);
     } else {
+      updateGoogleConsent(defaults);
       requestAnimationFrame(() => wrapper.classList.add('is-open'));
     }
   }
