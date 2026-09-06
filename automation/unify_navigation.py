@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-NAV_VERSION = "20260906-eko-fix1"
+NAV_VERSION = "20260906-eko-fix2"
 
 
 def normalize_html(path: Path) -> bool:
@@ -62,8 +62,8 @@ def normalize_html(path: Path) -> bool:
         flags=re.I,
     )
 
-    # stations-nav is loaded by global-nav. Direct HTML loading caused the
-    # legacy-menu/global-menu replacement race that hid the button.
+    # stations-nav is no longer loaded directly. Global navigation owns the
+    # stations dropdown markup, styles and mobile behavior.
     updated = re.sub(
         r'\s*<script\b[^>]*\bsrc=["\'](?:\.\./|/)?scripts/stations-nav\.js(?:\?[^"\']*)?["\'][^>]*></script>',
         '',
