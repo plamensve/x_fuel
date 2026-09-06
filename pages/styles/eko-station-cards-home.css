@@ -2,7 +2,7 @@
    Every card reserves the same vertical space for title, address, price grid,
    action and date so content length cannot shift controls between cards. */
 .eko-stations-grid{
-  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  grid-template-columns:repeat(3,minmax(0,1fr))!important;
   gap:16px!important;
   align-items:stretch!important;
 }
