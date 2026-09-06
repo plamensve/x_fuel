@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-NAV_VERSION = "20260906-nav5"
+NAV_VERSION = "20260906-eko1"
 
 
 def normalize_html(path: Path) -> bool:
@@ -31,6 +31,14 @@ def normalize_html(path: Path) -> bool:
     updated = re.sub(
         r'(<script\b[^>]*\bsrc=["\'])(?:\.\./|/)?scripts/article-engagement\.js(?:\?[^"\']*)?(["\'][^>]*></script>)',
         rf'\1/scripts/article-engagement.js?v={NAV_VERSION}\2',
+        updated,
+        flags=re.I,
+    )
+
+    # Standalone station hubs may load the global navigation directly.
+    updated = re.sub(
+        r'(<script\b[^>]*\bsrc=["\'])(?:\.\./|/)?scripts/global-nav\.js(?:\?[^"\']*)?(["\'][^>]*></script>)',
+        rf'\1/scripts/global-nav.js?v={NAV_VERSION}\2',
         updated,
         flags=re.I,
     )
@@ -80,7 +88,9 @@ def main() -> None:
     changed: list[str] = []
 
     html_files = [ROOT / "index.html"]
-    html_files.extend(sorted((ROOT / "pages").rglob("*.html")))
+    for html_root in (ROOT / "pages", ROOT / "stations"):
+        if html_root.exists():
+            html_files.extend(sorted(html_root.rglob("*.html")))
     for path in html_files:
         if path.exists() and normalize_html(path):
             changed.append(path.relative_to(ROOT).as_posix())
