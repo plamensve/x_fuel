@@ -87,10 +87,30 @@
     if (state.ads) loadAdsenseOnce();
   }
 
+  // Returning visitors may already have analytics/ads consent. Do not let those
+  // third-party scripts compete with HTML/CSS/hero resources on every page load.
+  // Consent state is applied immediately; optional services start after load and
+  // during an idle slice (or a short timeout where requestIdleCallback is absent).
+  function scheduleGrantedServices(state) {
+    if (!state.analytics && !state.ads) return;
+
+    const runWhenIdle = () => {
+      const run = () => activateGrantedServices(state);
+      if ('requestIdleCallback' in window) {
+        window.requestIdleCallback(run, { timeout: 2500 });
+      } else {
+        window.setTimeout(run, 350);
+      }
+    };
+
+    if (document.readyState === 'complete') runWhenIdle();
+    else window.addEventListener('load', runWhenIdle, { once: true });
+  }
+
   function persist(state) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, version: VERSION, savedAt: new Date().toISOString() }));
     updateGoogleConsent(state);
-    activateGrantedServices(state);
+    scheduleGrantedServices(state);
     window.dispatchEvent(new CustomEvent('goriva:consent-changed', { detail: state }));
   }
 
@@ -148,7 +168,7 @@
     const stored = loadStored();
     if (stored) {
       updateGoogleConsent(stored);
-      activateGrantedServices(stored);
+      scheduleGrantedServices(stored);
     } else {
       updateGoogleConsent(defaults);
       requestAnimationFrame(() => wrapper.classList.add('is-open'));
