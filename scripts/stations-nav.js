@@ -1,7 +1,4 @@
 (() => {
-    if (window.__GORIVA_STATIONS_NAV__) return;
-    window.__GORIVA_STATIONS_NAV__ = true;
-
     const STYLE_ID = "goriva-stations-nav-css";
 
     function ensureStyles() {
@@ -46,7 +43,7 @@
             const home = Array.from(legacyMenu.children).find(node => {
                 if (!node.matches?.("a")) return false;
                 const href = node.getAttribute("href") || "";
-                return href === "index.html" || href === "/" || href.endsWith("/index.html");
+                return href === "index.html" || href === "../index.html" || href === "/" || href.endsWith("/index.html");
             });
             if (home) return { menu: legacyMenu, home };
         }
@@ -56,7 +53,8 @@
 
     function install() {
         const target = findMenuAndHome();
-        if (!target || target.menu.querySelector(".goriva-stations-nav-item")) return false;
+        if (!target) return false;
+        if (target.menu.querySelector(".goriva-stations-nav-item")) return true;
 
         ensureStyles();
 
@@ -83,7 +81,7 @@
         });
 
         document.addEventListener("click", event => {
-            if (!item.contains(event.target)) closeDropdown(item);
+            if (!item.isConnected || !item.contains(event.target)) closeDropdown(item);
         });
         document.addEventListener("keydown", event => {
             if (event.key === "Escape") closeDropdown(item);
@@ -92,11 +90,13 @@
         return true;
     }
 
-    if (!install()) {
-        const observer = new MutationObserver(() => {
-            if (install()) observer.disconnect();
-        });
-        observer.observe(document.documentElement, { childList: true, subtree: true });
-        window.setTimeout(() => observer.disconnect(), 10000);
-    }
+    // The global navigation can replace the legacy header after this script runs.
+    // Keep watching briefly so the stations item is re-installed into the final menu.
+    install();
+    const observer = new MutationObserver(() => install());
+    observer.observe(document.documentElement, { childList: true, subtree: true });
+    window.setTimeout(() => {
+        install();
+        observer.disconnect();
+    }, 15000);
 })();
