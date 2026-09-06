@@ -35,7 +35,15 @@
   }
 
   function loadHotjarOnce() {
-    if (window.__GORIVA_HOTJAR_LOADED__) return;
+    const existingHotjar = [...document.scripts].some(script =>
+      script.src && script.src.includes('static.hotjar.com/c/hotjar-')
+    );
+
+    if (window.__GORIVA_HOTJAR_LOADED__ || existingHotjar) {
+      window.__GORIVA_HOTJAR_LOADED__ = true;
+      return;
+    }
+
     window.__GORIVA_HOTJAR_LOADED__ = true;
     window.hj = window.hj || function(){ (window.hj.q = window.hj.q || []).push(arguments); };
     window._hjSettings = { hjid: 6686373, hjsv: 6 };
