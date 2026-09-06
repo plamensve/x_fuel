@@ -56,7 +56,7 @@
         window.__GORIVA_STATIONS_NAV_LOADER__ = true;
         const script = document.createElement("script");
         script.id = "goriva-stations-nav-script";
-        script.src = "/scripts/stations-nav.js?v=20260906-perf2";
+        script.src = "/scripts/stations-nav.js?v=20260906-eko-logo1";
         script.async = false;
         document.head.appendChild(script);
     }
