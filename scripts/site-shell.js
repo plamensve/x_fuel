@@ -1,5 +1,5 @@
 (() => {
-    const navSrc = "/scripts/global-nav.js?v=20260906-eko-fix2";
+    const navSrc = "/scripts/global-nav.js?v=20260906-eko-fix3";
     if (!window.__GORIVA_GLOBAL_NAV_LOADER__) {
         window.__GORIVA_GLOBAL_NAV_LOADER__ = true;
         const navScript = document.createElement("script");
