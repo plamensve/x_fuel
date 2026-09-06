@@ -104,9 +104,15 @@ def lastmod_for(path: Path, source: str) -> str:
 
 def public_html_files() -> list[Path]:
     files = [path for path in STATIC_FILES if path.exists()]
+
     articles_root = ROOT / "pages" / "articles"
     if articles_root.exists():
         files.extend(sorted(articles_root.rglob("*.html")))
+
+    stations_root = ROOT / "stations"
+    if stations_root.exists():
+        files.extend(sorted(stations_root.rglob("*.html")))
+
     return files
 
 
