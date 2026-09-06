@@ -318,7 +318,13 @@
             const cities = new Set(stations.map(guessCity).filter(Boolean).map(value => value.toLocaleLowerCase("bg-BG")));
             window.__EKO_CITY_COUNT__ = cities.size;
 
-            const stationMap = L.map(element, { preferCanvas: true }).setView([42.7339, 25.4858], 7);
+            const hasCoarsePointer = window.matchMedia?.("(pointer: coarse)").matches || "ontouchstart" in window;
+            const stationMap = L.map(element, {
+                preferCanvas: true,
+                // On touch devices a marker tap may be followed by a synthetic map click.
+                // Leaflet would treat that second event as a request to close the popup.
+                closePopupOnClick: !hasCoarsePointer
+            }).setView([42.7339, 25.4858], 7);
             L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
                 attribution: "&copy; OpenStreetMap contributors"
             }).addTo(stationMap);
@@ -338,6 +344,13 @@
                     livePricesByStation[stationId] || {},
                     isCurrentDay
                 ));
+
+                if (hasCoarsePointer) {
+                    marker.on("click", event => {
+                        if (event.originalEvent) L.DomEvent.stopPropagation(event.originalEvent);
+                    });
+                }
+
                 markers.addLayer(marker);
             });
 
