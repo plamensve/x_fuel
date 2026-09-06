@@ -1,7 +1,6 @@
 (() => {
     const STYLE_ID = "goriva-stations-nav-css";
     const EKO_URL = "/stations/eko/";
-    const EKO_LOGO_URL = "/images/station_logos/eko.svg";
 
     function ensureStyles() {
         if (document.getElementById(STYLE_ID)) return;
@@ -22,66 +21,20 @@
 .goriva-stations-nav-option[aria-disabled="true"]{cursor:default}
 .goriva-stations-nav-option small{color:#64748b;font-size:10px;font-weight:700;letter-spacing:.02em}
 .goriva-stations-nav-brand{display:inline-flex;min-width:0;align-items:center;gap:8px}
-.goriva-stations-nav-brand-logo{width:28px;height:28px;flex:0 0 28px;padding:0;border:0;border-radius:0;background:transparent;object-fit:contain;filter:none}
+.goriva-stations-nav-brand-logo{display:block;width:28px;height:28px;flex:0 0 28px;background:transparent}
 .goriva-stations-nav-brand-label{white-space:nowrap}
 @media (min-width:901px){.goriva-stations-nav-item:hover .goriva-stations-nav-dropdown,.goriva-stations-nav-item:focus-within .goriva-stations-nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}}
-@media (max-width:900px){.goriva-stations-nav-item{display:flex;width:100%;flex-direction:column}.goriva-stations-nav-toggle{width:100%;justify-content:flex-start}.goriva-stations-nav-dropdown{position:static;display:none;width:100%;min-width:0;margin:3px 0 4px;padding:6px 6px 6px 28px;border:0;border-radius:10px;background:rgba(255,255,255,.025);box-shadow:none;opacity:1;visibility:visible;transform:none;backdrop-filter:none;-webkit-backdrop-filter:none}.goriva-stations-nav-item.is-open .goriva-stations-nav-dropdown{display:block}.goriva-stations-nav-option{min-height:42px}}
+@media (max-width:900px){.goriva-stations-nav-item{display:flex!important;width:100%!important;flex-direction:column!important;align-items:stretch!important}.goriva-stations-nav-toggle{width:100%!important;justify-content:flex-start!important}.goriva-stations-nav-dropdown{position:static!important;display:none!important;width:100%!important;min-width:0!important;margin:3px 0 4px!important;padding:6px 6px 6px 28px!important;border:0!important;border-radius:10px!important;background:rgba(255,255,255,.025)!important;box-shadow:none!important;opacity:1!important;visibility:visible!important;transform:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}.goriva-stations-nav-item.is-open>.goriva-stations-nav-dropdown{display:block!important}.goriva-stations-nav-option{min-height:42px}}
 `;
         document.head.appendChild(style);
     }
 
+    function ekoIcon() {
+        return `<svg class="goriva-stations-nav-brand-logo" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle cx="32" cy="32" r="30" fill="#e52329"/><path d="M15 19h24v7H22v6h15v7H22v6h17v7H15z" fill="#fff"/><path d="M43 20l7 5-7 7 7 7-7 5-11-12z" fill="#fff"/></svg>`;
+    }
+
     function ekoMarkup() {
-        return `<span class="goriva-stations-nav-brand"><img class="goriva-stations-nav-brand-logo" src="${EKO_LOGO_URL}" alt="" width="28" height="28" loading="lazy" decoding="async"><span class="goriva-stations-nav-brand-label">EKO</span></span><small>цени и обекти</small>`;
-    }
-
-    function closeDropdown(item) {
-        if (!item) return;
-        item.classList.remove("is-open");
-        item.querySelector(".goriva-stations-nav-toggle")?.setAttribute("aria-expanded", "false");
-    }
-
-    function wireItem(item) {
-        if (!item || item.dataset.stationsNavWired === "true") return;
-        item.dataset.stationsNavWired = "true";
-        const toggle = item.querySelector(".goriva-stations-nav-toggle");
-
-        toggle?.addEventListener("click", event => {
-            event.stopPropagation();
-            const open = item.classList.toggle("is-open");
-            toggle.setAttribute("aria-expanded", String(open));
-        });
-
-        item.addEventListener("click", event => {
-            if (event.target.closest("a.goriva-stations-nav-option")) closeDropdown(item);
-        });
-
-        document.addEventListener("click", event => {
-            if (item.isConnected && !item.contains(event.target)) closeDropdown(item);
-        });
-
-        document.addEventListener("keydown", event => {
-            if (event.key === "Escape") closeDropdown(item);
-        });
-    }
-
-    function findMenuAndHome() {
-        const globalMenu = document.querySelector(".goriva-global-menu");
-        if (globalMenu) {
-            const home = Array.from(globalMenu.children).find(node => node.matches?.('a[href="/"]'));
-            if (home) return { menu: globalMenu, home };
-        }
-
-        const legacyMenu = document.getElementById("nav-menu");
-        if (legacyMenu) {
-            const home = Array.from(legacyMenu.children).find(node => {
-                if (!node.matches?.("a")) return false;
-                const href = node.getAttribute("href") || "";
-                return href === "index.html" || href === "../index.html" || href === "/" || href.endsWith("/index.html");
-            });
-            if (home) return { menu: legacyMenu, home };
-        }
-
-        return null;
+        return `<span class="goriva-stations-nav-brand">${ekoIcon()}<span class="goriva-stations-nav-brand-label">EKO</span></span><small>цени и обекти</small>`;
     }
 
     function stationItemMarkup() {
@@ -97,36 +50,34 @@
             </div>`;
     }
 
-    function ensureEkoLink(item) {
-        if (!item) return;
-        const options = Array.from(item.querySelectorAll(".goriva-stations-nav-option"));
-        let eko = options.find(node => node.getAttribute?.("href") === EKO_URL || (node.textContent || "").toUpperCase().includes("EKO"));
-        if (!eko) return;
-
-        if (eko.tagName !== "A") {
-            const link = document.createElement("a");
-            link.className = "goriva-stations-nav-option";
-            link.href = EKO_URL;
-            link.setAttribute("role", "menuitem");
-            link.innerHTML = ekoMarkup();
-            eko.replaceWith(link);
-            eko = link;
-        } else if (!eko.querySelector(".goriva-stations-nav-brand-logo")) {
-            eko.innerHTML = ekoMarkup();
+    function findTarget() {
+        const globalMenu = document.querySelector(".goriva-global-menu");
+        if (globalMenu) {
+            const home = Array.from(globalMenu.children).find(node => node.matches?.('a[href="/"]'));
+            if (home) return { menu: globalMenu, home };
         }
+        const legacyMenu = document.getElementById("nav-menu");
+        if (legacyMenu) {
+            const home = Array.from(legacyMenu.children).find(node => {
+                if (!node.matches?.("a")) return false;
+                const href = node.getAttribute("href") || "";
+                return href === "index.html" || href === "../index.html" || href === "/" || href.endsWith("/index.html");
+            });
+            if (home) return { menu: legacyMenu, home };
+        }
+        return null;
+    }
 
-        const isCurrent = window.location.pathname === EKO_URL || window.location.pathname.startsWith(EKO_URL);
-        item.classList.toggle("is-current", isCurrent);
-        eko.classList.toggle("is-current", isCurrent);
-        if (isCurrent) eko.setAttribute("aria-current", "page");
-        else eko.removeAttribute("aria-current");
+    function setOpen(item, open) {
+        if (!item) return;
+        item.classList.toggle("is-open", open);
+        item.querySelector(".goriva-stations-nav-toggle")?.setAttribute("aria-expanded", String(open));
     }
 
     function install() {
-        const target = findMenuAndHome();
+        const target = findTarget();
         if (!target) return false;
         ensureStyles();
-
         let item = target.menu.querySelector(".goriva-stations-nav-item");
         if (!item) {
             item = document.createElement("div");
@@ -134,20 +85,58 @@
             item.innerHTML = stationItemMarkup();
             target.home.after(item);
         }
-
-        ensureEkoLink(item);
-        wireItem(item);
+        let eko = item.querySelector(`a[href="${EKO_URL}"]`);
+        if (!eko) {
+            const candidates = Array.from(item.querySelectorAll(".goriva-stations-nav-option"));
+            const old = candidates.find(node => (node.textContent || "").toUpperCase().includes("EKO"));
+            if (old) {
+                eko = document.createElement("a");
+                eko.className = "goriva-stations-nav-option";
+                eko.href = EKO_URL;
+                eko.setAttribute("role", "menuitem");
+                old.replaceWith(eko);
+            }
+        }
+        if (eko) eko.innerHTML = ekoMarkup();
+        const current = window.location.pathname === EKO_URL || window.location.pathname.startsWith(EKO_URL);
+        item.classList.toggle("is-current", current);
+        eko?.classList.toggle("is-current", current);
+        if (current) eko?.setAttribute("aria-current", "page");
         return true;
     }
 
-    if (!install()) {
-        const retry = () => {
-            if (!install()) window.requestAnimationFrame(() => install());
-        };
-        if (document.readyState === "loading") {
-            document.addEventListener("DOMContentLoaded", retry, { once: true });
-        } else {
-            retry();
-        }
+    if (!window.__GORIVA_STATIONS_NAV_EVENTS__) {
+        window.__GORIVA_STATIONS_NAV_EVENTS__ = true;
+        document.addEventListener("click", event => {
+            const toggle = event.target.closest?.(".goriva-stations-nav-toggle");
+            if (toggle) {
+                event.preventDefault();
+                event.stopPropagation();
+                const item = toggle.closest(".goriva-stations-nav-item");
+                const willOpen = !item?.classList.contains("is-open");
+                document.querySelectorAll(".goriva-stations-nav-item.is-open").forEach(node => setOpen(node, false));
+                setOpen(item, willOpen);
+                return;
+            }
+            const option = event.target.closest?.("a.goriva-stations-nav-option");
+            if (option) {
+                setOpen(option.closest(".goriva-stations-nav-item"), false);
+                return;
+            }
+            document.querySelectorAll(".goriva-stations-nav-item.is-open").forEach(node => {
+                if (!node.contains(event.target)) setOpen(node, false);
+            });
+        });
+        document.addEventListener("keydown", event => {
+            if (event.key !== "Escape") return;
+            document.querySelectorAll(".goriva-stations-nav-item.is-open").forEach(node => setOpen(node, false));
+        });
     }
+
+    const boot = () => {
+        if (install()) return;
+        requestAnimationFrame(() => install());
+    };
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot, { once: true });
+    else boot();
 })();
