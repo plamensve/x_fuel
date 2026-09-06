@@ -12,8 +12,24 @@
         { href: "/pages/rules.html", label: "Условия", symbol: "✓", match: ["/pages/rules.html"] }
     ];
 
+    const normalizePath = value => {
+        const path = (value || "/").replace(/\/+/g, "/");
+        return path !== "/" ? path.replace(/\/$/, "") : path;
+    };
+
+    const currentPath = normalizePath(window.location.pathname);
+    const stationsCurrent = currentPath === "/stations" || currentPath.startsWith("/stations/");
+    const ekoCurrent = currentPath === "/stations/eko" || currentPath.startsWith("/stations/eko/");
+
+    const ekoIcon = `
+        <svg class="goriva-stations-nav-brand-logo" viewBox="0 0 64 64" aria-hidden="true" focusable="false">
+            <circle cx="32" cy="32" r="30" fill="#e52329"></circle>
+            <path d="M15 19h24v7H22v6h15v7H22v6h17v7H15z" fill="#fff"></path>
+            <path d="M43 20l7 5-7 7 7 7-7 5-11-12z" fill="#fff"></path>
+        </svg>`;
+
     const stationsNavMarkup = `
-        <div class="goriva-stations-nav-item">
+        <div class="goriva-stations-nav-item${stationsCurrent ? " is-current" : ""}">
             <button class="goriva-stations-nav-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="goriva-stations-dropdown">
                 <span class="goriva-nav-symbol" aria-hidden="true">⛽</span>
                 <span>Бензиностанции</span>
@@ -21,19 +37,14 @@
             </button>
             <div id="goriva-stations-dropdown" class="goriva-stations-nav-dropdown" role="menu" aria-label="Бензиностанции">
                 <button class="goriva-stations-nav-option" type="button" role="menuitem" aria-disabled="true"><span>Всички бензиностанции</span><small>скоро</small></button>
-                <a class="goriva-stations-nav-option" href="/stations/eko/" role="menuitem"><span>EKO</span><small>цени и обекти</small></a>
+                <a class="goriva-stations-nav-option${ekoCurrent ? " is-current" : ""}" href="/stations/eko/" role="menuitem"${ekoCurrent ? ' aria-current="page"' : ""}>
+                    <span class="goriva-stations-nav-brand">${ekoIcon}<span class="goriva-stations-nav-brand-label">EKO</span></span>
+                    <small>цени и обекти</small>
+                </a>
             </div>
         </div>`;
 
-    const normalizePath = value => {
-        const path = (value || "/").replace(/\/+/g, "/");
-        return path !== "/" ? path.replace(/\/$/, "") : path;
-    };
-
-    const isActive = item => {
-        const path = normalizePath(window.location.pathname);
-        return item.match.some(match => match.endsWith("/") ? path.startsWith(match) : path === normalizePath(match));
-    };
+    const isActive = item => item.match.some(match => match.endsWith("/") ? currentPath.startsWith(match) : currentPath === normalizePath(match));
 
     function renderNavigationItems() {
         return navItems.map((item, index) => {
@@ -47,18 +58,8 @@
         const link = document.createElement("link");
         link.id = "goriva-global-progress-css";
         link.rel = "stylesheet";
-        link.href = "/pages/styles/global-progress.css?v=20260831-perf2";
+        link.href = "/pages/styles/global-progress.css?v=20260906-eko-fix2";
         document.head.appendChild(link);
-    }
-
-    function ensureStationsNavigation() {
-        if (window.__GORIVA_STATIONS_NAV_LOADER__ || document.getElementById("goriva-stations-nav-script")) return;
-        window.__GORIVA_STATIONS_NAV_LOADER__ = true;
-        const script = document.createElement("script");
-        script.id = "goriva-stations-nav-script";
-        script.src = "/scripts/stations-nav.js?v=20260906-eko-fix1";
-        script.async = false;
-        document.head.appendChild(script);
     }
 
     function buildScrollProgress() {
@@ -124,21 +125,41 @@
 
         const toggle = header.querySelector(".goriva-global-menu-toggle");
         const menu = header.querySelector(".goriva-global-menu");
+        const stationsItem = header.querySelector(".goriva-stations-nav-item");
+        const stationsToggle = header.querySelector(".goriva-stations-nav-toggle");
+
+        const closeStations = () => {
+            stationsItem?.classList.remove("is-open");
+            stationsToggle?.setAttribute("aria-expanded", "false");
+        };
         const closeMenu = () => {
+            closeStations();
             menu?.classList.remove("is-open");
             toggle?.setAttribute("aria-expanded", "false");
             document.body.classList.remove("goriva-menu-open");
         };
+
         toggle?.addEventListener("click", event => {
             event.stopPropagation();
             const open = menu.classList.toggle("is-open");
             toggle.setAttribute("aria-expanded", String(open));
             document.body.classList.toggle("goriva-menu-open", open);
+            if (!open) closeStations();
         });
+
+        stationsToggle?.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopPropagation();
+            const open = stationsItem.classList.toggle("is-open");
+            stationsToggle.setAttribute("aria-expanded", String(open));
+        });
+
         menu?.addEventListener("click", event => {
             if (event.target.closest("a")) closeMenu();
         });
+
         document.addEventListener("click", event => {
+            if (stationsItem?.classList.contains("is-open") && !stationsItem.contains(event.target)) closeStations();
             if (menu?.classList.contains("is-open") && !menu.contains(event.target) && !toggle?.contains(event.target)) closeMenu();
         });
         document.addEventListener("keydown", event => {
@@ -191,7 +212,6 @@
     function initGlobalShell() {
         ensureStyles();
         buildHeader();
-        ensureStationsNavigation();
         buildFooter();
         buildScrollProgress();
     }
