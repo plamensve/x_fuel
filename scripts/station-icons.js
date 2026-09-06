@@ -85,13 +85,3 @@ function getStationIcon(name) {
         ...defaultConfig
     })
 }
-
-/* Homepage navigation extension. Kept isolated from station icon logic. */
-(() => {
-    if (window.__GORIVA_STATIONS_NAV_LOADER__) return;
-    window.__GORIVA_STATIONS_NAV_LOADER__ = true;
-    const script = document.createElement("script");
-    script.src = "/scripts/stations-nav.js?v=20260906-2";
-    script.async = false;
-    document.head.appendChild(script);
-})();
