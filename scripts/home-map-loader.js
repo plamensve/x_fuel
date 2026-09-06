@@ -57,6 +57,20 @@
         });
     }
 
+    function hardenMobileMarkerClusters() {
+        const hasCoarsePointer = window.matchMedia?.("(pointer: coarse)").matches || "ontouchstart" in window;
+        const clusterOptions = window.L?.MarkerClusterGroup?.prototype?.options;
+        if (!hasCoarsePointer || !clusterOptions) return;
+
+        // EKO popups are taller than the available map viewport on many phones.
+        // Leaflet auto-pans the map to keep the popup visible. MarkerCluster's
+        // default move-end pruning can then temporarily remove the source marker,
+        // and Leaflet closes a bound popup when its source marker is removed.
+        // With only ~100 EKO markers, keeping off-screen markers mounted on touch
+        // devices is inexpensive and prevents that popup lifecycle race entirely.
+        clusterOptions.removeOutsideVisibleBounds = false;
+    }
+
     function startMapAssets() {
         if (startPromise) return startPromise;
 
@@ -69,10 +83,11 @@
 
             await loadScript("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js", "goriva-leaflet-js");
             await loadScript("https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js", "goriva-markercluster-js");
+            hardenMobileMarkerClusters();
             await loadScript("/scripts/station-icons.js?v=20260830-1239", "goriva-station-icons");
             // Release the temporary legacy-map guard so the dedicated EKO initializer can run.
             window.__GORIVA_EKO_MAP_MODE__ = false;
-            await loadScript("/scripts/ecopetrol_prices.js?v=20260906-eko-map1", "goriva-eko-map-data");
+            await loadScript("/scripts/ecopetrol_prices.js?v=20260906-eko-map2", "goriva-eko-map-data");
         })().catch(error => {
             console.error("Failed to lazy-load homepage map assets", error);
             throw error;
