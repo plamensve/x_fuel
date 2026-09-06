@@ -1,7 +1,7 @@
 (() => {
   const SUPABASE_URL = 'https://eaqvhxfvozhzatrnbkvx.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH';
-  const PAGE_SIZE = 18;
+  const PAGE_SIZE = 9;
   const PRICE_LIMIT = 1600;
   const EKO_CARD_ICON = '/images/station_logos/eko-page-logo.png?v=20260906-2';
 
@@ -24,7 +24,7 @@
 
   const $ = selector => document.querySelector(selector);
   const normalize = value => (value || '').toString().trim().toLocaleLowerCase('bg-BG');
-  const escapeHtml = value => (value || '').toString().replace(/[&<>'"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[char]));
+  const escapeHtml = value => (value || '').toString().replace(/[&<>'\"]/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','\"':'&quot;'}[char]));
 
   function stationIdFromRow(row) {
     const text = [row.location, row.city, row.region, row.station].filter(Boolean).join(' ');
