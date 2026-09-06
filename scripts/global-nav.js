@@ -4,10 +4,10 @@
 
     const navItems = [
         { href: "/", label: "Начало", symbol: "⌂", match: ["/", "/index.html"] },
-        { href: "/pages/useful.html", label: "Полезно", symbol: "✦", match: ["/pages/useful.html"] },
-        { href: "/pages/trends.html", label: "История", symbol: "↗", match: ["/pages/trends.html"] },
-        { href: "/pages/weather.html", label: "Времето", symbol: "☼", match: ["/pages/weather.html"] },
         { href: "/pages/business-clients.html", label: "За бизнеса", symbol: "◆", match: ["/pages/business-clients.html"] },
+        { href: "/pages/trends.html", label: "История на цените", symbol: "↗", match: ["/pages/trends.html"] },
+        { href: "/pages/useful.html", label: "Полезно", symbol: "✦", match: ["/pages/useful.html"] },
+        { href: "/pages/weather.html", label: "Времето", symbol: "☼", match: ["/pages/weather.html"] },
         { href: "/pages/news.html", label: "Новини", symbol: "▤", match: ["/pages/news.html", "/pages/articles/"] },
         { href: "/pages/rules.html", label: "Условия", symbol: "✓", match: ["/pages/rules.html"] }
     ];
@@ -58,7 +58,7 @@
         const link = document.createElement("link");
         link.id = "goriva-global-progress-css";
         link.rel = "stylesheet";
-        link.href = "/pages/styles/global-progress.css?v=20260906-eko-fix4";
+        link.href = "/pages/styles/global-progress.css?v=20260906-nav-order1";
         document.head.appendChild(link);
     }
 
