@@ -656,7 +656,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         let stationMapElement = document.getElementById("station-map")
 
-        if (stationMapElement) {
+        if (stationMapElement && !window.__GORIVA_EKO_MAP_MODE__) {
 
             let stationMap = L.map("station-map", {
                 preferCanvas: true
