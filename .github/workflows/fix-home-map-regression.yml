@@ -26,21 +26,18 @@ jobs:
 
           loader = Path("scripts/home-map-loader.js")
           text = loader.read_text(encoding="utf-8")
-          old = '''            await loadScript("/scripts/station-icons.js?v=20260830-1239", "goriva-station-icons");
-            await loadScript("/scripts/ecopetrol_prices.js?v=20260906-eko-map1", "goriva-eko-map-data");'''
-          new = '''            await loadScript("/scripts/station-icons.js?v=20260830-1239", "goriva-station-icons");
-
-            // The loader sets __GORIVA_EKO_MAP_MODE__ early only to keep the
-            // legacy map in script-base.js from taking ownership of #station-map.
-            // Release that temporary guard immediately before the dedicated EKO
-            // implementation loads; ecopetrol_prices.js will set it back to true
-            // after its own one-time initialization guard has passed.
-            window.__GORIVA_EKO_MAP_MODE__ = false;
-            await loadScript("/scripts/ecopetrol_prices.js?v=20260906-eko-map1", "goriva-eko-map-data");'''
-          if new not in text:
-              if old not in text:
-                  raise SystemExit("Expected homepage map loader sequence not found")
-              text = text.replace(old, new, 1)
+          needle = '            await loadScript("/scripts/ecopetrol_prices.js?v=20260906-eko-map1", "goriva-eko-map-data");'
+          reset = '            window.__GORIVA_EKO_MAP_MODE__ = false;\n'
+          if reset not in text:
+              if needle not in text:
+                  raise SystemExit("Expected EKO map script load line not found")
+              text = text.replace(
+                  needle,
+                  '            // Release the temporary legacy-map guard so the dedicated EKO initializer can run.\n'
+                  + reset
+                  + needle,
+                  1,
+              )
               loader.write_text(text, encoding="utf-8")
 
           index = Path("index.html")
