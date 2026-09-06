@@ -1,6 +1,7 @@
 (() => {
     const STYLE_ID = "goriva-stations-nav-css";
     const EKO_URL = "/stations/eko/";
+    const EKO_LOGO_URL = "/images/station_logos/eko.svg";
 
     function ensureStyles() {
         if (document.getElementById(STYLE_ID)) return;
@@ -20,10 +21,17 @@
 .goriva-stations-nav-option:hover,.goriva-stations-nav-option:focus-visible,.goriva-stations-nav-option.is-current{color:#fff;background:rgba(255,255,255,.06);outline:none}
 .goriva-stations-nav-option[aria-disabled="true"]{cursor:default}
 .goriva-stations-nav-option small{color:#64748b;font-size:10px;font-weight:700;letter-spacing:.02em}
+.goriva-stations-nav-brand{display:inline-flex;min-width:0;align-items:center;gap:8px}
+.goriva-stations-nav-brand-logo{width:26px;height:26px;flex:0 0 26px;padding:2px;border-radius:6px;background:#fff;object-fit:contain}
+.goriva-stations-nav-brand-label{white-space:nowrap}
 @media (min-width:901px){.goriva-stations-nav-item:hover .goriva-stations-nav-dropdown,.goriva-stations-nav-item:focus-within .goriva-stations-nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}}
-@media (max-width:900px){.goriva-stations-nav-item{display:flex;width:100%;flex-direction:column}.goriva-stations-nav-toggle{width:100%;justify-content:flex-start}.goriva-stations-nav-dropdown{position:static;display:none;width:100%;min-width:0;margin:3px 0 4px;padding:6px 6px 6px 28px;border:0;border-radius:10px;background:rgba(255,255,255,.025);box-shadow:none;opacity:1;visibility:visible;transform:none;backdrop-filter:none;-webkit-backdrop-filter:none}.goriva-stations-nav-item.is-open .goriva-stations-nav-dropdown{display:block}.goriva-stations-nav-option{min-height:38px}}
+@media (max-width:900px){.goriva-stations-nav-item{display:flex;width:100%;flex-direction:column}.goriva-stations-nav-toggle{width:100%;justify-content:flex-start}.goriva-stations-nav-dropdown{position:static;display:none;width:100%;min-width:0;margin:3px 0 4px;padding:6px 6px 6px 28px;border:0;border-radius:10px;background:rgba(255,255,255,.025);box-shadow:none;opacity:1;visibility:visible;transform:none;backdrop-filter:none;-webkit-backdrop-filter:none}.goriva-stations-nav-item.is-open .goriva-stations-nav-dropdown{display:block}.goriva-stations-nav-option{min-height:42px}}
 `;
         document.head.appendChild(style);
+    }
+
+    function ekoMarkup() {
+        return `<span class="goriva-stations-nav-brand"><img class="goriva-stations-nav-brand-logo" src="${EKO_LOGO_URL}" alt="" width="26" height="26" loading="lazy" decoding="async"><span class="goriva-stations-nav-brand-label">EKO</span></span><small>цени и обекти</small>`;
     }
 
     function closeDropdown(item) {
@@ -85,14 +93,14 @@
             </button>
             <div id="goriva-stations-dropdown" class="goriva-stations-nav-dropdown" role="menu" aria-label="Бензиностанции">
                 <button class="goriva-stations-nav-option" type="button" role="menuitem" aria-disabled="true"><span>Всички бензиностанции</span><small>скоро</small></button>
-                <a class="goriva-stations-nav-option" href="${EKO_URL}" role="menuitem"><span>EKO</span><small>цени и обекти</small></a>
+                <a class="goriva-stations-nav-option" href="${EKO_URL}" role="menuitem">${ekoMarkup()}</a>
             </div>`;
     }
 
     function ensureEkoLink(item) {
         if (!item) return;
         const options = Array.from(item.querySelectorAll(".goriva-stations-nav-option"));
-        let eko = options.find(node => (node.querySelector("span")?.textContent || node.textContent || "").trim().toUpperCase() === "EKO");
+        let eko = options.find(node => node.getAttribute?.("href") === EKO_URL || (node.textContent || "").toUpperCase().includes("EKO"));
         if (!eko) return;
 
         if (eko.tagName !== "A") {
@@ -100,9 +108,11 @@
             link.className = "goriva-stations-nav-option";
             link.href = EKO_URL;
             link.setAttribute("role", "menuitem");
-            link.innerHTML = "<span>EKO</span><small>цени и обекти</small>";
+            link.innerHTML = ekoMarkup();
             eko.replaceWith(link);
             eko = link;
+        } else if (!eko.querySelector(".goriva-stations-nav-brand-logo")) {
+            eko.innerHTML = ekoMarkup();
         }
 
         const isCurrent = window.location.pathname === EKO_URL || window.location.pathname.startsWith(EKO_URL);
@@ -130,9 +140,6 @@
         return true;
     }
 
-    // global-nav.js builds the final menu before it loads this script, so a
-    // document-wide MutationObserver is unnecessary and expensive. Keep only a
-    // lightweight one-time fallback for legacy/early loading paths.
     if (!install()) {
         const retry = () => {
             if (!install()) window.requestAnimationFrame(() => install());
