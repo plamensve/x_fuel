@@ -1,0 +1,209 @@
+/* EKO directory cards mirror the visual language of the homepage daily-price cards.
+   Data/filter logic remains owned by eko-hub.js. */
+.eko-stations-grid{
+  grid-template-columns:repeat(4,minmax(0,1fr))!important;
+  gap:16px!important;
+}
+
+.eko-station-card{
+  position:relative;
+  overflow:hidden;
+  min-height:0!important;
+  padding:20px!important;
+  border:1px solid #cbd5e1!important;
+  border-radius:18px!important;
+  background:linear-gradient(180deg,#f8fafc 0%,#f3f7fb 100%)!important;
+  box-shadow:0 10px 24px rgba(15,23,42,.07)!important;
+  transform:none!important;
+}
+
+.eko-station-card::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  right:0;
+  height:3px;
+  background:#94a3b8;
+}
+
+.eko-station-card:hover{
+  transform:translateY(-2px)!important;
+  border-color:#94a3b8!important;
+  box-shadow:0 14px 30px rgba(15,23,42,.10)!important;
+}
+
+.eko-station-head{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) 42px;
+  align-items:start!important;
+  gap:12px!important;
+}
+
+.eko-station-head>div{order:1;min-width:0}
+
+.eko-station-logo{
+  order:2;
+  display:flex!important;
+  width:42px!important;
+  height:48px!important;
+  flex:none!important;
+  align-items:flex-start!important;
+  justify-content:flex-end!important;
+  padding:0!important;
+  border:0!important;
+  border-radius:0!important;
+  background:transparent!important;
+}
+
+.eko-station-logo img{
+  display:block!important;
+  width:42px!important;
+  height:48px!important;
+  max-width:none!important;
+  max-height:none!important;
+  object-fit:contain!important;
+}
+
+.eko-station-head strong{
+  color:#111827!important;
+  font-size:15px!important;
+  line-height:1.35!important;
+  font-weight:800!important;
+  white-space:normal!important;
+}
+
+.eko-station-head div>span{
+  display:block!important;
+  margin-top:5px!important;
+  padding:0!important;
+  border-radius:0!important;
+  background:none!important;
+  color:#64748b!important;
+  font-size:11px!important;
+  font-weight:650!important;
+}
+
+.eko-station-address{
+  min-height:0!important;
+  margin:5px 50px 0 0!important;
+  padding:0!important;
+  border:0!important;
+  color:#64748b!important;
+  font-size:11px!important;
+  line-height:1.45!important;
+}
+
+/* Availability is still used for filtering, but the chips are omitted visually
+   so the cards match the compact homepage layout. */
+.eko-fuel-chips{display:none!important}
+
+.eko-station-status{
+  height:30px;
+  display:flex;
+  align-items:center;
+}
+
+.eko-station-status span{
+  display:block;
+  width:11px;
+  height:11px;
+  border-radius:50%;
+  background:#22c55e;
+  box-shadow:0 0 0 5px rgba(34,197,94,.11);
+}
+
+.eko-station-status.is-missing span{
+  background:#cbd5e1;
+  box-shadow:0 0 0 5px rgba(148,163,184,.10);
+}
+
+.eko-station-prices{
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:9px!important;
+  margin:0!important;
+}
+
+.eko-station-price{
+  min-height:68px;
+  display:flex!important;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:10px 8px!important;
+  border:1px solid #cbd5e1!important;
+  border-radius:12px!important;
+  background:#eaf0f7!important;
+  text-align:center;
+}
+
+.eko-station-price span{
+  color:#56677c!important;
+  font-size:12px!important;
+  line-height:1.2!important;
+  font-weight:750!important;
+}
+
+.eko-station-price strong{
+  display:block!important;
+  margin-top:5px!important;
+  color:#0f172a!important;
+  font-size:16px!important;
+  line-height:1.2!important;
+  font-weight:850!important;
+  letter-spacing:-.02em!important;
+}
+
+.eko-station-price.is-missing strong{color:#64748b!important}
+
+.eko-station-actions{
+  display:flex!important;
+  gap:8px!important;
+  margin-top:16px!important;
+}
+
+.eko-station-actions:empty{display:none!important}
+
+.eko-station-actions a{
+  width:100%!important;
+  min-height:42px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0 12px!important;
+  border:0!important;
+  border-radius:11px!important;
+  color:#fff!important;
+  background:linear-gradient(120deg,#334e7e 0%,#2563eb 55%,#0f8b8d 100%)!important;
+  box-shadow:0 8px 18px rgba(37,99,235,.16)!important;
+  text-decoration:none!important;
+  font-size:11px!important;
+  font-weight:800!important;
+}
+
+.eko-station-actions a:hover{
+  color:#fff!important;
+  filter:brightness(1.04);
+  transform:translateY(-1px);
+}
+
+.eko-station-date{
+  margin-top:12px;
+  color:#64748b;
+  font-size:11px;
+  line-height:1.4;
+}
+
+@media(max-width:1180px){
+  .eko-stations-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important}
+}
+
+@media(max-width:860px){
+  .eko-stations-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+}
+
+@media(max-width:560px){
+  .eko-stations-grid{grid-template-columns:1fr!important}
+  .eko-station-card{padding:18px!important}
+}
