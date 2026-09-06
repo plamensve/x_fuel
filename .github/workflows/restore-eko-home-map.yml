@@ -1,0 +1,85 @@
+name: Restore EKO-only homepage map
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/restore-eko-home-map.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: restore-eko-home-map
+  cancel-in-progress: false
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Restore EKO-only map boot order and bust stale JS cache
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          base = Path("scripts/script-base.js")
+          text = base.read_text(encoding="utf-8")
+          old = '        if (stationMapElement) {\n'
+          new = '        if (stationMapElement && !window.__GORIVA_EKO_MAP_MODE__) {\n'
+          if new not in text:
+              if old not in text:
+                  raise SystemExit("Could not find legacy station-map initializer guard")
+              text = text.replace(old, new, 1)
+              base.write_text(text, encoding="utf-8")
+
+          index = Path("index.html")
+          html = index.read_text(encoding="utf-8")
+          replacements = {
+              '/scripts/script-base.js?v=20260906-3': '/scripts/script-base.js?v=20260906-eko-map1',
+              'scripts/ecopetrol_prices.js?v=20260830-1239': 'scripts/ecopetrol_prices.js?v=20260906-eko-map1',
+          }
+          for old_value, new_value in replacements.items():
+              if new_value not in html:
+                  if old_value not in html:
+                      raise SystemExit(f"Could not find expected index reference: {old_value}")
+                  html = html.replace(old_value, new_value, 1)
+          index.write_text(html, encoding="utf-8")
+          PY
+
+      - name: Verify EKO map implementation is present
+        shell: bash
+        run: |
+          grep -q 'HOMEPAGE LEAFLET — EKO ONLY + LIVE SUPABASE PRICES' scripts/ecopetrol_prices.js
+          grep -q 'fetch("/data/eko_stations.json"' scripts/ecopetrol_prices.js
+          grep -q 'fetch("/data/eko_products.json"' scripts/ecopetrol_prices.js
+          grep -q 'station=eq.' scripts/ecopetrol_prices.js
+          grep -q '!window.__GORIVA_EKO_MAP_MODE__' scripts/script-base.js
+          grep -q 'ecopetrol_prices.js?v=20260906-eko-map1' index.html
+          echo "EKO-only Leaflet map guard and cache bust verified."
+
+      - name: Show changes
+        run: git diff -- scripts/script-base.js index.html
+
+      - name: Commit restored EKO map behavior
+        shell: bash
+        run: |
+          if git diff --quiet; then
+            echo "EKO-only map is already restored."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/script-base.js index.html
+          git commit -m "Restore EKO-only Leaflet map with live prices [skip ci]"
+          git pull --rebase origin "${GITHUB_REF_NAME}"
+          git push
