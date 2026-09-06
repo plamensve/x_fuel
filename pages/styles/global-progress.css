@@ -21,6 +21,32 @@
   box-shadow:0 14px 32px rgba(193,53,132,.31),inset 0 1px 0 rgba(255,255,255,.30)!important;
 }
 
+/* Stations dropdown is native to global-nav.js. No secondary script is required. */
+.goriva-stations-nav-item{position:relative;display:inline-flex;align-items:stretch}
+.goriva-stations-nav-toggle{min-height:40px;padding:0 10px;display:inline-flex;align-items:center;gap:7px;border:0;border-radius:10px;color:#cbd5e1;background:transparent;font:inherit;font-size:12px;font-weight:650;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.goriva-stations-nav-toggle:hover,.goriva-stations-nav-toggle:focus-visible,.goriva-stations-nav-item.is-open>.goriva-stations-nav-toggle,.goriva-stations-nav-item.is-current>.goriva-stations-nav-toggle{color:#fff;background:rgba(255,255,255,.065);outline:none}
+.goriva-stations-nav-toggle .goriva-nav-symbol{font-size:13px;opacity:.82}
+.goriva-stations-nav-caret{font-size:10px;line-height:1;transition:transform .18s ease}
+.goriva-stations-nav-item.is-open .goriva-stations-nav-caret{transform:rotate(180deg)}
+.goriva-stations-nav-dropdown{position:absolute;top:calc(100% + 8px);left:0;z-index:7000;min-width:230px;padding:8px;border:1px solid rgba(148,163,184,.16);border-radius:14px;background:rgba(8,17,31,.98);box-shadow:0 18px 42px rgba(2,6,23,.36);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);opacity:0;visibility:hidden;pointer-events:none;transform:translateY(-4px);transition:opacity .16s ease,transform .16s ease,visibility .16s ease}
+.goriva-stations-nav-item.is-open .goriva-stations-nav-dropdown{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}
+.goriva-stations-nav-option{width:100%;min-height:42px;padding:0 12px;display:flex;align-items:center;justify-content:space-between;gap:12px;border:0;border-radius:9px;color:#dbe7f4;background:transparent;font:inherit;font-size:12px;font-weight:650;text-align:left;text-decoration:none;cursor:pointer}
+.goriva-stations-nav-option+.goriva-stations-nav-option{margin-top:3px}
+.goriva-stations-nav-option:hover,.goriva-stations-nav-option:focus-visible,.goriva-stations-nav-option.is-current{color:#fff;background:rgba(255,255,255,.06);outline:none}
+.goriva-stations-nav-option[aria-disabled="true"]{cursor:default;color:#8a9aae}
+.goriva-stations-nav-option small{color:#64748b;font-size:10px;font-weight:700;letter-spacing:.02em}
+.goriva-stations-nav-brand{display:inline-flex;min-width:0;align-items:center;gap:8px}
+.goriva-stations-nav-brand-logo{display:block;width:28px;height:28px;flex:0 0 28px;background:transparent}
+.goriva-stations-nav-brand-label{white-space:nowrap}
+@media(min-width:901px){.goriva-stations-nav-item:hover .goriva-stations-nav-dropdown,.goriva-stations-nav-item:focus-within .goriva-stations-nav-dropdown{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}}
+@media(max-width:900px){
+  .goriva-stations-nav-item{display:flex!important;width:100%!important;flex-direction:column!important;align-items:stretch!important}
+  .goriva-stations-nav-toggle{width:100%!important;justify-content:flex-start!important}
+  .goriva-stations-nav-dropdown{position:static!important;display:none!important;width:100%!important;min-width:0!important;margin:3px 0 4px!important;padding:6px 6px 6px 28px!important;border:0!important;border-radius:10px!important;background:rgba(255,255,255,.025)!important;box-shadow:none!important;opacity:1!important;visibility:visible!important;pointer-events:auto!important;transform:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  .goriva-stations-nav-item.is-open>.goriva-stations-nav-dropdown{display:block!important}
+  .goriva-stations-nav-option{min-height:42px}
+}
+
 /* Daily prices date badge: force strong contrast even when older theme rules are cached. */
 html body.has-goriva-global-nav main.container>section.prices-card h2>span#prices-date,
 html body main.container>section.prices-card h2 span#prices-date{
@@ -33,4 +59,4 @@ html body main.container>section.prices-card h2 span#prices-date{
   opacity:1!important;
 }
 
-@media (prefers-reduced-motion:reduce){.goriva-scroll-progress-bar{transition:none!important}}
+@media (prefers-reduced-motion:reduce){.goriva-scroll-progress-bar,.goriva-stations-nav-caret,.goriva-stations-nav-dropdown{transition:none!important}}
