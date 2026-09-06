@@ -31,6 +31,16 @@
         document.head.appendChild(link);
     }
 
+    function ensureStationsNavigation() {
+        if (window.__GORIVA_STATIONS_NAV_LOADER__ || document.getElementById("goriva-stations-nav-script")) return;
+        window.__GORIVA_STATIONS_NAV_LOADER__ = true;
+        const script = document.createElement("script");
+        script.id = "goriva-stations-nav-script";
+        script.src = "/scripts/stations-nav.js?v=20260906-3";
+        script.async = false;
+        document.head.appendChild(script);
+    }
+
     function buildScrollProgress() {
         if (!document.body || document.querySelector(".goriva-scroll-progress")) return;
         const progress = document.createElement("div");
@@ -161,6 +171,7 @@
     function initGlobalShell() {
         ensureStyles();
         buildHeader();
+        ensureStationsNavigation();
         buildFooter();
         buildScrollProgress();
     }
