@@ -66,31 +66,7 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css">
-
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-F6YJNGGFR2"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
-        gtag('config', 'G-F6YJNGGFR2');
-    </script>
-
-    <script async
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-3478773231642095"
-            crossorigin="anonymous"></script>
     <meta name="google-adsense-account" content="ca-pub-3478773231642095">
-
-    <script>
-        (function (h, o, t, j, a, r) {
-            h.hj = h.hj || function () {(h.hj.q = h.hj.q || []).push(arguments)};
-            h._hjSettings = {hjid: 6686373, hjsv: 6};
-            a = o.getElementsByTagName('head')[0];
-            r = o.createElement('script');
-            r.async = 1;
-            r.src = t + h._hjSettings.hjid + j + h._hjSettings.hjsv;
-            a.appendChild(r);
-        })(window, document, 'https://static.hotjar.com/c/hotjar-', '.js?sv=');
-    </script>
 
     <style>
         .prices-card { margin-bottom: 32px; }
@@ -292,7 +268,7 @@
             <a href="pages/business-clients.html" class="business-promo-button">Научете повече</a>
         </div>
         <a href="https://goriva.online/pages/business-clients.html">
-            <div class="business-promo-image"><img src="media/business-clients-banner.png" alt="Анализ на разходите за гориво за бизнес клиенти"></div>
+            <div class="business-promo-image"><img src="media/business-clients-banner.png" alt="Анализ на разходите за гориво за бизнес клиенти" loading="lazy" decoding="async" fetchpriority="low"></div>
         </a>
     </section>
 
@@ -407,7 +383,7 @@
     <section class="about-founder">
         <div class="founder-card">
             <div class="founder-left">
-                <div class="founder-image-wrapper"><img src="media/plamen.jpg" alt="Пламен Светославов"></div>
+                <div class="founder-image-wrapper"><img src="media/plamen.jpg" alt="Пламен Светославов" loading="lazy" decoding="async"></div>
                 <h2 class="founder-name">Пламен Светославов</h2>
                 <span class="founder-role">Създател на goriva.online</span>
                 <div class="founder-socials">
@@ -468,14 +444,34 @@
 </footer>
 
 <div id="success-message" class="success-message"></div>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
-<script src="scripts/home-nav-modern.js?v=20260830-1645"></script>
-<script src="scripts/station-icons.js?v=20260830-1239"></script>
-<script src="/scripts/eko-fallback-efficient.js?v=20260906-nav-order1"></script>
-<script src="/scripts/script.js?v=20260906-nav-order1"></script>
-<script src="scripts/ecopetrol_prices.js?v=20260830-1239"></script>
-<script src="scripts/eco_filter.js?v=20260830-1239"></script>
-<script data-name="BMC-Widget" data-cfasync="false" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="qwan" data-description="Подкрепете goriva.online" data-message="Ако goriva.online Ви е полезен, можете да подкрепите развитието на проекта." data-color="#FF813F" data-position="Right" data-x_margin="18" data-y_margin="10"></script>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script defer src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
+<script defer src="scripts/home-nav-modern.js?v=20260830-1645"></script>
+<script defer src="scripts/station-icons.js?v=20260830-1239"></script>
+<script defer id="goriva-performance-guard" src="/scripts/performance-guard.js?v=20260906-3"></script>
+<script defer src="/scripts/eko-fallback-efficient.js?v=20260906-3"></script>
+<script defer id="goriva-script-base" src="/scripts/script-base.js?v=20260906-3"></script>
+<script defer id="goriva-home-hero-map" src="/scripts/home-hero-map-pro.js?v=20260906-3"></script>
+<script defer id="goriva-home-about-modern" src="/scripts/home-about-modern.js?v=20260906-3"></script>
+<script defer src="/scripts/script.js?v=20260906-3"></script>
+<script defer src="scripts/ecopetrol_prices.js?v=20260830-1239"></script>
+<script defer src="scripts/eco_filter.js?v=20260830-1239"></script>
+<script>
+window.addEventListener('load', () => setTimeout(() => {
+    if (document.querySelector('script[data-name="BMC-Widget"]')) return;
+    const s = document.createElement('script');
+    s.dataset.name = 'BMC-Widget';
+    s.dataset.cfasync = 'false';
+    s.src = 'https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js';
+    s.dataset.id = 'qwan';
+    s.dataset.description = 'Подкрепете goriva.online';
+    s.dataset.message = 'Ако goriva.online Ви е полезен, можете да подкрепите развитието на проекта.';
+    s.dataset.color = '#FF813F';
+    s.dataset.position = 'Right';
+    s.dataset.x_margin = '18';
+    s.dataset.y_margin = '10';
+    document.body.appendChild(s);
+}, 1200), { once: true });
+</script>
 </body>
 </html>
