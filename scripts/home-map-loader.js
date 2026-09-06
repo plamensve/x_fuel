@@ -70,6 +70,8 @@
             await loadScript("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js", "goriva-leaflet-js");
             await loadScript("https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js", "goriva-markercluster-js");
             await loadScript("/scripts/station-icons.js?v=20260830-1239", "goriva-station-icons");
+            // Release the temporary legacy-map guard so the dedicated EKO initializer can run.
+            window.__GORIVA_EKO_MAP_MODE__ = false;
             await loadScript("/scripts/ecopetrol_prices.js?v=20260906-eko-map1", "goriva-eko-map-data");
         })().catch(error => {
             console.error("Failed to lazy-load homepage map assets", error);
