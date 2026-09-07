@@ -225,7 +225,7 @@
     grid.innerHTML = '<div class="cars-loading">Зареждане на обявите…</div>';
     const { data, error } = await db
       .from('car_listings')
-      .select('id,title,make,model,year,price,mileage,fuel_type,transmission,engine_capacity,power_hp,drivetrain,body_type,color,condition,region,city,seller_name,created_at,is_featured')
+      .select('id,title,make,model,year,price,mileage,fuel_type,transmission,engine_capacity,power_hp,drivetrain,body_type,condition,region,city,seller_name,created_at,is_featured')
       .eq('status', 'active')
       .order('is_featured', { ascending: false })
       .order('created_at', { ascending: false })
@@ -255,7 +255,6 @@
     const model = $('#cars-filter-model');
     const region = $('#cars-filter-region');
     const city = $('#cars-filter-city');
-    const color = $('#cars-filter-color');
     const body = $('#cars-filter-body');
 
     const uniqueSorted = values => [...new Set(values.filter(Boolean))]
@@ -269,7 +268,6 @@
 
     setOptions(make, uniqueSorted(state.catalogRows.map(x => x.make)));
     setOptions(region, uniqueSorted(state.catalogRows.map(x => x.region)));
-    setOptions(color, uniqueSorted(state.catalogRows.map(x => x.color)));
     setOptions(body, uniqueSorted(state.catalogRows.map(x => x.body_type)));
 
     const updateModels = () => {
@@ -318,7 +316,6 @@
     const fuel = value('#cars-filter-fuel');
     const condition = value('#cars-filter-condition');
     const body = value('#cars-filter-body');
-    const color = value('#cars-filter-color');
     const transmission = value('#cars-filter-transmission');
     const drivetrain = value('#cars-filter-drivetrain');
     const q = textValue('#cars-filter-q');
@@ -344,7 +341,6 @@
         (!fuel || row.fuel_type === fuel) &&
         (!condition || row.condition === condition) &&
         (!body || row.body_type === body) &&
-        (!color || row.color === color) &&
         (!transmission || row.transmission === transmission) &&
         (!drivetrain || row.drivetrain === drivetrain) &&
         (!q || haystack.includes(q)) &&
@@ -398,6 +394,14 @@
       item.innerHTML = `<img src="${url}" alt="Преглед"><button class="cars-remove-upload" type="button" data-remove-file="${index}" aria-label="Премахни ${escapeHtml(file.name)}">×</button><span>${escapeHtml(file.name)}</span>`;
       target.appendChild(item);
     });
+
+    if (files.length < MAX_IMAGES) {
+      const addTile = document.createElement('label');
+      addTile.className = 'cars-add-photo-tile';
+      addTile.htmlFor = input.id;
+      addTile.innerHTML = `<span class="cars-add-photo-icon" aria-hidden="true">+</span><strong>Добави снимки</strong><small>${files.length}/${MAX_IMAGES}</small>`;
+      target.appendChild(addTile);
+    }
   }
 
   function previewFiles(input, target) {
@@ -422,6 +426,7 @@
     if (!input || !target) return;
     input._carsSelectedFiles = [];
     input.addEventListener('change', () => previewFiles(input, target));
+    renderSelectedFiles(input, target);
     target.addEventListener('click', event => {
       const button = event.target.closest('[data-remove-file]');
       if (!button) return;

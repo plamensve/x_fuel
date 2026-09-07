@@ -183,7 +183,7 @@ def refine(date_str: str) -> None:
     if '/scripts/script.js' not in text:
         text = text.replace('</body>', '<script src="/scripts/script.js" defer></script>\n</body>', 1)
     if '/scripts/article-engagement.js' not in text:
-        text = text.replace('</body>', '<script src="/scripts/article-engagement.js?v=20260907-cars2" defer></script>\n</body>', 1)
+        text = text.replace('</body>', '<script src="/scripts/article-engagement.js?v=20260907-cars3" defer></script>\n</body>', 1)
 
     css = '/pages/styles/daily-professional-article.css?v=20260831-1'
     if css not in text:
