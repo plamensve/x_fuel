@@ -54,7 +54,7 @@
             const link = document.createElement("link");
             link.id = "goriva-global-progress-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/global-progress.css?v=20260906-nav-order1";
+            link.href = "/pages/styles/global-progress.css?v=20260907-cars1";
             const finish = () => resolve();
             link.addEventListener("load", finish, { once: true });
             link.addEventListener("error", finish, { once: true });

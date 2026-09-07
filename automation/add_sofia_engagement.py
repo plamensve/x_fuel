@@ -82,7 +82,7 @@ def patch(date_str: str) -> None:
     if engagement_css not in text:
         text = text.replace('</head>', f'  <link rel="stylesheet" href="{engagement_css}">\n</head>', 1)
 
-    engagement_js = '/scripts/article-engagement.js?v=20260906-nav-order1'
+    engagement_js = '/scripts/article-engagement.js?v=20260907-cars1'
     if engagement_js not in text:
         text = text.replace('</body>', f'  <script src="{engagement_js}" defer></script>\n</body>', 1)
 
