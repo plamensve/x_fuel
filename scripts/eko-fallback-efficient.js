@@ -397,3 +397,55 @@
         return nativeFetch(input, sanitizeSupabaseInit(input, init));
     };
 })();
+
+// Daily price cards use local SVG brand assets. The legacy card renderer only
+// recognizes several station names in Cyrillic, while the data can contain the
+// same chains in Latin (for example "Petrol"). Install one normalized resolver
+// before the renderer's DOMContentLoaded callback runs so existing SVG files are
+// actually attached to the cards/table without changing unknown stations.
+(() => {
+    const stationLogoRules = [
+        { match: ["екопетрол", "ecopetrol"], src: "/images/station_logos/ecopetrol.svg" },
+        { match: ["ромпетрол", "rompetrol"], src: "/images/station_logos/rompetrol.svg" },
+        { match: ["бенита", "benita"], src: "/images/station_logos/benita.svg" },
+        { match: ["лукойл", "lukoil"], src: "/images/station_logos/lukoil.svg" },
+        { match: ["омв", "omv"], src: "/images/station_logos/omv.svg" },
+        { match: ["шел", "shell"], src: "/images/station_logos/shell.svg" },
+        { match: ["инса", "insa"], src: "/images/station_logos/insa.svg" },
+        { match: ["круиз", "kruiz", "cruise"], src: "/images/station_logos/kruiz.svg" },
+        { match: ["булмаркет", "bulmarket"], src: "/images/station_logos/bulmarket.svg" },
+        { match: ["дизелор", "dieselor", "diselor", "dieseler"], src: "/images/station_logos/diselor.svg" },
+        { match: ["химойл", "himoil", "chimoil"], src: "/images/station_logos/himoil.svg" },
+        { match: ["петрол", "petrol"], src: "/images/station_logos/petrol.svg" },
+        { match: ["еко", "eko"], src: "/images/station_logos/eko.svg" }
+    ];
+
+    const normalizeStationName = value => String(value || "")
+        .toLocaleLowerCase("bg-BG")
+        .normalize("NFKC")
+        .replace(/[\s\-_.]+/g, "")
+        .trim();
+
+    const resolveStationLogo = name => {
+        const normalized = normalizeStationName(name);
+        if (!normalized) return null;
+
+        const rule = stationLogoRules.find(item =>
+            item.match.some(alias => normalized.includes(normalizeStationName(alias)))
+        );
+
+        return rule?.src || null;
+    };
+
+    const installStationLogoResolver = () => {
+        window.getStationLogo = resolveStationLogo;
+    };
+
+    // This file is loaded before script-base.js, so this listener is registered
+    // first and replaces the legacy resolver before its initial card render.
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", installStationLogoResolver, { once: true });
+    } else {
+        installStationLogoResolver();
+    }
+})();
