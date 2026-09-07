@@ -13,6 +13,8 @@ function getStationLogo(name) {
         .replace(/[\s\-_.]+/g, "")
         .trim()
 
+    if (["петролкомерс", "petrolcommerce", "petrolkomers"].some(alias => normalized.includes(alias))) return null
+
     const rules = [
         { match: ["екопетрол", "ecopetrol"], src: "/images/station_logos/ecopetrol.svg" },
         { match: ["ромпетрол", "rompetrol"], src: "/images/station_logos/rompetrol.svg" },

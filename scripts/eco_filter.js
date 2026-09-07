@@ -69,6 +69,11 @@ function homeStationLogo(name) {
         .replace(/\s+/g, " ")
         .trim();
 
+    const compact = normalized.replace(/[\s\-_.]+/g, "");
+    if (["петролкомерс", "petrolcommerce", "petrolkomers"].some(alias => compact.includes(alias))) {
+        return "images/station_logos/unknown.svg";
+    }
+
     const config = HOME_STATION_LOGOS.find(item => item.match.some(token => normalized.includes(token)));
     return config?.src || "images/station_logos/unknown.svg";
 }

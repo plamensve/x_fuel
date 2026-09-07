@@ -429,6 +429,7 @@
     const resolveStationLogo = name => {
         const normalized = normalizeStationName(name);
         if (!normalized) return null;
+        if (["петролкомерс", "petrolcommerce", "petrolkomers"].some(alias => normalized.includes(alias))) return null;
 
         const rule = stationLogoRules.find(item =>
             item.match.some(alias => normalized.includes(normalizeStationName(alias)))

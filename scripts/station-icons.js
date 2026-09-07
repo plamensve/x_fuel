@@ -12,6 +12,10 @@ function getStationIcon(name) {
         popupAnchor: [0, -42]
     }
 
+    if (["петролкомерс", "petrolcommerce", "petrolkomers"].some(alias => lower.includes(alias))) {
+        return L.icon({iconUrl: "../images/station_logos/unknown.svg", ...defaultConfig})
+    }
+
     if (lower.includes("ecopetrol") || lower.includes("екопетрол")) {
         return L.icon({iconUrl: "../images/station_logos/ecopetrol.svg", ...defaultConfig})
     }
