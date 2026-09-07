@@ -1,8 +1,8 @@
 (() => {
     if (window.__GORIVA_EKO_FALLBACK__) return;
 
-    // Keep the expensive historical EKO fallback in script.js disabled. The
-    // homepage must not block today's prices on unrelated historical records.
+    // Own the EKO fallback here so the homepage can reuse the latest imported
+    // EKO batch without the expensive full-history scan in script.js.
     window.__GORIVA_EKO_FALLBACK__ = true;
 
     // Load the ticker/CPU guard before DOMContentLoaded whenever possible.
@@ -19,9 +19,25 @@
 
     const nativeFetch = window.fetch.bind(window);
     const DAILY_SELECT = "region,city,station,fuel,price,location,created_at";
+    const EKO_NAME = "ЕКО";
+    const EKO_HISTORY_PAGE_SIZE = 1000;
+    const SOFIA_TIME_ZONE = "Europe/Sofia";
     const dailyResponseCache = new Map();
     const dailyInflight = new Map();
     let mapReadyPromise = null;
+
+    const sofiaDateFormatter = new Intl.DateTimeFormat("sv-SE", {
+        timeZone: SOFIA_TIME_ZONE,
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+    });
+
+    const normalize = value => (value || "").toString().trim().toLocaleUpperCase("bg-BG");
+    const isEkoRow = row => {
+        const station = normalize(row?.station);
+        return station === EKO_NAME || station === "EKO";
+    };
 
     const getMethod = (input, init) => String(
         init?.method || (typeof input !== "string" ? input?.method : "GET") || "GET"
@@ -35,6 +51,11 @@
         } catch (_) {
             return null;
         }
+    }
+
+    function sofiaDateKey(value) {
+        const date = value instanceof Date ? value : new Date(value);
+        return Number.isNaN(date.getTime()) ? null : sofiaDateFormatter.format(date);
     }
 
     function sanitizeSupabaseInit(input, init = {}) {
@@ -113,6 +134,111 @@
         });
     }
 
+    function readApiKey(init) {
+        try {
+            return new Headers(init?.headers || {}).get("apikey") || "";
+        } catch (_) {
+            return "";
+        }
+    }
+
+    async function fetchLatestHistoricalEkoRows(canonicalUrl, apiKey, todayStartIso) {
+        const requestUrl = asUrl(canonicalUrl);
+        if (!requestUrl || !apiKey || !todayStartIso) return { rows: [], dateKey: null };
+
+        const rows = [];
+        let offset = 0;
+        let latestDateKey = null;
+
+        while (true) {
+            const historyUrl = new URL(requestUrl.origin + requestUrl.pathname);
+            historyUrl.searchParams.set("select", DAILY_SELECT);
+            historyUrl.searchParams.set("station", `eq.${EKO_NAME}`);
+            historyUrl.searchParams.append("created_at", `lt.${todayStartIso}`);
+            historyUrl.searchParams.set("order", "created_at.desc");
+            historyUrl.searchParams.set("limit", String(EKO_HISTORY_PAGE_SIZE));
+            historyUrl.searchParams.set("offset", String(offset));
+
+            const response = await nativeFetch(historyUrl.toString(), {
+                headers: { apikey: apiKey },
+                cache: "no-store"
+            });
+
+            if (!response.ok) {
+                throw new Error(`EKO latest-price fallback request failed: ${response.status}`);
+            }
+
+            const batch = await response.json();
+            if (!Array.isArray(batch) || batch.length === 0) break;
+
+            for (const row of batch) {
+                const rowDateKey = sofiaDateKey(row.created_at);
+                if (!rowDateKey) continue;
+
+                if (!latestDateKey) latestDateKey = rowDateKey;
+                if (rowDateKey !== latestDateKey) {
+                    return { rows, dateKey: latestDateKey };
+                }
+
+                rows.push(row);
+            }
+
+            if (batch.length < EKO_HISTORY_PAGE_SIZE) break;
+            offset += EKO_HISTORY_PAGE_SIZE;
+        }
+
+        return { rows, dateKey: latestDateKey };
+    }
+
+    async function enrichTodaySnapshotWithLatestEko(canonicalUrl, snapshot, safeInit) {
+        if (snapshot.status < 200 || snapshot.status >= 300) return snapshot;
+
+        try {
+            const todayRows = JSON.parse(snapshot.body);
+            if (!Array.isArray(todayRows) || todayRows.some(isEkoRow)) return snapshot;
+
+            const requestUrl = asUrl(canonicalUrl);
+            const startFilter = requestUrl?.searchParams
+                .getAll("created_at")
+                .find(value => value.startsWith("gte."));
+            const todayStartIso = startFilter?.slice(4) || "";
+            const apiKey = readApiKey(safeInit);
+            if (!todayStartIso || !apiKey) return snapshot;
+
+            const latestEko = await fetchLatestHistoricalEkoRows(canonicalUrl, apiKey, todayStartIso);
+            if (!latestEko.rows.length) return snapshot;
+
+            const startMs = new Date(todayStartIso).getTime();
+            const displayTimestamp = Number.isFinite(startMs)
+                ? new Date(startMs + 12 * 60 * 60 * 1000).toISOString()
+                : new Date().toISOString();
+
+            // Downstream legacy code filters rows with isToday(). Preserve the
+            // original timestamp for traceability, but expose the fallback rows
+            // as today's client-side snapshot so they remain visible in the table.
+            const fallbackRows = latestEko.rows.map(row => ({
+                ...row,
+                _eko_fallback: true,
+                _source_created_at: row.created_at,
+                _eko_fallback_date: latestEko.dateKey,
+                created_at: displayTimestamp
+            }));
+
+            const headers = new Headers(snapshot.headers);
+            headers.set("content-type", "application/json; charset=utf-8");
+            headers.delete("content-length");
+
+            return {
+                ...snapshot,
+                body: JSON.stringify([...todayRows, ...fallbackRows]),
+                headers: [...headers.entries()]
+            };
+        } catch (error) {
+            console.warn("EKO latest-price fallback skipped", error);
+            return snapshot;
+        }
+    }
+
     async function fetchSharedTodayPrices(canonicalUrl, input, init) {
         const cached = dailyResponseCache.get(canonicalUrl);
         if (cached) return responseFromSnapshot(cached);
@@ -121,7 +247,10 @@
         if (running) return responseFromSnapshot(await running);
 
         const safeInit = sanitizeSupabaseInit(input, init);
-        const promise = snapshotNetworkResponse(canonicalUrl, safeInit);
+        const promise = (async () => {
+            const snapshot = await snapshotNetworkResponse(canonicalUrl, safeInit);
+            return enrichTodaySnapshotWithLatestEko(canonicalUrl, snapshot, safeInit);
+        })();
         dailyInflight.set(canonicalUrl, promise);
 
         try {
