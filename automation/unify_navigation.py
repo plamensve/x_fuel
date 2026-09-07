@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-NAV_VERSION = "20260907-cars1"
+NAV_VERSION = "20260907-cars2"
 # This version also cache-busts the global navigation after adding /cars/.
 
 

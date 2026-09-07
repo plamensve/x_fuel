@@ -224,7 +224,7 @@ def enhance_article(date_str: str) -> None:
 
     text = inject_engagement(text)
 
-    engagement_js = '/scripts/article-engagement.js?v=20260907-cars1'
+    engagement_js = '/scripts/article-engagement.js?v=20260907-cars2'
     text = re.sub(r'/scripts/article-engagement\.js\?v=[^"\']+', engagement_js, text)
     if engagement_js not in text:
         text = text.replace('</body>', f'  <script src="{engagement_js}" defer></script>\n</body>', 1)

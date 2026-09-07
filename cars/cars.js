@@ -225,7 +225,7 @@
     grid.innerHTML = '<div class="cars-loading">Зареждане на обявите…</div>';
     const { data, error } = await db
       .from('car_listings')
-      .select('id,title,make,model,year,price,mileage,fuel_type,transmission,city,created_at,is_featured')
+      .select('id,title,make,model,year,price,mileage,fuel_type,transmission,engine_capacity,power_hp,drivetrain,body_type,color,condition,region,city,seller_name,created_at,is_featured')
       .eq('status', 'active')
       .order('is_featured', { ascending: false })
       .order('created_at', { ascending: false })
@@ -252,34 +252,120 @@
 
   function populateCatalogFilters() {
     const make = $('#cars-filter-make');
+    const model = $('#cars-filter-model');
+    const region = $('#cars-filter-region');
     const city = $('#cars-filter-city');
-    const addOptions = (select, values) => {
+    const color = $('#cars-filter-color');
+    const body = $('#cars-filter-body');
+
+    const uniqueSorted = values => [...new Set(values.filter(Boolean))]
+      .sort((a, b) => String(a).localeCompare(String(b), 'bg'));
+
+    const setOptions = (select, values) => {
       if (!select) return;
+      while (select.options.length > 1) select.remove(1);
       values.forEach(value => select.insertAdjacentHTML('beforeend', `<option value="${escapeHtml(value)}">${escapeHtml(value)}</option>`));
     };
-    addOptions(make, [...new Set(state.catalogRows.map(x => x.make).filter(Boolean))].sort((a,b) => a.localeCompare(b, 'bg')));
-    addOptions(city, [...new Set(state.catalogRows.map(x => x.city).filter(Boolean))].sort((a,b) => a.localeCompare(b, 'bg')));
+
+    setOptions(make, uniqueSorted(state.catalogRows.map(x => x.make)));
+    setOptions(region, uniqueSorted(state.catalogRows.map(x => x.region)));
+    setOptions(color, uniqueSorted(state.catalogRows.map(x => x.color)));
+    setOptions(body, uniqueSorted(state.catalogRows.map(x => x.body_type)));
+
+    const updateModels = () => {
+      const selectedMake = make?.value || '';
+      setOptions(model, uniqueSorted(state.catalogRows
+        .filter(row => !selectedMake || row.make === selectedMake)
+        .map(row => row.model)));
+      if (model) model.value = '';
+    };
+
+    const updateCities = () => {
+      const selectedRegion = region?.value || '';
+      setOptions(city, uniqueSorted(state.catalogRows
+        .filter(row => !selectedRegion || row.region === selectedRegion)
+        .map(row => row.city)));
+      if (city) city.value = '';
+    };
+
+    make?.addEventListener('change', updateModels);
+    region?.addEventListener('change', updateCities);
+    updateModels();
+    updateCities();
   }
 
   function renderCatalog() {
     const grid = $('#cars-grid');
     if (!grid) return;
-    const make = $('#cars-filter-make')?.value || '';
-    const city = $('#cars-filter-city')?.value || '';
-    const fuel = $('#cars-filter-fuel')?.value || '';
-    const q = ($('#cars-filter-q')?.value || '').trim().toLocaleLowerCase('bg-BG');
-    const min = Number($('#cars-filter-min')?.value || 0);
-    const maxRaw = $('#cars-filter-max')?.value;
-    const max = maxRaw ? Number(maxRaw) : Infinity;
+
+    const value = id => $(id)?.value || '';
+    const numberValue = id => {
+      const raw = value(id);
+      return raw === '' ? null : Number(raw);
+    };
+    const textValue = id => value(id).trim().toLocaleLowerCase('bg-BG');
+    const within = (raw, min, max) => {
+      if (min == null && max == null) return true;
+      if (raw == null || raw === '') return false;
+      const numeric = Number(raw);
+      return (min == null || numeric >= min) && (max == null || numeric <= max);
+    };
+
+    const make = value('#cars-filter-make');
+    const model = value('#cars-filter-model');
+    const region = value('#cars-filter-region');
+    const city = value('#cars-filter-city');
+    const fuel = value('#cars-filter-fuel');
+    const condition = value('#cars-filter-condition');
+    const body = value('#cars-filter-body');
+    const color = value('#cars-filter-color');
+    const transmission = value('#cars-filter-transmission');
+    const drivetrain = value('#cars-filter-drivetrain');
+    const q = textValue('#cars-filter-q');
+    const seller = textValue('#cars-filter-seller');
+    const priceMin = numberValue('#cars-filter-min');
+    const priceMax = numberValue('#cars-filter-max');
+    const yearMin = numberValue('#cars-filter-year-min');
+    const yearMax = numberValue('#cars-filter-year-max');
+    const mileageMax = numberValue('#cars-filter-mileage-max');
+    const capacityMin = numberValue('#cars-filter-capacity-min');
+    const capacityMax = numberValue('#cars-filter-capacity-max');
+    const powerMin = numberValue('#cars-filter-power-min');
+    const powerMax = numberValue('#cars-filter-power-max');
+    const sort = value('#cars-filter-sort') || 'newest';
 
     const rows = state.catalogRows.filter(row => {
       const haystack = `${row.make || ''} ${row.model || ''} ${row.title || ''}`.toLocaleLowerCase('bg-BG');
+      const sellerText = String(row.seller_name || '').toLocaleLowerCase('bg-BG');
       return (!make || row.make === make) &&
+        (!model || row.model === model) &&
+        (!region || row.region === region) &&
         (!city || row.city === city) &&
         (!fuel || row.fuel_type === fuel) &&
+        (!condition || row.condition === condition) &&
+        (!body || row.body_type === body) &&
+        (!color || row.color === color) &&
+        (!transmission || row.transmission === transmission) &&
+        (!drivetrain || row.drivetrain === drivetrain) &&
         (!q || haystack.includes(q)) &&
-        Number(row.price || 0) >= min && Number(row.price || 0) <= max;
-    });
+        (!seller || sellerText.includes(seller)) &&
+        within(row.price, priceMin, priceMax) &&
+        within(row.year, yearMin, yearMax) &&
+        (mileageMax == null || (row.mileage != null && Number(row.mileage) <= mileageMax)) &&
+        within(row.engine_capacity, capacityMin, capacityMax) &&
+        within(row.power_hp, powerMin, powerMax);
+    }).slice();
+
+    const featured = (a, b) => Number(Boolean(b.is_featured)) - Number(Boolean(a.is_featured));
+    const comparators = {
+      newest: (a, b) => featured(a, b) || new Date(b.created_at) - new Date(a.created_at),
+      'price-asc': (a, b) => featured(a, b) || Number(a.price) - Number(b.price),
+      'price-desc': (a, b) => featured(a, b) || Number(b.price) - Number(a.price),
+      'year-desc': (a, b) => featured(a, b) || Number(b.year || 0) - Number(a.year || 0),
+      'mileage-asc': (a, b) => featured(a, b) || Number(a.mileage ?? Infinity) - Number(b.mileage ?? Infinity),
+      'make-asc': (a, b) => featured(a, b) || `${a.make || ''} ${a.model || ''}`.localeCompare(`${b.make || ''} ${b.model || ''}`, 'bg')
+    };
+    rows.sort(comparators[sort] || comparators.newest);
 
     const count = $('#cars-results-count');
     if (count) count.textContent = `${rows.length} ${rows.length === 1 ? 'обява' : 'обяви'}`;
@@ -297,23 +383,54 @@
     return '';
   }
 
-  function previewFiles(input, target) {
+  function fileFingerprint(file) {
+    return `${file.name}:${file.size}:${file.lastModified}`;
+  }
+
+  function renderSelectedFiles(input, target) {
     if (!input || !target) return;
-    const files = [...input.files];
-    const problem = validateFiles(files);
-    if (problem) {
-      showToast(problem, 'error');
-      input.value = '';
-      target.innerHTML = '';
-      return;
-    }
+    const files = input._carsSelectedFiles || [];
     target.innerHTML = '';
-    files.forEach(file => {
+    files.forEach((file, index) => {
       const url = URL.createObjectURL(file);
       const item = document.createElement('div');
       item.className = 'cars-upload-preview-item';
-      item.innerHTML = `<img src="${url}" alt="Преглед"><span>${escapeHtml(file.name)}</span>`;
+      item.innerHTML = `<img src="${url}" alt="Преглед"><button class="cars-remove-upload" type="button" data-remove-file="${index}" aria-label="Премахни ${escapeHtml(file.name)}">×</button><span>${escapeHtml(file.name)}</span>`;
       target.appendChild(item);
+    });
+  }
+
+  function previewFiles(input, target) {
+    if (!input || !target) return;
+    const previous = input._carsSelectedFiles || [];
+    const incoming = [...input.files];
+    const merged = new Map(previous.map(file => [fileFingerprint(file), file]));
+    incoming.forEach(file => merged.set(fileFingerprint(file), file));
+    const files = [...merged.values()];
+    const problem = validateFiles(files);
+    input.value = '';
+    if (problem) {
+      showToast(problem, 'error');
+      renderSelectedFiles(input, target);
+      return;
+    }
+    input._carsSelectedFiles = files;
+    renderSelectedFiles(input, target);
+  }
+
+  function initImagePicker(input, target) {
+    if (!input || !target) return;
+    input._carsSelectedFiles = [];
+    input.addEventListener('change', () => previewFiles(input, target));
+    target.addEventListener('click', event => {
+      const button = event.target.closest('[data-remove-file]');
+      if (!button) return;
+      const index = Number(button.dataset.removeFile);
+      const files = [...(input._carsSelectedFiles || [])];
+      if (!Number.isInteger(index) || index < 0 || index >= files.length) return;
+      files.splice(index, 1);
+      input._carsSelectedFiles = files;
+      renderSelectedFiles(input, target);
     });
   }
 
@@ -392,7 +509,7 @@
     const form = $('#car-listing-form');
     const imagesInput = $('#car-images');
     const preview = $('#car-images-preview');
-    imagesInput?.addEventListener('change', () => previewFiles(imagesInput, preview));
+    initImagePicker(imagesInput, preview);
 
     form?.addEventListener('submit', async event => {
       event.preventDefault();
@@ -400,7 +517,7 @@
         showToast('Първо влезте с email код.', 'error');
         return;
       }
-      const files = [...(imagesInput?.files || [])];
+      const files = [...(imagesInput?._carsSelectedFiles || [])];
       const problem = validateFiles(files);
       if (problem) return showToast(problem, 'error');
       const button = $('button[type="submit"]', form);
@@ -574,7 +691,7 @@
     const existing = $('#existing-images');
     const imagesInput = $('#car-images');
     const preview = $('#car-images-preview');
-    imagesInput?.addEventListener('change', () => previewFiles(imagesInput, preview));
+    initImagePicker(imagesInput, preview);
 
     async function load() {
       if (!state.user || !id || !form) return;
@@ -608,7 +725,7 @@
     form?.addEventListener('submit', async event => {
       event.preventDefault();
       if (!state.user || !id) return;
-      const files = [...(imagesInput?.files || [])];
+      const files = [...(imagesInput?._carsSelectedFiles || [])];
       if (state.currentImages.length + files.length > MAX_IMAGES) return showToast(`Максимум ${MAX_IMAGES} снимки общо.`, 'error');
       const problem = validateFiles(files);
       if (problem) return showToast(problem, 'error');

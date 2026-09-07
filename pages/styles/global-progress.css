@@ -40,7 +40,7 @@
 .goriva-stations-nav-brand-logo{display:none!important}
 .goriva-stations-nav-brand::before{content:"";display:block;width:28px;height:28px;flex:0 0 28px;background:url("/images/station_logos/eko.svg") center/contain no-repeat}
 .goriva-stations-nav-brand-label{white-space:nowrap}
-@media(min-width:901px){.goriva-stations-nav-item:hover .goriva-stations-nav-dropdown,.goriva-stations-nav-item:focus-within .goriva-stations-nav-dropdown{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}}
+@media(min-width:901px){.goriva-stations-nav-item{margin-right:9px}.goriva-stations-nav-item:hover .goriva-stations-nav-dropdown,.goriva-stations-nav-item:focus-within .goriva-stations-nav-dropdown{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}}
 @media(max-width:900px){
   .goriva-stations-nav-item{display:flex!important;width:100%!important;flex-direction:column!important;align-items:stretch!important}
   .goriva-stations-nav-toggle{width:100%!important;justify-content:flex-start!important}

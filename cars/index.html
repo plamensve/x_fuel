@@ -9,8 +9,8 @@
   <link rel="canonical" href="https://goriva.online/cars/">
   <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
   <link rel="preconnect" href="https://eaqvhxfvozhzatrnbkvx.supabase.co" crossorigin>
-  <link rel="stylesheet" href="/styles.css?v=20260907-cars1">
-  <link rel="stylesheet" href="/cars/cars.css?v=20260907-cars1">
+  <link rel="stylesheet" href="/styles.css?v=20260907-cars2">
+  <link rel="stylesheet" href="/cars/cars.css?v=20260907-cars2">
   <meta property="og:site_name" content="goriva.online">
   <meta property="og:title" content="Автомобили за продажба | goriva.online">
   <meta property="og:description" content="Разгледайте и публикувайте обяви за автомобили в България.">
@@ -53,12 +53,28 @@
     </div>
     <form id="cars-filter-form" class="cars-filter-grid">
       <label class="cars-field search"><span>Марка, модел или заглавие</span><input id="cars-filter-q" type="search" placeholder="BMW 320d"></label>
+      <label class="cars-field"><span>Състояние</span><select id="cars-filter-condition"><option value="">Всички</option><option value="new">Нов</option><option value="used">Употребяван</option><option value="damaged">Повреден / ударен</option></select></label>
       <label class="cars-field"><span>Марка</span><select id="cars-filter-make"><option value="">Всички марки</option></select></label>
-      <label class="cars-field"><span>Град</span><select id="cars-filter-city"><option value="">Всички градове</option></select></label>
-      <label class="cars-field"><span>Гориво</span><select id="cars-filter-fuel"><option value="">Всички</option><option>Бензин</option><option>Дизел</option><option>Хибрид</option><option>Plug-in хибрид</option><option>Електрически</option><option>LPG</option><option>Метан</option></select></label>
+      <label class="cars-field"><span>Модел</span><select id="cars-filter-model"><option value="">Всички модели</option></select></label>
+      <label class="cars-field"><span>Година от</span><input id="cars-filter-year-min" type="number" min="1900" max="2100" step="1" placeholder="2015"></label>
+      <label class="cars-field"><span>Година до</span><input id="cars-filter-year-max" type="number" min="1900" max="2100" step="1" placeholder="2026"></label>
+      <label class="cars-field"><span>Макс. пробег, км</span><input id="cars-filter-mileage-max" type="number" min="0" step="1000" placeholder="150000"></label>
+      <label class="cars-field"><span>Цвят</span><select id="cars-filter-color"><option value="">Всички цветове</option></select></label>
       <label class="cars-field"><span>Цена от €</span><input id="cars-filter-min" type="number" min="0" step="500" placeholder="0"></label>
       <label class="cars-field"><span>Цена до €</span><input id="cars-filter-max" type="number" min="0" step="500" placeholder="50000"></label>
-      <div class="cars-filter-actions"><button id="cars-filter-reset" class="cars-btn secondary" type="button">Изчисти</button></div>
+      <label class="cars-field"><span>Категория / купе</span><select id="cars-filter-body"><option value="">Всички категории</option></select></label>
+      <label class="cars-field"><span>Гориво</span><select id="cars-filter-fuel"><option value="">Всички типове</option><option>Бензин</option><option>Дизел</option><option>Електрически</option><option>Хибрид</option><option>Plug-in хибрид</option><option>LPG</option><option>Метан</option><option>Водород</option></select></label>
+      <label class="cars-field"><span>Кубатура от, см³</span><input id="cars-filter-capacity-min" type="number" min="0" step="100" placeholder="1000"></label>
+      <label class="cars-field"><span>Кубатура до, см³</span><input id="cars-filter-capacity-max" type="number" min="0" step="100" placeholder="3000"></label>
+      <label class="cars-field"><span>Мощност от, к.с.</span><input id="cars-filter-power-min" type="number" min="0" step="10" placeholder="100"></label>
+      <label class="cars-field"><span>Мощност до, к.с.</span><input id="cars-filter-power-max" type="number" min="0" step="10" placeholder="300"></label>
+      <label class="cars-field"><span>Скоростна кутия</span><select id="cars-filter-transmission"><option value="">Без значение</option><option>Ръчна</option><option>Автоматична</option></select></label>
+      <label class="cars-field"><span>Задвижване</span><select id="cars-filter-drivetrain"><option value="">Без значение</option><option>Предно</option><option>Задно</option><option>4x4</option></select></label>
+      <label class="cars-field"><span>Област</span><select id="cars-filter-region"><option value="">Всички области</option></select></label>
+      <label class="cars-field"><span>Град</span><select id="cars-filter-city"><option value="">Всички градове</option></select></label>
+      <label class="cars-field wide"><span>Дилър / продавач</span><input id="cars-filter-seller" type="search" placeholder="Започнете да пишете име"></label>
+      <label class="cars-field wide"><span>Сортиране</span><select id="cars-filter-sort"><option value="newest">Най-нови</option><option value="price-asc">Цена: ниска към висока</option><option value="price-desc">Цена: висока към ниска</option><option value="year-desc">Година: най-нови</option><option value="mileage-asc">Пробег: най-нисък</option><option value="make-asc">Марка / модел</option></select></label>
+      <div class="cars-filter-actions"><button id="cars-filter-reset" class="cars-btn secondary" type="button">Изчисти филтрите</button></div>
     </form>
   </section>
 
@@ -68,7 +84,7 @@
 
 <footer class="site-footer"></footer>
 <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script defer src="/scripts/global-nav.js?v=20260907-cars1"></script>
-<script defer src="/cars/cars.js?v=20260907-cars1"></script>
+<script defer src="/scripts/global-nav.js?v=20260907-cars2"></script>
+<script defer src="/cars/cars.js?v=20260907-cars2"></script>
 </body>
 </html>
