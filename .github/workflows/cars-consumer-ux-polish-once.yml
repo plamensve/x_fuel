@@ -1,3 +1,4 @@
+# Trigger after workflow registration
 name: Polish cars consumer UX once
 
 on:
@@ -50,7 +51,6 @@ jobs:
                   raise SystemExit(f'Missing expected block: {label}')
               return text.replace(old, new, 1)
 
-          # Cache-bust every car page so shared JS/CSS changes are visible immediately.
           for path in [
               'cars/index.html',
               'cars/new/index.html',
@@ -62,7 +62,6 @@ jobs:
               text = text.replace(OLD, NEW)
               write(path, text)
 
-          # My listings: replace developer/database language with consumer benefits.
           path = 'cars/my/index.html'
           text = read(path)
           old = '<div class="cars-hero-aside"><div class="cars-hero-stat"><strong>Сигурно управление</strong><span>Достъпът е свързан с твоя Supabase user ID</span></div></div>'
@@ -70,7 +69,6 @@ jobs:
           text = must_replace(text, old, new, 'consumer hero on my listings')
           write(path, text)
 
-          # New listing: remove technical OTP wording from consumer-facing copy.
           path = 'cars/new/index.html'
           text = read(path)
           old = '<div class="cars-auth-copy"><span class="cars-kicker" style="color:#2563eb">Сигурен достъп</span><h2>Вход за публикуване</h2><p>Използваме email OTP вместо парола. По този начин разпознаваме собственика на обявата и позволяваме редактиране само от неговия профил.</p></div>'
@@ -78,7 +76,6 @@ jobs:
           text = must_replace(text, old, new, 'consumer auth copy on new listing')
           write(path, text)
 
-          # Catalog: remove color filter and upgrade the search header/panel.
           path = 'cars/index.html'
           text = read(path)
           old_heading = '''<section class="cars-panel">
@@ -95,7 +92,6 @@ jobs:
           text = must_replace(text, color_field, '', 'catalog color filter')
           write(path, text)
 
-          # Shared cars JS: remove color filtering and add a persistent + photo tile.
           path = 'cars/cars.js'
           text = read(path)
           text = must_replace(
@@ -144,7 +140,6 @@ jobs:
           )
           write(path, text)
 
-          # Cars CSS: professional search panel and clearer multi-photo picker.
           path = 'cars/cars.css'
           text = read(path)
           anchor = '''.cars-filter-grid .cars-field { grid-column:span 3; }
@@ -238,7 +233,6 @@ jobs:
 }
 '''
           text = must_replace(text, anchor, enhanced, 'professional search styles')
-
           text = must_replace(
               text,
               '.cars-upload-box input[type=file] { width:100%; }',
@@ -285,14 +279,11 @@ jobs:
 .cars-add-photo-tile small { color:#64748b; font-size:10px; font-weight:800; }
 '''
           text = must_replace(text, upload_anchor, upload_styles, 'add-photo tile styles')
-
-          # Mobile search heading should remain compact.
           mobile_anchor = '  .cars-panel-heading { flex-direction:column; }\n'
           mobile_new = mobile_anchor + '  .cars-search-heading-badge { width:100%; box-sizing:border-box; justify-content:flex-start; white-space:normal; }\n'
           text = must_replace(text, mobile_anchor, mobile_new, 'mobile search heading')
           write(path, text)
 
-          # Global navigation: increase desktop width and real gaps between items.
           path = 'pages/styles/global-progress.css'
           text = read(path)
           old_prefix = '@media(min-width:901px){.goriva-stations-nav-item{margin-right:9px}'
@@ -309,12 +300,10 @@ jobs:
           text = must_replace(text, mobile_marker, desktop_wide + mobile_marker, 'wide desktop navigation')
           write(path, text)
 
-          # Cache-bust the global navigation CSS and loader.
           for path in ['scripts/global-nav.js', 'scripts/script.js']:
               text = read(path).replace(OLD, NEW)
               write(path, text)
 
-          # Business page loads the global nav through script.js; force the new loader.
           path = 'pages/business-clients.html'
           text = read(path).replace(OLD, NEW)
           write(path, text)
@@ -326,7 +315,7 @@ jobs:
           node --check cars/cars.js
           node --check scripts/global-nav.js
           node --check scripts/script.js
-          grep -R "Supabase user ID\|email OTP" cars/*.html cars/*/index.html && exit 1 || true
+          if grep -R -E "Supabase user ID|email OTP" cars/*.html cars/*/index.html; then exit 1; fi
           git diff --check
           git diff --stat
 
