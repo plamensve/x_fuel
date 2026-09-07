@@ -1,11 +1,7 @@
 (() => {
     if (window.__GORIVA_EKO_FALLBACK__) return;
-
-    // Own the EKO fallback here so the homepage can reuse the latest imported
-    // EKO batch without the expensive full-history scan in script.js.
     window.__GORIVA_EKO_FALLBACK__ = true;
 
-    // Load the ticker/CPU guard before DOMContentLoaded whenever possible.
     if (!document.getElementById("goriva-performance-guard")) {
         const perf = document.createElement("script");
         perf.id = "goriva-performance-guard";
@@ -24,6 +20,7 @@
     const SOFIA_TIME_ZONE = "Europe/Sofia";
     const dailyResponseCache = new Map();
     const dailyInflight = new Map();
+    const currentDayEkoChecks = new Map();
     let mapReadyPromise = null;
 
     const sofiaDateFormatter = new Intl.DateTimeFormat("sv-SE", {
@@ -34,15 +31,13 @@
     });
 
     const normalize = value => (value || "").toString().trim().toLocaleUpperCase("bg-BG");
-    const isEkoRow = row => {
-        const station = normalize(row?.station);
-        return station === EKO_NAME || station === "EKO";
-    };
+    const isEkoRow = row => ["ЕКО", "EKO"].includes(normalize(row?.station));
+    const ekoStationKey = row => normalize(row?.location) || `${normalize(row?.city)}|${normalize(row?.station)}`;
+    const ekoFuelKey = row => `${ekoStationKey(row)}|${normalize(row?.fuel)}`;
 
     const getMethod = (input, init) => String(
         init?.method || (typeof input !== "string" ? input?.method : "GET") || "GET"
     ).toUpperCase();
-
     const getUrl = input => typeof input === "string" ? input : input?.url || "";
 
     function asUrl(rawUrl) {
@@ -69,8 +64,6 @@
             const apiKey = headers.get("apikey") || "";
             const authorization = headers.get("Authorization") || "";
 
-            // Supabase publishable keys are API keys, not JWTs. Avoid carrying
-            // a redundant Bearer copy through every request.
             if (apiKey.startsWith("sb_publishable_") && authorization === `Bearer ${apiKey}`) {
                 headers.delete("Authorization");
             }
@@ -93,9 +86,6 @@
         if (method !== "GET") return null;
         const url = asUrl(rawUrl);
         if (!isFuelPricesEndpoint(url)) return null;
-
-        // Station-specific requests belong to the EKO map and have different
-        // semantics. Only consolidate the broad, current-day homepage queries.
         if (url.searchParams.has("station")) return null;
 
         const createdAtFilters = url.searchParams.getAll("created_at");
@@ -103,12 +93,23 @@
         const hasEnd = createdAtFilters.some(value => value.startsWith("lt."));
         if (!hasStart || !hasEnd) return null;
 
-        // script-base.js and eco_filter.js request the same day independently,
-        // with different select/order clauses. Canonicalizing them lets both
-        // consumers share exactly one network response per page.
         url.searchParams.set("select", DAILY_SELECT);
         url.searchParams.set("order", "created_at.desc");
         return url.toString();
+    }
+
+    function getDayWindow(url) {
+        const filters = url?.searchParams.getAll("created_at") || [];
+        const start = filters.find(value => value.startsWith("gte."))?.slice(4) || "";
+        const end = filters.find(value => value.startsWith("lt."))?.slice(3) || "";
+        if (!start || !end) return null;
+        return { start, end, key: `${start}|${end}` };
+    }
+
+    function isFinalPage(url, rowCount) {
+        const limit = Number(url?.searchParams.get("limit"));
+        if (!Number.isFinite(limit) || limit <= 0) return true;
+        return rowCount < limit;
     }
 
     async function snapshotNetworkResponse(url, init) {
@@ -117,7 +118,6 @@
         const headers = new Headers(response.headers);
         headers.delete("content-length");
         headers.delete("content-encoding");
-
         return {
             body,
             status: response.status,
@@ -142,10 +142,48 @@
         }
     }
 
-    async function fetchLatestHistoricalEkoRows(canonicalUrl, apiKey, todayStartIso) {
-        const requestUrl = asUrl(canonicalUrl);
-        if (!requestUrl || !apiKey || !todayStartIso) return { rows: [], dateKey: null };
+    async function hasCurrentDayEkoRows(requestUrl, apiKey, dayWindow) {
+        if (currentDayEkoChecks.has(dayWindow.key)) {
+            return currentDayEkoChecks.get(dayWindow.key);
+        }
 
+        const promise = (async () => {
+            const checkUrl = new URL(requestUrl.origin + requestUrl.pathname);
+            checkUrl.searchParams.set("select", "created_at");
+            checkUrl.searchParams.set("station", `eq.${EKO_NAME}`);
+            checkUrl.searchParams.append("created_at", `gte.${dayWindow.start}`);
+            checkUrl.searchParams.append("created_at", `lt.${dayWindow.end}`);
+            checkUrl.searchParams.set("limit", "1");
+
+            const response = await nativeFetch(checkUrl.toString(), {
+                headers: { apikey: apiKey },
+                cache: "no-store"
+            });
+            if (!response.ok) throw new Error(`EKO current-day check failed: ${response.status}`);
+
+            const rows = await response.json();
+            return Array.isArray(rows) && rows.length > 0;
+        })();
+
+        currentDayEkoChecks.set(dayWindow.key, promise);
+        try {
+            return await promise;
+        } finally {
+            currentDayEkoChecks.delete(dayWindow.key);
+        }
+    }
+
+    function latestRowPerStationFuel(rows) {
+        const selected = new Map();
+        for (const row of rows) {
+            const key = ekoFuelKey(row);
+            if (!key || key.startsWith("|")) continue;
+            if (!selected.has(key)) selected.set(key, row);
+        }
+        return [...selected.values()];
+    }
+
+    async function fetchLatestHistoricalEkoRows(requestUrl, apiKey, todayStartIso) {
         const rows = [];
         let offset = 0;
         let latestDateKey = null;
@@ -163,10 +201,7 @@
                 headers: { apikey: apiKey },
                 cache: "no-store"
             });
-
-            if (!response.ok) {
-                throw new Error(`EKO latest-price fallback request failed: ${response.status}`);
-            }
+            if (!response.ok) throw new Error(`EKO fallback request failed: ${response.status}`);
 
             const batch = await response.json();
             if (!Array.isArray(batch) || batch.length === 0) break;
@@ -177,9 +212,8 @@
 
                 if (!latestDateKey) latestDateKey = rowDateKey;
                 if (rowDateKey !== latestDateKey) {
-                    return { rows, dateKey: latestDateKey };
+                    return { rows: latestRowPerStationFuel(rows), dateKey: latestDateKey };
                 }
-
                 rows.push(row);
             }
 
@@ -187,35 +221,36 @@
             offset += EKO_HISTORY_PAGE_SIZE;
         }
 
-        return { rows, dateKey: latestDateKey };
+        return { rows: latestRowPerStationFuel(rows), dateKey: latestDateKey };
     }
 
-    async function enrichTodaySnapshotWithLatestEko(canonicalUrl, snapshot, safeInit) {
+    async function enrichFinalTodayPageWithLatestEko(canonicalUrl, snapshot, safeInit) {
         if (snapshot.status < 200 || snapshot.status >= 300) return snapshot;
 
         try {
             const todayRows = JSON.parse(snapshot.body);
-            if (!Array.isArray(todayRows) || todayRows.some(isEkoRow)) return snapshot;
+            if (!Array.isArray(todayRows)) return snapshot;
 
             const requestUrl = asUrl(canonicalUrl);
-            const startFilter = requestUrl?.searchParams
-                .getAll("created_at")
-                .find(value => value.startsWith("gte."));
-            const todayStartIso = startFilter?.slice(4) || "";
-            const apiKey = readApiKey(safeInit);
-            if (!todayStartIso || !apiKey) return snapshot;
+            if (!requestUrl || !isFinalPage(requestUrl, todayRows.length)) return snapshot;
+            if (todayRows.some(isEkoRow)) return snapshot;
 
-            const latestEko = await fetchLatestHistoricalEkoRows(canonicalUrl, apiKey, todayStartIso);
+            const dayWindow = getDayWindow(requestUrl);
+            const apiKey = readApiKey(safeInit);
+            if (!dayWindow || !apiKey) return snapshot;
+
+            // The final page can contain no EKO rows even when an earlier page did.
+            // Verify the whole current-day window before using yesterday's import.
+            if (await hasCurrentDayEkoRows(requestUrl, apiKey, dayWindow)) return snapshot;
+
+            const latestEko = await fetchLatestHistoricalEkoRows(requestUrl, apiKey, dayWindow.start);
             if (!latestEko.rows.length) return snapshot;
 
-            const startMs = new Date(todayStartIso).getTime();
+            const startMs = new Date(dayWindow.start).getTime();
             const displayTimestamp = Number.isFinite(startMs)
                 ? new Date(startMs + 12 * 60 * 60 * 1000).toISOString()
                 : new Date().toISOString();
 
-            // Downstream legacy code filters rows with isToday(). Preserve the
-            // original timestamp for traceability, but expose the fallback rows
-            // as today's client-side snapshot so they remain visible in the table.
             const fallbackRows = latestEko.rows.map(row => ({
                 ...row,
                 _eko_fallback: true,
@@ -249,7 +284,7 @@
         const safeInit = sanitizeSupabaseInit(input, init);
         const promise = (async () => {
             const snapshot = await snapshotNetworkResponse(canonicalUrl, safeInit);
-            return enrichTodaySnapshotWithLatestEko(canonicalUrl, snapshot, safeInit);
+            return enrichFinalTodayPageWithLatestEko(canonicalUrl, snapshot, safeInit);
         })();
         dailyInflight.set(canonicalUrl, promise);
 
@@ -267,6 +302,7 @@
     function clearTodayPriceCache() {
         dailyResponseCache.clear();
         dailyInflight.clear();
+        currentDayEkoChecks.clear();
     }
 
     function waitUntilMapIsNearViewport() {
@@ -291,9 +327,6 @@
                     resolve();
                 };
 
-                // Do not compete with hero/LCP work. Start map data shortly
-                // before the user reaches the map; still provide a long fallback
-                // so the map eventually hydrates even without scrolling.
                 const observer = new IntersectionObserver(entries => {
                     if (entries.some(entry => entry.isIntersecting)) done();
                 }, { rootMargin: "160px 0px" });
@@ -317,9 +350,7 @@
         if (!url) return false;
 
         if (url.origin === window.location.origin) {
-            if (url.pathname === "/data/eko_stations.json" || url.pathname === "/data/eko_products.json") {
-                return true;
-            }
+            if (url.pathname === "/data/eko_stations.json" || url.pathname === "/data/eko_products.json") return true;
             if (url.pathname === "/data/export.geojson") return true;
         }
 
@@ -331,13 +362,8 @@
     function isUnusedLegacyEcoPetrolRequest(rawUrl, method) {
         if (method !== "GET") return false;
         const url = asUrl(rawUrl);
-        if (!url || !url.hostname.endsWith(".supabase.co") || !url.pathname.endsWith("/rest/v1/ecopetrol")) {
-            return false;
-        }
+        if (!url || !url.hostname.endsWith(".supabase.co") || !url.pathname.endsWith("/rest/v1/ecopetrol")) return false;
 
-        // ecopetrol_prices.js still contains an old widget fetch. On the current
-        // homepage none of its target elements exist, so the full table response
-        // is pure network/JSON work with no visible output.
         return !document.querySelector(
             '[id^="dizel-"], [id^="benzin95-"], [id^="benzin100-"], [id^="lpg-"], [id^="adblue-"]'
         );
@@ -355,9 +381,7 @@
         }
 
         const canonicalUrl = canonicalTodayPricesUrl(rawUrl, method);
-        if (canonicalUrl) {
-            return fetchSharedTodayPrices(canonicalUrl, input, init);
-        }
+        if (canonicalUrl) return fetchSharedTodayPrices(canonicalUrl, input, init);
 
         if (isUnusedLegacyEcoPetrolRequest(rawUrl, method)) {
             return new Response("[]", {
