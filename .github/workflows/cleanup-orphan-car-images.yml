@@ -1,0 +1,42 @@
+name: Cleanup orphan car images
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Only report orphaned files without deleting them"
+        required: false
+        default: false
+        type: boolean
+  schedule:
+    - cron: "37 * * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - "automation/cleanup_orphan_car_images.py"
+      - ".github/workflows/cleanup-orphan-car-images.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cleanup-orphan-car-images
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Clean orphaned car images from Supabase Storage
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          CAR_IMAGES_BUCKET: car-images
+          ORPHAN_GRACE_MINUTES: "15"
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run || false }}
+        run: python automation/cleanup_orphan_car_images.py
