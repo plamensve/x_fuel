@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="bg">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1">
+  <title>Автомобили за продажба в България | goriva.online</title>
+  <meta name="description" content="Обяви за автомобили за продажба в България. Разглеждайте коли по марка, град, гориво и цена или публикувайте собствена обява в goriva.online.">
+  <link rel="canonical" href="https://goriva.online/cars/">
+  <link rel="icon" type="image/svg+xml" href="/media/fav.svg">
+  <link rel="preconnect" href="https://eaqvhxfvozhzatrnbkvx.supabase.co" crossorigin>
+  <link rel="stylesheet" href="/styles.css?v=20260907-cars1">
+  <link rel="stylesheet" href="/cars/cars.css?v=20260907-cars1">
+  <meta property="og:site_name" content="goriva.online">
+  <meta property="og:title" content="Автомобили за продажба | goriva.online">
+  <meta property="og:description" content="Разгледайте и публикувайте обяви за автомобили в България.">
+  <meta property="og:url" content="https://goriva.online/cars/">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://goriva.online/media/og-3.png">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"CollectionPage","name":"Автомобили за продажба","url":"https://goriva.online/cars/","isPartOf":{"@type":"WebSite","name":"goriva.online","url":"https://goriva.online/"}}</script>
+</head>
+<body class="cars-page" data-cars-page="catalog">
+<header class="header-bar"></header>
+<nav class="main-nav"></nav>
+
+<main class="cars-shell">
+  <nav class="cars-local-nav" aria-label="Автомобили">
+    <a class="is-active" href="/cars/">Всички обяви</a>
+    <a href="/cars/new/">+ Публикувай обява</a>
+    <a href="/cars/my/">Моите обяви</a>
+  </nav>
+
+  <section class="cars-hero">
+    <div>
+      <span class="cars-kicker">🚘 Автомобили · goriva.online</span>
+      <h1>Намери следващия си автомобил</h1>
+      <p>Разглеждай обяви от частни продавачи и публикувай автомобил с ясна информация, снимки и директен контакт.</p>
+      <div class="cars-hero-actions">
+        <a class="cars-btn light" href="/cars/new/">+ Публикувай обява</a>
+        <a class="cars-btn secondary" href="/cars/my/">Моите обяви</a>
+      </div>
+    </div>
+    <div class="cars-hero-aside">
+      <div class="cars-hero-stat"><strong>Без парола</strong><span>Вход с еднократен код по email</span></div>
+      <div class="cars-hero-stat"><strong>До 15 снимки</strong><span>JPG, PNG или WebP към всяка обява</span></div>
+      <div class="cars-hero-stat"><strong>Контрол от собственика</strong><span>Редактиране и изтриване само от автора</span></div>
+    </div>
+  </section>
+
+  <section class="cars-panel">
+    <div class="cars-panel-heading">
+      <div><h2>Търси автомобил</h2><p>Филтрирай наличните обяви по основните критерии.</p></div>
+    </div>
+    <form id="cars-filter-form" class="cars-filter-grid">
+      <label class="cars-field search"><span>Марка, модел или заглавие</span><input id="cars-filter-q" type="search" placeholder="BMW 320d"></label>
+      <label class="cars-field"><span>Марка</span><select id="cars-filter-make"><option value="">Всички марки</option></select></label>
+      <label class="cars-field"><span>Град</span><select id="cars-filter-city"><option value="">Всички градове</option></select></label>
+      <label class="cars-field"><span>Гориво</span><select id="cars-filter-fuel"><option value="">Всички</option><option>Бензин</option><option>Дизел</option><option>Хибрид</option><option>Plug-in хибрид</option><option>Електрически</option><option>LPG</option><option>Метан</option></select></label>
+      <label class="cars-field"><span>Цена от €</span><input id="cars-filter-min" type="number" min="0" step="500" placeholder="0"></label>
+      <label class="cars-field"><span>Цена до €</span><input id="cars-filter-max" type="number" min="0" step="500" placeholder="50000"></label>
+      <div class="cars-filter-actions"><button id="cars-filter-reset" class="cars-btn secondary" type="button">Изчисти</button></div>
+    </form>
+  </section>
+
+  <div class="cars-results-head"><h2>Последни обяви</h2><span id="cars-results-count" class="cars-results-count">0 обяви</span></div>
+  <section id="cars-grid" class="cars-grid" aria-live="polite"></section>
+</main>
+
+<footer class="site-footer"></footer>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script defer src="/scripts/global-nav.js?v=20260907-cars1"></script>
+<script defer src="/cars/cars.js?v=20260907-cars1"></script>
+</body>
+</html>
