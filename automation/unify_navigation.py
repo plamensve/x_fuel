@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-NAV_VERSION = "20260906-nav-order1"
+NAV_VERSION = "20260907-cars1"
 
 
 def normalize_html(path: Path) -> bool:

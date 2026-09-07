@@ -104,4 +104,9 @@
     <loc>https://goriva.online/stations/eko/</loc>
     <lastmod>2026-09-07</lastmod>
   </url>
+  <url>
+    <loc>https://goriva.online/cars/</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
 </urlset>
