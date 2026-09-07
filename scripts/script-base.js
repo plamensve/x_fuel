@@ -7,23 +7,37 @@ let map
 let marker
 
 function getStationLogo(name) {
+    const normalized = String(name || "")
+        .toLocaleLowerCase("bg-BG")
+        .normalize("NFKC")
+        .replace(/[\s\-_.]+/g, "")
+        .trim()
 
-    let lower = (name || "").toLowerCase()
+    const rules = [
+        { match: ["екопетрол", "ecopetrol"], src: "/images/station_logos/ecopetrol.svg" },
+        { match: ["ромпетрол", "rompetrol"], src: "/images/station_logos/rompetrol.svg" },
+        { match: ["бенита", "benita"], src: "/images/station_logos/benita.svg" },
+        { match: ["лукойл", "lukoil"], src: "/images/station_logos/lukoil.svg" },
+        { match: ["омв", "omv"], src: "/images/station_logos/omv.svg" },
+        { match: ["шел", "shell"], src: "/images/station_logos/shell.svg" },
+        { match: ["инса", "insa"], src: "/images/station_logos/insa.svg" },
+        { match: ["круиз", "kruiz", "cruise"], src: "/images/station_logos/kruiz.svg" },
+        { match: ["булмаркет", "bulmarket"], src: "/images/station_logos/bulmarket.svg" },
+        { match: ["дизелор", "dieselor", "diselor", "dieseler"], src: "/images/station_logos/diselor.svg" },
+        { match: ["химойл", "himoil", "chimoil"], src: "/images/station_logos/himoil.svg" },
+        { match: ["петрол", "petrol"], src: "/images/station_logos/petrol.svg" },
+        { match: ["еко", "eko"], src: "/images/station_logos/eko.svg" }
+    ]
 
-    if (lower.includes("бенита")) return "../images/station_logos/benita.svg"
-    if (lower.includes("еко петрол") || lower.includes("екопетрол")) return "../images/station_logos/ecopetrol.svg"
-    if (lower.includes("лукойл")) return "../images/station_logos/lukoil.svg"
-    if (lower.includes("омв") || lower.includes("omv"))
-        return "../images/station_logos/omv.svg"
-    if (lower.includes("шел")) return "../images/station_logos/shell.svg"
-    if (lower.includes("ромпетрол")) return "../images/station_logos/rompetrol.svg"
-    if (lower.includes("инса")) return "../images/station_logos/insa.svg"
-    if (lower.includes("круиз")) return "../images/station_logos/kruiz.svg"
-    if (lower.includes("булмаркет")) return "../images/station_logos/bulmarket.svg"
-    if (lower.includes("петрол")) return "../images/station_logos/petrol.svg"
-    if (lower.includes("еко")) return "../images/station_logos/eko.svg"
-    if (lower.includes("дизелор")) return "../images/station_logos/diselor.svg"
-    if (lower.includes("химойл")) return "../images/station_logos/himoil.svg"
+    for (const rule of rules) {
+        if (rule.match.some(alias => normalized.includes(
+            alias.toLocaleLowerCase("bg-BG")
+                .normalize("NFKC")
+                .replace(/[\s\-_.]+/g, "")
+        ))) {
+            return rule.src
+        }
+    }
 
     return null
 }
