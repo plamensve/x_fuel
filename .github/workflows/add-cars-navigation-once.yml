@@ -1,0 +1,66 @@
+name: Add car marketplace navigation once
+
+on:
+  push:
+    paths:
+      - .github/workflows/add-cars-navigation-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.event.head_commit.message == 'Run one-time car marketplace navigation update'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Add cars to global navigation and sitemap
+        shell: python
+        run: |
+          from pathlib import Path
+
+          nav = Path('scripts/global-nav.js')
+          text = nav.read_text(encoding='utf-8')
+          old = '        { href: "/", label: "Начало", symbol: "⌂", match: ["/", "/index.html"] },\n        { href: "/pages/business-clients.html", label: "За бизнеса"'
+          new = '        { href: "/", label: "Начало", symbol: "⌂", match: ["/", "/index.html"] },\n        { href: "/cars/", label: "Автомобили", symbol: "▰", match: ["/cars", "/cars/"] },\n        { href: "/pages/business-clients.html", label: "За бизнеса"'
+          if '/cars/' not in text:
+              if old not in text:
+                  raise SystemExit('Global navigation insertion point not found')
+              text = text.replace(old, new, 1)
+
+          footer_old = '<li><a href="/pages/useful.html">Полезно</a></li><li><a href="/pages/weather.html">Прогноза за времето</a></li>'
+          footer_new = '<li><a href="/pages/useful.html">Полезно</a></li><li><a href="/cars/">Автомобили</a></li><li><a href="/pages/weather.html">Прогноза за времето</a></li>'
+          if footer_new not in text:
+              if footer_old not in text:
+                  raise SystemExit('Global footer insertion point not found')
+              text = text.replace(footer_old, footer_new, 1)
+          nav.write_text(text, encoding='utf-8')
+
+          normalize = Path('automation/unify_navigation.py')
+          text = normalize.read_text(encoding='utf-8')
+          text = text.replace('NAV_VERSION = "20260906-nav-order1"', 'NAV_VERSION = "20260907-cars1"', 1)
+          normalize.write_text(text, encoding='utf-8')
+
+          sitemap = Path('sitemap.xml')
+          text = sitemap.read_text(encoding='utf-8')
+          if 'https://goriva.online/cars/' not in text:
+              entry = '  <url>\n    <loc>https://goriva.online/cars/</loc>\n    <changefreq>daily</changefreq>\n    <priority>0.8</priority>\n  </url>\n'
+              if '</urlset>' not in text:
+                  raise SystemExit('sitemap.xml closing urlset not found')
+              text = text.replace('</urlset>', entry + '</urlset>', 1)
+              sitemap.write_text(text, encoding='utf-8')
+
+      - name: Validate JavaScript
+        run: node --check scripts/global-nav.js
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/global-nav.js automation/unify_navigation.py sitemap.xml
+          git commit -m "Add car marketplace to site navigation"
+          git pull --rebase origin main
+          git push origin main
