@@ -376,7 +376,7 @@
       description: value('description') || null,
       seller_name: value('seller_name'),
       seller_phone: value('seller_phone'),
-      seller_email: value('seller_email') || state.user?.email || null
+      seller_email: value('seller_email') || null
     };
   }
 
