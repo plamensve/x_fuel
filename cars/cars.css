@@ -226,9 +226,6 @@ body.cars-page {
 .cars-search-heading { position:relative; align-items:center; padding-bottom:20px; border-bottom:1px solid #e4ebf5; }
 .cars-search-heading-copy { max-width:760px; }
 .cars-search-eyebrow { display:inline-flex; margin-bottom:7px; color:#2563eb; font-size:11px; font-weight:950; letter-spacing:.12em; text-transform:uppercase; }
-.cars-search-heading-badge { display:flex; align-items:center; gap:10px; padding:12px 16px; border:1px solid #d7e3f4; border-radius:14px; background:rgba(255,255,255,.82); color:#334155; box-shadow:0 8px 24px rgba(15,23,42,.06); white-space:nowrap; }
-.cars-search-heading-badge span { display:grid; place-items:center; width:34px; height:34px; border-radius:10px; background:linear-gradient(135deg,#2563eb,#0f766e); color:#fff; font-size:22px; font-weight:900; }
-.cars-search-heading-badge strong { font-size:13px; }
 .cars-search-panel .cars-filter-grid { gap:16px 14px; }
 .cars-search-panel .cars-field span { color:#475569; font-size:11px; letter-spacing:.055em; }
 .cars-search-panel .cars-field input,
@@ -429,7 +426,6 @@ body.cars-page {
   .cars-hero-aside { grid-template-columns:1fr; }
   .cars-panel { padding:18px 14px; border-radius:18px; }
   .cars-panel-heading { flex-direction:column; }
-  .cars-search-heading-badge { width:100%; box-sizing:border-box; justify-content:flex-start; white-space:normal; }
   .cars-filter-grid .cars-field,
   .cars-filter-grid .cars-field.search,
   .cars-filter-grid .cars-field.wide,

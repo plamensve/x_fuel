@@ -68,3 +68,42 @@ html body main.container>section.prices-card h2 span#prices-date{
 }
 
 @media (prefers-reduced-motion:reduce){.goriva-scroll-progress-bar,.goriva-stations-nav-caret,.goriva-stations-nav-dropdown{transition:none!important}}
+
+
+/* GORIVA NAV WIDE DESKTOP 20260907 */
+@media (min-width: 1200px) {
+  .goriva-global-nav-shell {
+    width: min(1600px, calc(100% - 20px))!important;
+    max-width: 1600px!important;
+    grid-template-columns: minmax(220px, auto) minmax(0, 1fr) auto!important;
+    gap: 20px!important;
+    padding-left: 2px!important;
+    padding-right: 2px!important;
+    box-sizing: border-box!important;
+  }
+  .goriva-global-nav {
+    width: 100%!important;
+    justify-content: stretch!important;
+  }
+  .goriva-global-menu {
+    width: 100%!important;
+    box-sizing: border-box!important;
+    justify-content: center!important;
+    gap: 9px!important;
+  }
+  .goriva-global-menu > a {
+    margin-left: 0!important;
+    margin-right: 0!important;
+    padding-left: 13px!important;
+    padding-right: 13px!important;
+  }
+  .goriva-stations-nav-item {
+    margin-left: 4px!important;
+    margin-right: 4px!important;
+  }
+  .goriva-global-actions {
+    justify-self: end!important;
+    justify-content: flex-end!important;
+    margin-left: auto!important;
+  }
+}

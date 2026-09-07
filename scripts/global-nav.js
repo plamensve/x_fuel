@@ -28,7 +28,6 @@
         { href: "/pages/useful.html", label: "Полезно", symbol: "✦", match: ["/pages/useful.html"] },
         { href: "/pages/weather.html", label: "Времето", symbol: "☼", match: ["/pages/weather.html"] },
         { href: "/pages/news.html", label: "Новини", symbol: "▤", match: ["/pages/news.html", "/pages/articles/"] },
-        { href: "/pages/rules.html", label: "Условия", symbol: "✓", match: ["/pages/rules.html"] }
     ];
     const normalizePath=value=>{const path=(value||"/").replace(/\/+/g,"/");return path!=="/"?path.replace(/\/$/,""):path;};
     const currentPath=normalizePath(window.location.pathname);
@@ -54,7 +53,7 @@
             const link = document.createElement("link");
             link.id = "goriva-global-progress-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/global-progress.css?v=20260907-cars3";
+            link.href = "/pages/styles/global-progress.css?v=20260907-cars4";
             const finish = () => resolve();
             link.addEventListener("load", finish, { once: true });
             link.addEventListener("error", finish, { once: true });
