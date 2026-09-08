@@ -50,8 +50,10 @@
     if (!directory) {
       directory = document.createElement('div');
       directory.className = 'city-directory';
-      directory.innerHTML = '<div id="city-stations-grid" class="city-stations-grid"></div><div class="city-load-more-wrap"><button id="city-load-more" class="city-load-more" type="button">Зареди още карти</button></div>';
+      directory.innerHTML = '<div class="city-directory-filters" role="search"><div class="city-directory-field"><label for="city-station-search">Търсене</label><input id="city-station-search" type="search" autocomplete="off" placeholder="Например: София, 1181, Сливница…"></div><div class="city-directory-field"><label for="city-fuel-filter">Налично гориво</label><select id="city-fuel-filter"><option value="all">Всички горива</option>'+FUELS.map(fuel => '<option value="'+escapeHtml(fuel)+'">'+escapeHtml(LABELS[fuel])+'</option>').join('')+'</select></div></div><div id="city-stations-grid" class="city-stations-grid"></div><div class="city-load-more-wrap"><button id="city-load-more" class="city-load-more" type="button">Зареди още карти</button></div>';
       tableWrap.parentNode.insertBefore(directory, tableWrap);
+      document.getElementById('city-station-search').addEventListener('input', () => { visibleStationCount = 9; paintDirectory(); });
+      document.getElementById('city-fuel-filter').addEventListener('change', () => { visibleStationCount = 9; paintDirectory(); });
       document.getElementById('city-load-more').addEventListener('click', () => { visibleStationCount += 9; paintDirectory(); });
     }
     visibleStationCount = 9;
@@ -59,7 +61,12 @@
   }
 
   function paintDirectory() {
-    const filtered = stationRows;
+    const search = (document.getElementById('city-station-search')?.value || '').trim().toLocaleLowerCase('bg-BG');
+    const fuel = document.getElementById('city-fuel-filter')?.value || 'all';
+    const filtered = stationRows.filter(station => {
+      const haystack = (station.brand+' '+station.location).toLocaleLowerCase('bg-BG');
+      return (!search || haystack.includes(search)) && (fuel === 'all' || station.prices[fuel] != null);
+    });
     const shown = filtered.slice(0, visibleStationCount);
     const grid = document.getElementById('city-stations-grid');
     if (!grid) return;
