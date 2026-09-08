@@ -20,6 +20,8 @@ STATIC_FILES = (
     ROOT / "pages" / "weather.html",
     ROOT / "pages" / "news.html",
     ROOT / "pages" / "business-clients.html",
+    ROOT / "pages" / "about.html",
+    ROOT / "pages" / "methodology.html",
     ROOT / "pages" / "rules.html",
     ROOT / "pages" / "privacy.html",
 )
@@ -112,6 +114,10 @@ def public_html_files() -> list[Path]:
     stations_root = ROOT / "stations"
     if stations_root.exists():
         files.extend(sorted(stations_root.rglob("*.html")))
+
+    cities_root = ROOT / "cities"
+    if cities_root.exists():
+        files.extend(sorted(cities_root.rglob("*.html")))
 
     return files
 
