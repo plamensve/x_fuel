@@ -6,8 +6,24 @@
   const SUPABASE_KEY = 'sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH';
   const FUELS = ['Бензин A95', 'Дизел', 'Пропан Бутан', 'Бензин A100', 'Дизел премиум', 'Метан'];
   const LABELS = {'Бензин A95':'A95','Дизел':'Дизел','Пропан Бутан':'LPG','Бензин A100':'A100','Дизел премиум':'Дизел +','Метан':'Метан'};
-  const LOGOS = {'ЕКО':'/images/station_logos/eko.svg','PETROL':'/images/station_logos/petrol.svg'};
-  const logoFor = brand => LOGOS[normalize(brand)] || '';
+  const LOGOS = [
+    {match:['ЕКО','EKO'],src:'/images/station_logos/eko.svg'},
+    {match:['PETROL','ПЕТРОЛ'],src:'/images/station_logos/petrol.svg'},
+    {match:['INSA','ИНСА'],src:'/images/station_logos/insa.svg'},
+    {match:['OMV'],src:'/images/station_logos/omv.svg'},
+    {match:['SHELL','ШЕЛ'],src:'/images/station_logos/shell.svg'},
+    {match:['LUKOIL','ЛУКОЙЛ'],src:'/images/station_logos/lukoil.svg'},
+    {match:['ROMPETROL','РОМПЕТРОЛ'],src:'/images/station_logos/rompetrol.svg'},
+    {match:['KRUiz','КРУИЗ'],src:'/images/station_logos/kruiz.svg'},
+    {match:['BULMARKET','БУЛМАРКЕТ'],src:'/images/station_logos/bulmarket.svg'},
+    {match:['HIMOIL','ХИМОЙЛ'],src:'/images/station_logos/himoil.svg'},
+    {match:['DISELOR','ДИЗЕЛОР'],src:'/images/station_logos/diselor.svg'},
+    {match:['ECO PETROL','ЕКО ПЕТРОЛ'],src:'/images/station_logos/ecopetrol.svg'}
+  ];
+  const logoFor = brand => {
+    const normalized = normalize(brand);
+    return LOGOS.find(item => item.match.some(token => normalized.includes(token)))?.src || '/images/station_logos/unknown.svg';
+  };
   const logoMarkup = brand => { const src = logoFor(brand); return src ? '<img class="station-brand-logo" src="' + src + '" alt="' + escapeHtml(brand) + ' лого" loading="lazy" decoding="async">' : ''; };
   const normalize = value => String(value || '').trim().toLocaleUpperCase('bg-BG');
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
@@ -127,18 +143,8 @@
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const rows = (await response.json());
       if (!rows.length) throw new Error('Няма налични публикувани записи');
-      const latestByStation = new Map();
-      rows.forEach(row => {
-        const key = String(row.location || row.station || '').trim();
-        const date = dateKey(row.created_at);
-        if (!latestByStation.has(key) || date > latestByStation.get(key)) latestByStation.set(key, date);
-      });
-      const latestRows = rows.filter(row => {
-        const key = String(row.location || row.station || '').trim();
-        return dateKey(row.created_at) === latestByStation.get(key);
-      });
       const latest = rows.map(row => dateKey(row.created_at)).sort().at(-1);
-      render(summarize(latestRows), latest);
+      render(summarize(rows.filter(row => dateKey(row.created_at) === latest)), latest);
     } catch (error) {
       status.textContent = `${status.textContent} Неуспешно онлайн обновяване; запазени са публикуваните данни от страницата.`;
       console.warn('City prices refresh skipped', error);
