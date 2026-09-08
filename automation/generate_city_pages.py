@@ -25,7 +25,7 @@ CITIES = {
 # These names correspond to price feeds maintained as chain-published imports.
 OFFICIAL_STATIONS = {"ЕКО", "PETROL"}
 FUEL_ORDER = ("Бензин A95", "Дизел", "Пропан Бутан", "Бензин A100", "Дизел премиум", "Метан")
-LOGO_PATHS = {"ЕКО": "/media/logos/eko.svg", "PETROL": "/media/logos/petrol.svg"}
+LOGO_PATHS = {"ЕКО": "/images/station_logos/eko.svg", "PETROL": "/images/station_logos/petrol.svg"}
 
 FUEL_LABELS = {
     "Бензин A95": "A95",
