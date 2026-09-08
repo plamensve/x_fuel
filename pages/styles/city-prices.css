@@ -62,3 +62,5 @@
 .city-station-meta .city-station-status{display:flex!important;align-items:center!important;justify-content:center!important;flex:0 0 20px!important;width:20px!important;height:20px!important;margin:0!important;padding:0!important;order:1!important}
 .city-station-meta .city-station-status i{display:block!important;width:11px!important;height:11px!important;margin:0!important;padding:0!important}
 .city-station-meta .city-station-date{display:flex!important;align-items:center!important;flex:0 0 auto!important;width:auto!important;height:20px!important;min-height:20px!important;margin:0!important;padding:0!important;line-height:20px!important;white-space:nowrap!important;order:2!important}
+
+.city-station-prices{margin-top:14px!important}
