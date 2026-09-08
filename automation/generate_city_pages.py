@@ -25,7 +25,20 @@ CITIES = {
 # These names correspond to price feeds maintained as chain-published imports.
 OFFICIAL_STATIONS = set()
 FUEL_ORDER = ("Бензин A95", "Дизел", "Пропан Бутан", "Бензин A100", "Дизел премиум", "Метан")
-LOGO_PATHS = {"ЕКО": "/images/station_logos/eko.svg", "PETROL": "/images/station_logos/petrol.svg"}
+LOGO_PATHS = {
+    "ЕКО": "/images/station_logos/eko.svg",
+    "PETROL": "/images/station_logos/petrol.svg",
+    "INSA OIL": "/images/station_logos/insa.svg",
+    "OMV": "/images/station_logos/omv.svg",
+    "SHELL": "/images/station_logos/shell.svg",
+    "LUKOIL": "/images/station_logos/lukoil.svg",
+    "ROMPETROL": "/images/station_logos/rompetrol.svg",
+    "KRUИЗ": "/images/station_logos/kruiz.svg",
+    "BULMARKET": "/images/station_logos/bulmarket.svg",
+    "HIMOIL": "/images/station_logos/himoil.svg",
+    "DISELOR": "/images/station_logos/diselor.svg",
+    "ECO PETROL": "/images/station_logos/ecopetrol.svg",
+}
 
 FUEL_LABELS = {
     "Бензин A95": "A95",
