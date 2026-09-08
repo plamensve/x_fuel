@@ -54,7 +54,7 @@ def bg_date(value: str) -> str:
 
 def fetch_city_rows(city: str) -> list[dict]:
     params = urllib.parse.urlencode({
-        "select": "station,city,region,location,fuel,price,created_at",
+        "select": "station,city,region,location,phone,fuel,price,created_at",
         "city": f"eq.{city}",
         "order": "created_at.desc",
         "limit": "1000",
@@ -84,7 +84,7 @@ def summarize(rows: list[dict]) -> dict:
         row = {**row, "price": price}
         by_fuel[fuel].append(row)
         location = str(row.get("location") or row.get("station") or "Бензиностанция").strip()
-        station = stations.setdefault(location, {"location": location, "brand": str(row.get("station") or ""), "prices": {}})
+        station = stations.setdefault(location, {"location": location, "brand": str(row.get("station") or ""), "phone": str(row.get("phone") or ""), "prices": {}})
         current = station["prices"].get(fuel)
         if current is None or price < current:
             station["prices"][fuel] = price
