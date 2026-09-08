@@ -4,7 +4,6 @@
 
   const SUPABASE_URL = 'https://eaqvhxfvozhzatrnbkvx.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH';
-  const OFFICIAL_STATIONS = new Set(['ЕКО', 'PETROL']);
   const FUELS = ['Бензин A95', 'Дизел', 'Пропан Бутан', 'Бензин A100', 'Дизел премиум', 'Метан'];
   const LABELS = {'Бензин A95':'A95','Дизел':'Дизел','Пропан Бутан':'LPG','Бензин A100':'A100','Дизел премиум':'Дизел +','Метан':'Метан'};
   const LOGOS = {'ЕКО':'/images/station_logos/eko.svg','PETROL':'/images/station_logos/petrol.svg'};
@@ -126,7 +125,7 @@
       await loadContacts();
       const response = await fetch(`${SUPABASE_URL}/rest/v1/fuel_prices?${params}`, {headers:{apikey:SUPABASE_KEY}, cache:'no-store'});
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const rows = (await response.json()).filter(row => OFFICIAL_STATIONS.has(normalize(row.station)));
+      const rows = (await response.json());
       if (!rows.length) throw new Error('Няма налични публикувани записи');
       const latest = rows.map(row => dateKey(row.created_at)).sort().at(-1);
       render(summarize(rows.filter(row => dateKey(row.created_at) === latest)), latest);
