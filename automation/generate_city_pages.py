@@ -25,6 +25,8 @@ CITIES = {
 # These names correspond to price feeds maintained as chain-published imports.
 OFFICIAL_STATIONS = {"ЕКО", "PETROL"}
 FUEL_ORDER = ("Бензин A95", "Дизел", "Пропан Бутан", "Бензин A100", "Дизел премиум", "Метан")
+LOGO_PATHS = {"ЕКО": "/media/logos/eko.svg", "PETROL": "/media/logos/petrol.svg"}
+
 FUEL_LABELS = {
     "Бензин A95": "A95",
     "Дизел": "Дизел",
@@ -135,6 +137,13 @@ def render_summary_cards(summary: dict) -> str:
     return "\n".join(cards)
 
 
+def station_logo_html(brand: str) -> str:
+    path = LOGO_PATHS.get(normalize(brand))
+    if not path:
+        return ""
+    return f'<img class="station-brand-logo" src="{path}" alt="{html.escape(brand)} лого" loading="lazy" decoding="async">'
+
+
 def render_station_rows(summary: dict) -> str:
     rows = []
     for station in summary["stations"]:
@@ -144,7 +153,7 @@ def render_station_rows(summary: dict) -> str:
             cells.append(f'<td data-label="{html.escape(FUEL_LABELS[fuel])}">{money(value, fuel) if value is not None else "—"}</td>')
         rows.append(
             '<tr>'
-            f'<th scope="row"><strong>{html.escape(station["brand"])}</strong><span>{html.escape(station["location"])}</span></th>'
+            f'<th scope="row"><div class="station-brand">{station_logo_html(station["brand"])}<span><strong>{html.escape(station["brand"])}</strong><span>{html.escape(station["location"])}</span></span></div></th>'
             + "".join(cells)
             + "</tr>"
         )
