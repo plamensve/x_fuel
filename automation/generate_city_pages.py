@@ -54,7 +54,7 @@ def bg_date(value: str) -> str:
 
 def fetch_city_rows(city: str) -> list[dict]:
     params = urllib.parse.urlencode({
-        "select": "station,city,region,location,phone,fuel,price,created_at",
+        "select": "station,city,region,location,fuel,price,created_at",
         "city": f"eq.{city}",
         "order": "created_at.desc",
         "limit": "1000",
