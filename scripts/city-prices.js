@@ -7,7 +7,7 @@
   const OFFICIAL_STATIONS = new Set(['ЕКО', 'PETROL']);
   const FUELS = ['Бензин A95', 'Дизел', 'Пропан Бутан', 'Бензин A100', 'Дизел премиум', 'Метан'];
   const LABELS = {'Бензин A95':'A95','Дизел':'Дизел','Пропан Бутан':'LPG','Бензин A100':'A100','Дизел премиум':'Дизел +','Метан':'Метан'};
-  const LOGOS = {'ЕКО':'/media/logos/eko.svg','PETROL':'/media/logos/petrol.svg'};
+  const LOGOS = {'ЕКО':'/images/station_logos/eko.svg','PETROL':'/images/station_logos/petrol.svg'};
   const logoFor = brand => LOGOS[normalize(brand)] || '';
   const logoMarkup = brand => { const src = logoFor(brand); return src ? '<img class="station-brand-logo" src="' + src + '" alt="' + escapeHtml(brand) + ' лого" loading="lazy" decoding="async">' : ''; };
   const normalize = value => String(value || '').trim().toLocaleUpperCase('bg-BG');
