@@ -20,3 +20,17 @@
 @media(prefers-reduced-motion:reduce){.city-switch-link{transition:none}}
 
 .station-brand{display:flex;align-items:center;gap:10px}.station-brand-logo{width:34px;height:34px;flex:0 0 34px;object-fit:contain;padding:5px;border-radius:9px;background:#f6fafc;border:1px solid #e3edf3}.city-hero{background:linear-gradient(135deg,#0b2342 0%,#123d68 58%,#176d8c 100%);border-color:rgba(255,255,255,.12);box-shadow:0 24px 64px rgba(7,30,58,.24)}.city-hero:after{border-color:rgba(255,255,255,.09)}.city-hero h1{color:#fff}.city-hero p{color:#d7e7f3}.city-eyebrow{color:#a9e2cd}.city-coverage span{border-color:rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#e7f1f7}.city-coverage b{color:#fff}.city-update-card{border-color:rgba(255,255,255,.18);background:rgba(255,255,255,.1);box-shadow:0 16px 40px rgba(0,0,0,.14)}.city-update-card span,.city-update-card small{color:#c6d9e7}.city-update-card strong{color:#fff}@media(max-width:560px){.station-brand-logo{width:30px;height:30px;flex-basis:30px}}
+
+.city-price-overview{position:relative;overflow:hidden;padding:32px 30px 30px;border-radius:26px;background:linear-gradient(135deg,#081e38 0%,#102f53 58%,#17496d 100%);box-shadow:0 22px 55px rgba(7,30,58,.2)}
+.city-price-overview:after{content:"";position:absolute;right:-45px;bottom:-150px;width:230px;height:230px;border:1px solid rgba(255,255,255,.12);border-radius:50%;pointer-events:none}
+.city-price-overview .city-section-heading,.city-price-overview .city-price-grid{position:relative;z-index:1}
+.city-price-overview .city-section-heading>span{color:#ff5e67}
+.city-price-overview .city-section-heading h2{color:#fff;margin-top:10px}
+.city-price-overview .city-section-heading p{color:#b6c8d9}
+.city-price-grid{grid-template-columns:repeat(5,minmax(0,1fr));gap:14px}
+.city-price-card{position:relative;overflow:hidden;min-height:140px;padding:19px 18px;border-color:rgba(255,255,255,.14);background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.03));box-shadow:none}
+.city-price-card:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;background:#41b9f2}
+.city-price-card:nth-child(2):before{background:#30c5ca}.city-price-card:nth-child(3):before{background:#67d85b}.city-price-card:nth-child(4):before{background:#a57be9}.city-price-card:nth-child(5):before{background:#ff9b20}
+.city-price-card .city-price-label{background:transparent;color:#abc9e3;padding:0;margin-bottom:14px}.city-price-card strong{color:#fff;font-size:1.55rem}.city-price-card>span:not(.city-price-label),.city-price-card small{color:#b7c7d5}
+@media(max-width:1050px){.city-price-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:560px){.city-price-overview{padding:24px 16px}.city-price-grid{grid-template-columns:1fr 1fr;gap:9px}.city-price-card{padding:17px 13px}.city-price-card strong{font-size:1.25rem}}
