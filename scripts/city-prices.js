@@ -23,7 +23,7 @@
       if (!FUELS.includes(row.fuel) || !Number.isFinite(Number(row.price))) return;
       const price = Number(row.price);
       const location = String(row.location || row.station || 'Бензиностанция').trim();
-      const station = stations.get(location) || {location, brand:String(row.station || ''), prices:{}};
+      const station = stations.get(location) || {location, brand:String(row.station || ''), phone:String(row.phone || ''), prices:{}};
       if (!(row.fuel in station.prices) || price < station.prices[row.fuel]) station.prices[row.fuel] = price;
       stations.set(location, station);
       byFuel.get(row.fuel).push({price, location});
@@ -39,6 +39,7 @@
 
 
   let stationRows = [];
+  let currentStationDate = '';
   let visibleStationCount = 9;
   function renderDirectory(stations) {
     stationRows = stations;
@@ -63,11 +64,12 @@
     const shown = filtered.slice(0, visibleStationCount);
     const grid = document.getElementById('city-stations-grid');
     if (!grid) return;
-    grid.innerHTML = shown.map(station => '<article class="city-station-card"><div class="city-station-head"><div><strong>'+escapeHtml(station.brand)+'</strong><span>'+escapeHtml(station.location)+'</span></div>'+logoMarkup(station.brand).replace('station-brand-logo','city-station-logo')+'</div><div class="city-station-date">Цени към дата '+humanDate(document.getElementById('city-price-date')?.textContent ? dateKey(new Date()) : dateKey(new Date()))+'</div><div class="city-station-status"><i></i></div><div class="city-station-prices">'+FUELS.map(fuel => '<div class="city-station-price '+(station.prices[fuel] == null ? 'is-missing' : '')+'"><span>'+escapeHtml(LABELS[fuel])+'</span><strong>'+(station.prices[fuel] == null ? '-' : money(station.prices[fuel], fuel))+'</strong></div>').join('')+'</div>'+(station.phone ? '<a class="city-station-phone" href="tel:'+escapeHtml(station.phone)+'">☎ '+escapeHtml(station.phone)+'</a>' : '<span class="city-station-phone" aria-hidden="true">&nbsp;</span>')+'</article>').join('');
+    grid.innerHTML = shown.map(station => '<article class="city-station-card"><div class="city-station-head"><div><strong>'+escapeHtml(station.brand)+'</strong><span>'+escapeHtml(station.location)+'</span></div>'+logoMarkup(station.brand).replace('station-brand-logo','city-station-logo')+'</div><div class="city-station-date">Цени към дата '+humanDate(currentStationDate)+'</div><div class="city-station-status"><i></i></div><div class="city-station-prices">'+FUELS.map(fuel => '<div class="city-station-price '+(station.prices[fuel] == null ? 'is-missing' : '')+'"><span>'+escapeHtml(LABELS[fuel])+'</span><strong>'+(station.prices[fuel] == null ? '-' : money(station.prices[fuel], fuel))+'</strong></div>').join('')+'</div>'+(station.phone ? '<a class="city-station-phone" href="tel:'+escapeHtml(station.phone)+'">☎ '+escapeHtml(station.phone)+'</a>' : '<span class="city-station-phone" aria-hidden="true">&nbsp;</span>')+'</article>').join('');
     const more = document.getElementById('city-load-more'); if (more) more.hidden = filtered.length <= visibleStationCount;
   }
 
   function render(summary, date) {
+    currentStationDate = date;
     document.getElementById('city-station-count').textContent = summary.stationCount;
     document.getElementById('city-record-count').textContent = summary.records;
     document.getElementById('city-source-summary').textContent = `Импорти: ${summary.brands.join(', ')}`;
@@ -93,7 +95,7 @@
   async function loadLatest() {
     const city = page.dataset.city;
     const status = document.getElementById('city-loading-status');
-    const params = new URLSearchParams({select:'station,city,region,location,fuel,price,created_at', city:`eq.${city}`, order:'created_at.desc', limit:'1000'});
+    const params = new URLSearchParams({select:'station,city,region,location,phone,fuel,price,created_at', city:`eq.${city}`, order:'created_at.desc', limit:'1000'});
     try {
       const response = await fetch(`${SUPABASE_URL}/rest/v1/fuel_prices?${params}`, {headers:{apikey:SUPABASE_KEY}, cache:'no-store'});
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
