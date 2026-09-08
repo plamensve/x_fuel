@@ -40,7 +40,26 @@
 
   let stationRows = [];
   let currentStationDate = '';
+  const CONTACTS = new Map();
   let visibleStationCount = 9;
+  async function loadContacts() {
+    try {
+      const response = await fetch('/data/eko_stations.json', {cache:'force-cache'});
+      if (!response.ok) return;
+      const payload = await response.json();
+      Object.values(payload.stations || {}).forEach(station => {
+        if (station.station_id && station.phone) CONTACTS.set(String(station.station_id), String(station.phone));
+      });
+    } catch (error) {
+      console.warn('Station contacts unavailable', error);
+    }
+  }
+
+  function contactFor(station) {
+    const match = String(station.location || '').match(/(?:ЕКО|EKO)\s*(\d+)/i);
+    return station.phone || (match ? CONTACTS.get(match[1]) || '' : '');
+  }
+
   function renderDirectory(stations) {
     stationRows = stations;
     const section = document.querySelector('.city-stations');
@@ -104,6 +123,7 @@
     const status = document.getElementById('city-loading-status');
     const params = new URLSearchParams({select:'station,city,region,location,fuel,price,created_at', city:`eq.${city}`, order:'created_at.desc', limit:'1000'});
     try {
+      await loadContacts();
       const response = await fetch(`${SUPABASE_URL}/rest/v1/fuel_prices?${params}`, {headers:{apikey:SUPABASE_KEY}, cache:'no-store'});
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const rows = (await response.json()).filter(row => OFFICIAL_STATIONS.has(normalize(row.station)));
