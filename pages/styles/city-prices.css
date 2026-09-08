@@ -55,3 +55,5 @@
 .city-directory-field input{padding:0 16px!important}.city-directory-field select{padding:0 42px 0 16px!important;font-weight:650!important;cursor:pointer}.city-directory-field input:focus,.city-directory-field select:focus{border-color:#60a5fa!important;outline:0;box-shadow:0 0 0 4px rgba(59,130,246,.11),0 8px 20px rgba(37,99,235,.08)!important}
 .city-station-meta{justify-content:flex-start!important;gap:10px!important}.city-station-meta .city-station-status{order:1}.city-station-meta .city-station-date{order:2}
 @media(max-width:700px){.city-directory-filters{grid-template-columns:1fr!important;gap:14px!important;padding:16px!important;border-radius:18px!important}}
+
+.city-station-meta{align-items:center!important}.city-station-date{display:flex;align-items:center;height:20px!important;line-height:20px!important}.city-station-phone{display:flex;min-height:42px;align-items:center;justify-content:center;margin-top:auto;border-radius:11px;background:linear-gradient(120deg,#334e7e,#2563eb 55%,#0f8b8d);color:#fff;text-decoration:none;font-size:11px;font-weight:800;box-shadow:0 8px 18px rgba(37,99,235,.16)}
