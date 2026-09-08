@@ -7,6 +7,9 @@
   const OFFICIAL_STATIONS = new Set(['ЕКО', 'PETROL']);
   const FUELS = ['Бензин A95', 'Дизел', 'Пропан Бутан', 'Бензин A100', 'Дизел премиум', 'Метан'];
   const LABELS = {'Бензин A95':'A95','Дизел':'Дизел','Пропан Бутан':'LPG','Бензин A100':'A100','Дизел премиум':'Дизел +','Метан':'Метан'};
+  const LOGOS = {'ЕКО':'/media/logos/eko.svg','PETROL':'/media/logos/petrol.svg'};
+  const logoFor = brand => LOGOS[normalize(brand)] || '';
+  const logoMarkup = brand => { const src = logoFor(brand); return src ? '<img class="station-brand-logo" src="' + src + '" alt="' + escapeHtml(brand) + ' лого" loading="lazy" decoding="async">' : ''; };
   const normalize = value => String(value || '').trim().toLocaleUpperCase('bg-BG');
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   const dateKey = value => new Intl.DateTimeFormat('sv-SE', {timeZone:'Europe/Sofia',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(value));
@@ -46,7 +49,7 @@
       return `<article class="city-price-card" data-fuel="${escapeHtml(fuel)}"><span class="city-price-label">${escapeHtml(LABELS[fuel])}</span><strong>${money(item.average, fuel)}</strong><span>средна цена</span><small>от ${money(item.minimum, fuel)} до ${money(item.maximum, fuel)} · ${item.count} обекта</small></article>`;
     }).join('');
 
-    document.getElementById('city-prices-body').innerHTML = summary.stations.map(station => `<tr><th scope="row"><strong>${escapeHtml(station.brand)}</strong><span>${escapeHtml(station.location)}</span></th>${FUELS.map(fuel => `<td data-label="${escapeHtml(LABELS[fuel])}">${station.prices[fuel] == null ? '—' : money(station.prices[fuel], fuel)}</td>`).join('')}</tr>`).join('');
+    document.getElementById('city-prices-body').innerHTML = summary.stations.map(station => `<tr><th scope="row"><div class="station-brand">${logoMarkup(station.brand)}<span><strong>${escapeHtml(station.brand)}</strong><span>${escapeHtml(station.location)}</span></span></div></th>${FUELS.map(fuel => `<td data-label="${escapeHtml(LABELS[fuel])}">${station.prices[fuel] == null ? '—' : money(station.prices[fuel], fuel)}</td>`).join('')}</tr>`).join('');
     applyFilter();
   }
 
