@@ -37,6 +37,36 @@
     return {records:rows.length, stationCount:stations.size, brands:[...new Set(rows.map(row=>row.station))].sort((a,b)=>String(a).localeCompare(String(b),'bg')), fuels, stations:[...stations.values()].sort((a,b)=>`${a.brand}|${a.location}`.localeCompare(`${b.brand}|${b.location}`,'bg'))};
   }
 
+
+  let stationRows = [];
+  let visibleStationCount = 9;
+  function renderDirectory(stations) {
+    stationRows = stations;
+    const section = document.querySelector('.city-stations');
+    const tableWrap = section?.querySelector('.city-table-wrap');
+    if (!section || !tableWrap) return;
+    let directory = section.querySelector('.city-directory');
+    if (!directory) {
+      directory = document.createElement('div'); directory.className = 'city-directory';
+      directory.innerHTML = '<div class="city-directory-filters" role="search"><div class="city-directory-field"><label for="city-station-search">Търсене</label><input id="city-station-search" type="search" autocomplete="off" placeholder="Например: София, 1181, Сливница…"></div><div class="city-directory-field"><label for="city-fuel-filter">Налично гориво</label><select id="city-fuel-filter"><option value="all">Всички горива</option>' + FUELS.map(fuel => '<option value="'+escapeHtml(fuel)+'">'+escapeHtml(LABELS[fuel])+'</option>').join('') + '</select></div></div><div id="city-stations-grid" class="city-stations-grid"></div><div class="city-load-more-wrap"><button id="city-load-more" class="city-load-more" type="button">Зареди още карти</button></div>';
+      tableWrap.parentNode.insertBefore(directory, tableWrap);
+      document.getElementById('city-station-search').addEventListener('input', () => { visibleStationCount = 9; paintDirectory(); });
+      document.getElementById('city-fuel-filter').addEventListener('change', () => { visibleStationCount = 9; paintDirectory(); });
+      document.getElementById('city-load-more').addEventListener('click', () => { visibleStationCount += 9; paintDirectory(); });
+    }
+    visibleStationCount = 9; paintDirectory();
+  }
+  function paintDirectory() {
+    const search = (document.getElementById('city-station-search')?.value || '').trim().toLocaleLowerCase('bg-BG');
+    const fuel = document.getElementById('city-fuel-filter')?.value || 'all';
+    const filtered = stationRows.filter(station => { const haystack = (station.brand+' '+station.location).toLocaleLowerCase('bg-BG'); return (!search || haystack.includes(search)) && (fuel === 'all' || station.prices[fuel] != null); });
+    const shown = filtered.slice(0, visibleStationCount);
+    const grid = document.getElementById('city-stations-grid');
+    if (!grid) return;
+    grid.innerHTML = shown.map(station => '<article class="city-station-card"><div class="city-station-head"><div><strong>'+escapeHtml(station.brand)+'</strong><span>'+escapeHtml(station.location)+'</span></div>'+logoMarkup(station.brand).replace('station-brand-logo','city-station-logo')+'</div><div class="city-station-date">Цени към дата '+humanDate(document.getElementById('city-price-date')?.textContent ? dateKey(new Date()) : dateKey(new Date()))+'</div><div class="city-station-status"><i></i></div><div class="city-station-prices">'+FUELS.map(fuel => '<div class="city-station-price '+(station.prices[fuel] == null ? 'is-missing' : '')+'"><span>'+escapeHtml(LABELS[fuel])+'</span><strong>'+(station.prices[fuel] == null ? '-' : money(station.prices[fuel], fuel))+'</strong></div>').join('')+'</div>'+(station.phone ? '<a class="city-station-phone" href="tel:'+escapeHtml(station.phone)+'">☎ '+escapeHtml(station.phone)+'</a>' : '<span class="city-station-phone" aria-hidden="true">&nbsp;</span>')+'</article>').join('');
+    const more = document.getElementById('city-load-more'); if (more) more.hidden = filtered.length <= visibleStationCount;
+  }
+
   function render(summary, date) {
     document.getElementById('city-station-count').textContent = summary.stationCount;
     document.getElementById('city-record-count').textContent = summary.records;
@@ -49,8 +79,7 @@
       return `<article class="city-price-card" data-fuel="${escapeHtml(fuel)}"><span class="city-price-label">${escapeHtml(LABELS[fuel])}</span><strong>${money(item.average, fuel)}</strong><span>средна цена</span><small>от ${money(item.minimum, fuel)} до ${money(item.maximum, fuel)} · ${item.count} обекта</small></article>`;
     }).join('');
 
-    document.getElementById('city-prices-body').innerHTML = summary.stations.map(station => `<tr><th scope="row"><div class="station-brand">${logoMarkup(station.brand)}<span><strong>${escapeHtml(station.brand)}</strong><span>${escapeHtml(station.location)}</span></span></div></th>${FUELS.map(fuel => `<td data-label="${escapeHtml(LABELS[fuel])}">${station.prices[fuel] == null ? '—' : money(station.prices[fuel], fuel)}</td>`).join('')}</tr>`).join('');
-    applyFilter();
+    renderDirectory(summary.stations);
   }
 
   function applyFilter() {
@@ -78,6 +107,5 @@
     }
   }
 
-  document.getElementById('city-fuel-filter')?.addEventListener('change', applyFilter);
   loadLatest();
 })();
