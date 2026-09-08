@@ -69,8 +69,18 @@ def fetch_city_rows(city: str) -> list[dict]:
     official = rows
     if not official:
         return []
-    newest = max(local_date(str(row["created_at"])) for row in official)
-    return [row for row in official if local_date(str(row["created_at"])) == newest]
+    latest_by_station: dict[str, str] = {}
+    for row in official:
+        key = str(row.get("location") or row.get("station") or "").strip()
+        date = local_date(str(row["created_at"]))
+        if date > latest_by_station.get(key, ""):
+            latest_by_station[key] = date
+    return [
+        row for row in official
+        if local_date(str(row["created_at"])) == latest_by_station.get(
+            str(row.get("location") or row.get("station") or "").strip()
+        )
+    ]
 
 
 def summarize(rows: list[dict]) -> dict:
