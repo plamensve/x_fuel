@@ -39,10 +39,10 @@
 .city-update-card strong{white-space:nowrap;font-size:clamp(1.05rem,2vw,1.35rem)}
 @media(max-width:560px){.city-update-card{padding:20px 16px}.city-update-card strong{font-size:1.05rem;letter-spacing:-.02em}}
 
-.city-directory-filters{display:none!important}
+
 .city-station-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;height:28px;margin:0 0 10px}
 .city-station-date{height:auto!important;white-space:nowrap}
 .city-station-meta .city-station-status{height:20px!important;margin:0!important;flex:0 0 20px}
 .city-station-footer{display:flex;min-height:42px;align-items:center;justify-content:center;margin-top:auto;border-radius:11px;background:linear-gradient(120deg,#334e7e,#2563eb 55%,#0f8b8d);color:#fff;font-size:11px;font-weight:800;box-shadow:0 8px 18px rgba(37,99,235,.16);text-align:center}
 
-.city-filter-row{display:none!important}
+
