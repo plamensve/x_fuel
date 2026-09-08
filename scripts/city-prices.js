@@ -127,8 +127,18 @@
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const rows = (await response.json());
       if (!rows.length) throw new Error('Няма налични публикувани записи');
+      const latestByStation = new Map();
+      rows.forEach(row => {
+        const key = String(row.location || row.station || '').trim();
+        const date = dateKey(row.created_at);
+        if (!latestByStation.has(key) || date > latestByStation.get(key)) latestByStation.set(key, date);
+      });
+      const latestRows = rows.filter(row => {
+        const key = String(row.location || row.station || '').trim();
+        return dateKey(row.created_at) === latestByStation.get(key);
+      });
       const latest = rows.map(row => dateKey(row.created_at)).sort().at(-1);
-      render(summarize(rows.filter(row => dateKey(row.created_at) === latest)), latest);
+      render(summarize(latestRows), latest);
     } catch (error) {
       status.textContent = `${status.textContent} Неуспешно онлайн обновяване; запазени са публикуваните данни от страницата.`;
       console.warn('City prices refresh skipped', error);
