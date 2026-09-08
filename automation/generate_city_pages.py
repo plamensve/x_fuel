@@ -23,7 +23,7 @@ CITIES = {
 }
 
 # These names correspond to price feeds maintained as chain-published imports.
-OFFICIAL_STATIONS = {"ЕКО", "PETROL"}
+OFFICIAL_STATIONS = set()
 FUEL_ORDER = ("Бензин A95", "Дизел", "Пропан Бутан", "Бензин A100", "Дизел премиум", "Метан")
 LOGO_PATHS = {"ЕКО": "/images/station_logos/eko.svg", "PETROL": "/images/station_logos/petrol.svg"}
 
@@ -66,7 +66,7 @@ def fetch_city_rows(city: str) -> list[dict]:
     with urllib.request.urlopen(request, timeout=45) as response:
         rows = json.load(response)
 
-    official = [row for row in rows if normalize(row.get("station")) in OFFICIAL_STATIONS]
+    official = rows
     if not official:
         return []
     newest = max(local_date(str(row["created_at"])) for row in official)
