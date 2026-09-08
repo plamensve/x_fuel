@@ -95,7 +95,7 @@
   async function loadLatest() {
     const city = page.dataset.city;
     const status = document.getElementById('city-loading-status');
-    const params = new URLSearchParams({select:'station,city,region,location,phone,fuel,price,created_at', city:`eq.${city}`, order:'created_at.desc', limit:'1000'});
+    const params = new URLSearchParams({select:'station,city,region,location,fuel,price,created_at', city:`eq.${city}`, order:'created_at.desc', limit:'1000'});
     try {
       const response = await fetch(`${SUPABASE_URL}/rest/v1/fuel_prices?${params}`, {headers:{apikey:SUPABASE_KEY}, cache:'no-store'});
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
