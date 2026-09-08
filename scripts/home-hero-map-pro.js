@@ -292,10 +292,10 @@
                 <div class="pro-hero-kicker">Актуални цени от шофьори, за шофьори</div>
                 <h1 class="about-title how-title">Цени на горивата <span class="hero-gradient">днес в България</span></h1>
                 <p class="about-desc">Намери най-евтиното гориво близо до теб. goriva.online събира актуални цени на бензин, дизел, LPG и метан по градове и бензиностанции в цялата страна.</p>
-                <div class="about-points">
-                    <div class="hero-benefit"><span class="hero-benefit-icon">⛽</span><span><strong>Реални цени от потребители</strong><small>Актуална информация за деня</small></span></div>
-                    <div class="hero-benefit"><span class="hero-benefit-icon">⌖</span><span><strong>По области и градове</strong><small>Бензиностанции в цялата страна</small></span></div>
-                    <div class="hero-benefit"><span class="hero-benefit-icon">▥</span><span><strong>Средни и най-ниски стойности</strong><small>Сравни и избери по-добра цена</small></span></div>
+                <div class="about-points city-price-shortcuts" aria-label="Цени на горивата по градове">
+                    <a class="hero-benefit" href="/cities/sofia/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в София</strong><small>Последни публикувани цени по обекти</small></span></a>
+                    <a class="hero-benefit" href="/cities/plovdiv/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в Пловдив</strong><small>Бензин, дизел, LPG и още</small></span></a>
+                    <a class="hero-benefit" href="/cities/varna/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени във Варна</strong><small>Средни и най-ниски стойности</small></span></a>
                 </div>
                 <div class="about-cta">
                     <a href="#fuel-form" class="cta-primary">⛽ Сподели цена</a>
