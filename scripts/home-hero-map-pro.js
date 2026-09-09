@@ -7,7 +7,7 @@
             const link = document.createElement("link");
             link.id = "home-hero-map-pro-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/home-hero-map-pro.css?v=20260905-eko-cleanup";
+            link.href = "/pages/styles/home-hero-map-pro.css?v=20260909-city-slider1";
             document.head.appendChild(link);
         }
 
@@ -282,6 +282,69 @@
         document.querySelector(".header-bar .facebook-button")?.remove();
     }
 
+    function initCityShortcutSlider(hero) {
+        const slider = hero.querySelector(".city-shortcuts-slider");
+        const viewport = slider?.querySelector(".city-shortcuts-viewport");
+        const track = slider?.querySelector(".city-shortcuts-track");
+        const previous = slider?.querySelector(".city-shortcuts-arrow.is-prev");
+        const next = slider?.querySelector(".city-shortcuts-arrow.is-next");
+        const status = slider?.querySelector(".city-shortcuts-status");
+        if (!slider || !viewport || !track || !previous || !next || !status) return;
+
+        let frame = 0;
+        const pageMetrics = () => {
+            const maxScroll = Math.max(0, track.scrollWidth - viewport.clientWidth);
+            const firstCard = track.querySelector(".hero-benefit");
+            const cardWidth = firstCard?.getBoundingClientRect().width || viewport.clientWidth;
+            const itemsPerPage = Math.max(1, Math.round(viewport.clientWidth / Math.max(1, cardWidth + 12)));
+            const pages = Math.max(1, Math.ceil(track.children.length / itemsPerPage));
+            const page = maxScroll ? Math.round((viewport.scrollLeft / maxScroll) * (pages - 1)) : 0;
+            return { maxScroll, pages, page };
+        };
+
+        const update = () => {
+            const { maxScroll, pages, page } = pageMetrics();
+            previous.disabled = viewport.scrollLeft <= 2;
+            next.disabled = viewport.scrollLeft >= maxScroll - 2;
+            status.textContent = `${page + 1} / ${pages}`;
+            slider.style.setProperty("--city-slider-progress", maxScroll ? viewport.scrollLeft / maxScroll : 0);
+        };
+
+        const requestUpdate = () => {
+            cancelAnimationFrame(frame);
+            frame = requestAnimationFrame(update);
+        };
+
+        const move = direction => {
+            const { maxScroll, pages, page } = pageMetrics();
+            const nextPage = Math.max(0, Math.min(pages - 1, page + direction));
+            const target = pages > 1 ? (maxScroll * nextPage) / (pages - 1) : 0;
+            viewport.scrollTo({
+                left: target,
+                behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
+            });
+        };
+
+        previous.addEventListener("click", () => move(-1));
+        next.addEventListener("click", () => move(1));
+        viewport.addEventListener("scroll", requestUpdate, { passive: true });
+        viewport.addEventListener("keydown", event => {
+            if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
+            event.preventDefault();
+            move(event.key === "ArrowRight" ? 1 : -1);
+        });
+        window.addEventListener("resize", requestUpdate, { passive: true });
+        window.addEventListener("load", requestUpdate, { once: true });
+        const stylesheet = document.getElementById("home-hero-map-pro-css");
+        if (stylesheet && !stylesheet.sheet) stylesheet.addEventListener("load", requestUpdate, { once: true });
+        if ("ResizeObserver" in window) {
+            const observer = new ResizeObserver(requestUpdate);
+            observer.observe(viewport);
+            observer.observe(track);
+        }
+        update();
+    }
+
     function buildHero() {
         const hero = document.querySelector(".about-project");
         if (!hero || hero.dataset.proHeroReady === "1") return;
@@ -292,10 +355,20 @@
                 <div class="pro-hero-kicker">Актуални цени от шофьори, за шофьори</div>
                 <h1 class="about-title how-title">Цени на горивата <span class="hero-gradient">днес в България</span></h1>
                 <p class="about-desc">Намери най-евтиното гориво близо до теб. goriva.online събира актуални цени на бензин, дизел, LPG и метан по градове и бензиностанции в цялата страна.</p>
-                <div class="about-points city-price-shortcuts" aria-label="Цени на горивата по градове">
-                    <a class="hero-benefit" href="/cities/sofia/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в София</strong><small>Последни публикувани цени по обекти</small></span></a>
-                    <a class="hero-benefit" href="/cities/plovdiv/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в Пловдив</strong><small>Бензин, дизел, LPG и още</small></span></a>
-                    <a class="hero-benefit" href="/cities/varna/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени във Варна</strong><small>Средни и най-ниски стойности</small></span></a>
+                <div class="about-points city-price-shortcuts city-shortcuts-slider" aria-label="Цени на горивата по градове">
+                    <button class="city-shortcuts-arrow is-prev" type="button" aria-label="Предишни градове" disabled><span aria-hidden="true">‹</span></button>
+                    <div class="city-shortcuts-viewport" tabindex="0" aria-label="Слайдер с градове. Използвай стрелките наляво и надясно.">
+                        <div class="city-shortcuts-track">
+                            <a class="hero-benefit" href="/cities/sofia/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в София</strong><small>Последни публикувани цени по обекти</small></span></a>
+                            <a class="hero-benefit" href="/cities/plovdiv/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в Пловдив</strong><small>Бензин, дизел, LPG и още</small></span></a>
+                            <a class="hero-benefit" href="/cities/varna/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени във Варна</strong><small>Средни и най-ниски стойности</small></span></a>
+                            <a class="hero-benefit" href="/?city=Бургас#home-top10-prices"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в Бургас</strong><small>Актуални оферти по бензиностанции</small></span></a>
+                            <a class="hero-benefit" href="/?city=Русе#home-top10-prices"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в Русе</strong><small>Сравни най-добрите цени днес</small></span></a>
+                            <a class="hero-benefit" href="/?city=Стара%20Загора#home-top10-prices"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в Стара Загора</strong><small>Бензин, дизел, LPG и още</small></span></a>
+                        </div>
+                    </div>
+                    <button class="city-shortcuts-arrow is-next" type="button" aria-label="Следващи градове"><span aria-hidden="true">›</span></button>
+                    <span class="city-shortcuts-status" aria-live="polite">1 / 2</span>
                 </div>
                 <div class="about-cta">
                     <a href="#fuel-form" class="cta-primary">⛽ Сподели цена</a>
@@ -311,6 +384,8 @@
                     </span>
                 </a>
             </div>`;
+
+        initCityShortcutSlider(hero);
 
         hero.querySelector(".eko-map-promo")?.addEventListener("click", event => {
             event.preventDefault();
