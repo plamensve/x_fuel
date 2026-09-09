@@ -3,7 +3,7 @@
   const SUPABASE_KEY = 'sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH';
   const PAGE_SIZE = 9;
   const PRICE_LIMIT = 2000;
-  const INSA_LOGO = '/images/station_logos/insa-oil.png?v=20260909-1';
+  const INSA_LOGO = '/images/station_logos/insa-card-logo.png?v=20260909-1';
   const FUELS = ['Дизел', 'A95', 'Дизел +', 'A100', 'LPG', 'Метан'];
 
   const state = { rows: [], stations: [], visible: PAGE_SIZE, search: '', fuel: 'all', latestDate: null };

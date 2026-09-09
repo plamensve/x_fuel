@@ -7,15 +7,17 @@
   const FUELS = ['Бензин A95', 'Дизел', 'Пропан Бутан', 'Бензин A100', 'Дизел премиум', 'Метан'];
   const LABELS = {'Бензин A95':'A95','Дизел':'Дизел','Пропан Бутан':'LPG','Бензин A100':'A100','Дизел премиум':'Дизел +','Метан':'Метан'};
   const LOGOS = [
-    {match:['ЕКО','EKO'],src:'/images/station_logos/eko.svg'},
     {match:['ECO PETROL','ЕКО ПЕТРОЛ'],src:'/images/station_logos/ecopetrol.svg'},
+    {match:['ЕКО','EKO'],src:'/images/station_logos/eko-card-logo.png'},
     {match:['POWER OIL','POWERОIL','ПАУЪР ОЙЛ'],src:'/images/station_logos/power-oil.png'},
-    {match:['PETROL','ПЕТРОЛ'],src:'/images/station_logos/petrol-logo.png'},
-    {match:['INSA','ИНСА'],src:'/images/station_logos/insa.svg'},
+    {match:['ТОПЛИВО','TOPLIVO'],src:'/images/station_logos/toplivo-logo.png'},
+    {match:['ПЕГАС','PEGAS'],src:'/images/station_logos/pegas-logo.png'},
+    {match:['ROMPETROL','РОМПЕТРОЛ'],src:'/images/station_logos/rompetrol.svg'},
+    {match:['PETROL','ПЕТРОЛ'],src:'/images/station_logos/petrol-logo.jpg'},
+    {match:['INSA','ИНСА'],src:'/images/station_logos/insa-card-logo.png'},
     {match:['OMV'],src:'/images/station_logos/omv.svg'},
     {match:['SHELL','ШЕЛ'],src:'/images/station_logos/shell.svg'},
     {match:['LUKOIL','ЛУКОЙЛ'],src:'/images/station_logos/lukoil.svg'},
-    {match:['ROMPETROL','РОМПЕТРОЛ'],src:'/images/station_logos/rompetrol.svg'},
     {match:['KRUiz','КРУИЗ'],src:'/images/station_logos/kruiz.svg'},
     {match:['BULMARKET','БУЛМАРКЕТ'],src:'/images/station_logos/bulmarket.svg'},
     {match:['HIMOIL','ХИМОЙЛ'],src:'/images/station_logos/himoil.svg'},

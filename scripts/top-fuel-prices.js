@@ -24,17 +24,18 @@ const SHARE_STATION_LOGOS = [
     {match: ["omv", "омв"], src: "../images/station_logos/omv.svg"},
     {match: ["shell", "шел"], src: "../images/station_logos/shell.svg"},
     {match: ["rompetrol", "ромпетрол"], src: "../images/station_logos/rompetrol.svg"},
-    {match: ["insa", "инса"], src: "../images/station_logos/insa.svg"},
+    {match: ["insa", "инса"], src: "../images/station_logos/insa-card-logo.png"},
     {match: ["kruiz", "cruise", "круиз"], src: "../images/station_logos/kruiz.svg"},
     {match: ["bulmarket", "булмаркет"], src: "../images/station_logos/bulmarket.svg"},
-    {match: ["petrol", "петрол"], src: "../images/station_logos/petrol.svg"},
-    {match: ["eko", "еко"], src: "../images/station_logos/eko.svg"},
+    {match: ["пегас", "pegas"], src: "../images/station_logos/pegas-logo.png"},
+    {match: ["petrol", "петрол"], src: "../images/station_logos/petrol-logo.jpg"},
+    {match: ["eko", "еко"], src: "../images/station_logos/eko-card-logo.png"},
     {match: ["dieselor", "дизелор", "diesoler"], src: "../images/station_logos/diselor.svg"},
     {match: ["himoil", "chimoil", "химойл"], src: "../images/station_logos/himoil.svg"},
     {match: ["avia"], src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/AVIA_International_logo.svg"},
     {match: ["gazprom", "газпром"], src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/Gazprom_logo.svg"},
     {match: ["зара", "zara"], src: "https://zara.bg/favicon.ico"},
-    {match: ["топливо", "toplivo"], src: "https://toplivo.bg/favicon.ico"}
+    {match: ["топливо", "toplivo"], src: "../images/station_logos/toplivo-logo.png"}
 ];
 
 function shareStationLogo(name) {

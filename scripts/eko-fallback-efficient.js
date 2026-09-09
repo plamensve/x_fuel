@@ -411,14 +411,16 @@
         { match: ["лукойл", "lukoil"], src: "/images/station_logos/lukoil.svg" },
         { match: ["омв", "omv"], src: "/images/station_logos/omv.svg" },
         { match: ["шел", "shell"], src: "/images/station_logos/shell.svg" },
-        { match: ["инса", "insa"], src: "/images/station_logos/insa.svg" },
+        { match: ["инса", "insa"], src: "/images/station_logos/insa-card-logo.png" },
         { match: ["круиз", "kruiz", "cruise"], src: "/images/station_logos/kruiz.svg" },
         { match: ["булмаркет", "bulmarket"], src: "/images/station_logos/bulmarket.svg" },
         { match: ["пауър ойл", "poweroil"], src: "/images/station_logos/power-oil.png" },
+        { match: ["топливо", "toplivo"], src: "/images/station_logos/toplivo-logo.png" },
+        { match: ["пегас", "pegas"], src: "/images/station_logos/pegas-logo.png" },
         { match: ["дизелор", "dieselor", "diselor", "dieseler"], src: "/images/station_logos/dieselor-logo.jpg" },
         { match: ["химойл", "himoil", "chimoil"], src: "/images/station_logos/himoil.svg" },
-        { match: ["петрол", "petrol"], src: "/images/station_logos/petrol-logo.png" },
-        { match: ["еко", "eko"], src: "/images/station_logos/eko.svg" }
+        { match: ["петрол", "petrol"], src: "/images/station_logos/petrol-logo.jpg" },
+        { match: ["еко", "eko"], src: "/images/station_logos/eko-card-logo.png" }
     ];
 
     const normalizeStationName = value => String(value || "")

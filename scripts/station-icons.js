@@ -41,7 +41,7 @@ function getStationIcon(name) {
     }
 
     if (lower.includes("insa") || lower.includes("инса")) {
-        return L.icon({iconUrl: "../images/station_logos/insa.svg", ...defaultConfig})
+        return L.icon({iconUrl: "../images/station_logos/insa-card-logo.png", ...defaultConfig})
     }
 
     if (lower.includes("kruiz") || lower.includes("cruise") || lower.includes("круиз")) {
@@ -52,12 +52,16 @@ function getStationIcon(name) {
         return L.icon({iconUrl: "../images/station_logos/bulmarket.svg", ...defaultConfig})
     }
 
+    if (lower.includes("пегас") || lower.includes("pegas")) {
+        return L.icon({iconUrl: "../images/station_logos/pegas-logo.png", ...defaultConfig})
+    }
+
     if (lower.includes("petrol") || lower.includes("петрол")) {
-        return L.icon({iconUrl: "../images/station_logos/petrol.svg", ...defaultConfig})
+        return L.icon({iconUrl: "../images/station_logos/petrol-logo.jpg", ...defaultConfig})
     }
 
     if (lower.includes("eko") || lower.includes("еко")) {
-        return L.icon({iconUrl: "../images/station_logos/eko.svg", ...defaultConfig})
+        return L.icon({iconUrl: "../images/station_logos/eko-card-logo.png", ...defaultConfig})
     }
 
     if (lower.includes("diselor") || lower.includes("дизелор") || lower.includes("diesoler")) {
@@ -81,7 +85,7 @@ function getStationIcon(name) {
     }
 
     if (lower.includes("топливо") || lower.includes("toplivo")) {
-        return L.icon({iconUrl: "https://toplivo.bg/favicon.ico", ...defaultConfig})
+        return L.icon({iconUrl: "../images/station_logos/toplivo-logo.png", ...defaultConfig})
     }
 
     return L.icon({

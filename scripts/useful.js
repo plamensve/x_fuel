@@ -165,13 +165,15 @@ function getStationLogo(name) {
     if (lower.includes("omv") || lower.includes("омв")) return "../images/station_logos/omv.svg"
     if (lower.includes("shell") || lower.includes("шел")) return "../images/station_logos/shell.svg"
     if (lower.includes("rompetrol") || lower.includes("ромпетрол")) return "../images/station_logos/rompetrol.svg"
-    if (lower.includes("insa") || lower.includes("инса")) return "../images/station_logos/insa.svg"
+    if (lower.includes("insa") || lower.includes("инса")) return "../images/station_logos/insa-card-logo.png"
     if (lower.includes("kruiz") || lower.includes("круиз")) return "../images/station_logos/kruiz.svg"
     if (lower.includes("bulmarket") || lower.includes("булмаркет")) return "../images/station_logos/bulmarket.svg"
     if (lower.includes("dieselor") || lower.includes("diselor") || lower.includes("дизелор")) return "../images/station_logos/diselor.svg"
     if (lower.includes("himoil") || lower.includes("химойл")) return "../images/station_logos/himoil.svg"
-    if (lower.includes("petrol") || lower.includes("петрол")) return "../images/station_logos/petrol.svg"
-    if (lower.includes("eko") || lower.includes("еко")) return "../images/station_logos/eko.svg"
+    if (lower.includes("топливо") || lower.includes("toplivo")) return "../images/station_logos/toplivo-logo.png"
+    if (lower.includes("пегас") || lower.includes("pegas")) return "../images/station_logos/pegas-logo.png"
+    if (lower.includes("petrol") || lower.includes("петрол")) return "../images/station_logos/petrol-logo.jpg"
+    if (lower.includes("eko") || lower.includes("еко")) return "../images/station_logos/eko-card-logo.png"
 
     return "../images/station_logos/unknown.svg"
 }

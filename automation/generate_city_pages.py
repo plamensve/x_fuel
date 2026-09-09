@@ -26,10 +26,14 @@ CITIES = {
 OFFICIAL_STATIONS = set()
 FUEL_ORDER = ("Бензин A95", "Дизел", "Пропан Бутан", "Бензин A100", "Дизел премиум", "Метан")
 LOGO_PATHS = {
-    "ЕКО": "/images/station_logos/eko.svg",
+    "ЕКО": "/images/station_logos/eko-card-logo.png",
     "POWER OIL": "/images/station_logos/power-oil.png",
-    "PETROL": "/images/station_logos/petrol-logo.png",
-    "INSA OIL": "/images/station_logos/insa.svg",
+    "ТОПЛИВО": "/images/station_logos/toplivo-logo.png",
+    "TOPLIVO": "/images/station_logos/toplivo-logo.png",
+    "ПЕГАС": "/images/station_logos/pegas-logo.png",
+    "PEGAS": "/images/station_logos/pegas-logo.png",
+    "PETROL": "/images/station_logos/petrol-logo.jpg",
+    "INSA OIL": "/images/station_logos/insa-card-logo.png",
     "OMV": "/images/station_logos/omv.svg",
     "SHELL": "/images/station_logos/shell.svg",
     "LUKOIL": "/images/station_logos/lukoil.svg",
