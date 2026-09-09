@@ -32,7 +32,7 @@
     }
 
     function ekoIcon() {
-        return `<img class="goriva-stations-nav-brand-logo" src="/images/station_logos/eko.svg?v=20260909-restore1" alt="" width="28" height="28" decoding="async">`;
+        return `<img class="goriva-stations-nav-brand-logo" src="/images/station_logos/eko-page-logo.png?v=20260906-2" alt="" width="28" height="28" decoding="async">`;
     }
 
     function ekoMarkup() {
