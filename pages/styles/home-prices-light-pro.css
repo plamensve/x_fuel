@@ -423,7 +423,7 @@ main.container > .prices-card #pagination .active-page {
 
 /* Final card overrides are intentionally last so legacy homepage rules cannot
    undo the shared EKO card geometry. */
-main.container > .prices-card .cards-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:16px!important;align-items:stretch!important}
+main.container > .prices-card .cards-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:16px!important;align-items:stretch!important}
 main.container > .prices-card .price-card{box-sizing:border-box!important;height:458px!important;min-height:458px!important;display:grid!important;grid-template-rows:82px 28px 20px 204px 42px!important;row-gap:10px!important;padding:0 20px 20px!important;border:1px solid #cbd5e1!important;border-radius:18px!important;background:linear-gradient(180deg,#f8fafc 0%,#f3f7fb 100%)!important;box-shadow:0 10px 24px rgba(15,23,42,.07)!important}
 main.container > .prices-card .price-card::before{display:none!important}
 main.container > .prices-card .price-card-header{position:relative!important;left:-20px!important;width:calc(100% + 40px)!important;box-sizing:border-box!important;display:grid!important;grid-template-columns:minmax(0,1fr) 54px!important;align-items:center!important;gap:14px!important;min-height:82px!important;padding:14px 20px!important;border-radius:17px 17px 0 0!important;background:linear-gradient(120deg,#172554 0%,#1e3a8a 55%,#0f4c5c 100%)!important;box-shadow:0 8px 18px rgba(15,37,84,.20)!important}
