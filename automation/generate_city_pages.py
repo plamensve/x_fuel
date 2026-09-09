@@ -262,7 +262,7 @@ def render_page(slug: str, city: str, summary: dict) -> str:
   <link rel="preload" href="/styles-legacy.css" as="style" data-goriva-css-preload>
   <link rel="preload" href="/pages/styles/site-shell.css" as="style" data-goriva-css-preload>
   <link rel="stylesheet" href="/styles.css?v=20260908-city1">
-  <link rel="stylesheet" href="/pages/styles/city-prices.css?v=20260909-slider-fix1">
+  <link rel="stylesheet" href="/pages/styles/city-prices.css?v=20260909-slider-fix2">
   <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
 </head>
 <body class="city-prices-page" data-city="{html.escape(city)}" data-city-slug="{slug}">
