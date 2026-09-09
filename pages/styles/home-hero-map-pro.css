@@ -162,7 +162,7 @@
     position: relative;
     display: block;
     max-width: 940px;
-    padding: 0 50px 23px;
+    padding: 7px 52px 42px;
 }
 
 .city-shortcuts-viewport {
@@ -175,6 +175,8 @@
     scrollbar-width: none;
     -ms-overflow-style: none;
     touch-action: pan-x;
+    padding: 6px 2px 8px;
+    scroll-padding-inline: 2px;
 }
 
 .city-shortcuts-viewport::-webkit-scrollbar {
@@ -197,6 +199,9 @@
     flex: 0 0 calc((100% - 24px) / 3);
     overflow: hidden;
     scroll-snap-align: start;
+    border-color: #d7e2ec;
+    background: linear-gradient(145deg, #fff, #fbfdff);
+    box-shadow: 0 8px 22px rgba(15,42,75,.075), inset 0 1px 0 #fff;
 }
 
 .pro-home-hero .city-shortcuts-track .hero-benefit::after {
@@ -217,20 +222,40 @@
     opacity: 1;
 }
 
+.pro-home-hero .city-shortcuts-track .hero-benefit:hover,
+.pro-home-hero .city-shortcuts-track .hero-benefit:focus-visible {
+    z-index: 2;
+    border-color: #65a5d4;
+    background: #fff;
+    box-shadow: 0 14px 29px rgba(15,74,123,.15), inset 0 0 0 1px rgba(101,165,212,.12);
+    transform: translateY(-3px);
+}
+
+.pro-home-hero .city-shortcuts-track .hero-benefit .hero-benefit-icon {
+    transition: color .18s ease, background .18s ease, transform .18s ease;
+}
+
+.pro-home-hero .city-shortcuts-track .hero-benefit:hover .hero-benefit-icon,
+.pro-home-hero .city-shortcuts-track .hero-benefit:focus-visible .hero-benefit-icon {
+    color: #fff;
+    background: linear-gradient(135deg, #2563eb, #1785b7 58%, #18a66c);
+    transform: scale(1.04);
+}
+
 .city-shortcuts-arrow {
     position: absolute;
-    top: 34px;
+    top: 47px;
     z-index: 3;
     width: 42px;
     height: 42px;
     padding: 0;
     display: grid;
     place-items: center;
-    border: 1px solid #d7e1eb;
+    border: 1px solid rgba(255,255,255,.2);
     border-radius: 13px;
-    color: #1f5f9e;
-    background: linear-gradient(145deg, #fff, #f1f6fa);
-    box-shadow: 0 8px 20px rgba(15,42,75,.12), inset 0 1px 0 #fff;
+    color: #fff;
+    background: linear-gradient(145deg, #173f72, #236da8);
+    box-shadow: 0 10px 23px rgba(23,63,114,.24), inset 0 1px 0 rgba(255,255,255,.18);
     font: inherit;
     cursor: pointer;
     transform: translateY(-50%);
@@ -271,15 +296,15 @@
 
 .city-shortcuts-status {
     position: absolute;
-    bottom: 0;
+    bottom: 5px;
     left: 50%;
     min-width: 47px;
-    padding: 3px 9px;
+    padding: 4px 10px;
     border: 1px solid #e4eaf1;
     border-radius: 999px;
     color: #64748b;
     background: rgba(255,255,255,.92);
-    box-shadow: 0 4px 12px rgba(15,23,42,.05);
+    box-shadow: 0 5px 14px rgba(15,23,42,.07);
     font-size: 9px;
     font-weight: 800;
     letter-spacing: .08em;
@@ -593,6 +618,7 @@
 
     .pro-home-hero .about-points.city-shortcuts-slider {
         max-width: 620px;
+        padding-bottom: 40px;
         padding-right: 43px;
         padding-left: 43px;
     }
@@ -637,8 +663,9 @@
         width: calc(100% + 16px);
         margin-right: -8px;
         margin-left: -8px;
-        padding-right: 39px;
-        padding-left: 39px;
+        padding-right: 40px;
+        padding-bottom: 38px;
+        padding-left: 40px;
     }
     .pro-home-hero .city-shortcuts-track .hero-benefit { flex-basis: 100%; }
     .city-shortcuts-arrow { width: 34px; height: 34px; border-radius: 10px; }

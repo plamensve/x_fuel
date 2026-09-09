@@ -7,7 +7,7 @@
             const link = document.createElement("link");
             link.id = "home-hero-map-pro-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/home-hero-map-pro.css?v=20260909-six-cities1";
+            link.href = "/pages/styles/home-hero-map-pro.css?v=20260909-slider-fix1";
             document.head.appendChild(link);
         }
 
