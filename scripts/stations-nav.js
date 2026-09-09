@@ -21,9 +21,10 @@
 .goriva-stations-nav-option:hover,.goriva-stations-nav-option:focus-visible,.goriva-stations-nav-option.is-current{color:#fff;background:rgba(255,255,255,.06);outline:none}
 .goriva-stations-nav-option[aria-disabled="true"]{cursor:default}
 .goriva-stations-nav-option small{color:#64748b;font-size:10px;font-weight:700;letter-spacing:.02em}
-.goriva-stations-nav-brand{display:inline-flex;min-width:0;align-items:center;gap:8px}
-.goriva-stations-nav-brand-logo{display:block;width:28px;height:28px;flex:0 0 28px;background:transparent}
-.goriva-stations-nav-brand-label{white-space:nowrap}
+.goriva-stations-nav-option[href]{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center}
+.goriva-stations-nav-brand{display:grid;grid-template-columns:28px minmax(0,1fr);align-items:center;column-gap:8px;min-width:0}
+.goriva-stations-nav-brand-logo{display:block;grid-column:1;width:28px;height:28px;object-fit:contain;background:transparent}
+.goriva-stations-nav-brand-label{grid-column:2;white-space:nowrap}
 @media (min-width:901px){.goriva-stations-nav-item:hover .goriva-stations-nav-dropdown,.goriva-stations-nav-item:focus-within .goriva-stations-nav-dropdown{opacity:1;visibility:visible;transform:translateY(0)}}
 @media (max-width:900px){.goriva-stations-nav-item{display:flex!important;width:100%!important;flex-direction:column!important;align-items:stretch!important}.goriva-stations-nav-toggle{width:100%!important;justify-content:flex-start!important}.goriva-stations-nav-dropdown{position:static!important;display:none!important;width:100%!important;min-width:0!important;margin:3px 0 4px!important;padding:6px 6px 6px 28px!important;border:0!important;border-radius:10px!important;background:rgba(255,255,255,.025)!important;box-shadow:none!important;opacity:1!important;visibility:visible!important;transform:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important}.goriva-stations-nav-item.is-open>.goriva-stations-nav-dropdown{display:block!important}.goriva-stations-nav-option{min-height:42px}}
 `;
@@ -31,7 +32,7 @@
     }
 
     function ekoIcon() {
-        return `<svg class="goriva-stations-nav-brand-logo" viewBox="0 0 64 64" aria-hidden="true" focusable="false"><circle cx="32" cy="32" r="30" fill="#e52329"/><path d="M15 19h24v7H22v6h15v7H22v6h17v7H15z" fill="#fff"/><path d="M43 20l7 5-7 7 7 7-7 5-11-12z" fill="#fff"/></svg>`;
+        return `<img class="goriva-stations-nav-brand-logo" src="/images/station_logos/eko.svg?v=20260909-restore1" alt="" width="28" height="28" decoding="async">`;
     }
 
     function ekoMarkup() {

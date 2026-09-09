@@ -36,10 +36,11 @@
 .goriva-stations-nav-option:hover,.goriva-stations-nav-option:focus-visible,.goriva-stations-nav-option.is-current{color:#fff;background:rgba(255,255,255,.06);outline:none}
 .goriva-stations-nav-option[aria-disabled="true"]{cursor:default;color:#8a9aae}
 .goriva-stations-nav-option small{color:#64748b;font-size:10px;font-weight:700;letter-spacing:.02em}
-.goriva-stations-nav-brand{display:inline-flex;min-width:0;align-items:center;gap:8px}
-.goriva-stations-nav-brand-logo{display:block!important;width:28px!important;height:28px!important;flex:0 0 28px;object-fit:contain}
+.goriva-stations-nav-option[href]{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center}
+.goriva-stations-nav-brand{display:grid;grid-template-columns:28px minmax(0,1fr);align-items:center;column-gap:8px;min-width:0}
+.goriva-stations-nav-brand-logo{display:block!important;grid-column:1;width:28px!important;height:28px!important;object-fit:contain}
 .goriva-stations-nav-brand::before{display:none!important}
-.goriva-stations-nav-brand-label{white-space:nowrap}
+.goriva-stations-nav-brand-label{grid-column:2;white-space:nowrap}
 @media(min-width:901px){.goriva-global-menu{gap:4px!important}.goriva-global-menu>a{margin:0 2px!important}.goriva-stations-nav-item{margin:0 8px 0 2px}.goriva-stations-nav-item:hover .goriva-stations-nav-dropdown,.goriva-stations-nav-item:focus-within .goriva-stations-nav-dropdown{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}}
 @media(min-width:1200px){
   .goriva-global-nav-shell{width:min(1480px,calc(100% - 32px))!important;max-width:1480px!important;gap:18px!important;padding-left:8px!important;padding-right:8px!important}
