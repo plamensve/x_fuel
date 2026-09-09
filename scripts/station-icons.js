@@ -25,7 +25,7 @@ function getStationIcon(name) {
     }
 
     if (lower.includes("lukoil") || lower.includes("лукойл")) {
-        return L.icon({iconUrl: "../images/station_logos/lukoil.svg", ...defaultConfig})
+        return L.icon({iconUrl: "../images/station_logos/lukoil-card-logo.jpg", ...defaultConfig})
     }
 
     if (lower.includes("omv") || lower.includes("омв")) {

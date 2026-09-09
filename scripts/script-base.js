@@ -19,7 +19,7 @@ function getStationLogo(name) {
         { match: ["екопетрол", "ecopetrol"], src: "/images/station_logos/ecopetrol.svg" },
         { match: ["ромпетрол", "rompetrol"], src: "/images/station_logos/rompetrol.svg" },
         { match: ["бенита", "benita"], src: "/images/station_logos/benita.svg" },
-        { match: ["лукойл", "lukoil"], src: "/images/station_logos/lukoil.svg" },
+        { match: ["лукойл", "lukoil"], src: "/images/station_logos/lukoil-card-logo.jpg" },
         { match: ["омв", "omv"], src: "/images/station_logos/omv.svg" },
         { match: ["шел", "shell"], src: "/images/station_logos/shell.svg" },
         { match: ["инса", "insa"], src: "/images/station_logos/insa-card-logo.png" },

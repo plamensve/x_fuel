@@ -50,7 +50,7 @@ const HOME_TOP10_CITIES = ["София", "Пловдив", "Варна", "Бур
 const HOME_STATION_LOGOS = [
     {match: ["еко петрол", "екопетрол", "ecopetrol"], src: "images/station_logos/ecopetrol.svg"},
     {match: ["бенита", "benita"], src: "images/station_logos/benita.svg"},
-    {match: ["лукойл", "lukoil"], src: "images/station_logos/lukoil.svg"},
+    {match: ["лукойл", "lukoil"], src: "images/station_logos/lukoil-card-logo.jpg"},
     {match: ["omv", "омв"], src: "images/station_logos/omv.svg"},
     {match: ["shell", "шел"], src: "images/station_logos/shell.svg"},
     {match: ["rompetrol", "ромпетрол"], src: "images/station_logos/rompetrol.svg"},

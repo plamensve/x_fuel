@@ -20,7 +20,7 @@ const SHARE_FUELS = ["A95", "Дизел", "LPG", "A100", "Дизел +", "Мет
 const SHARE_STATION_LOGOS = [
     {match: ["еко петрол", "екопетрол", "ecopetrol"], src: "../images/station_logos/ecopetrol.svg"},
     {match: ["бенита", "benita"], src: "../images/station_logos/benita.svg"},
-    {match: ["лукойл", "lukoil"], src: "../images/station_logos/lukoil.svg"},
+    {match: ["лукойл", "lukoil"], src: "../images/station_logos/lukoil-card-logo.jpg"},
     {match: ["omv", "омв"], src: "../images/station_logos/omv.svg"},
     {match: ["shell", "шел"], src: "../images/station_logos/shell.svg"},
     {match: ["rompetrol", "ромпетрол"], src: "../images/station_logos/rompetrol.svg"},

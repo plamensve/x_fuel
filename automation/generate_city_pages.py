@@ -36,7 +36,7 @@ LOGO_PATHS = {
     "INSA OIL": "/images/station_logos/insa-card-logo.png",
     "OMV": "/images/station_logos/omv.svg",
     "SHELL": "/images/station_logos/shell.svg",
-    "LUKOIL": "/images/station_logos/lukoil.svg",
+    "LUKOIL": "/images/station_logos/lukoil-card-logo.jpg",
     "ROMPETROL": "/images/station_logos/rompetrol.svg",
     "KRUИЗ": "/images/station_logos/kruiz.svg",
     "BULMARKET": "/images/station_logos/bulmarket.svg",
@@ -301,7 +301,7 @@ def render_page(slug: str, city: str, summary: dict) -> str:
     <section class="city-methodology" aria-labelledby="city-method-title">
       <div><span>За данните</span><h2 id="city-method-title">Как се изчисляват цените</h2></div>
       <div class="city-method-grid">
-        <p><strong>Източници.</strong> Страницата използва последните налични записи от поддържаните ценови импорти за EKO и Petrol. Изписаната дата е датата на самите ценови записи.</p>
+        <p><strong>Източници.</strong> Страницата използва последните налични записи от поддържаните ценови импорти за показаните вериги. Изписаната дата е датата на самите ценови записи.</p>
         <p><strong>Средна цена.</strong> Средната стойност се изчислява само върху показаните обекти за съответното гориво. Тя не е официална национална или градска статистика.</p>
         <p><strong>Проверка на място.</strong> Цените могат да се променят след публикуването и да не включват отстъпки, карти за лоялност или промоционални условия.</p>
       </div>

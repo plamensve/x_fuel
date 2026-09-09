@@ -161,7 +161,7 @@ function getStationLogo(name) {
 
     if (lower.includes("еко петрол") || lower.includes("ecopetrol")) return "../images/station_logos/ecopetrol.svg"
     if (lower.includes("бенита") || lower.includes("benita")) return "../images/station_logos/benita.svg"
-    if (lower.includes("lukoil") || lower.includes("лукойл")) return "../images/station_logos/lukoil.svg"
+    if (lower.includes("lukoil") || lower.includes("лукойл")) return "../images/station_logos/lukoil-card-logo.jpg"
     if (lower.includes("omv") || lower.includes("омв")) return "../images/station_logos/omv.svg"
     if (lower.includes("shell") || lower.includes("шел")) return "../images/station_logos/shell.svg"
     if (lower.includes("rompetrol") || lower.includes("ромпетрол")) return "../images/station_logos/rompetrol.svg"

@@ -17,7 +17,7 @@
     {match:['INSA','ИНСА'],src:'/images/station_logos/insa-card-logo.png'},
     {match:['OMV'],src:'/images/station_logos/omv.svg'},
     {match:['SHELL','ШЕЛ'],src:'/images/station_logos/shell.svg'},
-    {match:['LUKOIL','ЛУКОЙЛ'],src:'/images/station_logos/lukoil.svg'},
+    {match:['LUKOIL','ЛУКОЙЛ'],src:'/images/station_logos/lukoil-card-logo.jpg'},
     {match:['KRUiz','КРУИЗ'],src:'/images/station_logos/kruiz.svg'},
     {match:['BULMARKET','БУЛМАРКЕТ'],src:'/images/station_logos/bulmarket.svg'},
     {match:['HIMOIL','ХИМОЙЛ'],src:'/images/station_logos/himoil.svg'},
