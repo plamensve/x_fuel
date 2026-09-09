@@ -8,7 +8,9 @@
   const LABELS = {'Бензин A95':'A95','Дизел':'Дизел','Пропан Бутан':'LPG','Бензин A100':'A100','Дизел премиум':'Дизел +','Метан':'Метан'};
   const LOGOS = [
     {match:['ЕКО','EKO'],src:'/images/station_logos/eko.svg'},
-    {match:['PETROL','ПЕТРОЛ'],src:'/images/station_logos/petrol.svg'},
+    {match:['ECO PETROL','ЕКО ПЕТРОЛ'],src:'/images/station_logos/ecopetrol.svg'},
+    {match:['POWER OIL','POWERОIL','ПАУЪР ОЙЛ'],src:'/images/station_logos/power-oil.png'},
+    {match:['PETROL','ПЕТРОЛ'],src:'/images/station_logos/petrol-logo.png'},
     {match:['INSA','ИНСА'],src:'/images/station_logos/insa.svg'},
     {match:['OMV'],src:'/images/station_logos/omv.svg'},
     {match:['SHELL','ШЕЛ'],src:'/images/station_logos/shell.svg'},
@@ -17,8 +19,7 @@
     {match:['KRUiz','КРУИЗ'],src:'/images/station_logos/kruiz.svg'},
     {match:['BULMARKET','БУЛМАРКЕТ'],src:'/images/station_logos/bulmarket.svg'},
     {match:['HIMOIL','ХИМОЙЛ'],src:'/images/station_logos/himoil.svg'},
-    {match:['DIESELOR','DISELOR','DIESELER','ДИЗЕЛОР'],src:'/images/station_logos/diselor.svg'},
-    {match:['ECO PETROL','ЕКО ПЕТРОЛ'],src:'/images/station_logos/ecopetrol.svg'}
+    {match:['DIESELOR','DISELOR','DIESELER','ДИЗЕЛОР'],src:'/images/station_logos/dieselor-logo.jpg'}
   ];
   const logoFor = brand => {
     const normalized = normalize(brand);

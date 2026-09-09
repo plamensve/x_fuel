@@ -27,7 +27,8 @@ OFFICIAL_STATIONS = set()
 FUEL_ORDER = ("Бензин A95", "Дизел", "Пропан Бутан", "Бензин A100", "Дизел премиум", "Метан")
 LOGO_PATHS = {
     "ЕКО": "/images/station_logos/eko.svg",
-    "PETROL": "/images/station_logos/petrol.svg",
+    "POWER OIL": "/images/station_logos/power-oil.png",
+    "PETROL": "/images/station_logos/petrol-logo.png",
     "INSA OIL": "/images/station_logos/insa.svg",
     "OMV": "/images/station_logos/omv.svg",
     "SHELL": "/images/station_logos/shell.svg",
@@ -36,9 +37,9 @@ LOGO_PATHS = {
     "KRUИЗ": "/images/station_logos/kruiz.svg",
     "BULMARKET": "/images/station_logos/bulmarket.svg",
     "HIMOIL": "/images/station_logos/himoil.svg",
-    "DISELOR": "/images/station_logos/diselor.svg",
-    "DIESELOR": "/images/station_logos/diselor.svg",
-    "DIESELER": "/images/station_logos/diselor.svg",
+    "DISELOR": "/images/station_logos/dieselor-logo.jpg",
+    "DIESELOR": "/images/station_logos/dieselor-logo.jpg",
+    "DIESELER": "/images/station_logos/dieselor-logo.jpg",
     "ECO PETROL": "/images/station_logos/ecopetrol.svg",
 }
 

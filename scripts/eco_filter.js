@@ -57,9 +57,10 @@ const HOME_STATION_LOGOS = [
     {match: ["insa", "инса"], src: "images/station_logos/insa.svg"},
     {match: ["kruiz", "cruise", "круиз"], src: "images/station_logos/kruiz.svg"},
     {match: ["bulmarket", "булмаркет"], src: "images/station_logos/bulmarket.svg"},
-    {match: ["petrol", "петрол"], src: "images/station_logos/petrol.svg"},
+    {match: ["power oil", "poweroil", "пауър ойл"], src: "images/station_logos/power-oil.png"},
+    {match: ["petrol", "петрол"], src: "images/station_logos/petrol-logo.png"},
     {match: ["eko", "еко"], src: "images/station_logos/eko.svg"},
-    {match: ["dieselor", "diselor", "dieseler", "дизелор"], src: "images/station_logos/diselor.svg"},
+    {match: ["dieselor", "diselor", "dieseler", "дизелор"], src: "images/station_logos/dieselor-logo.jpg"},
     {match: ["himoil", "chimoil", "химойл"], src: "images/station_logos/himoil.svg"}
 ];
 

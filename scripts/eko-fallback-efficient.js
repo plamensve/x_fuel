@@ -414,9 +414,10 @@
         { match: ["инса", "insa"], src: "/images/station_logos/insa.svg" },
         { match: ["круиз", "kruiz", "cruise"], src: "/images/station_logos/kruiz.svg" },
         { match: ["булмаркет", "bulmarket"], src: "/images/station_logos/bulmarket.svg" },
-        { match: ["дизелор", "dieselor", "diselor", "dieseler"], src: "/images/station_logos/diselor.svg" },
+        { match: ["пауър ойл", "poweroil"], src: "/images/station_logos/power-oil.png" },
+        { match: ["дизелор", "dieselor", "diselor", "dieseler"], src: "/images/station_logos/dieselor-logo.jpg" },
         { match: ["химойл", "himoil", "chimoil"], src: "/images/station_logos/himoil.svg" },
-        { match: ["петрол", "petrol"], src: "/images/station_logos/petrol.svg" },
+        { match: ["петрол", "petrol"], src: "/images/station_logos/petrol-logo.png" },
         { match: ["еко", "eko"], src: "/images/station_logos/eko.svg" }
     ];
 
