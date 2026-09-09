@@ -38,7 +38,9 @@
       if (!FUELS.includes(row.fuel) || !Number.isFinite(Number(row.price))) return;
       const price = Number(row.price);
       const location = String(row.location || row.station || 'Бензиностанция').trim();
-      const station = stations.get(location) || {location, brand:String(row.station || ''), phone:String(row.phone || ''), prices:{}};
+      const sourceDate = dateKey(row._source_created_at || row.created_at);
+      const station = stations.get(location) || {location, brand:String(row.station || ''), phone:String(row.phone || ''), date:sourceDate, prices:{}};
+      if (sourceDate > station.date) station.date = sourceDate;
       if (!(row.fuel in station.prices) || price < station.prices[row.fuel]) station.prices[row.fuel] = price;
       stations.set(location, station);
       byFuel.get(row.fuel).push({price, location});
@@ -104,7 +106,7 @@
     const shown = filtered.slice(0, visibleStationCount);
     const grid = document.getElementById('city-stations-grid');
     if (!grid) return;
-    grid.innerHTML = shown.map(station => '<article class="city-station-card"><div class="city-station-head"><div><strong>'+escapeHtml(station.brand)+'</strong><span>'+escapeHtml(station.location)+'</span></div>'+logoMarkup(station.brand).replace('station-brand-logo','city-station-logo')+'</div><div class="city-station-meta"><div class="city-station-status" aria-label="Актуални данни"><i></i></div><div class="city-station-date">Цени към дата '+humanDate(currentStationDate)+'</div></div><div class="city-station-prices">'+FUELS.map(fuel => '<div class="city-station-price '+(station.prices[fuel] == null ? 'is-missing' : '')+'"><span>'+escapeHtml(LABELS[fuel])+'</span><strong>'+(station.prices[fuel] == null ? '-' : money(station.prices[fuel], fuel))+'</strong></div>').join('')+'</div>'+(contactFor(station) ? '<a class="city-station-phone" href="tel:'+escapeHtml(contactFor(station))+'">☎ '+escapeHtml(contactFor(station).replace(/^\\+359/, '+359 '))+'</a>' : '<div class="city-station-footer">Провери актуалната цена на място</div>')+'</article>').join('');
+    grid.innerHTML = shown.map(station => '<article class="city-station-card"><div class="city-station-head"><div><strong>'+escapeHtml(station.brand)+'</strong><span>'+escapeHtml(station.location)+'</span></div>'+logoMarkup(station.brand).replace('station-brand-logo','city-station-logo')+'</div><div class="city-station-meta"><div class="city-station-status" aria-label="Актуални данни"><i></i></div><div class="city-station-date">Цени към дата '+humanDate(station.date || currentStationDate)+'</div></div><div class="city-station-prices">'+FUELS.map(fuel => '<div class="city-station-price '+(station.prices[fuel] == null ? 'is-missing' : '')+'"><span>'+escapeHtml(LABELS[fuel])+'</span><strong>'+(station.prices[fuel] == null ? '-' : money(station.prices[fuel], fuel))+'</strong></div>').join('')+'</div>'+(contactFor(station) ? '<a class="city-station-phone" href="tel:'+escapeHtml(contactFor(station))+'">☎ '+escapeHtml(contactFor(station).replace(/^\\+359/, '+359 '))+'</a>' : '<div class="city-station-footer">Провери актуалната цена на място</div>')+'</article>').join('');
     const more = document.getElementById('city-load-more');
     if (more) more.hidden = filtered.length <= visibleStationCount;
   }
@@ -133,18 +135,42 @@
     });
   }
 
+  function selectPublishedSnapshot(rows) {
+    const latest = rows.map(row => dateKey(row.created_at)).sort().at(-1);
+    const latestRows = rows.filter(row => dateKey(row.created_at) === latest);
+    const currentEkoStations = new Set(
+      latestRows.filter(row => normalize(row.station) === 'ЕКО').map(row => normalize(row.location) || normalize(row.city))
+    );
+    const fallback = new Map();
+
+    // Keep the homepage EKO fallback: when an EKO object has no record in the
+    // latest import, include its newest published row for every fuel type.
+    rows.forEach(row => {
+      if (normalize(row.station) !== 'ЕКО' || dateKey(row.created_at) === latest) return;
+      const station = normalize(row.location) || normalize(row.city);
+      if (!station || currentEkoStations.has(station)) return;
+      const key = `${station}|${normalize(row.fuel)}`;
+      if (!fallback.has(key)) fallback.set(key, row);
+    });
+
+    return {latest, rows:[...latestRows, ...fallback.values()]};
+  }
+
   async function loadLatest() {
     const city = page.dataset.city;
     const status = document.getElementById('city-loading-status');
-    const params = new URLSearchParams({select:'station,city,region,location,fuel,price,created_at', city:`eq.${city}`, order:'created_at.desc', limit:'1000'});
+    // Use the same published fuel_prices records as the homepage section.
+    // City values arrive from different importers with different casing, while
+    // PostgREST's `eq` operator is case-sensitive (e.g. София != СОФИЯ).
+    const params = new URLSearchParams({select:'station,city,region,location,fuel,price,created_at', city:`ilike.${city}`, order:'created_at.desc', limit:'1000'});
     try {
       await loadContacts();
       const response = await fetch(`${SUPABASE_URL}/rest/v1/fuel_prices?${params}`, {headers:{apikey:SUPABASE_KEY}, cache:'no-store'});
       if (!response.ok) throw new Error(`HTTP ${response.status}`);
       const rows = (await response.json());
       if (!rows.length) throw new Error('Няма налични публикувани записи');
-      const latest = rows.map(row => dateKey(row.created_at)).sort().at(-1);
-      render(summarize(rows.filter(row => dateKey(row.created_at) === latest)), latest);
+      const snapshot = selectPublishedSnapshot(rows);
+      render(summarize(snapshot.rows), snapshot.latest);
     } catch (error) {
       status.textContent = `${status.textContent} Неуспешно онлайн обновяване; запазени са публикуваните данни от страницата.`;
       console.warn('City prices refresh skipped', error);

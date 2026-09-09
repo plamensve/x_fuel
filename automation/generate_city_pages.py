@@ -68,7 +68,9 @@ def bg_date(value: str) -> str:
 def fetch_city_rows(city: str) -> list[dict]:
     params = urllib.parse.urlencode({
         "select": "station,city,region,location,fuel,price,created_at",
-        "city": f"eq.{city}",
+        # Importers do not use consistent casing for city names. Match the
+        # homepage dataset case-insensitively so СОФИЯ and София are identical.
+        "city": f"ilike.{city}",
         "order": "created_at.desc",
         "limit": "1000",
     })
@@ -79,21 +81,35 @@ def fetch_city_rows(city: str) -> list[dict]:
     with urllib.request.urlopen(request, timeout=45) as response:
         rows = json.load(response)
 
-    official = rows
-    if not official:
+    if not rows:
         return []
-    latest_by_station: dict[str, str] = {}
-    for row in official:
-        key = str(row.get("location") or row.get("station") or "").strip()
-        date = local_date(str(row["created_at"]))
-        if date > latest_by_station.get(key, ""):
-            latest_by_station[key] = date
-    return [
-        row for row in official
-        if local_date(str(row["created_at"])) == latest_by_station.get(
-            str(row.get("location") or row.get("station") or "").strip()
-        )
+
+    # Start with exactly the newest published city snapshot.
+    latest_date = max(local_date(str(row["created_at"])) for row in rows)
+    latest_rows = [
+        row for row in rows
+        if local_date(str(row["created_at"])) == latest_date
     ]
+
+    # Mirror the homepage EKO fallback: if an EKO object is absent from the
+    # newest import, include its most recent published row for every fuel.
+    current_eko_stations = {
+        normalize(row.get("location") or row.get("city"))
+        for row in latest_rows
+        if normalize(row.get("station")) == "ЕКО"
+    }
+    fallback: dict[tuple[str, str], dict] = {}
+    for row in rows:  # API response is ordered newest first.
+        if normalize(row.get("station")) != "ЕКО":
+            continue
+        if local_date(str(row["created_at"])) == latest_date:
+            continue
+        station = normalize(row.get("location") or row.get("city"))
+        if not station or station in current_eko_stations:
+            continue
+        fallback.setdefault((station, normalize(row.get("fuel"))), row)
+
+    return [*latest_rows, *fallback.values()]
 
 
 def summarize(rows: list[dict]) -> dict:
@@ -285,7 +301,7 @@ def render_page(slug: str, city: str, summary: dict) -> str:
       <div class="city-source-links"><a href="https://www.eko.bg/self-service-terminal-instructions/karta-na-obektite/" target="_blank" rel="noopener noreferrer">Официална карта на EKO</a><a href="https://www.petrol.bg/%D1%86%D0%B5%D0%BD%D0%B8-%D0%BD%D0%B0-%D0%B3%D0%BE%D1%80%D0%B8%D0%B2%D0%B0%D1%82%D0%B0/" target="_blank" rel="noopener noreferrer">Официални цени на Petrol</a><a href="/pages/methodology.html">Методология на goriva.online</a></div>
     </section>
   </main>
-  <script defer src="/scripts/city-prices.js?v=20260908-city1"></script>
+  <script defer src="/scripts/city-prices.js?v=20260909-city2"></script>
   <script defer src="/scripts/global-nav.js?v=20260908-city1"></script>
 </body>
 </html>
