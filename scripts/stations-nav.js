@@ -40,7 +40,7 @@
     }
 
     function insaMarkup() {
-        return `<span class="goriva-stations-nav-brand"><img class="goriva-stations-nav-brand-logo" src="/images/station_logos/insa.svg?v=20260909-1" alt="" width="28" height="28" decoding="async"><span class="goriva-stations-nav-brand-label">Insa Oil</span></span><small>цени и обекти</small>`;
+        return `<span class="goriva-stations-nav-brand"><img class="goriva-stations-nav-brand-logo" src="/images/station_logos/insa-oil.png?v=20260909-1" alt="" width="28" height="28" decoding="async"><span class="goriva-stations-nav-brand-label">Insa Oil</span></span><small>цени и обекти</small>`;
     }
 
     function stationItemMarkup() {

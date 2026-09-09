@@ -3,7 +3,7 @@
     window.__GORIVA_GLOBAL_NAV_LOADER__ = true;
     const navScript = document.createElement('script');
     navScript.id = 'goriva-global-nav-script';
-    navScript.src = '/scripts/global-nav.js?v=20260909-insa2';
+    navScript.src = '/scripts/global-nav.js?v=20260909-insa3';
     navScript.async = false;
     document.head.appendChild(navScript);
   }

@@ -3,7 +3,7 @@
   const SUPABASE_KEY = 'sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH';
   const PAGE_SIZE = 9;
   const PRICE_LIMIT = 2000;
-  const INSA_LOGO = '/images/station_logos/insa.svg?v=20260909-1';
+  const INSA_LOGO = '/images/station_logos/insa-oil.png?v=20260909-1';
   const FUELS = ['Дизел', 'A95', 'Дизел +', 'A100', 'LPG', 'Метан'];
 
   const state = { rows: [], stations: [], visible: PAGE_SIZE, search: '', fuel: 'all', latestDate: null };
@@ -127,7 +127,7 @@
       : station.city;
     return `<article class="eko-station-card">
       <div class="eko-station-head">
-        <span class="eko-station-logo"><img src="${INSA_LOGO}" alt="Insa Oil" loading="lazy" width="38" height="45" decoding="async"></span>
+        <span class="eko-station-logo"><img src="${INSA_LOGO}" alt="Insa Oil" loading="lazy" width="447" height="447" decoding="async"></span>
         <div><strong>Insa Oil – ${escapeHtml(station.city)}</strong><span>${escapeHtml(station.location)}</span></div>
       </div>
       <p class="eko-station-address">Цени към дата ${escapeHtml(displayDateKey(state.latestDate))}</p>
