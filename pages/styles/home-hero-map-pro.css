@@ -221,38 +221,49 @@
     position: absolute;
     top: 34px;
     z-index: 3;
-    width: 39px;
-    height: 39px;
-    padding: 0 0 3px;
+    width: 42px;
+    height: 42px;
+    padding: 0;
     display: grid;
     place-items: center;
-    border: 1px solid rgba(255,255,255,.62);
-    border-radius: 50%;
-    color: #fff;
-    background: linear-gradient(135deg, #2563eb 0%, #1785b7 52%, #18a66c 100%);
-    box-shadow: 0 9px 22px rgba(37,99,235,.23), inset 0 1px 0 rgba(255,255,255,.25);
+    border: 1px solid #d7e1eb;
+    border-radius: 13px;
+    color: #1f5f9e;
+    background: linear-gradient(145deg, #fff, #f1f6fa);
+    box-shadow: 0 8px 20px rgba(15,42,75,.12), inset 0 1px 0 #fff;
     font: inherit;
-    font-size: 27px;
-    line-height: 1;
     cursor: pointer;
     transform: translateY(-50%);
     transition: transform .18s ease, box-shadow .18s ease, opacity .18s ease;
 }
 
-.city-shortcuts-arrow.is-prev { left: 2px; }
-.city-shortcuts-arrow.is-next { right: 2px; }
+.city-shortcuts-arrow svg {
+    width: 21px;
+    height: 21px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2.2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+.city-shortcuts-arrow.is-prev { left: 0; }
+.city-shortcuts-arrow.is-next { right: 0; }
 
 .city-shortcuts-arrow:hover:not(:disabled),
 .city-shortcuts-arrow:focus-visible:not(:disabled) {
     outline: none;
-    transform: translateY(-50%) scale(1.08);
-    box-shadow: 0 12px 27px rgba(37,99,235,.32), inset 0 1px 0 rgba(255,255,255,.3);
+    color: #fff;
+    border-color: transparent;
+    background: linear-gradient(135deg, #2563eb, #1785b7 55%, #18a66c);
+    transform: translateY(-50%) scale(1.05);
+    box-shadow: 0 12px 26px rgba(37,99,235,.28), inset 0 1px 0 rgba(255,255,255,.24);
 }
 
 .city-shortcuts-arrow:disabled {
     border-color: #e2e8f0;
-    color: #9aa7b8;
-    background: #f3f6f9;
+    color: #a8b4c1;
+    background: #f5f7fa;
     box-shadow: 0 5px 12px rgba(15,23,42,.06);
     cursor: default;
     opacity: .72;
@@ -630,7 +641,8 @@
         padding-left: 39px;
     }
     .pro-home-hero .city-shortcuts-track .hero-benefit { flex-basis: 100%; }
-    .city-shortcuts-arrow { width: 34px; height: 34px; font-size: 24px; }
+    .city-shortcuts-arrow { width: 34px; height: 34px; border-radius: 10px; }
+    .city-shortcuts-arrow svg { width: 18px; height: 18px; }
     .city-shortcuts-arrow.is-prev { left: 0; }
     .city-shortcuts-arrow.is-next { right: 0; }
     .pro-map-heading p { display: none; }

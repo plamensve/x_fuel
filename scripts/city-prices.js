@@ -34,6 +34,75 @@
   const humanDate = value => new Intl.DateTimeFormat('bg-BG', {day:'numeric',month:'long',year:'numeric',timeZone:'Europe/Sofia'}).format(new Date(`${value}T12:00:00+03:00`));
   const money = (value, fuel) => `${Number(value).toFixed(2).replace('.', ',')} ${fuel === 'Метан' ? '€/кг' : '€/л'}`;
 
+  function initCitySwitcher() {
+    const slider = document.querySelector('[data-city-switcher]');
+    const viewport = slider?.querySelector('.city-switch-viewport');
+    const track = slider?.querySelector('.city-switch-track');
+    const previous = slider?.querySelector('.city-switch-arrow.is-prev');
+    const next = slider?.querySelector('.city-switch-arrow.is-next');
+    const status = slider?.querySelector('.city-switch-status');
+    if (!slider || !viewport || !track || !previous || !next || !status) return;
+
+    let frame = 0;
+    const metrics = () => {
+      const cards = [...track.querySelectorAll('.city-switch-link')];
+      const cardWidth = cards[0]?.getBoundingClientRect().width || viewport.clientWidth;
+      const itemsPerPage = Math.max(1, Math.round(viewport.clientWidth / Math.max(1, cardWidth + 9)));
+      const pages = Math.max(1, Math.ceil(cards.length / itemsPerPage));
+      const maxScroll = Math.max(0, track.scrollWidth - viewport.clientWidth);
+      const pageIndex = maxScroll ? Math.round((viewport.scrollLeft / maxScroll) * (pages - 1)) : 0;
+      return { cards, itemsPerPage, pages, maxScroll, pageIndex };
+    };
+
+    const update = () => {
+      const { pages, maxScroll, pageIndex } = metrics();
+      previous.disabled = pages <= 1;
+      next.disabled = pages <= 1;
+      status.textContent = `${pageIndex + 1} / ${pages}`;
+      slider.dataset.page = String(pageIndex);
+      slider.style.setProperty('--city-switch-progress', maxScroll ? viewport.scrollLeft / maxScroll : 0);
+    };
+
+    const requestUpdate = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(update);
+    };
+
+    const goToPage = (pageIndex, behavior = 'smooth') => {
+      const { pages, maxScroll } = metrics();
+      const normalizedPage = pages > 1 ? (pageIndex + pages) % pages : 0;
+      viewport.scrollTo({left: pages > 1 ? maxScroll * normalizedPage / (pages - 1) : 0, behavior});
+    };
+
+    const move = direction => {
+      const { pageIndex } = metrics();
+      goToPage(pageIndex + direction, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+    };
+
+    const revealCurrentCity = () => {
+      const { cards, itemsPerPage } = metrics();
+      const activeIndex = Math.max(0, cards.findIndex(card => card.classList.contains('is-current')));
+      goToPage(Math.floor(activeIndex / itemsPerPage), 'auto');
+      requestUpdate();
+    };
+
+    previous.addEventListener('click', () => move(-1));
+    next.addEventListener('click', () => move(1));
+    viewport.addEventListener('scroll', requestUpdate, {passive:true});
+    viewport.addEventListener('keydown', event => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+      event.preventDefault();
+      move(event.key === 'ArrowRight' ? 1 : -1);
+    });
+    window.addEventListener('resize', requestUpdate, {passive:true});
+    if ('ResizeObserver' in window) {
+      const observer = new ResizeObserver(requestUpdate);
+      observer.observe(viewport);
+      observer.observe(track);
+    }
+    requestAnimationFrame(revealCurrentCity);
+  }
+
   function summarize(rows) {
     const stations = new Map();
     const byFuel = new Map(FUELS.map(fuel => [fuel, []]));
@@ -180,5 +249,6 @@
     }
   }
 
+  initCitySwitcher();
   loadLatest();
 })();

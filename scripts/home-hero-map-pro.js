@@ -7,7 +7,7 @@
             const link = document.createElement("link");
             link.id = "home-hero-map-pro-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/home-hero-map-pro.css?v=20260909-city-slider1";
+            link.href = "/pages/styles/home-hero-map-pro.css?v=20260909-six-cities1";
             document.head.appendChild(link);
         }
 
@@ -304,8 +304,8 @@
 
         const update = () => {
             const { maxScroll, pages, page } = pageMetrics();
-            previous.disabled = viewport.scrollLeft <= 2;
-            next.disabled = viewport.scrollLeft >= maxScroll - 2;
+            previous.disabled = pages <= 1;
+            next.disabled = pages <= 1;
             status.textContent = `${page + 1} / ${pages}`;
             slider.style.setProperty("--city-slider-progress", maxScroll ? viewport.scrollLeft / maxScroll : 0);
         };
@@ -317,7 +317,7 @@
 
         const move = direction => {
             const { maxScroll, pages, page } = pageMetrics();
-            const nextPage = Math.max(0, Math.min(pages - 1, page + direction));
+            const nextPage = pages > 1 ? (page + direction + pages) % pages : 0;
             const target = pages > 1 ? (maxScroll * nextPage) / (pages - 1) : 0;
             viewport.scrollTo({
                 left: target,
@@ -356,18 +356,18 @@
                 <h1 class="about-title how-title">Цени на горивата <span class="hero-gradient">днес в България</span></h1>
                 <p class="about-desc">Намери най-евтиното гориво близо до теб. goriva.online събира актуални цени на бензин, дизел, LPG и метан по градове и бензиностанции в цялата страна.</p>
                 <div class="about-points city-price-shortcuts city-shortcuts-slider" aria-label="Цени на горивата по градове">
-                    <button class="city-shortcuts-arrow is-prev" type="button" aria-label="Предишни градове" disabled><span aria-hidden="true">‹</span></button>
+                    <button class="city-shortcuts-arrow is-prev" type="button" aria-label="Предишни градове"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6"/></svg></button>
                     <div class="city-shortcuts-viewport" tabindex="0" aria-label="Слайдер с градове. Използвай стрелките наляво и надясно.">
                         <div class="city-shortcuts-track">
                             <a class="hero-benefit" href="/cities/sofia/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в София</strong><small>Последни публикувани цени по обекти</small></span></a>
                             <a class="hero-benefit" href="/cities/plovdiv/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в Пловдив</strong><small>Бензин, дизел, LPG и още</small></span></a>
                             <a class="hero-benefit" href="/cities/varna/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени във Варна</strong><small>Средни и най-ниски стойности</small></span></a>
-                            <a class="hero-benefit" href="/?city=Бургас#home-top10-prices"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в Бургас</strong><small>Актуални оферти по бензиностанции</small></span></a>
-                            <a class="hero-benefit" href="/?city=Русе#home-top10-prices"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в Русе</strong><small>Сравни най-добрите цени днес</small></span></a>
-                            <a class="hero-benefit" href="/?city=Стара%20Загора#home-top10-prices"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в Стара Загора</strong><small>Бензин, дизел, LPG и още</small></span></a>
+                            <a class="hero-benefit" href="/cities/burgas/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в Бургас</strong><small>Актуални оферти по бензиностанции</small></span></a>
+                            <a class="hero-benefit" href="/cities/ruse/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в Русе</strong><small>Сравни най-добрите цени днес</small></span></a>
+                            <a class="hero-benefit" href="/cities/stara-zagora/"><span class="hero-benefit-icon">⌖</span><span><strong>Цени в Стара Загора</strong><small>Бензин, дизел, LPG и още</small></span></a>
                         </div>
                     </div>
-                    <button class="city-shortcuts-arrow is-next" type="button" aria-label="Следващи градове"><span aria-hidden="true">›</span></button>
+                    <button class="city-shortcuts-arrow is-next" type="button" aria-label="Следващи градове"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6"/></svg></button>
                     <span class="city-shortcuts-status" aria-live="polite">1 / 2</span>
                 </div>
                 <div class="about-cta">
