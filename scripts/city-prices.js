@@ -17,7 +17,7 @@
     {match:['KRUiz','КРУИЗ'],src:'/images/station_logos/kruiz.svg'},
     {match:['BULMARKET','БУЛМАРКЕТ'],src:'/images/station_logos/bulmarket.svg'},
     {match:['HIMOIL','ХИМОЙЛ'],src:'/images/station_logos/himoil.svg'},
-    {match:['DISELOR','ДИЗЕЛОР'],src:'/images/station_logos/diselor.svg'},
+    {match:['DIESELOR','DISELOR','DIESELER','ДИЗЕЛОР'],src:'/images/station_logos/diselor.svg'},
     {match:['ECO PETROL','ЕКО ПЕТРОЛ'],src:'/images/station_logos/ecopetrol.svg'}
   ];
   const logoFor = brand => {
@@ -106,7 +106,7 @@
     const shown = filtered.slice(0, visibleStationCount);
     const grid = document.getElementById('city-stations-grid');
     if (!grid) return;
-    grid.innerHTML = shown.map(station => '<article class="city-station-card"><div class="city-station-head"><div><strong>'+escapeHtml(station.brand)+'</strong><span>'+escapeHtml(station.location)+'</span></div>'+logoMarkup(station.brand).replace('station-brand-logo','city-station-logo')+'</div><div class="city-station-meta"><div class="city-station-status" aria-label="Актуални данни"><i></i></div><div class="city-station-date">Цени към дата '+humanDate(station.date || currentStationDate)+'</div></div><div class="city-station-prices">'+FUELS.map(fuel => '<div class="city-station-price '+(station.prices[fuel] == null ? 'is-missing' : '')+'"><span>'+escapeHtml(LABELS[fuel])+'</span><strong>'+(station.prices[fuel] == null ? '-' : money(station.prices[fuel], fuel))+'</strong></div>').join('')+'</div>'+(contactFor(station) ? '<a class="city-station-phone" href="tel:'+escapeHtml(contactFor(station))+'">☎ '+escapeHtml(contactFor(station).replace(/^\\+359/, '+359 '))+'</a>' : '<div class="city-station-footer">Провери актуалната цена на място</div>')+'</article>').join('');
+    grid.innerHTML = shown.map(station => '<article class="city-station-card"><div class="city-station-head"><div><strong>'+escapeHtml(station.brand)+'</strong><span>'+escapeHtml(station.location)+'</span></div>'+logoMarkup(station.brand).replace('station-brand-logo','city-station-logo')+'</div><div class="city-station-date">Цени към дата '+humanDate(station.date || currentStationDate)+'</div><div class="city-station-status" aria-label="Актуални данни"><i></i></div><div class="city-station-prices">'+FUELS.map(fuel => '<div class="city-station-price '+(station.prices[fuel] == null ? 'is-missing' : '')+'"><span>'+escapeHtml(LABELS[fuel])+'</span><strong>'+(station.prices[fuel] == null ? '-' : money(station.prices[fuel], fuel))+'</strong></div>').join('')+'</div>'+(contactFor(station) ? '<a class="city-station-phone" href="tel:'+escapeHtml(contactFor(station))+'">☎ '+escapeHtml(contactFor(station).replace(/^\\+359/, '+359 '))+'</a>' : '<div class="city-station-footer">Провери актуалната цена на място</div>')+'</article>').join('');
     const more = document.getElementById('city-load-more');
     if (more) more.hidden = filtered.length <= visibleStationCount;
   }

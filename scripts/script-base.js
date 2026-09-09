@@ -943,23 +943,20 @@ function generateCards() {
             methane: cols[7]?.innerText
         };
 
-        let logo = getStationLogo(station);
+        let logo = getStationLogo(station) || "/images/station_logos/unknown.svg";
 
         let card = document.createElement("div");
         card.className = "price-card";
 
         card.innerHTML = `
-            ${logo ? `<img src="${logo}" class="station-logo" alt="station-logo">` : ""}
-        
             <div class="price-card-header">
-        
                 <div class="price-card-title">
                     <h3>${station} – ${city}</h3>
+                    <div class="price-card-location">${location}</div>
                 </div>
-        
-                <div class="price-card-location">${location}</div>
-        
+                <span class="price-card-logo"><img src="${logo}" alt="${station} лого" loading="lazy" decoding="async"></span>
             </div>
+            <div class="price-card-date">Цени към дата ${currentDate}</div>
             <div class="price-card-status">
                 <span class="status-dot"></span>
             </div>
@@ -976,11 +973,8 @@ function generateCards() {
                 data-station="${station}"
                 data-city="${city}"
                 data-location="${location}">
-                Намери на картата
+                ⌖ Намери на картата
             </button>
-          <div style="font-size: 15px; margin-top: 10px;">
-                Добавен на дата ${currentDate}
-          </div>
         `;
 
         container.appendChild(card);

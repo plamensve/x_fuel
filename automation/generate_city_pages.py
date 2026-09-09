@@ -37,6 +37,8 @@ LOGO_PATHS = {
     "BULMARKET": "/images/station_logos/bulmarket.svg",
     "HIMOIL": "/images/station_logos/himoil.svg",
     "DISELOR": "/images/station_logos/diselor.svg",
+    "DIESELOR": "/images/station_logos/diselor.svg",
+    "DIESELER": "/images/station_logos/diselor.svg",
     "ECO PETROL": "/images/station_logos/ecopetrol.svg",
 }
 
@@ -252,7 +254,7 @@ def render_page(slug: str, city: str, summary: dict) -> str:
   <link rel="preload" href="/styles-legacy.css" as="style" data-goriva-css-preload>
   <link rel="preload" href="/pages/styles/site-shell.css" as="style" data-goriva-css-preload>
   <link rel="stylesheet" href="/styles.css?v=20260908-city1">
-  <link rel="stylesheet" href="/pages/styles/city-prices.css?v=20260908-city1">
+  <link rel="stylesheet" href="/pages/styles/city-prices.css?v=20260909-cards3">
   <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
 </head>
 <body class="city-prices-page" data-city="{html.escape(city)}" data-city-slug="{slug}">
@@ -301,7 +303,7 @@ def render_page(slug: str, city: str, summary: dict) -> str:
       <div class="city-source-links"><a href="https://www.eko.bg/self-service-terminal-instructions/karta-na-obektite/" target="_blank" rel="noopener noreferrer">Официална карта на EKO</a><a href="https://www.petrol.bg/%D1%86%D0%B5%D0%BD%D0%B8-%D0%BD%D0%B0-%D0%B3%D0%BE%D1%80%D0%B8%D0%B2%D0%B0%D1%82%D0%B0/" target="_blank" rel="noopener noreferrer">Официални цени на Petrol</a><a href="/pages/methodology.html">Методология на goriva.online</a></div>
     </section>
   </main>
-  <script defer src="/scripts/city-prices.js?v=20260909-city2"></script>
+  <script defer src="/scripts/city-prices.js?v=20260909-cards3"></script>
   <script defer src="/scripts/global-nav.js?v=20260908-city1"></script>
 </body>
 </html>
