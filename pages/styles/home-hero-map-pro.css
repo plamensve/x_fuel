@@ -162,7 +162,7 @@
     position: relative;
     display: block;
     max-width: 940px;
-    padding: 12px 52px 46px;
+    padding: 12px 60px 46px;
     border: 1px solid #d7e5ef;
     border-radius: 24px;
     background: linear-gradient(120deg, #eef5fc, #f5fcfa);
@@ -274,8 +274,8 @@
     stroke-linejoin: round;
 }
 
-.city-shortcuts-arrow.is-prev { left: 0; }
-.city-shortcuts-arrow.is-next { right: 0; }
+.city-shortcuts-arrow.is-prev { left: 8px; }
+.city-shortcuts-arrow.is-next { right: 8px; }
 
 .city-shortcuts-arrow:hover:not(:disabled),
 .city-shortcuts-arrow:focus-visible:not(:disabled) {
@@ -621,8 +621,8 @@
     .pro-home-hero .about-points.city-shortcuts-slider {
         max-width: 620px;
         padding-bottom: 40px;
-        padding-right: 43px;
-        padding-left: 43px;
+        padding-right: 58px;
+        padding-left: 58px;
     }
 
     .pro-home-hero .city-shortcuts-track .hero-benefit {
@@ -665,15 +665,15 @@
         width: calc(100% + 16px);
         margin-right: -8px;
         margin-left: -8px;
-        padding-right: 40px;
+        padding-right: 46px;
         padding-bottom: 38px;
-        padding-left: 40px;
+        padding-left: 46px;
     }
     .pro-home-hero .city-shortcuts-track .hero-benefit { flex-basis: 100%; }
     .city-shortcuts-arrow { width: 34px; height: 34px; border-radius: 10px; }
     .city-shortcuts-arrow svg { width: 18px; height: 18px; }
-    .city-shortcuts-arrow.is-prev { left: 0; }
-    .city-shortcuts-arrow.is-next { right: 0; }
+    .city-shortcuts-arrow.is-prev { left: 6px; }
+    .city-shortcuts-arrow.is-next { right: 6px; }
     .pro-map-heading p { display: none; }
     .pro-map-legend span { font-size: 9px; }
     .map-stat-card { grid-template-columns: 32px minmax(0, 1fr); }

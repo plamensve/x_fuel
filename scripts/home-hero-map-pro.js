@@ -7,7 +7,7 @@
             const link = document.createElement("link");
             link.id = "home-hero-map-pro-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/home-hero-map-pro.css?v=20260909-slider-v3";
+            link.href = "/pages/styles/home-hero-map-pro.css?v=20260909-slider-v4";
             document.head.appendChild(link);
         }
 
