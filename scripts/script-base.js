@@ -951,7 +951,7 @@ function generateCards() {
         card.innerHTML = `
             <div class="price-card-header">
                 <div class="price-card-title">
-                    <h3>${station} – ${city}</h3>
+                    <h3>${station}</h3>
                     <div class="price-card-location">${location}</div>
                 </div>
                 <span class="price-card-logo"><img src="${logo}" alt="${station} лого" loading="lazy" decoding="async"></span>
