@@ -1,6 +1,7 @@
 (() => {
     const STYLE_ID = "goriva-stations-nav-css";
     const EKO_URL = "/stations/eko/";
+    const INSA_URL = "/stations/insa-oil/";
 
     function ensureStyles() {
         if (document.getElementById(STYLE_ID)) return;
@@ -37,6 +38,10 @@
         return `<span class="goriva-stations-nav-brand">${ekoIcon()}<span class="goriva-stations-nav-brand-label">EKO</span></span><small>цени и обекти</small>`;
     }
 
+    function insaMarkup() {
+        return `<span class="goriva-stations-nav-brand"><img class="goriva-stations-nav-brand-logo" src="/images/station_logos/insa.svg?v=20260909-1" alt="" width="28" height="28" decoding="async"><span class="goriva-stations-nav-brand-label">Insa Oil</span></span><small>цени и обекти</small>`;
+    }
+
     function stationItemMarkup() {
         return `
             <button class="goriva-stations-nav-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="goriva-stations-dropdown">
@@ -47,6 +52,7 @@
             <div id="goriva-stations-dropdown" class="goriva-stations-nav-dropdown" role="menu" aria-label="Бензиностанции">
                 <button class="goriva-stations-nav-option" type="button" role="menuitem" aria-disabled="true"><span>Всички бензиностанции</span><small>скоро</small></button>
                 <a class="goriva-stations-nav-option" href="${EKO_URL}" role="menuitem">${ekoMarkup()}</a>
+                <a class="goriva-stations-nav-option" href="${INSA_URL}" role="menuitem">${insaMarkup()}</a>
             </div>`;
     }
 
@@ -98,10 +104,23 @@
             }
         }
         if (eko) eko.innerHTML = ekoMarkup();
-        const current = window.location.pathname === EKO_URL || window.location.pathname.startsWith(EKO_URL);
+        let insa = item.querySelector(`a[href="${INSA_URL}"]`);
+        if (!insa) {
+            insa = document.createElement("a");
+            insa.className = "goriva-stations-nav-option";
+            insa.href = INSA_URL;
+            insa.setAttribute("role", "menuitem");
+            insa.innerHTML = insaMarkup();
+            item.querySelector(".goriva-stations-nav-dropdown")?.appendChild(insa);
+        }
+        const ekoCurrent = window.location.pathname === EKO_URL || window.location.pathname.startsWith(EKO_URL);
+        const insaCurrent = window.location.pathname === INSA_URL || window.location.pathname.startsWith(INSA_URL);
+        const current = ekoCurrent || insaCurrent;
         item.classList.toggle("is-current", current);
-        eko?.classList.toggle("is-current", current);
-        if (current) eko?.setAttribute("aria-current", "page");
+        eko?.classList.toggle("is-current", ekoCurrent);
+        insa?.classList.toggle("is-current", insaCurrent);
+        if (ekoCurrent) eko?.setAttribute("aria-current", "page"); else eko?.removeAttribute("aria-current");
+        if (insaCurrent) insa?.setAttribute("aria-current", "page"); else insa?.removeAttribute("aria-current");
         return true;
     }
 

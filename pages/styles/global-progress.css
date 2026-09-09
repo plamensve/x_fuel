@@ -37,8 +37,8 @@
 .goriva-stations-nav-option[aria-disabled="true"]{cursor:default;color:#8a9aae}
 .goriva-stations-nav-option small{color:#64748b;font-size:10px;font-weight:700;letter-spacing:.02em}
 .goriva-stations-nav-brand{display:inline-flex;min-width:0;align-items:center;gap:8px}
-.goriva-stations-nav-brand-logo{display:none!important}
-.goriva-stations-nav-brand::before{content:"";display:block;width:28px;height:28px;flex:0 0 28px;background:url("/images/station_logos/eko.svg") center/contain no-repeat}
+.goriva-stations-nav-brand-logo{display:block!important;width:28px!important;height:28px!important;flex:0 0 28px;object-fit:contain}
+.goriva-stations-nav-brand::before{display:none!important}
 .goriva-stations-nav-brand-label{white-space:nowrap}
 @media(min-width:901px){.goriva-global-menu{gap:4px!important}.goriva-global-menu>a{margin:0 2px!important}.goriva-stations-nav-item{margin:0 8px 0 2px}.goriva-stations-nav-item:hover .goriva-stations-nav-dropdown,.goriva-stations-nav-item:focus-within .goriva-stations-nav-dropdown{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}}
 @media(min-width:1200px){
