@@ -19,7 +19,7 @@
   <link rel="preload" href="/styles-legacy.css" as="style" data-goriva-css-preload>
   <link rel="preload" href="/pages/styles/site-shell.css" as="style" data-goriva-css-preload>
   <link rel="stylesheet" href="/styles.css?v=20260908-city1">
-  <link rel="stylesheet" href="/pages/styles/city-prices.css?v=20260909-slider-fix2">
+  <link rel="stylesheet" href="/pages/styles/city-prices.css?v=20260909-slider-v3">
   <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "CollectionPage", "@id": "https://goriva.online/cities/plovdiv/#webpage", "url": "https://goriva.online/cities/plovdiv/", "name": "Цени на горивата в Пловдив", "description": "Актуални цени на бензин A95, дизел и LPG в Пловдив по бензиностанции. Виж средни, най-ниски цени, адреси и дата на публикуване.", "dateModified": "2026-09-09", "inLanguage": "bg-BG", "isPartOf": {"@type": "WebSite", "name": "goriva.online", "url": "https://goriva.online/"}}, {"@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Начало", "item": "https://goriva.online/"}, {"@type": "ListItem", "position": 2, "name": "Цени на горивата в Пловдив", "item": "https://goriva.online/cities/plovdiv/"}]}]}</script>
 </head>
 <body class="city-prices-page" data-city="Пловдив" data-city-slug="plovdiv">
@@ -43,13 +43,13 @@
         <small id="city-freshness">Цените са информационни и могат да се променят на място.</small>
       </aside>
     </section>
-    <div class="city-switcher-slider" data-city-switcher aria-label="Цени по градове">
-      <button class="city-switch-arrow is-prev" type="button" aria-label="Предишни градове"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6"/></svg></button>
-      <div class="city-switch-viewport" tabindex="0" aria-label="Слайдер с градове. Използвай стрелките наляво и надясно.">
-        <nav class="city-switcher city-switch-track"><a href="/cities/sofia/" class="city-switch-link">София</a><a href="/cities/plovdiv/" class="city-switch-link is-current" aria-current="page">Пловдив</a><a href="/cities/varna/" class="city-switch-link">Варна</a><a href="/cities/burgas/" class="city-switch-link">Бургас</a><a href="/cities/ruse/" class="city-switch-link">Русе</a><a href="/cities/stara-zagora/" class="city-switch-link">Стара Загора</a></nav>
+    <div class="fuel-city-slider" data-city-switcher aria-label="Цени по градове">
+      <button class="fuel-city-arrow is-prev" type="button" aria-label="Предишни градове"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6"/></svg></button>
+      <div class="fuel-city-viewport" tabindex="0" aria-label="Слайдер с градове. Използвай стрелките наляво и надясно.">
+        <nav class="fuel-city-nav fuel-city-track"><a href="/cities/sofia/" class="fuel-city-link">София</a><a href="/cities/plovdiv/" class="fuel-city-link is-current" aria-current="page">Пловдив</a><a href="/cities/varna/" class="fuel-city-link">Варна</a><a href="/cities/burgas/" class="fuel-city-link">Бургас</a><a href="/cities/ruse/" class="fuel-city-link">Русе</a><a href="/cities/stara-zagora/" class="fuel-city-link">Стара Загора</a></nav>
       </div>
-      <button class="city-switch-arrow is-next" type="button" aria-label="Следващи градове"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6"/></svg></button>
-      <span class="city-switch-status" aria-live="polite">1 / 2</span>
+      <button class="fuel-city-arrow is-next" type="button" aria-label="Следващи градове"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6"/></svg></button>
+      <span class="fuel-city-status" aria-live="polite">1 / 2</span>
     </div>
 
     <section class="city-price-overview" aria-labelledby="city-overview-title">
@@ -146,7 +146,7 @@
       <div class="city-source-links"><a href="https://www.eko.bg/self-service-terminal-instructions/karta-na-obektite/" target="_blank" rel="noopener noreferrer">Официална карта на EKO</a><a href="https://www.petrol.bg/%D1%86%D0%B5%D0%BD%D0%B8-%D0%BD%D0%B0-%D0%B3%D0%BE%D1%80%D0%B8%D0%B2%D0%B0%D1%82%D0%B0/" target="_blank" rel="noopener noreferrer">Официални цени на Petrol</a><a href="/pages/methodology.html">Методология на goriva.online</a></div>
     </section>
   </main>
-  <script defer src="/scripts/city-prices.js?v=20260909-six-cities1"></script>
+  <script defer src="/scripts/city-prices.js?v=20260909-slider-v3"></script>
   <script defer src="/scripts/global-nav.js?v=20260908-city1"></script>
 </body>
 </html>

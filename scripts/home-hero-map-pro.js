@@ -7,7 +7,7 @@
             const link = document.createElement("link");
             link.id = "home-hero-map-pro-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/home-hero-map-pro.css?v=20260909-slider-fix1";
+            link.href = "/pages/styles/home-hero-map-pro.css?v=20260909-slider-v3";
             document.head.appendChild(link);
         }
 
@@ -292,14 +292,18 @@
         if (!slider || !viewport || !track || !previous || !next || !status) return;
 
         let frame = 0;
+        let requestedPage = null;
+        let settleTimer;
         const pageMetrics = () => {
-            const maxScroll = Math.max(0, track.scrollWidth - viewport.clientWidth);
+            const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
             const firstCard = track.querySelector(".hero-benefit");
             const cardWidth = firstCard?.getBoundingClientRect().width || viewport.clientWidth;
             const itemsPerPage = Math.max(1, Math.round(viewport.clientWidth / Math.max(1, cardWidth + 12)));
             const pages = Math.max(1, Math.ceil(track.children.length / itemsPerPage));
-            const page = maxScroll ? Math.round((viewport.scrollLeft / maxScroll) * (pages - 1)) : 0;
-            return { maxScroll, pages, page };
+            const firstLeft = firstCard?.getBoundingClientRect().left || 0;
+            const targets = Array.from({length:pages}, (_, index) => Math.min(maxScroll, Math.max(0, track.children[index * itemsPerPage].getBoundingClientRect().left - firstLeft)));
+            const page = targets.reduce((best, target, index) => Math.abs(target - viewport.scrollLeft) < Math.abs(targets[best] - viewport.scrollLeft) ? index : best, 0);
+            return { maxScroll, pages, page, targets };
         };
 
         const update = () => {
@@ -316,18 +320,23 @@
         };
 
         const move = direction => {
-            const { maxScroll, pages, page } = pageMetrics();
-            const nextPage = pages > 1 ? (page + direction + pages) % pages : 0;
-            const target = pages > 1 ? (maxScroll * nextPage) / (pages - 1) : 0;
+            const { pages, page, targets } = pageMetrics();
+            const nextPage = ((requestedPage ?? page) + direction + pages) % pages;
+            requestedPage = nextPage;
+            const target = targets[nextPage];
             viewport.scrollTo({
                 left: target,
                 behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"
             });
+            clearTimeout(settleTimer);
+            settleTimer = setTimeout(() => { requestedPage = null; update(); }, 500);
         };
 
         previous.addEventListener("click", () => move(-1));
         next.addEventListener("click", () => move(1));
         viewport.addEventListener("scroll", requestUpdate, { passive: true });
+        viewport.addEventListener("pointerdown", () => { requestedPage = null; });
+        viewport.addEventListener("wheel", () => { requestedPage = null; }, { passive: true });
         viewport.addEventListener("keydown", event => {
             if (event.key !== "ArrowLeft" && event.key !== "ArrowRight") return;
             event.preventDefault();

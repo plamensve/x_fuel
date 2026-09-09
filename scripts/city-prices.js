@@ -36,22 +36,27 @@
 
   function initCitySwitcher() {
     const slider = document.querySelector('[data-city-switcher]');
-    const viewport = slider?.querySelector('.city-switch-viewport');
-    const track = slider?.querySelector('.city-switch-track');
-    const previous = slider?.querySelector('.city-switch-arrow.is-prev');
-    const next = slider?.querySelector('.city-switch-arrow.is-next');
-    const status = slider?.querySelector('.city-switch-status');
+    const viewport = slider?.querySelector('.fuel-city-viewport');
+    const track = slider?.querySelector('.fuel-city-track');
+    const previous = slider?.querySelector('.fuel-city-arrow.is-prev');
+    const next = slider?.querySelector('.fuel-city-arrow.is-next');
+    const status = slider?.querySelector('.fuel-city-status');
     if (!slider || !viewport || !track || !previous || !next || !status) return;
 
     let frame = 0;
+    let requestedPage = null;
+    let settleTimer;
     const metrics = () => {
-      const cards = [...track.querySelectorAll('.city-switch-link')];
+      const cards = [...track.querySelectorAll('.fuel-city-link')];
       const cardWidth = cards[0]?.getBoundingClientRect().width || viewport.clientWidth;
-      const itemsPerPage = Math.max(1, Math.round(viewport.clientWidth / Math.max(1, cardWidth + 9)));
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 12;
+      const itemsPerPage = Math.max(1, Math.round((viewport.clientWidth + gap) / Math.max(1, cardWidth + gap)));
       const pages = Math.max(1, Math.ceil(cards.length / itemsPerPage));
-      const maxScroll = Math.max(0, track.scrollWidth - viewport.clientWidth);
-      const pageIndex = maxScroll ? Math.round((viewport.scrollLeft / maxScroll) * (pages - 1)) : 0;
-      return { cards, itemsPerPage, pages, maxScroll, pageIndex };
+      const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+      const firstLeft = cards[0]?.getBoundingClientRect().left || 0;
+      const targets = Array.from({length:pages}, (_, index) => Math.min(maxScroll, Math.max(0, cards[index * itemsPerPage].getBoundingClientRect().left - firstLeft)));
+      const pageIndex = targets.reduce((best, target, index) => Math.abs(target - viewport.scrollLeft) < Math.abs(targets[best] - viewport.scrollLeft) ? index : best, 0);
+      return { cards, itemsPerPage, pages, maxScroll, pageIndex, targets };
     };
 
     const update = () => {
@@ -60,7 +65,7 @@
       next.disabled = pages <= 1;
       status.textContent = `${pageIndex + 1} / ${pages}`;
       slider.dataset.page = String(pageIndex);
-      slider.style.setProperty('--city-switch-progress', maxScroll ? viewport.scrollLeft / maxScroll : 0);
+      slider.style.setProperty('--fuel-city-progress', maxScroll ? viewport.scrollLeft / maxScroll : 0);
     };
 
     const requestUpdate = () => {
@@ -69,14 +74,17 @@
     };
 
     const goToPage = (pageIndex, behavior = 'smooth') => {
-      const { pages, maxScroll } = metrics();
-      const normalizedPage = pages > 1 ? (pageIndex + pages) % pages : 0;
-      viewport.scrollTo({left: pages > 1 ? maxScroll * normalizedPage / (pages - 1) : 0, behavior});
+      const { pages, targets } = metrics();
+      const normalizedPage = ((pageIndex % pages) + pages) % pages;
+      requestedPage = normalizedPage;
+      viewport.scrollTo({left: targets[normalizedPage], behavior});
+      clearTimeout(settleTimer);
+      settleTimer = setTimeout(() => { requestedPage = null; update(); }, 500);
     };
 
     const move = direction => {
       const { pageIndex } = metrics();
-      goToPage(pageIndex + direction, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+      goToPage((requestedPage ?? pageIndex) + direction, window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
     };
 
     const revealCurrentCity = () => {
@@ -94,7 +102,9 @@
       event.preventDefault();
       move(event.key === 'ArrowRight' ? 1 : -1);
     });
-    window.addEventListener('resize', requestUpdate, {passive:true});
+    viewport.addEventListener('pointerdown', () => { requestedPage = null; });
+    viewport.addEventListener('wheel', () => { requestedPage = null; }, {passive:true});
+    window.addEventListener('resize', revealCurrentCity, {passive:true});
     if ('ResizeObserver' in window) {
       const observer = new ResizeObserver(requestUpdate);
       observer.observe(viewport);

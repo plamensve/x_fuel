@@ -236,7 +236,7 @@ def render_page(slug: str, city: str, summary: dict) -> str:
         ],
     }
     city_links = "".join(
-        f'<a href="/cities/{key}/" class="city-switch-link{" is-current" if key == slug else ""}"{(" aria-current=\"page\"" if key == slug else "")}>{html.escape(item["name"])}</a>'
+        f'<a href="/cities/{key}/" class="fuel-city-link{" is-current" if key == slug else ""}"{(" aria-current=\"page\"" if key == slug else "")}>{html.escape(item["name"])}</a>'
         for key, item in CITIES.items()
     )
     headers = "".join(f"<th scope=\"col\">{html.escape(FUEL_LABELS[fuel])}</th>" for fuel in FUEL_ORDER)
@@ -262,7 +262,7 @@ def render_page(slug: str, city: str, summary: dict) -> str:
   <link rel="preload" href="/styles-legacy.css" as="style" data-goriva-css-preload>
   <link rel="preload" href="/pages/styles/site-shell.css" as="style" data-goriva-css-preload>
   <link rel="stylesheet" href="/styles.css?v=20260908-city1">
-  <link rel="stylesheet" href="/pages/styles/city-prices.css?v=20260909-slider-fix2">
+  <link rel="stylesheet" href="/pages/styles/city-prices.css?v=20260909-slider-v3">
   <script type="application/ld+json">{json.dumps(schema, ensure_ascii=False)}</script>
 </head>
 <body class="city-prices-page" data-city="{html.escape(city)}" data-city-slug="{slug}">
@@ -286,13 +286,13 @@ def render_page(slug: str, city: str, summary: dict) -> str:
         <small id="city-freshness">Цените са информационни и могат да се променят на място.</small>
       </aside>
     </section>
-    <div class="city-switcher-slider" data-city-switcher aria-label="Цени по градове">
-      <button class="city-switch-arrow is-prev" type="button" aria-label="Предишни градове"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6"/></svg></button>
-      <div class="city-switch-viewport" tabindex="0" aria-label="Слайдер с градове. Използвай стрелките наляво и надясно.">
-        <nav class="city-switcher city-switch-track">{city_links}</nav>
+    <div class="fuel-city-slider" data-city-switcher aria-label="Цени по градове">
+      <button class="fuel-city-arrow is-prev" type="button" aria-label="Предишни градове"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m14.5 6-6 6 6 6"/></svg></button>
+      <div class="fuel-city-viewport" tabindex="0" aria-label="Слайдер с градове. Използвай стрелките наляво и надясно.">
+        <nav class="fuel-city-nav fuel-city-track">{city_links}</nav>
       </div>
-      <button class="city-switch-arrow is-next" type="button" aria-label="Следващи градове"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6"/></svg></button>
-      <span class="city-switch-status" aria-live="polite">1 / 2</span>
+      <button class="fuel-city-arrow is-next" type="button" aria-label="Следващи градове"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9.5 6 6 6-6 6"/></svg></button>
+      <span class="fuel-city-status" aria-live="polite">1 / 2</span>
     </div>
 
     <section class="city-price-overview" aria-labelledby="city-overview-title">
@@ -318,7 +318,7 @@ def render_page(slug: str, city: str, summary: dict) -> str:
       <div class="city-source-links"><a href="https://www.eko.bg/self-service-terminal-instructions/karta-na-obektite/" target="_blank" rel="noopener noreferrer">Официална карта на EKO</a><a href="https://www.petrol.bg/%D1%86%D0%B5%D0%BD%D0%B8-%D0%BD%D0%B0-%D0%B3%D0%BE%D1%80%D0%B8%D0%B2%D0%B0%D1%82%D0%B0/" target="_blank" rel="noopener noreferrer">Официални цени на Petrol</a><a href="/pages/methodology.html">Методология на goriva.online</a></div>
     </section>
   </main>
-  <script defer src="/scripts/city-prices.js?v=20260909-six-cities1"></script>
+  <script defer src="/scripts/city-prices.js?v=20260909-slider-v3"></script>
   <script defer src="/scripts/global-nav.js?v=20260908-city1"></script>
 </body>
 </html>

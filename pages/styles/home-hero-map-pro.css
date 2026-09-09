@@ -162,7 +162,10 @@
     position: relative;
     display: block;
     max-width: 940px;
-    padding: 7px 52px 42px;
+    padding: 12px 52px 46px;
+    border: 1px solid #d7e5ef;
+    border-radius: 24px;
+    background: linear-gradient(120deg, #eef5fc, #f5fcfa);
 }
 
 .city-shortcuts-viewport {
@@ -174,9 +177,7 @@
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    touch-action: pan-x;
-    padding: 6px 2px 8px;
-    scroll-padding-inline: 2px;
+    padding: 8px 0 12px;
 }
 
 .city-shortcuts-viewport::-webkit-scrollbar {
@@ -200,6 +201,7 @@
     overflow: hidden;
     scroll-snap-align: start;
     border-color: #d7e2ec;
+    color: #173654;
     background: linear-gradient(145deg, #fff, #fbfdff);
     box-shadow: 0 8px 22px rgba(15,42,75,.075), inset 0 1px 0 #fff;
 }
@@ -244,7 +246,7 @@
 
 .city-shortcuts-arrow {
     position: absolute;
-    top: 47px;
+    top: 54px;
     z-index: 3;
     width: 42px;
     height: 42px;
