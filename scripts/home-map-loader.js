@@ -84,7 +84,7 @@
             await loadScript("https://unpkg.com/leaflet@1.9.4/dist/leaflet.js", "goriva-leaflet-js");
             await loadScript("https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js", "goriva-markercluster-js");
             hardenMobileMarkerClusters();
-            await loadScript("/scripts/station-icons.js?v=20260910-generic-logo1", "goriva-station-icons");
+            await loadScript("/scripts/station-icons.js?v=20260910-station-logos2", "goriva-station-icons");
             // Release the temporary legacy-map guard so the dedicated EKO initializer can run.
             window.__GORIVA_EKO_MAP_MODE__ = false;
             await loadScript("/scripts/ecopetrol_prices.js?v=20260906-eko-map2", "goriva-eko-map-data");

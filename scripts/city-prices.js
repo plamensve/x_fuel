@@ -13,15 +13,15 @@
     {match:['POWER OIL','POWERОIL','ПАУЪР ОЙЛ'],src:'/images/station_logos/power-oil.png'},
     {match:['ТОПЛИВО','TOPLIVO'],src:'/images/station_logos/toplivo-logo.png'},
     {match:['ПЕГАС','PEGAS'],src:'/images/station_logos/pegas-logo.png'},
-    {match:['ROMPETROL','РОМПЕТРОЛ'],src:'/images/station_logos/rompetrol.svg'},
+    {match:['ROMPETROL','РОМПЕТРОЛ'],src:'/images/station_logos/rompetrol-logo.png'},
     {match:['PETROL','ПЕТРОЛ'],src:'/images/station_logos/petrol-logo.jpg'},
     {match:['INSA','ИНСА'],src:'/images/station_logos/insa-card-logo.png'},
-    {match:['OMV'],src:'/images/station_logos/omv.svg'},
-    {match:['SHELL','ШЕЛ'],src:'/images/station_logos/shell.svg'},
+    {match:['OMV'],src:'/images/station_logos/omv-logo.jpg'},
+    {match:['SHELL','ШЕЛ'],src:'/images/station_logos/shell-logo.png'},
     {match:['LUKOIL','ЛУКОЙЛ'],src:'/images/station_logos/lukoil-card-logo.jpg'},
-    {match:['KRUiz','КРУИЗ'],src:'/images/station_logos/kruiz.svg'},
+    {match:['KRUiz','КРУИЗ'],src:'/images/station_logos/kruiz-logo.png'},
     {match:['BULMARKET','БУЛМАРКЕТ'],src:'/images/station_logos/bulmarket.svg'},
-    {match:['HIMOIL','ХИМОЙЛ'],src:'/images/station_logos/himoil.svg'},
+    {match:['HIMOIL','ХИМОЙЛ'],src:'/images/station_logos/himoil-logo.png'},
     {match:['DIESELOR','DISELOR','DIESELER','ДИЗЕЛОР'],src:'/images/station_logos/dieselor-logo.jpg'}
   ];
   const logoFor = brand => {

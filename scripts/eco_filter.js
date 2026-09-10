@@ -52,11 +52,11 @@ const HOME_STATION_LOGOS = [
     {match: ["еко петрол", "екопетрол", "ecopetrol"], src: "images/station_logos/ecopetrol.svg"},
     {match: ["бенита", "benita"], src: "images/station_logos/benita.svg"},
     {match: ["лукойл", "lukoil"], src: "images/station_logos/lukoil-card-logo.jpg"},
-    {match: ["omv", "омв"], src: "images/station_logos/omv.svg"},
-    {match: ["shell", "шел"], src: "images/station_logos/shell.svg"},
-    {match: ["rompetrol", "ромпетрол"], src: "images/station_logos/rompetrol.svg"},
+    {match: ["omv", "омв"], src: "images/station_logos/omv-logo.jpg"},
+    {match: ["shell", "шел"], src: "images/station_logos/shell-logo.png"},
+    {match: ["rompetrol", "ромпетрол"], src: "images/station_logos/rompetrol-logo.png"},
     {match: ["insa", "инса"], src: "images/station_logos/insa-card-logo.png"},
-    {match: ["kruiz", "cruise", "круиз"], src: "images/station_logos/kruiz.svg"},
+    {match: ["kruiz", "cruise", "круиз"], src: "images/station_logos/kruiz-logo.png"},
     {match: ["bulmarket", "булмаркет"], src: "images/station_logos/bulmarket.svg"},
     {match: ["power oil", "poweroil", "пауър ойл"], src: "images/station_logos/power-oil.png"},
     {match: ["toplivo", "топливо"], src: "images/station_logos/toplivo-logo.png"},
@@ -64,7 +64,7 @@ const HOME_STATION_LOGOS = [
     {match: ["petrol", "петрол"], src: "images/station_logos/petrol-logo.jpg"},
     {match: ["eko", "еко"], src: "images/station_logos/eko-card-logo.png"},
     {match: ["dieselor", "diselor", "dieseler", "дизелор"], src: "images/station_logos/dieselor-logo.jpg"},
-    {match: ["himoil", "chimoil", "химойл"], src: "images/station_logos/himoil.svg"}
+    {match: ["himoil", "chimoil", "химойл"], src: "images/station_logos/himoil-logo.png"}
 ];
 
 function homeStationLogo(name) {

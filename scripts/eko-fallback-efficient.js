@@ -407,19 +407,19 @@
     const GENERIC_STATION_LOGO = "/images/station_logos/generic-fuel-pump.png";
     const stationLogoRules = [
         { match: ["екопетрол", "ecopetrol"], src: "/images/station_logos/ecopetrol.svg" },
-        { match: ["ромпетрол", "rompetrol"], src: "/images/station_logos/rompetrol.svg" },
+        { match: ["ромпетрол", "rompetrol"], src: "/images/station_logos/rompetrol-logo.png" },
         { match: ["бенита", "benita"], src: "/images/station_logos/benita.svg" },
         { match: ["лукойл", "lukoil"], src: "/images/station_logos/lukoil-card-logo.jpg" },
-        { match: ["омв", "omv"], src: "/images/station_logos/omv.svg" },
-        { match: ["шел", "shell"], src: "/images/station_logos/shell.svg" },
+        { match: ["омв", "omv"], src: "/images/station_logos/omv-logo.jpg" },
+        { match: ["шел", "shell"], src: "/images/station_logos/shell-logo.png" },
         { match: ["инса", "insa"], src: "/images/station_logos/insa-card-logo.png" },
-        { match: ["круиз", "kruiz", "cruise"], src: "/images/station_logos/kruiz.svg" },
+        { match: ["круиз", "kruiz", "cruise"], src: "/images/station_logos/kruiz-logo.png" },
         { match: ["булмаркет", "bulmarket"], src: "/images/station_logos/bulmarket.svg" },
         { match: ["пауър ойл", "poweroil"], src: "/images/station_logos/power-oil.png" },
         { match: ["топливо", "toplivo"], src: "/images/station_logos/toplivo-logo.png" },
         { match: ["пегас", "pegas"], src: "/images/station_logos/pegas-logo.png" },
         { match: ["дизелор", "dieselor", "diselor", "dieseler"], src: "/images/station_logos/dieselor-logo.jpg" },
-        { match: ["химойл", "himoil", "chimoil"], src: "/images/station_logos/himoil.svg" },
+        { match: ["химойл", "himoil", "chimoil"], src: "/images/station_logos/himoil-logo.png" },
         { match: ["петрол", "petrol"], src: "/images/station_logos/petrol-logo.jpg" },
         { match: ["еко", "eko"], src: "/images/station_logos/eko-card-logo.png" }
     ];

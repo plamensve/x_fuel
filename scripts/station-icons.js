@@ -29,15 +29,15 @@ function getStationIcon(name) {
     }
 
     if (lower.includes("omv") || lower.includes("омв")) {
-        return L.icon({iconUrl: "../images/station_logos/omv.svg", ...defaultConfig})
+        return L.icon({iconUrl: "../images/station_logos/omv-logo.jpg", ...defaultConfig})
     }
 
     if (lower.includes("shell") || lower.includes("шел")) {
-        return L.icon({iconUrl: "../images/station_logos/shell.svg", ...defaultConfig})
+        return L.icon({iconUrl: "../images/station_logos/shell-logo.png", ...defaultConfig})
     }
 
     if (lower.includes("rompetrol") || lower.includes("ромпетрол")) {
-        return L.icon({iconUrl: "../images/station_logos/rompetrol.svg", ...defaultConfig})
+        return L.icon({iconUrl: "../images/station_logos/rompetrol-logo.png", ...defaultConfig})
     }
 
     if (lower.includes("insa") || lower.includes("инса")) {
@@ -45,7 +45,7 @@ function getStationIcon(name) {
     }
 
     if (lower.includes("kruiz") || lower.includes("cruise") || lower.includes("круиз")) {
-        return L.icon({iconUrl: "../images/station_logos/kruiz.svg", ...defaultConfig})
+        return L.icon({iconUrl: "../images/station_logos/kruiz-logo.png", ...defaultConfig})
     }
 
     if (lower.includes("bulmarket") || lower.includes("булмаркет")) {
@@ -69,7 +69,7 @@ function getStationIcon(name) {
     }
 
     if (lower.includes("chimoil") || lower.includes("химойл") || lower.includes("himoil")) {
-        return L.icon({iconUrl: "../images/station_logos/himoil.svg", ...defaultConfig})
+        return L.icon({iconUrl: "../images/station_logos/himoil-logo.png", ...defaultConfig})
     }
 
     if (lower.includes("avia")) {
