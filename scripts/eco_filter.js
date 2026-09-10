@@ -46,6 +46,7 @@ const HOME_FUEL_ALIASES = {
 
 const HOME_FUEL_ORDER = ["A95", "Дизел", "LPG", "A100", "Дизел +", "Метан"];
 const HOME_TOP10_CITIES = ["София", "Пловдив", "Варна", "Бургас", "Русе", "Стара Загора"];
+const HOME_GENERIC_STATION_LOGO = "images/station_logos/generic-fuel-pump.png";
 
 const HOME_STATION_LOGOS = [
     {match: ["еко петрол", "екопетрол", "ecopetrol"], src: "images/station_logos/ecopetrol.svg"},
@@ -74,11 +75,11 @@ function homeStationLogo(name) {
 
     const compact = normalized.replace(/[\s\-_.]+/g, "");
     if (["петролкомерс", "petrolcommerce", "petrolkomers"].some(alias => compact.includes(alias))) {
-        return "images/station_logos/unknown.svg";
+        return HOME_GENERIC_STATION_LOGO;
     }
 
     const config = HOME_STATION_LOGOS.find(item => item.match.some(token => normalized.includes(token)));
-    return config?.src || "images/station_logos/unknown.svg";
+    return config?.src || HOME_GENERIC_STATION_LOGO;
 }
 
 let homeTop10Rows = [];
@@ -360,7 +361,7 @@ function renderHomeTop10() {
                              class="home-top10-station-logo"
                              alt="${homeEscapeHtml(station)} лого"
                              loading="lazy"
-                             onerror="this.onerror=null;this.src='images/station_logos/unknown.svg';">
+                             onerror="this.onerror=null;this.src='${HOME_GENERIC_STATION_LOGO}';">
                     </span>
                     <span class="home-top10-fuel-pill">${homeEscapeHtml(homeTop10Fuel)}</span>
                 </div>

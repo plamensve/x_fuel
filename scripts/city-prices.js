@@ -6,6 +6,7 @@
   const SUPABASE_KEY = 'sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH';
   const FUELS = ['Бензин A95', 'Дизел', 'Пропан Бутан', 'Бензин A100', 'Дизел премиум', 'Метан'];
   const LABELS = {'Бензин A95':'A95','Дизел':'Дизел','Пропан Бутан':'LPG','Бензин A100':'A100','Дизел премиум':'Дизел +','Метан':'Метан'};
+  const GENERIC_STATION_LOGO = '/images/station_logos/generic-fuel-pump.png';
   const LOGOS = [
     {match:['ECO PETROL','ЕКО ПЕТРОЛ'],src:'/images/station_logos/ecopetrol.svg'},
     {match:['ЕКО','EKO'],src:'/images/station_logos/eko-card-logo.png'},
@@ -25,9 +26,9 @@
   ];
   const logoFor = brand => {
     const normalized = normalize(brand);
-    return LOGOS.find(item => item.match.some(token => normalized.includes(token)))?.src || '/images/station_logos/unknown.svg';
+    return LOGOS.find(item => item.match.some(token => normalized.includes(token)))?.src || GENERIC_STATION_LOGO;
   };
-  const logoMarkup = brand => { const src = logoFor(brand); return src ? '<img class="station-brand-logo" src="' + src + '" alt="' + escapeHtml(brand) + ' лого" loading="lazy" decoding="async">' : ''; };
+  const logoMarkup = brand => { const src = logoFor(brand); return src ? '<img class="station-brand-logo" src="' + src + '" alt="' + escapeHtml(brand) + ' лого" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=\'' + GENERIC_STATION_LOGO + '\'">' : ''; };
   const normalize = value => String(value || '').trim().toLocaleUpperCase('bg-BG');
   const escapeHtml = value => String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
   const dateKey = value => new Intl.DateTimeFormat('sv-SE', {timeZone:'Europe/Sofia',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date(value));

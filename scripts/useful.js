@@ -175,7 +175,7 @@ function getStationLogo(name) {
     if (lower.includes("petrol") || lower.includes("петрол")) return "../images/station_logos/petrol-logo.jpg"
     if (lower.includes("eko") || lower.includes("еко")) return "../images/station_logos/eko-card-logo.png"
 
-    return "../images/station_logos/unknown.svg"
+    return "../images/station_logos/generic-fuel-pump.png"
 }
 
 function renderStations(items) {
@@ -193,7 +193,7 @@ function renderStations(items) {
         card.className = "station-card"
         card.innerHTML = `
             <div class="station-header">
-                <img src="${logo}" class="station-logo" alt="" onerror="this.src='../images/station_logos/unknown.svg'">
+            <img src="${logo}" class="station-logo" alt="" onerror="this.onerror=null;this.src='../images/station_logos/generic-fuel-pump.png'">
                 <div>
                     <div class="station-name">${escapeHtml(st.name)}</div>
                     ${st.city ? `<div class="station-city">${escapeHtml(st.city)}</div>` : ""}

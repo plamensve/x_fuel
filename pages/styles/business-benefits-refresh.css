@@ -441,3 +441,29 @@ body .business-cta-text .cta-content::after {
     body .business-cta-text .cta-main { font-size: 16px !important; }
     body .business-cta-text .cta-highlight { font-size: 15px !important; }
 }
+
+/* Use the generated compact assets in the benefit cards. */
+body .business-benefits .step::before {
+    content: none !important;
+    display: none !important;
+}
+
+body .business-benefits .step img {
+    display: block !important;
+    width: 142px !important;
+    height: 142px !important;
+    max-width: 142px !important;
+    flex: 0 0 142px !important;
+    margin: 0 auto 28px !important;
+    object-fit: contain !important;
+}
+
+@media (max-width: 620px) {
+    body .business-benefits .step img {
+        width: 118px !important;
+        height: 118px !important;
+        max-width: 118px !important;
+        flex-basis: 118px !important;
+        margin-bottom: 24px !important;
+    }
+}

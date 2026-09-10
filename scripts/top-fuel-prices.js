@@ -16,6 +16,7 @@ const SHARE_FUEL_ALIASES = {
 
 const SHARE_CITIES = ["София", "Пловдив", "Варна", "Бургас", "Русе"];
 const SHARE_FUELS = ["A95", "Дизел", "LPG", "A100", "Дизел +", "Метан"];
+const SHARE_GENERIC_STATION_LOGO = "../images/station_logos/generic-fuel-pump.png";
 
 const SHARE_STATION_LOGOS = [
     {match: ["еко петрол", "екопетрол", "ecopetrol"], src: "../images/station_logos/ecopetrol.svg"},
@@ -45,7 +46,7 @@ function shareStationLogo(name) {
         .trim();
 
     const config = SHARE_STATION_LOGOS.find(item => item.match.some(token => normalized.includes(token)));
-    return config?.src || "../images/station_logos/unknown.svg";
+    return config?.src || SHARE_GENERIC_STATION_LOGO;
 }
 
 function shareEscapeHtml(value) {
@@ -209,7 +210,7 @@ function renderSharedTop4(city, fuel, rows) {
                 <div class="home-top10-card-top">
                     <span class="home-top10-rank-badge">${shareRankBadge(index)}</span>
                     <span class="home-top10-station-logo-wrap" aria-hidden="true">
-                        <img class="home-top10-station-logo" src="${shareEscapeHtml(logo)}" alt="" loading="lazy" decoding="async">
+                        <img class="home-top10-station-logo" src="${shareEscapeHtml(logo)}" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='${SHARE_GENERIC_STATION_LOGO}';">
                     </span>
                     <span class="home-top10-fuel-pill">${shareEscapeHtml(fuel)}</span>
                 </div>

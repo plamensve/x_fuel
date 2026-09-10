@@ -187,9 +187,7 @@ def render_summary_cards(summary: dict) -> str:
 
 
 def station_logo_html(brand: str) -> str:
-    path = LOGO_PATHS.get(normalize(brand))
-    if not path:
-        return ""
+    path = LOGO_PATHS.get(normalize(brand), "/images/station_logos/generic-fuel-pump.png")
     return f'<img class="station-brand-logo" src="{path}" alt="{html.escape(brand)} лого" loading="lazy" decoding="async">'
 
 

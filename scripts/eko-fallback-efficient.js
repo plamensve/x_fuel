@@ -402,8 +402,9 @@
 // recognizes several station names in Cyrillic, while the data can contain the
 // same chains in Latin (for example "Petrol"). Install one normalized resolver
 // before the renderer's DOMContentLoaded callback runs so existing SVG files are
-// actually attached to the cards/table without changing unknown stations.
+// actually attached to the cards/table while providing a neutral fallback for unknown stations.
 (() => {
+    const GENERIC_STATION_LOGO = "/images/station_logos/generic-fuel-pump.png";
     const stationLogoRules = [
         { match: ["екопетрол", "ecopetrol"], src: "/images/station_logos/ecopetrol.svg" },
         { match: ["ромпетрол", "rompetrol"], src: "/images/station_logos/rompetrol.svg" },
@@ -431,14 +432,14 @@
 
     const resolveStationLogo = name => {
         const normalized = normalizeStationName(name);
-        if (!normalized) return null;
-        if (["петролкомерс", "petrolcommerce", "petrolkomers"].some(alias => normalized.includes(alias))) return null;
+        if (!normalized) return GENERIC_STATION_LOGO;
+        if (["петролкомерс", "petrolcommerce", "petrolkomers"].some(alias => normalized.includes(alias))) return GENERIC_STATION_LOGO;
 
         const rule = stationLogoRules.find(item =>
             item.match.some(alias => normalized.includes(normalizeStationName(alias)))
         );
 
-        return rule?.src || null;
+        return rule?.src || GENERIC_STATION_LOGO;
     };
 
     const installStationLogoResolver = () => {

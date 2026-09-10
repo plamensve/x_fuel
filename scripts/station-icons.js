@@ -13,7 +13,7 @@ function getStationIcon(name) {
     }
 
     if (["петролкомерс", "petrolcommerce", "petrolkomers"].some(alias => lower.includes(alias))) {
-        return L.icon({iconUrl: "../images/station_logos/unknown.svg", ...defaultConfig})
+        return L.icon({iconUrl: "../images/station_logos/generic-fuel-pump.png", ...defaultConfig})
     }
 
     if (lower.includes("ecopetrol") || lower.includes("екопетрол")) {
@@ -89,7 +89,7 @@ function getStationIcon(name) {
     }
 
     return L.icon({
-        iconUrl: "../images/station_logos/unknown.svg",
+        iconUrl: "../images/station_logos/generic-fuel-pump.png",
         ...defaultConfig
     })
 }

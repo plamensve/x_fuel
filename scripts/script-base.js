@@ -13,7 +13,7 @@ function getStationLogo(name) {
         .replace(/[\s\-_.]+/g, "")
         .trim()
 
-    if (["петролкомерс", "petrolcommerce", "petrolkomers"].some(alias => normalized.includes(alias))) return null
+    if (["петролкомерс", "petrolcommerce", "petrolkomers"].some(alias => normalized.includes(alias))) return "/images/station_logos/generic-fuel-pump.png"
 
     const rules = [
         { match: ["екопетрол", "ecopetrol"], src: "/images/station_logos/ecopetrol.svg" },
@@ -44,7 +44,7 @@ function getStationLogo(name) {
         }
     }
 
-    return null
+    return "/images/station_logos/generic-fuel-pump.png"
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -502,7 +502,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
                 let row = document.createElement("tr")
 
-                let logo = getStationLogo(item.station)
+                let logo = getStationLogo(item.station) || "/images/station_logos/generic-fuel-pump.png"
 
                 row.innerHTML = `
 <td>
@@ -946,7 +946,7 @@ function generateCards() {
             methane: cols[7]?.innerText
         };
 
-        let logo = getStationLogo(station) || "/images/station_logos/unknown.svg";
+        let logo = getStationLogo(station) || "/images/station_logos/generic-fuel-pump.png";
 
         let card = document.createElement("div");
         card.className = "price-card";
@@ -957,7 +957,7 @@ function generateCards() {
                     <h3>${station}</h3>
                     <div class="price-card-location">${location}</div>
                 </div>
-                <span class="price-card-logo"><img src="${logo}" alt="${station} лого" loading="lazy" decoding="async"></span>
+                <span class="price-card-logo"><img src="${logo}" alt="${station} лого" loading="lazy" decoding="async" onerror="this.onerror=null;this.src='/images/station_logos/generic-fuel-pump.png'"></span>
             </div>
             <div class="price-card-date">Цени към дата ${currentDate}</div>
             <div class="price-card-status">
