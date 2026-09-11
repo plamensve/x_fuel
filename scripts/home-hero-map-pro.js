@@ -7,7 +7,7 @@
             const link = document.createElement("link");
             link.id = "home-hero-map-pro-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/home-hero-map-pro.css?v=20260911-hero-poll-sync650";
+            link.href = "/pages/styles/home-hero-map-pro.css?v=20260911-hero-border-sync650";
             document.head.appendChild(link);
         }
 
@@ -456,18 +456,41 @@
         const isMobile = window.matchMedia("(max-width: 650px)").matches;
         const pollCard = document.querySelector(".fuel-poll-card");
         if (!isMobile || !pollCard) {
-            ["boxSizing", "width", "maxWidth", "marginLeft", "marginRight"].forEach(property => {
-                inner.style[property] = "";
+            [hero, inner].forEach(element => {
+                ["boxSizing", "width", "maxWidth", "left", "marginLeft", "marginRight"].forEach(property => {
+                    element.style[property] = "";
+                });
             });
             return;
         }
 
-        const heroRect = hero.getBoundingClientRect();
         const pollRect = pollCard.getBoundingClientRect();
+        if (!Number.isFinite(pollRect.width) || pollRect.width <= 0) return;
+
+        const heroRect = hero.getBoundingClientRect();
         const heroStyles = getComputedStyle(hero);
-        const contentLeft = heroRect.left
-            + (parseFloat(heroStyles.borderLeftWidth) || 0)
-            + (parseFloat(heroStyles.paddingLeft) || 0);
+        const borderLeft = parseFloat(heroStyles.borderLeftWidth) || 0;
+        const borderRight = parseFloat(heroStyles.borderRightWidth) || 0;
+        const paddingLeft = parseFloat(heroStyles.paddingLeft) || 0;
+        const paddingRight = parseFloat(heroStyles.paddingRight) || 0;
+        const desiredHeroLeft = pollRect.left - borderLeft - paddingLeft;
+        const heroLeftDelta = desiredHeroLeft - heroRect.left;
+        const currentMarginLeft = parseFloat(heroStyles.marginLeft) || 0;
+        const desiredHeroWidth = pollRect.width + borderLeft + borderRight + paddingLeft + paddingRight;
+
+        /* Expand the hero shell as well, so its overflow:hidden cannot clip the aligned borders. */
+        hero.style.boxSizing = "border-box";
+        hero.style.width = `${desiredHeroWidth}px`;
+        hero.style.maxWidth = "none";
+        hero.style.left = "0px";
+        hero.style.marginLeft = `${currentMarginLeft + heroLeftDelta}px`;
+        hero.style.marginRight = "0px";
+
+        const alignedHeroRect = hero.getBoundingClientRect();
+        const alignedHeroStyles = getComputedStyle(hero);
+        const contentLeft = alignedHeroRect.left
+            + (parseFloat(alignedHeroStyles.borderLeftWidth) || 0)
+            + (parseFloat(alignedHeroStyles.paddingLeft) || 0);
         const leftOffset = pollRect.left - contentLeft;
 
         inner.style.boxSizing = "border-box";
@@ -476,7 +499,6 @@
         inner.style.marginLeft = `${leftOffset}px`;
         inner.style.marginRight = "0px";
     }
-
     function initMobileHeroPollSync() {
         let frame = 0;
         const schedule = () => {
