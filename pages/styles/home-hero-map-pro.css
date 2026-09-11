@@ -763,15 +763,28 @@
         max-width: 100%;
         margin-right: auto;
         margin-left: auto;
-        padding-right: 46px;
+        /* Reserve a dedicated side rail so the arrows never sit on the city card. */
+        --city-arrow-rail: clamp(50px, 14vw, 58px);
+        padding-right: var(--city-arrow-rail);
         padding-bottom: 38px;
-        padding-left: 46px;
+        padding-left: var(--city-arrow-rail);
     }
     .pro-home-hero .city-shortcuts-track .hero-benefit { flex-basis: 100%; }
-    .city-shortcuts-arrow { width: 34px; height: 34px; border-radius: 10px; }
+    .city-shortcuts-arrow {
+        box-sizing: border-box;
+        width: 38px;
+        min-width: 38px;
+        height: 44px;
+        min-height: 44px;
+        border-radius: 11px;
+    }
     .city-shortcuts-arrow svg { width: 18px; height: 18px; }
-    .city-shortcuts-arrow.is-prev { left: 6px; }
-    .city-shortcuts-arrow.is-next { right: 6px; }
+    .city-shortcuts-arrow.is-prev { left: 5px; }
+    .city-shortcuts-arrow.is-next { right: 5px; }
+    .city-shortcuts-arrow:hover:not(:disabled),
+    .city-shortcuts-arrow:focus-visible:not(:disabled) {
+        transform: translateY(-50%);
+    }
     .pro-map-heading p { display: none; }
     .pro-map-legend span { font-size: 9px; }
     .map-stat-card { grid-template-columns: 32px minmax(0, 1fr); }
@@ -782,12 +795,12 @@
 
 @media (max-width: 360px) {
     .pro-home-hero .about-points.city-shortcuts-slider {
-        padding-right: 40px;
-        padding-left: 40px;
+        padding-right: 52px;
+        padding-left: 52px;
     }
 
-    .city-shortcuts-arrow.is-prev { left: 4px; }
-    .city-shortcuts-arrow.is-next { right: 4px; }
+    .city-shortcuts-arrow.is-prev { left: 5px; }
+    .city-shortcuts-arrow.is-next { right: 5px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
