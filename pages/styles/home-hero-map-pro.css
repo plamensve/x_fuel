@@ -779,6 +779,17 @@
     .map-stat-value { font-size: 17px; }
 }
 
+
+@media (max-width: 360px) {
+    .pro-home-hero .about-points.city-shortcuts-slider {
+        padding-right: 40px;
+        padding-left: 40px;
+    }
+
+    .city-shortcuts-arrow.is-prev { left: 4px; }
+    .city-shortcuts-arrow.is-next { right: 4px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .city-shortcuts-viewport { scroll-behavior: auto; }
     .city-shortcuts-arrow,
