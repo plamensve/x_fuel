@@ -619,7 +619,10 @@
     }
 
     .pro-home-hero .about-points.city-shortcuts-slider {
+        width: min(100%, 620px);
         max-width: 620px;
+        margin-left: auto;
+        margin-right: auto;
         padding-bottom: 40px;
         padding-right: 58px;
         padding-left: 58px;
@@ -662,9 +665,10 @@
 @media (max-width: 460px) {
     .pro-home-hero .about-title { font-size: 38px; }
     .pro-home-hero .about-points.city-shortcuts-slider {
-        width: calc(100% + 16px);
-        margin-right: -8px;
-        margin-left: -8px;
+        width: 100%;
+        max-width: 100%;
+        margin-right: auto;
+        margin-left: auto;
         padding-right: 46px;
         padding-bottom: 38px;
         padding-left: 46px;
