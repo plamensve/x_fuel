@@ -807,11 +807,12 @@
 @media (max-width: 650px) {
     .pro-home-hero .about-points.city-shortcuts-slider {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        grid-template-columns: 44px auto 44px;
         grid-template-areas:
             "viewport viewport viewport"
             "prev status next";
         align-items: center;
+        justify-content: center;
         column-gap: 12px;
         row-gap: 10px;
         padding: 12px 12px 14px;
@@ -840,13 +841,13 @@
 
     .city-shortcuts-arrow.is-prev {
         grid-area: prev;
-        justify-self: end;
+        justify-self: center;
         left: auto;
     }
 
     .city-shortcuts-arrow.is-next {
         grid-area: next;
-        justify-self: start;
+        justify-self: center;
         right: auto;
     }
 
