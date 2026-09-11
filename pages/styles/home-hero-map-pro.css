@@ -250,6 +250,10 @@
     transform: scale(1.04);
 }
 
+.city-shortcuts-controls {
+    display: contents;
+}
+
 .city-shortcuts-arrow {
     position: absolute;
     top: 54px;
@@ -806,23 +810,27 @@
 /* Keep mobile city cards and pagination controls in separate rows. */
 @media (max-width: 650px) {
     .pro-home-hero .about-points.city-shortcuts-slider {
-        display: grid;
-        grid-template-columns: 44px auto 44px;
-        grid-template-areas:
-            "viewport viewport viewport"
-            "prev status next";
-        align-items: center;
-        justify-content: center;
-        column-gap: 12px;
-        row-gap: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
         padding: 12px 12px 14px;
     }
 
     .pro-home-hero .city-shortcuts-viewport {
-        grid-area: viewport;
         width: 100%;
         min-width: 0;
         padding: 8px 0 4px;
+    }
+
+    .city-shortcuts-controls {
+        width: 100%;
+        min-width: 0;
+        margin-top: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
     }
 
     .city-shortcuts-arrow {
@@ -831,6 +839,8 @@
         right: auto;
         bottom: auto;
         left: auto;
+        flex: 0 0 44px;
+        box-sizing: border-box;
         width: 44px;
         min-width: 44px;
         height: 44px;
@@ -839,24 +849,18 @@
         transform: none;
     }
 
-    .city-shortcuts-arrow.is-prev {
-        grid-area: prev;
-        justify-self: center;
-        left: auto;
-    }
-
+    .city-shortcuts-arrow.is-prev,
     .city-shortcuts-arrow.is-next {
-        grid-area: next;
-        justify-self: center;
+        left: auto;
         right: auto;
     }
 
     .city-shortcuts-status {
         position: static;
-        grid-area: status;
-        justify-self: center;
-        align-self: center;
+        flex: 0 0 auto;
         margin: 0;
+        left: auto;
+        bottom: auto;
         transform: none;
     }
 
