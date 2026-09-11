@@ -691,6 +691,67 @@
     }
 }
 
+
+/* Fluid hero layout for compact phones from 300px through 650px. */
+@media (min-width: 300px) and (max-width: 650px) {
+    .about-project.pro-home-hero {
+        padding-top: clamp(30px, 6vw, 36px);
+        padding-bottom: clamp(24px, 5vw, 28px);
+    }
+
+    .pro-home-hero .about-inner,
+    .pro-home-hero .about-points.city-shortcuts-slider,
+    .pro-home-hero .eko-map-promo {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
+    }
+
+    .pro-home-hero .about-title,
+    .pro-home-hero .about-desc {
+        max-width: 100%;
+        overflow-wrap: anywhere;
+    }
+
+    .pro-home-hero .about-desc {
+        font-size: clamp(13px, 2.8vw, 15px);
+    }
+
+    .pro-hero-kicker {
+        max-width: 100%;
+        box-sizing: border-box;
+        justify-content: center;
+        text-align: center;
+        overflow-wrap: anywhere;
+        font-size: clamp(9px, 1.9vw, 11px);
+        line-height: 1.25;
+    }
+
+    .pro-home-hero .about-points.city-shortcuts-slider {
+        padding-right: clamp(40px, 9vw, 58px);
+        padding-left: clamp(40px, 9vw, 58px);
+        padding-bottom: clamp(38px, 6vw, 40px);
+    }
+
+    .pro-home-hero .city-shortcuts-viewport,
+    .pro-home-hero .city-shortcuts-track,
+    .pro-home-hero .city-shortcuts-track .hero-benefit {
+        min-width: 0;
+    }
+
+    .pro-home-hero .city-shortcuts-track .hero-benefit {
+        grid-template-columns: clamp(30px, 8vw, 36px) minmax(0, 1fr);
+        gap: clamp(7px, 2.4vw, 10px);
+        padding-right: clamp(10px, 3vw, 15px);
+        padding-left: clamp(10px, 3vw, 15px);
+    }
+
+    .pro-home-hero .city-shortcuts-track .hero-benefit .hero-benefit-icon {
+        width: clamp(30px, 8vw, 36px);
+        height: clamp(30px, 8vw, 36px);
+    }
+}
+
 @media (max-width: 460px) {
     .about-project.pro-home-hero {
         --hero-mobile-gutter: 10px;

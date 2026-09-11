@@ -7,7 +7,7 @@
             const link = document.createElement("link");
             link.id = "home-hero-map-pro-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/home-hero-map-pro.css?v=20260911-hero-poll-width5";
+            link.href = "/pages/styles/home-hero-map-pro.css?v=20260911-hero-mobile-300";
             document.head.appendChild(link);
         }
 
@@ -268,6 +268,34 @@
                         padding: 0 13px;
                     }
                     .map-stat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+                }
+
+
+                @media (min-width: 300px) and (max-width: 650px) {
+                    .pro-home-hero .eko-map-promo-inner {
+                        grid-template-columns: clamp(36px, 6.5vw, 42px) minmax(0, 1fr);
+                        gap: clamp(8px, 1.9vw, 12px);
+                        padding: clamp(10px, 2.2vw, 14px);
+                    }
+                    .pro-home-hero .eko-map-promo-icon {
+                        width: clamp(36px, 6.5vw, 42px);
+                        height: clamp(36px, 6.5vw, 42px);
+                    }
+                    .pro-home-hero .eko-map-promo-copy {
+                        min-width: 0;
+                    }
+                    .pro-home-hero .eko-map-promo-copy strong,
+                    .pro-home-hero .eko-map-promo-copy small {
+                        overflow-wrap: anywhere;
+                    }
+                    .pro-home-hero .eko-map-promo-action {
+                        box-sizing: border-box;
+                        max-width: 100%;
+                        padding-right: clamp(10px, 2.2vw, 13px);
+                        padding-left: clamp(10px, 2.2vw, 13px);
+                        text-align: center;
+                        white-space: normal;
+                    }
                 }
 
                 @media (max-width: 560px) {
