@@ -7,7 +7,7 @@
             const link = document.createElement("link");
             link.id = "home-hero-map-pro-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/home-hero-map-pro.css?v=20260911-hero-mobile-300-2";
+            link.href = "/pages/styles/home-hero-map-pro.css?v=20260911-hero-poll-sync650";
             document.head.appendChild(link);
         }
 
@@ -447,6 +447,57 @@
         });
     }
 
+
+    function syncMobileHeroToFuelPoll() {
+        const hero = document.querySelector(".pro-home-hero");
+        const inner = hero?.querySelector(".about-inner");
+        if (!hero || !inner) return;
+
+        const isMobile = window.matchMedia("(max-width: 650px)").matches;
+        const pollCard = document.querySelector(".fuel-poll-card");
+        if (!isMobile || !pollCard) {
+            ["boxSizing", "width", "maxWidth", "marginLeft", "marginRight"].forEach(property => {
+                inner.style[property] = "";
+            });
+            return;
+        }
+
+        const heroRect = hero.getBoundingClientRect();
+        const pollRect = pollCard.getBoundingClientRect();
+        const heroStyles = getComputedStyle(hero);
+        const contentLeft = heroRect.left
+            + (parseFloat(heroStyles.borderLeftWidth) || 0)
+            + (parseFloat(heroStyles.paddingLeft) || 0);
+        const leftOffset = pollRect.left - contentLeft;
+
+        inner.style.boxSizing = "border-box";
+        inner.style.width = `${Math.max(0, pollRect.width)}px`;
+        inner.style.maxWidth = "none";
+        inner.style.marginLeft = `${leftOffset}px`;
+        inner.style.marginRight = "0px";
+    }
+
+    function initMobileHeroPollSync() {
+        let frame = 0;
+        const schedule = () => {
+            cancelAnimationFrame(frame);
+            frame = requestAnimationFrame(() => {
+                frame = 0;
+                syncMobileHeroToFuelPoll();
+            });
+        };
+
+        window.addEventListener("resize", schedule, { passive: true });
+        window.addEventListener("load", schedule, { once: true });
+        schedule();
+
+        const main = document.querySelector("main.container") || document.body;
+        if ("MutationObserver" in window && main) {
+            const observer = new MutationObserver(schedule);
+            observer.observe(main, { childList: true, subtree: true });
+        }
+    }
+
     function buildMapShell() {
         const section = document.querySelector(".station-map-section");
         const map = document.getElementById("station-map");
@@ -568,6 +619,7 @@
         ensureStyles();
         simplifyHeader();
         buildHero();
+        initMobileHeroPollSync();
         buildMapShell();
         scheduleMapStats();
     }
