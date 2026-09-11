@@ -216,7 +216,7 @@ const gorivaLoadScript = (src, { id = "", defer = true } = {}) => {
 // becomes a late LCP candidate and produces large CLS values.
 (() => {
     if (window.location.pathname !== "/" && !window.location.pathname.endsWith("/index.html")) return;
-    const src = "/scripts/home-hero-map-pro.js?v=20260911-hero-poll-width4";
+    const src = "/scripts/home-hero-map-pro.js?v=20260911-hero-poll-width5";
     if (document.readyState === "loading") {
         document.write(`<script src="${src}"><\/script>`);
         return;

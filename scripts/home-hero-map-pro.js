@@ -7,7 +7,7 @@
             const link = document.createElement("link");
             link.id = "home-hero-map-pro-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/home-hero-map-pro.css?v=20260911-hero-poll-width4";
+            link.href = "/pages/styles/home-hero-map-pro.css?v=20260911-hero-poll-width5";
             document.head.appendChild(link);
         }
 
@@ -251,7 +251,7 @@
                     .station-map-section.pro-station-map { margin-top: 34px !important; }
                     .pro-home-hero .eko-map-promo {
                         width: 100%;
-                        max-width: 520px;
+                        max-width: none;
                         margin-left: auto;
                         margin-right: auto;
                     }

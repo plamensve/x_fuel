@@ -633,14 +633,22 @@
         margin-right: auto;
     }
 
+    /* Keep every mobile hero block on the same content gutter as the fuel poll. */
+    .pro-home-hero .about-inner,
+    .pro-home-hero .about-points.city-shortcuts-slider,
+    .pro-home-hero .eko-map-promo {
+        width: 100%;
+        max-width: none;
+    }
+
     .pro-home-hero .about-points {
         grid-template-columns: 1fr;
         max-width: 520px;
     }
 
     .pro-home-hero .about-points.city-shortcuts-slider {
-        width: min(100%, 620px);
-        max-width: 620px;
+        width: 100%;
+        max-width: none;
         box-sizing: border-box;
         margin-left: auto;
         margin-right: auto;
