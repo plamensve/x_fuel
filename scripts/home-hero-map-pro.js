@@ -7,7 +7,7 @@
             const link = document.createElement("link");
             link.id = "home-hero-map-pro-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/home-hero-map-pro.css?v=20260911-hero-fullwidth1";
+            link.href = "/pages/styles/home-hero-map-pro.css?v=20260911-hero-centered2";
             document.head.appendChild(link);
         }
 
@@ -24,6 +24,8 @@
                 .pro-home-hero .eko-map-promo {
                     position: relative;
                     overflow: hidden;
+                    box-sizing: border-box;
+                    width: min(100%, 850px);
                     max-width: 850px;
                     margin: 18px auto 0;
                     padding: 2px;
@@ -247,7 +249,12 @@
 
                 @media (max-width: 760px) {
                     .station-map-section.pro-station-map { margin-top: 34px !important; }
-                    .pro-home-hero .eko-map-promo { max-width: 520px; }
+                    .pro-home-hero .eko-map-promo {
+                        width: 100%;
+                        max-width: 520px;
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
                     .eko-map-promo-inner {
                         grid-template-columns: 42px minmax(0, 1fr);
                         gap: 12px;
