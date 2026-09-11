@@ -614,10 +614,11 @@
 
 @media (max-width: 760px) {
     .about-project.pro-home-hero {
-        width: 100vw;
+        --hero-mobile-gutter: 14px;
+        width: calc(100% + var(--hero-mobile-gutter) + var(--hero-mobile-gutter));
         max-width: none;
-        left: 50%;
-        margin-left: -50vw;
+        left: 0;
+        margin-left: calc(0px - var(--hero-mobile-gutter));
         margin-right: 0;
         padding: 36px 16px 28px;
     }
@@ -683,6 +684,10 @@
 }
 
 @media (max-width: 460px) {
+    .about-project.pro-home-hero {
+        --hero-mobile-gutter: 10px;
+    }
+
     .pro-home-hero .about-title { font-size: 38px; }
     .pro-home-hero .about-points.city-shortcuts-slider {
         width: 100%;
