@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-NAV_VERSION = "20260907-cars4"
+NAV_VERSION = "20260911-privacy-banner1"
 
 
 def write_if_changed(path: Path, updated: str, changed: list[str]) -> None:

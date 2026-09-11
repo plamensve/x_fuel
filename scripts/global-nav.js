@@ -7,13 +7,13 @@
             const link = document.createElement('link');
             link.id = 'goriva-consent-css';
             link.rel = 'stylesheet';
-            link.href = '/pages/styles/consent-manager.css?v=20260906-1';
+            link.href = '/pages/styles/consent-manager.css?v=20260911-privacy-banner1';
             document.head.appendChild(link);
         }
         if (!document.getElementById('goriva-consent-js')) {
             const script = document.createElement('script');
             script.id = 'goriva-consent-js';
-            script.src = '/scripts/consent-manager.js?v=20260906-1';
+            script.src = '/scripts/consent-manager.js?v=20260911-privacy-banner1';
             script.defer = true;
             document.head.appendChild(script);
         }
@@ -57,7 +57,7 @@
             const link = document.createElement("link");
             link.id = "goriva-global-progress-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/global-progress.css?v=20260909-insa2";
+            link.href = "/pages/styles/global-progress.css?v=20260911-privacy-banner1";
             const finish = () => resolve();
             link.addEventListener("load", finish, { once: true });
             link.addEventListener("error", finish, { once: true });

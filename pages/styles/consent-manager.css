@@ -1,183 +1,231 @@
+/* Non-blocking privacy consent banner. The page remains visible behind it. */
+
+.goriva-consent-backdrop,
+.goriva-consent-backdrop * {
+    box-sizing: border-box;
+}
+
 .goriva-consent-backdrop {
     position: fixed;
-    inset: 0;
+    inset: auto 0 0;
     z-index: 99998;
     display: flex;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
-    padding: 24px;
+    padding: 0 12px 12px;
     opacity: 0;
     pointer-events: none;
-    background: rgba(2, 8, 18, 0.72);
-    backdrop-filter: blur(3px);
-    -webkit-backdrop-filter: blur(3px);
+    background: transparent;
     transition: opacity 0.22s ease;
 }
 
 .goriva-consent-backdrop.is-open {
     opacity: 1;
-    pointer-events: auto;
 }
 
 .goriva-consent-modal {
-    width: min(920px, 100%);
-    max-height: min(760px, calc(100vh - 48px));
-    min-height: 0;
+    width: min(1120px, 100%);
+    max-height: min(430px, calc(100vh - 24px));
     overflow: hidden;
     display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    border: 1px solid rgba(229, 178, 79, 0.58);
-    border-radius: 28px;
+    grid-template-columns: minmax(0, 1.12fr) minmax(360px, 0.88fr);
+    border: 1px solid rgba(15, 23, 42, 0.14);
+    border-radius: 20px;
     background: #f8fafc;
-    box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.08),
-        0 0 0 4px rgba(229, 178, 79, 0.06),
-        0 28px 70px rgba(0, 0, 0, 0.42),
-        0 0 24px rgba(229, 178, 79, 0.11);
-    transform: translateY(12px) scale(0.985);
+    box-shadow: 0 16px 48px rgba(15, 23, 42, 0.28), 0 3px 12px rgba(15, 23, 42, 0.14);
+    transform: translateY(14px);
     transition: transform 0.22s ease;
+    pointer-events: none;
 }
 
 .goriva-consent-backdrop.is-open .goriva-consent-modal {
-    transform: none;
+    transform: translateY(0);
+    pointer-events: auto;
 }
 
 .goriva-consent-brand {
-    position: relative;
-    overflow: hidden;
-    padding: 42px 38px;
-    color: #f8fafc;
-    background:
-        radial-gradient(circle at 25% 10%, rgba(245, 190, 67, 0.16), transparent 28%),
-        linear-gradient(160deg, #071421, #0b2030 58%, #07131f);
-}
-
-.goriva-consent-brand::after {
-    content: "";
-    position: absolute;
-    inset: auto -70px -90px 15%;
-    height: 240px;
-    background: radial-gradient(circle, rgba(218, 164, 58, 0.16), transparent 68%);
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 24px 28px;
+    color: #0f172a;
+    background: linear-gradient(135deg, #ffffff 0%, #eef5ff 100%);
 }
 
 .goriva-consent-logo {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 52px;
+    gap: 10px;
+    margin-bottom: 16px;
 }
 
 .goriva-consent-logo img {
-    width: 52px;
-    height: 52px;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
     object-fit: contain;
+    box-shadow: 0 5px 16px rgba(15, 23, 42, 0.14);
 }
 
 .goriva-consent-logo strong {
-    font-size: 25px;
+    color: #0f172a;
+    font-size: 21px;
     letter-spacing: -0.03em;
 }
 
 .goriva-consent-logo strong span {
-    color: #d9a63f;
+    color: #2563eb;
 }
 
-.goriva-consent-brand h2 {
-    margin: 0 0 18px;
-    font-size: clamp(32px, 4.2vw, 48px);
-    line-height: 1.08;
-    letter-spacing: -0.045em;
-    overflow-wrap: normal;
-    word-break: normal;
-    hyphens: none;
+.goriva-consent-title {
+    margin: 0 0 9px;
+    color: #0f172a;
+    font-size: clamp(22px, 3vw, 30px);
+    line-height: 1.12;
+    font-weight: 850;
+    letter-spacing: -0.035em;
 }
 
-.goriva-consent-brand h2 span {
-    color: #e5b24f;
+.goriva-consent-title strong {
+    color: #0f172a;
 }
 
-.goriva-consent-brand p {
+.goriva-consent-title span {
+    color: #2563eb;
+}
+
+.goriva-consent-brand > p:not(.goriva-consent-title) {
+    max-width: 470px;
     margin: 0;
-    color: #c7d2df;
-    line-height: 1.68;
-    font-size: 15px;
+    color: #475569;
+    font-size: 13px;
+    line-height: 1.55;
 }
 
-.goriva-consent-benefits {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-top: 34px;
+.goriva-consent-brand-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 7px;
+    margin-top: 17px;
+    color: #64748b;
+    font-size: 11px;
 }
 
-.goriva-consent-benefit {
-    color: #dbe5ef;
-    font-size: 12px;
-    text-align: center;
+.goriva-consent-brand-meta a {
+    color: #2563eb;
+    text-decoration: none;
 }
 
-.goriva-consent-benefit b {
-    width: 42px;
-    height: 42px;
-    margin: 0 auto 8px;
-    display: grid;
-    place-items: center;
-    border: 1px solid rgba(229, 178, 79, 0.55);
-    border-radius: 50%;
-    color: #e5b24f;
-    font-size: 18px;
+.goriva-consent-brand-meta a:hover,
+.goriva-consent-brand-meta a:focus-visible {
+    text-decoration: underline;
 }
 
 .goriva-consent-panel {
     position: relative;
     min-width: 0;
     min-height: 0;
-    margin: 10px 10px 10px 0;
-    padding: 24px 24px 24px 34px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 8px;
+    padding: 18px 20px;
     overflow: hidden;
-    display: grid;
-    grid-template-rows: auto minmax(0, 1fr) auto auto;
-    color: #102030;
-    background: linear-gradient(180deg, #fff, #f7f9fc);
-    border-radius: 0 20px 20px 0;
+    border-radius: 14px;
+    color: #e2e8f0;
+    background: #172033;
 }
 
 .goriva-consent-close {
     position: absolute;
-    z-index: 5;
-    top: 12px;
-    right: 12px;
-    width: 42px;
-    height: 42px;
-    display: grid;
-    place-items: center;
-    border: 1px solid transparent;
-    border-radius: 11px;
-    color: #23374a;
-    background: rgba(255, 255, 255, 0.92);
-    font-size: 29px;
+    top: 8px;
+    right: 8px;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    color: #cbd5e1;
+    background: transparent;
+    font-size: 23px;
     line-height: 1;
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
 }
 
 .goriva-consent-close:hover,
 .goriva-consent-close:focus-visible {
-    border-color: #d8e0e8;
-    background: #ffffff;
-    outline: none;
-    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.10);
+    color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    outline: 3px solid rgba(147, 197, 253, 0.55);
+    outline-offset: 2px;
+}
+
+.goriva-consent-summary {
+    min-width: 0;
+    padding: 0 42px 11px 0;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.22);
+}
+
+.goriva-consent-summary-label {
+    display: block;
+    margin-bottom: 4px;
+    color: #93c5fd;
+    font-size: 10px;
+    font-weight: 800;
+    letter-spacing: 0.09em;
+}
+
+.goriva-consent-summary-text {
+    display: block;
+    color: #f8fafc;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.goriva-consent-settings[hidden],
+.goriva-consent-actions button[hidden] {
+    display: none !important;
+}
+
+.goriva-consent-settings {
+    min-height: 0;
+    max-height: 230px;
+    overflow: auto;
+    padding-right: 3px;
+    scrollbar-width: thin;
+    scrollbar-color: #60a5fa rgba(148, 163, 184, 0.16);
+}
+
+.goriva-consent-settings::-webkit-scrollbar {
+    width: 8px;
+}
+
+.goriva-consent-settings::-webkit-scrollbar-track {
+    background: rgba(148, 163, 184, 0.16);
+    border-radius: 999px;
+}
+
+.goriva-consent-settings::-webkit-scrollbar-thumb {
+    border: 2px solid #172033;
+    border-radius: 999px;
+    background: #60a5fa;
 }
 
 .goriva-consent-tabs {
-    min-width: 0;
     display: flex;
-    gap: 22px;
-    padding: 0 48px 12px 0;
-    margin-bottom: 14px;
+    gap: 5px;
+    margin: 0 0 9px;
+    padding: 0 42px 7px 0;
     overflow-x: auto;
-    border-bottom: 1px solid #e5eaf0;
-    font-size: 13px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+    color: #94a3b8;
+    font-size: 11px;
     scrollbar-width: none;
 }
 
@@ -192,87 +240,74 @@
 }
 
 .goriva-consent-tabs b {
-    padding-bottom: 10px;
-    color: #172536;
-    border-bottom: 2px solid #d9a63f;
+    padding-bottom: 6px;
+    color: #ffffff;
+    border-bottom: 2px solid #60a5fa;
+}
+
+.goriva-consent-tabs span {
+    color: #94a3b8;
 }
 
 .goriva-consent-options {
-    min-width: 0;
-    min-height: 0;
-    overflow-x: hidden;
-    overflow-y: auto;
-    padding-right: 4px;
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: thin;
-    scrollbar-color: #d8a13a #e9eef4;
-}
-
-.goriva-consent-options::-webkit-scrollbar {
-    width: 9px;
-}
-
-.goriva-consent-options::-webkit-scrollbar-track {
-    margin: 8px 0;
-    background: #e9eef4;
-    border-radius: 999px;
-}
-
-.goriva-consent-options::-webkit-scrollbar-thumb {
-    border: 2px solid #e9eef4;
-    border-radius: 999px;
-    background: linear-gradient(180deg, #efc464, #d39b31);
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
 }
 
 .goriva-consent-category {
+    min-width: 0;
     display: grid;
-    grid-template-columns: 46px minmax(0, 1fr) auto;
-    gap: 14px;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
     align-items: center;
-    padding: 16px;
-    margin-bottom: 12px;
-    border: 1px solid #e2e8f0;
-    border-radius: 15px;
-    background: #fff;
-}
-
-.goriva-consent-category:last-child {
-    margin-bottom: 0;
+    gap: 9px;
+    min-height: 62px;
+    padding: 10px;
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    border-radius: 10px;
+    background: rgba(15, 23, 42, 0.32);
 }
 
 .goriva-consent-icon {
-    width: 42px;
-    height: 42px;
-    display: grid;
-    place-items: center;
-    border-radius: 12px;
-    background: #eef3f7;
-    font-size: 20px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 9px;
+    color: #bfdbfe;
+    background: rgba(37, 99, 235, 0.18);
+    font-size: 16px;
 }
 
 .goriva-consent-category strong {
     display: block;
-    margin-bottom: 4px;
-    font-size: 15px;
+    margin-bottom: 2px;
+    color: #f8fafc;
+    font-size: 12px;
+    line-height: 1.25;
 }
 
 .goriva-consent-category small {
     display: block;
-    color: #667789;
-    line-height: 1.45;
+    color: #94a3b8;
+    font-size: 10px;
+    line-height: 1.35;
 }
 
 .goriva-consent-switch {
     position: relative;
-    width: 52px;
-    height: 30px;
-    display: inline-block;
+    display: inline-flex;
+    flex: 0 0 auto;
+    align-items: center;
+    width: 38px;
+    height: 22px;
 }
 
 .goriva-consent-switch input {
-    width: 0;
-    height: 0;
+    position: absolute;
+    width: 1px;
+    height: 1px;
     opacity: 0;
 }
 
@@ -280,284 +315,222 @@
     position: absolute;
     inset: 0;
     border-radius: 999px;
-    background: #c7d0da;
+    background: #475569;
     cursor: pointer;
-    transition: 0.2s;
+    transition: background 0.18s ease;
 }
 
 .goriva-consent-slider::before {
-    content: "";
     position: absolute;
-    left: 3px;
     top: 3px;
-    width: 24px;
-    height: 24px;
+    left: 3px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
-    background: #fff;
-    box-shadow: 0 2px 7px rgba(0, 0, 0, 0.18);
-    transition: 0.2s;
+    background: #ffffff;
+    content: '';
+    transition: transform 0.18s ease;
 }
 
 .goriva-consent-switch input:checked + .goriva-consent-slider {
-    background: #d7a43b;
+    background: #2563eb;
 }
 
 .goriva-consent-switch input:checked + .goriva-consent-slider::before {
-    transform: translateX(22px);
+    transform: translateX(16px);
 }
 
 .goriva-consent-switch input:disabled + .goriva-consent-slider {
-    background: #aeb8c3;
+    background: #64748b;
     cursor: not-allowed;
+}
+
+.goriva-consent-switch input:focus-visible + .goriva-consent-slider {
+    outline: 3px solid rgba(147, 197, 253, 0.55);
+    outline-offset: 2px;
 }
 
 .goriva-consent-actions {
     display: grid;
-    gap: 10px;
-    margin-top: 16px;
-    padding-top: 4px;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-top: auto;
 }
 
 .goriva-consent-actions button {
-    width: 100%;
-    min-height: 49px;
-    border-radius: 12px;
-    font-size: 14px;
-    font-weight: 800;
+    min-height: 40px;
+    padding: 8px 10px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font: inherit;
+    font-size: 11px;
+    font-weight: 750;
+    line-height: 1.2;
     cursor: pointer;
-    -webkit-tap-highlight-color: transparent;
+    transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
 }
 
 .goriva-consent-accept {
-    border: 1px solid #d6a23c;
-    color: #111827;
-    background: linear-gradient(180deg, #ebbe5e, #d8a13a);
+    border-color: #3b82f6;
+    color: #ffffff;
+    background: #2563eb;
+}
+
+.goriva-consent-accept:hover,
+.goriva-consent-accept:focus-visible {
+    background: #1d4ed8;
 }
 
 .goriva-consent-reject,
+.goriva-consent-manage,
 .goriva-consent-save {
-    border: 1px solid #263c51;
-    color: #1a2b3c;
-    background: #fff;
+    border-color: rgba(148, 163, 184, 0.35);
+    color: #e2e8f0;
+    background: rgba(255, 255, 255, 0.05);
 }
 
-/* Keep all actions visible. Saving the current selection is valid even before a switch changes. */
-.goriva-consent-save {
-    display: block;
+.goriva-consent-reject:hover,
+.goriva-consent-reject:focus-visible,
+.goriva-consent-manage:hover,
+.goriva-consent-manage:focus-visible,
+.goriva-consent-save:hover,
+.goriva-consent-save:focus-visible {
+    border-color: rgba(191, 219, 254, 0.6);
+    background: rgba(255, 255, 255, 0.11);
+}
+
+.goriva-consent-actions button:focus-visible,
+.goriva-consent-close:focus-visible {
+    outline: 3px solid rgba(147, 197, 253, 0.55);
+    outline-offset: 2px;
 }
 
 .goriva-consent-meta {
-    margin-top: 12px;
-    color: #708090;
-    font-size: 11px;
-    line-height: 1.55;
-    text-align: center;
+    margin: 0;
+    color: #94a3b8;
+    font-size: 10px;
+    line-height: 1.35;
 }
 
 .goriva-consent-meta a {
-    color: #365b7d;
+    color: #bfdbfe;
 }
 
 .goriva-privacy-settings-link {
-    display: inline;
-    margin: 0 !important;
     padding: 0 !important;
     border: 0 !important;
     color: inherit !important;
-    background: none !important;
-    box-shadow: none !important;
+    background: transparent !important;
     font: inherit !important;
-    font-size: inherit !important;
-    font-weight: inherit !important;
-    line-height: inherit !important;
     cursor: pointer;
-    text-decoration: none !important;
 }
 
 .goriva-privacy-settings-link:hover,
-.goriva-privacy-settings-link:focus {
-    color: inherit !important;
-    text-decoration: none !important;
+.goriva-privacy-settings-link:focus-visible {
+    color: #2563eb !important;
+    text-decoration: underline !important;
 }
 
 @media (max-width: 760px) {
     .goriva-consent-backdrop {
-        align-items: stretch;
-        padding:
-            max(8px, env(safe-area-inset-top))
-            max(8px, env(safe-area-inset-right))
-            max(8px, env(safe-area-inset-bottom))
-            max(8px, env(safe-area-inset-left));
-        backdrop-filter: none;
-        -webkit-backdrop-filter: none;
+        padding: 0 8px max(8px, env(safe-area-inset-bottom));
     }
 
     .goriva-consent-modal {
         width: 100%;
-        max-height: calc(100vh - 16px);
-        max-height: calc(100dvh - 16px);
-        margin: auto 0 0;
+        max-height: min(560px, calc(100vh - 16px));
+        max-height: min(560px, calc(100dvh - 16px));
         grid-template-columns: 1fr;
         grid-template-rows: auto minmax(0, 1fr);
-        border-radius: 22px;
+        border-radius: 18px;
     }
 
     .goriva-consent-brand {
-        padding: 18px 18px 14px;
+        padding: 14px 16px 10px;
     }
 
     .goriva-consent-logo {
         gap: 9px;
-        margin-bottom: 10px;
+        margin-bottom: 8px;
     }
 
     .goriva-consent-logo img {
-        width: 42px;
-        height: 42px;
+        width: 40px;
+        height: 40px;
     }
 
     .goriva-consent-logo strong {
+        font-size: 19px;
+    }
+
+    .goriva-consent-title {
+        margin-bottom: 5px;
         font-size: 21px;
     }
 
-    .goriva-consent-brand h2 {
-        max-width: 100%;
-        margin-bottom: 9px;
-        font-size: clamp(23px, 7vw, 28px);
-        line-height: 1.08;
+    .goriva-consent-brand > p:not(.goriva-consent-title) {
+        font-size: 11px;
+        line-height: 1.4;
     }
 
-    .goriva-consent-brand p {
-        font-size: 13px;
-        line-height: 1.48;
-    }
-
-    .goriva-consent-benefits {
-        display: none;
+    .goriva-consent-brand-meta {
+        margin-top: 8px;
+        font-size: 10px;
     }
 
     .goriva-consent-panel {
-        min-height: 0;
         margin: 0 6px 6px;
-        padding: 16px 12px calc(12px + env(safe-area-inset-bottom));
-        border-radius: 0 0 15px 15px;
-        grid-template-rows: auto minmax(0, 1fr) auto auto;
+        padding: 14px 12px;
+        border-radius: 0 0 14px 14px;
     }
 
-    .goriva-consent-close {
-        top: 8px;
-        right: 8px;
-        width: 44px;
-        height: 44px;
-        border-color: #e2e8f0;
-        background: #fff;
-        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
+    .goriva-consent-summary {
+        padding-right: 36px;
     }
 
-    .goriva-consent-tabs {
-        gap: 12px;
-        margin-bottom: 10px;
-        padding: 0 48px 9px 0;
-        font-size: 12px;
-    }
-
-    .goriva-consent-tabs b {
-        padding-bottom: 7px;
+    .goriva-consent-settings {
+        max-height: 240px;
     }
 
     .goriva-consent-options {
-        padding-right: 2px;
-    }
-
-    .goriva-consent-category {
-        grid-template-columns: 38px minmax(0, 1fr) auto;
-        gap: 9px;
-        padding: 10px;
-        margin-bottom: 8px;
-        border-radius: 12px;
-    }
-
-    .goriva-consent-icon {
-        width: 36px;
-        height: 36px;
-        border-radius: 10px;
-        font-size: 17px;
-    }
-
-    .goriva-consent-category strong {
-        margin-bottom: 2px;
-        font-size: 13px;
-    }
-
-    .goriva-consent-category small {
-        font-size: 10.5px;
-        line-height: 1.32;
-    }
-
-    .goriva-consent-switch {
-        width: 48px;
-        height: 28px;
-    }
-
-    .goriva-consent-slider::before {
-        width: 22px;
-        height: 22px;
-    }
-
-    .goriva-consent-switch input:checked + .goriva-consent-slider::before {
-        transform: translateX(20px);
+        grid-template-columns: 1fr;
     }
 
     .goriva-consent-actions {
-        gap: 7px;
-        margin-top: 10px;
-        padding-top: 0;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
-    .goriva-consent-actions button {
-        min-height: 44px;
-        font-size: 13px;
-    }
-
-    .goriva-consent-meta {
-        margin-top: 8px;
-        font-size: 10px;
-        line-height: 1.4;
+    .goriva-consent-accept {
+        grid-column: 1 / -1;
     }
 }
 
-@media (max-width: 380px), (max-width: 760px) and (max-height: 650px) {
-    .goriva-consent-brand {
-        padding: 12px 14px 9px;
+@media (max-width: 430px) {
+    .goriva-consent-actions {
+        grid-template-columns: 1fr;
     }
 
-    .goriva-consent-logo {
-        margin-bottom: 5px;
+    .goriva-consent-accept {
+        grid-column: auto;
     }
+}
 
-    .goriva-consent-logo img {
-        width: 34px;
-        height: 34px;
-    }
-
-    .goriva-consent-logo strong {
-        font-size: 18px;
-    }
-
-    .goriva-consent-brand h2 {
-        margin-bottom: 0;
-        font-size: 21px;
-    }
-
-    .goriva-consent-brand p {
+@media (max-height: 650px) and (max-width: 760px) {
+    .goriva-consent-brand > p:not(.goriva-consent-title) {
         display: none;
     }
 
-    .goriva-consent-panel {
-        padding-top: 12px;
+    .goriva-consent-brand-meta {
+        margin-top: 6px;
     }
+}
 
-    .goriva-consent-meta {
-        display: none;
+@media (prefers-reduced-motion: reduce) {
+    .goriva-consent-backdrop,
+    .goriva-consent-modal,
+    .goriva-consent-slider,
+    .goriva-consent-slider::before,
+    .goriva-consent-actions button {
+        transition: none;
     }
 }

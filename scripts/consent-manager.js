@@ -149,8 +149,9 @@
     wrapper.id = 'goriva-consent';
     wrapper.className = 'goriva-consent-backdrop';
     wrapper.setAttribute('role', 'dialog');
-    wrapper.setAttribute('aria-modal', 'true');
+    wrapper.setAttribute('aria-modal', 'false');
     wrapper.setAttribute('aria-labelledby', 'goriva-consent-title');
+    wrapper.setAttribute('aria-hidden', 'true');
 
     wrapper.innerHTML = `
       <div class="goriva-consent-modal">
@@ -159,54 +160,61 @@
             <img src="/media/2logo.png" alt="">
             <strong><span>goriva</span>.online</strong>
           </div>
-          <h2 id="goriva-consent-title">Вашата поверителност <span>е важна</span></h2>
+          <p id="goriva-consent-title" class="goriva-consent-title"><strong>Вашата поверителност</strong> <span>е важна</span></p>
           <p>Използваме бисквитки и сходни технологии, за да осигурим работата на сайта, да разбираме как се използва и, при ваше съгласие, да показваме реклами.</p>
-          <div class="goriva-consent-benefits">
-            <div class="goriva-consent-benefit"><b>▥</b>По-добро изживяване</div>
-            <div class="goriva-consent-benefit"><b>⌁</b>Защитени данни</div>
-            <div class="goriva-consent-benefit"><b>✓</b>Вие избирате</div>
+          <div class="goriva-consent-brand-meta">
+            <a href="/pages/privacy.html">Политика за поверителност</a>
+            <span aria-hidden="true">·</span>
+            <a href="/pages/rules.html">Общи условия</a>
           </div>
         </section>
 
         <section class="goriva-consent-panel">
           <button class="goriva-consent-close" type="button" aria-label="Затвори настройките за поверителност">×</button>
 
-          <div class="goriva-consent-tabs">
-            <b>Категории</b><span>Подробности</span><span>За бисквитките</span>
+          <div class="goriva-consent-summary">
+            <span class="goriva-consent-summary-label">ПОВЕРИТЕЛНОСТ И БИСКВИТКИ</span>
+            <span class="goriva-consent-summary-text">Избери кои допълнителни услуги да използваме.</span>
           </div>
 
-          <div class="goriva-consent-options">
-            <div class="goriva-consent-category">
-              <span class="goriva-consent-icon">⚙</span>
-              <div><strong>Необходими</strong><small>Нужни са за основната работа и сигурността на сайта.</small></div>
-              <label class="goriva-consent-switch"><input type="checkbox" checked disabled><span class="goriva-consent-slider"></span></label>
+          <div class="goriva-consent-settings" hidden>
+            <div class="goriva-consent-tabs">
+              <b>Категории</b><span>Подробности</span><span>За бисквитките</span>
             </div>
-            <div class="goriva-consent-category">
-              <span class="goriva-consent-icon">▥</span>
-              <div><strong>Аналитични</strong><small>Помагат ни да разбираме посещаемостта и използването на сайта.</small></div>
-              <label class="goriva-consent-switch"><input id="goriva-consent-analytics" type="checkbox"><span class="goriva-consent-slider"></span></label>
-            </div>
-            <div class="goriva-consent-category">
-              <span class="goriva-consent-icon">◁</span>
-              <div><strong>Рекламни</strong><small>Използват се за рекламни услуги и персонализиране, когато е приложимо.</small></div>
-              <label class="goriva-consent-switch"><input id="goriva-consent-ads" type="checkbox"><span class="goriva-consent-slider"></span></label>
-            </div>
-            <div class="goriva-consent-category">
-              <span class="goriva-consent-icon">☰</span>
-              <div><strong>Функционални</strong><small>Запомнят допълнителни предпочитания и настройки.</small></div>
-              <label class="goriva-consent-switch"><input id="goriva-consent-functional" type="checkbox"><span class="goriva-consent-slider"></span></label>
+
+            <div class="goriva-consent-options">
+              <div class="goriva-consent-category">
+                <span class="goriva-consent-icon">⚙</span>
+                <div><strong>Необходими</strong><small>Нужни са за основната работа и сигурността на сайта.</small></div>
+                <label class="goriva-consent-switch"><input type="checkbox" checked disabled><span class="goriva-consent-slider"></span></label>
+              </div>
+              <div class="goriva-consent-category">
+                <span class="goriva-consent-icon">▥</span>
+                <div><strong>Аналитични</strong><small>Помагат ни да разбираме посещаемостта и използването на сайта.</small></div>
+                <label class="goriva-consent-switch"><input id="goriva-consent-analytics" type="checkbox"><span class="goriva-consent-slider"></span></label>
+              </div>
+              <div class="goriva-consent-category">
+                <span class="goriva-consent-icon">◁</span>
+                <div><strong>Рекламни</strong><small>Използват се за рекламни услуги и персонализиране, когато е приложимо.</small></div>
+                <label class="goriva-consent-switch"><input id="goriva-consent-ads" type="checkbox"><span class="goriva-consent-slider"></span></label>
+              </div>
+              <div class="goriva-consent-category">
+                <span class="goriva-consent-icon">☰</span>
+                <div><strong>Функционални</strong><small>Запомнят допълнителни предпочитания и настройки.</small></div>
+                <label class="goriva-consent-switch"><input id="goriva-consent-functional" type="checkbox"><span class="goriva-consent-slider"></span></label>
+              </div>
             </div>
           </div>
 
           <div class="goriva-consent-actions">
             <button class="goriva-consent-accept" type="button">Приемам всички</button>
             <button class="goriva-consent-reject" type="button">Отказвам всички</button>
-            <button class="goriva-consent-save" type="button">Запази моите настройки</button>
+            <button class="goriva-consent-manage" type="button" aria-expanded="false">Настройки</button>
+            <button class="goriva-consent-save" type="button" hidden>Запази моите настройки</button>
           </div>
 
           <div class="goriva-consent-meta">
-            Можете да промените избора си по всяко време от footer-а.<br>
-            <a href="/pages/privacy.html">Политика за поверителност</a> · <a href="/pages/rules.html">Общи условия</a>
+            Можете да промените избора си по всяко време от footer-а.
           </div>
         </section>
       </div>`;
@@ -214,15 +222,27 @@
     document.body.appendChild(wrapper);
 
     const panel = wrapper.querySelector('.goriva-consent-panel');
+    const settings = wrapper.querySelector('.goriva-consent-settings');
     const closeButton = wrapper.querySelector('.goriva-consent-close');
     const analytics = wrapper.querySelector('#goriva-consent-analytics');
     const ads = wrapper.querySelector('#goriva-consent-ads');
     const functional = wrapper.querySelector('#goriva-consent-functional');
+    const manageButton = wrapper.querySelector('.goriva-consent-manage');
+    const saveButton = wrapper.querySelector('.goriva-consent-save');
     const switches = [analytics, ads, functional];
+
+    const setMode = settingsMode => {
+      panel.classList.toggle('is-settings', settingsMode);
+      settings.hidden = !settingsMode;
+      manageButton.hidden = settingsMode;
+      saveButton.hidden = !settingsMode;
+      manageButton.setAttribute('aria-expanded', String(settingsMode));
+    };
 
     const close = () => {
       wrapper.classList.remove('is-open');
       wrapper.setAttribute('aria-hidden', 'true');
+      setMode(false);
     };
 
     const apply = state => {
@@ -240,24 +260,28 @@
       apply({ necessary: true, analytics: false, ads: false, functional: false });
     };
 
-    const open = (settingsMode = false) => {
+    const open = (settingsMode = false, shouldFocus = false) => {
       const state = loadStored() || defaults;
       analytics.checked = !!state.analytics;
       ads.checked = !!state.ads;
       functional.checked = !!state.functional;
-      panel.classList.toggle('is-settings', settingsMode);
+      setMode(settingsMode);
       wrapper.removeAttribute('aria-hidden');
       wrapper.classList.add('is-open');
 
-      window.requestAnimationFrame(() => {
-        try { closeButton.focus({ preventScroll: true }); }
-        catch (_) { closeButton.focus(); }
-      });
+      if (shouldFocus) {
+        window.requestAnimationFrame(() => {
+          try { closeButton.focus({ preventScroll: true }); }
+          catch (_) { closeButton.focus(); }
+        });
+      }
     };
 
     switches.forEach(input => {
-      input.addEventListener('change', () => panel.classList.add('is-settings'));
+      input.addEventListener('change', () => setMode(true));
     });
+
+    manageButton.addEventListener('click', () => setMode(true));
 
     wrapper.querySelector('.goriva-consent-accept').addEventListener('click', () => {
       apply({ necessary: true, analytics: true, ads: true, functional: true });
@@ -284,7 +308,7 @@
       }
     });
 
-    window.gorivaOpenPrivacySettings = () => open(true);
+    window.gorivaOpenPrivacySettings = () => open(true, true);
 
     const stored = loadStored();
     if (stored) {
@@ -293,7 +317,7 @@
       wrapper.setAttribute('aria-hidden', 'true');
     } else {
       updateGoogleConsent(defaults);
-      window.requestAnimationFrame(() => open(false));
+      window.requestAnimationFrame(() => open(false, false));
     }
   }
 
