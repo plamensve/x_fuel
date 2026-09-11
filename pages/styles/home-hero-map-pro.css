@@ -803,6 +803,68 @@
     .city-shortcuts-arrow.is-next { right: 5px; }
 }
 
+/* Keep mobile city cards and pagination controls in separate rows. */
+@media (max-width: 650px) {
+    .pro-home-hero .about-points.city-shortcuts-slider {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+        grid-template-areas:
+            "viewport viewport viewport"
+            "prev status next";
+        align-items: center;
+        column-gap: 12px;
+        row-gap: 10px;
+        padding: 12px 12px 14px;
+    }
+
+    .pro-home-hero .city-shortcuts-viewport {
+        grid-area: viewport;
+        width: 100%;
+        min-width: 0;
+        padding: 8px 0 4px;
+    }
+
+    .city-shortcuts-arrow {
+        position: static;
+        top: auto;
+        right: auto;
+        bottom: auto;
+        left: auto;
+        width: 44px;
+        min-width: 44px;
+        height: 44px;
+        min-height: 44px;
+        border-radius: 12px;
+        transform: none;
+    }
+
+    .city-shortcuts-arrow.is-prev {
+        grid-area: prev;
+        justify-self: end;
+        left: auto;
+    }
+
+    .city-shortcuts-arrow.is-next {
+        grid-area: next;
+        justify-self: start;
+        right: auto;
+    }
+
+    .city-shortcuts-status {
+        position: static;
+        grid-area: status;
+        justify-self: center;
+        align-self: center;
+        margin: 0;
+        transform: none;
+    }
+
+    .city-shortcuts-arrow:hover:not(:disabled),
+    .city-shortcuts-arrow:focus-visible:not(:disabled) {
+        transform: none;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .city-shortcuts-viewport { scroll-behavior: auto; }
     .city-shortcuts-arrow,

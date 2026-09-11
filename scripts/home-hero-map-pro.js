@@ -7,7 +7,7 @@
             const link = document.createElement("link");
             link.id = "home-hero-map-pro-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/home-hero-map-pro.css?v=20260911-hero-arrows-mobile";
+            link.href = "/pages/styles/home-hero-map-pro.css?v=20260911-hero-arrows-below-cards";
             document.head.appendChild(link);
         }
 
