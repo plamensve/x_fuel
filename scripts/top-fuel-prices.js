@@ -17,6 +17,7 @@ const SHARE_FUEL_ALIASES = {
 const SHARE_CITIES = ["София", "Пловдив", "Варна", "Бургас", "Русе"];
 const SHARE_FUELS = ["A95", "Дизел", "LPG", "A100", "Дизел +", "Метан"];
 const SHARE_GENERIC_STATION_LOGO = "../images/station_logos/generic-fuel-pump.png";
+const SHARE_EKO_TOKEN_RE = /(^|[^\p{L}\p{N}])(?:eko|еко)(?=$|[^\p{L}\p{N}])/iu;
 
 const SHARE_STATION_LOGOS = [
     {match: ["еко петрол", "екопетрол", "ecopetrol"], src: "../images/station_logos/ecopetrol.svg"},
@@ -30,7 +31,6 @@ const SHARE_STATION_LOGOS = [
     {match: ["bulmarket", "булмаркет"], src: "../images/station_logos/bulmarket.svg"},
     {match: ["пегас", "pegas"], src: "../images/station_logos/pegas-logo.png"},
     {match: ["petrol", "петрол"], src: "../images/station_logos/petrol-logo.jpg"},
-    {match: ["eko", "еко"], src: "../images/station_logos/eko-card-logo.png"},
     {match: ["dieselor", "дизелор", "diesoler"], src: "../images/station_logos/diselor.svg"},
     {match: ["himoil", "chimoil", "химойл"], src: "../images/station_logos/himoil-logo.png"},
     {match: ["avia"], src: "https://commons.wikimedia.org/wiki/Special:Redirect/file/AVIA_International_logo.svg"},
@@ -46,7 +46,8 @@ function shareStationLogo(name) {
         .trim();
 
     const config = SHARE_STATION_LOGOS.find(item => item.match.some(token => normalized.includes(token)));
-    return config?.src || SHARE_GENERIC_STATION_LOGO;
+    if (config) return config.src;
+    return SHARE_EKO_TOKEN_RE.test(String(name || "")) ? "../images/station_logos/eko-card-logo.png" : SHARE_GENERIC_STATION_LOGO;
 }
 
 function shareEscapeHtml(value) {

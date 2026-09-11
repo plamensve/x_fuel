@@ -158,6 +158,7 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
 function getStationLogo(name) {
     const lower = String(name || "").toLowerCase()
+    const hasStandaloneEkoToken = /(^|[^\p{L}\p{N}])(?:eko|еко)(?=$|[^\p{L}\p{N}])/iu.test(String(name || ""))
 
     if (lower.includes("еко петрол") || lower.includes("ecopetrol")) return "../images/station_logos/ecopetrol.svg"
     if (lower.includes("бенита") || lower.includes("benita")) return "../images/station_logos/benita.svg"
@@ -173,7 +174,7 @@ function getStationLogo(name) {
     if (lower.includes("топливо") || lower.includes("toplivo")) return "../images/station_logos/toplivo-logo.png"
     if (lower.includes("пегас") || lower.includes("pegas")) return "../images/station_logos/pegas-logo.png"
     if (lower.includes("petrol") || lower.includes("петрол")) return "../images/station_logos/petrol-logo.jpg"
-    if (lower.includes("eko") || lower.includes("еко")) return "../images/station_logos/eko-card-logo.png"
+    if (hasStandaloneEkoToken) return "../images/station_logos/eko-card-logo.png"
 
     return "../images/station_logos/generic-fuel-pump.png"
 }

@@ -13,6 +13,8 @@ function getStationLogo(name) {
         .replace(/[\s\-_.]+/g, "")
         .trim()
 
+    const hasStandaloneEkoToken = /(^|[^\p{L}\p{N}])(?:eko|еко)(?=$|[^\p{L}\p{N}])/iu.test(String(name || ""))
+
     if (["петролкомерс", "petrolcommerce", "petrolkomers"].some(alias => normalized.includes(alias))) return "/images/station_logos/generic-fuel-pump.png"
 
     const rules = [
@@ -31,7 +33,6 @@ function getStationLogo(name) {
         { match: ["дизелор", "dieselor", "diselor", "dieseler"], src: "/images/station_logos/dieselor-logo.jpg" },
         { match: ["химойл", "himoil", "chimoil"], src: "/images/station_logos/himoil-logo.png" },
         { match: ["петрол", "petrol"], src: "/images/station_logos/petrol-logo.jpg" },
-        { match: ["еко", "eko"], src: "/images/station_logos/eko-card-logo.png" }
     ]
 
     for (const rule of rules) {
@@ -43,6 +44,8 @@ function getStationLogo(name) {
             return rule.src
         }
     }
+
+    if (hasStandaloneEkoToken) return "/images/station_logos/eko-card-logo.png"
 
     return "/images/station_logos/generic-fuel-pump.png"
 }

@@ -1,5 +1,7 @@
 function getStationIcon(name) {
 
+    const hasStandaloneEkoToken = /(^|[^\p{L}\p{N}])(?:eko|еко)(?=$|[^\p{L}\p{N}])/iu.test(String(name || ""));
+
     let lower = (name || "")
         .toLowerCase()
         .replace(/\s+/g, "")
@@ -60,7 +62,7 @@ function getStationIcon(name) {
         return L.icon({iconUrl: "../images/station_logos/petrol-logo.jpg", ...defaultConfig})
     }
 
-    if (lower.includes("eko") || lower.includes("еко")) {
+    if (hasStandaloneEkoToken) {
         return L.icon({iconUrl: "../images/station_logos/eko-card-logo.png", ...defaultConfig})
     }
 

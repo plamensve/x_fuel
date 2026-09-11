@@ -421,7 +421,6 @@
         { match: ["дизелор", "dieselor", "diselor", "dieseler"], src: "/images/station_logos/dieselor-logo.jpg" },
         { match: ["химойл", "himoil", "chimoil"], src: "/images/station_logos/himoil-logo.png" },
         { match: ["петрол", "petrol"], src: "/images/station_logos/petrol-logo.jpg" },
-        { match: ["еко", "eko"], src: "/images/station_logos/eko-card-logo.png" }
     ];
 
     const normalizeStationName = value => String(value || "")
@@ -429,6 +428,8 @@
         .normalize("NFKC")
         .replace(/[\s\-_.]+/g, "")
         .trim();
+
+    const EKO_TOKEN_RE = /(^|[^\p{L}\p{N}])(?:eko|еко)(?=$|[^\p{L}\p{N}])/iu;
 
     const resolveStationLogo = name => {
         const normalized = normalizeStationName(name);
@@ -439,7 +440,7 @@
             item.match.some(alias => normalized.includes(normalizeStationName(alias)))
         );
 
-        return rule?.src || GENERIC_STATION_LOGO;
+        return rule?.src || (EKO_TOKEN_RE.test(String(name || "")) ? "/images/station_logos/eko-card-logo.png" : GENERIC_STATION_LOGO);
     };
 
     const installStationLogoResolver = () => {

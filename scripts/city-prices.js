@@ -7,9 +7,9 @@
   const FUELS = ['Бензин A95', 'Дизел', 'Пропан Бутан', 'Бензин A100', 'Дизел премиум', 'Метан'];
   const LABELS = {'Бензин A95':'A95','Дизел':'Дизел','Пропан Бутан':'LPG','Бензин A100':'A100','Дизел премиум':'Дизел +','Метан':'Метан'};
   const GENERIC_STATION_LOGO = '/images/station_logos/generic-fuel-pump.png';
+  const EKO_TOKEN_RE = /(^|[^\p{L}\p{N}])(?:eko|еко)(?=$|[^\p{L}\p{N}])/iu;
   const LOGOS = [
     {match:['ECO PETROL','ЕКО ПЕТРОЛ'],src:'/images/station_logos/ecopetrol.svg'},
-    {match:['ЕКО','EKO'],src:'/images/station_logos/eko-card-logo.png'},
     {match:['POWER OIL','POWERОIL','ПАУЪР ОЙЛ'],src:'/images/station_logos/power-oil.png'},
     {match:['ТОПЛИВО','TOPLIVO'],src:'/images/station_logos/toplivo-logo.png'},
     {match:['ПЕГАС','PEGAS'],src:'/images/station_logos/pegas-logo.png'},
@@ -26,7 +26,9 @@
   ];
   const logoFor = brand => {
     const normalized = normalize(brand);
-    return LOGOS.find(item => item.match.some(token => normalized.includes(token)))?.src || GENERIC_STATION_LOGO;
+    const matched = LOGOS.find(item => item.match.some(token => normalized.includes(token)));
+    if (matched) return matched.src;
+    return EKO_TOKEN_RE.test(String(brand || '')) ? '/images/station_logos/eko-card-logo.png' : GENERIC_STATION_LOGO;
   };
   const logoMarkup = brand => { const src = logoFor(brand); return src ? '<img class="station-brand-logo" src="' + src + '" alt="' + escapeHtml(brand) + ' лого" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=\'' + GENERIC_STATION_LOGO + '\'">' : ''; };
   const normalize = value => String(value || '').trim().toLocaleUpperCase('bg-BG');
