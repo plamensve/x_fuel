@@ -620,7 +620,7 @@
         left: 0;
         margin-left: calc(0px - var(--hero-mobile-gutter));
         margin-right: 0;
-        padding: 36px 16px 28px;
+        padding: 36px var(--hero-mobile-gutter) 28px;
     }
 
     .pro-home-hero .about-inner,

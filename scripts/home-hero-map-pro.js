@@ -7,7 +7,7 @@
             const link = document.createElement("link");
             link.id = "home-hero-map-pro-css";
             link.rel = "stylesheet";
-            link.href = "/pages/styles/home-hero-map-pro.css?v=20260911-hero-mobile-centered3";
+            link.href = "/pages/styles/home-hero-map-pro.css?v=20260911-hero-poll-width4";
             document.head.appendChild(link);
         }
 
