@@ -26,7 +26,6 @@
         { href: "/pages/business-clients.html", label: "За бизнеса", symbol: "◆", match: ["/pages/business-clients.html"] },
         { href: "/pages/trends.html", label: "История на цените", symbol: "↗", match: ["/pages/trends.html"] },
         { href: "/pages/useful.html", label: "Полезно", symbol: "✦", match: ["/pages/useful.html"] },
-        { href: "/pages/weather.html", label: "Времето", symbol: "☼", match: ["/pages/weather.html"] },
         { href: "/pages/news.html", label: "Новини", symbol: "▤", match: ["/pages/news.html", "/pages/articles/"] },
     ];
     const normalizePath=value=>{const path=(value||"/").replace(/\/+/g,"/");return path!=="/"?path.replace(/\/$/,""):path;};
