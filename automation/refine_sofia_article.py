@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import os
 import re
 from pathlib import Path
 
 from openai import OpenAI
+from automation.image_prompt_variants import daylight_prompt
+
 
 ROOT = Path(__file__).resolve().parents[1]
 IMAGE_MODEL = os.getenv("OPENAI_IMAGE_MODEL", "gpt-image-2")
@@ -138,6 +141,7 @@ def refine(date_str: str) -> None:
     }
 
     for slug, (path, prompt, alt, caption, heading) in images.items():
+        prompt = f"{prompt} {daylight_prompt(date_str, 'sofia-section-' + slug)}"
         if not path.exists():
             generate_image(path, prompt)
         if path.exists():

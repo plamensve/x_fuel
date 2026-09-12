@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import html
 import json
 import math
@@ -13,6 +14,8 @@ from zoneinfo import ZoneInfo
 from openai import OpenAI
 
 import automation.generate_daily_article_bg as base
+from automation.image_prompt_variants import daylight_prompt
+
 
 ROOT = Path(__file__).resolve().parents[1]
 SOFIA = ZoneInfo("Europe/Sofia")
@@ -100,6 +103,7 @@ Visual direction:
 - interpret the article's actual subject rather than making a generic fuel image;
 - modern European/Bulgarian roadside atmosphere where appropriate;
 - restrained, trustworthy business-news mood;
+- {daylight_prompt(date_str, "daily-hero")}
 - landscape composition with useful negative space;
 - no headline, date, prices, labels, logos, station brands, watermarks or legible text;
 - no fake UI, infographic panels or typography-as-art.

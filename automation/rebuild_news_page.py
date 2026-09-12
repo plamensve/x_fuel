@@ -156,11 +156,40 @@ def compact_story(item: dict) -> str:
 </a>'''
 
 
+
+CITY_PRICE_LINKS = (
+    ("/", "Национален обзор", "Цените на горивата днес в България", "Сравнение на актуалните стойности в страната."),
+    ("/cities/sofia/", "София", "Цени на горивата днес в София", "Дневни данни и цени по бензиностанции."),
+    ("/cities/plovdiv/", "Пловдив", "Цени на горивата днес в Пловдив", "Актуални цени и местни сравнения."),
+    ("/cities/varna/", "Варна", "Цени на горивата днес във Варна", "Цени по обекти и вид гориво."),
+    ("/cities/burgas/", "Бургас", "Цени на горивата днес в Бургас", "Провери стойностите в Бургас."),
+    ("/cities/ruse/", "Русе", "Цени на горивата днес в Русе", "Провери стойностите в Русе."),
+    ("/cities/stara-zagora/", "Стара Загора", "Цени на горивата днес в Стара Загора", "Провери стойностите в Стара Загора."),
+)
+
+
+def render_city_directory() -> str:
+    cards = "".join(
+        f'''<a class="news-city-directory-link" href="{html.escape(href, quote=True)}">
+<span class="news-city-directory-label">{html.escape(label)}</span>
+<strong>{html.escape(title)}</strong>
+<small>{html.escape(description)}</small>
+</a>'''
+        for href, label, title, description in CITY_PRICE_LINKS
+    )
+    return f'''<!-- AUTO_SEO_CITY_DIRECTORY_START -->
+<section class="news-city-directory" aria-labelledby="news-city-directory-title">
+<div class="news-city-directory-copy"><span class="section-eyebrow">Цени по градове</span><h2 id="news-city-directory-title">Цени на горивата днес по градове</h2><p>Провери цените на горивата днес в България и отвори отделната страница за своя град. Там ще откриеш актуални стойности по вид гориво и бензиностанции.</p></div>
+<nav class="news-city-directory-links" aria-label="Цени на горивата днес по градове">{cards}</nav>
+</section>
+<!-- AUTO_SEO_CITY_DIRECTORY_END -->'''
+
 def render(items: list[dict]) -> str:
     latest = items[0]
     secondary = items[1:3]
     archive_cards = "\n".join(card(item) for item in items)
     secondary_html = "\n".join(compact_story(item) for item in secondary)
+    city_directory = render_city_directory()
     counts = {key: sum(1 for item in items if category(item) == key) for key in ("daily", "sofia", "analysis", "business")}
     years = sorted({str(item.get("date", ""))[:4] for item in items if item.get("date")}, reverse=True)
     year_options = "".join(f'<option value="{year}">{year}</option>' for year in years)
@@ -168,9 +197,10 @@ def render(items: list[dict]) -> str:
     item_list = {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
-        "name": "Новини и анализи за горивата | goriva.online",
+        "name": "Цени на горивата днес в България и по градове | goriva.online",
         "url": "https://goriva.online/pages/news.html",
-        "description": "Последни новини, дневни обзори и анализи за цените на горивата в България.",
+        "description": "Цени на горивата днес в България: актуални цени на бензин, дизел и LPG в София, Пловдив, Бургас, Русе и Стара Загора.",
+        "keywords": "Цени на горивата, Цените на горивата днес в България, Цени на горивата днес в София, Цени на горивата днес в Пловдив, Цени на горивата днес в Бургас, Цени на горивата днес в Русе, Цени на горивата днес в Стара Загора",
         "inLanguage": "bg-BG",
         "dateModified": latest.get("date"),
         "isPartOf": {"@type": "WebSite", "name": "goriva.online", "url": "https://goriva.online/"},
@@ -194,13 +224,13 @@ def render(items: list[dict]) -> str:
 <html lang="bg">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Новини, анализи и цени на горивата | goriva.online</title>
-<meta name="description" content="Последни новини, дневни обзори и анализи за цените на бензин, дизел и LPG в България. Търсене и филтриране на всички публикации на goriva.online.">
+<title>Цени на горивата днес в България и по градове | goriva.online</title>
+<meta name="description" content="Цени на горивата днес в България: актуални цени на бензин, дизел и LPG в София, Пловдив, Бургас, Русе и Стара Загора.">
 <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1">
 <link rel="canonical" href="https://goriva.online/pages/news.html"><link rel="icon" type="image/svg+xml" href="/media/fav.svg">
-<meta property="og:site_name" content="goriva.online"><meta property="og:title" content="Новини и анализи за горивата | goriva.online"><meta property="og:description" content="Дневни обзори, анализи по градове и практически материали за горивата."><meta property="og:image" content="https://goriva.online/media/og-3.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://goriva.online/pages/news.html"><meta property="og:type" content="website"><meta property="og:locale" content="bg_BG">
-<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Новини и анализи за горивата | goriva.online"><meta name="twitter:description" content="Дневни обзори, анализи по градове и практически материали за горивата."><meta name="twitter:image" content="https://goriva.online/media/og-3.png">
-<link rel="stylesheet" href="../styles.css?v=20260831-newsroom1"><link rel="stylesheet" href="styles/news.css?v=20260831-newsroom1">
+<meta property="og:site_name" content="goriva.online"><meta property="og:title" content="Цени на горивата днес в България и по градове | goriva.online"><meta property="og:description" content="Дневни обзори и анализи за цените на горивата днес в България и актуалните цени по градове."><meta property="og:image" content="https://goriva.online/media/og-3.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:url" content="https://goriva.online/pages/news.html"><meta property="og:type" content="website"><meta property="og:locale" content="bg_BG">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Цени на горивата днес в България и по градове | goriva.online"><meta name="twitter:description" content="Дневни обзори и анализи за цените на горивата днес в България и актуалните цени по градове."><meta name="twitter:image" content="https://goriva.online/media/og-3.png">
+<link rel="stylesheet" href="../styles.css?v=20260831-newsroom1"><link rel="stylesheet" href="styles/news.css?v=20260912-seo-cities1">
 <script type="application/ld+json">{json.dumps(item_list, ensure_ascii=False)}</script>
 </head>
 <body id="top" class="news-page"><div class="background"></div>
@@ -209,9 +239,11 @@ def render(items: list[dict]) -> str:
 
 <main class="news-shell">
 <section class="news-masthead">
-<div class="news-masthead-copy"><span class="news-kicker"><i></i> goriva.online newsroom</span><h1>Новини и анализи за <span>горивата</span></h1><p>Дневни ценови обзори, анализи за София и големите градове, пазарен контекст и практически материали — подредени така, че бързо да намериш важната за теб информация.</p></div>
+<div class="news-masthead-copy"><span class="news-kicker"><i></i> goriva.online newsroom</span><h1>Цени на горивата днес в <span>България</span></h1><p>Актуални цени на бензин A95, дизел и LPG, дневни обзори и анализи за София, Пловдив, Варна, Бургас, Русе и Стара Загора — на едно място, с лесен достъп до най-новите публикации.</p></div>
 <div class="news-masthead-actions"><a href="../index.html#home-top10-prices" class="news-primary-btn">Виж цените днес</a><a href="trends.html" class="news-secondary-btn">История на цените</a></div>
 </section>
+
+{city_directory}
 
 <section class="news-lead-grid" aria-labelledby="news-latest-title">
 <a class="news-lead-story" href="{html.escape(latest['url'], quote=True)}">{media(latest, "news-lead-media")}<div class="news-lead-copy"><div class="news-lead-meta"><span>Последно публикувано</span><time datetime="{latest['date']}">{bg_date(latest['date'])}</time></div><h2 id="news-latest-title">{html.escape(latest['title'])}</h2><p>{html.escape(latest.get('description',''))}</p><strong>Прочети анализа <span aria-hidden="true">→</span></strong></div></a>
@@ -219,7 +251,7 @@ def render(items: list[dict]) -> str:
 </section>
 
 <section class="news-discovery" id="archive" aria-labelledby="archive-title">
-<div class="news-discovery-heading"><div><span class="section-eyebrow">Архив</span><h2 id="archive-title">Всички публикации</h2><p>Търси по тема или филтрирай по тип публикация и година.</p></div><div class="news-total"><strong>{len(items)}</strong><span>публикации</span></div></div>
+<div class="news-discovery-heading"><div><span class="section-eyebrow">Архив на цените</span><h2 id="archive-title">Архив на цените на горивата днес</h2><p>Разгледай дневни обзори и анализи за цените на горивата по градове, вид гориво и година.</p></div><div class="news-total"><strong>{len(items)}</strong><span>публикации</span></div></div>
 
 <div class="news-toolbar" role="search">
 <label class="news-search"><span class="sr-only">Търси статии</span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m21 21-4.35-4.35m1.35-5.65a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"/></svg><input id="news-search" type="search" placeholder="Търси: дизел, София, LPG..." autocomplete="off"></label>

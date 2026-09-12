@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import html
 import os
 import re
@@ -10,6 +11,8 @@ from openai import OpenAI
 
 import automation.generate_daily_article_bg as base
 import automation.generate_sofia_article as sofia
+from automation.image_prompt_variants import daylight_prompt
+
 
 ROOT = Path(__file__).resolve().parents[1]
 IMAGE_MODEL = os.getenv("OPENAI_IMAGE_MODEL", "gpt-image-2")
@@ -172,8 +175,21 @@ def enrich(date_str: str, facts: dict) -> None:
 
     hero=media/"hero.png"
     street=media/"sofia-street.png"
-    generate_ai_image(hero,"Premium editorial photograph for a Bulgarian fuel-price news article about Sofia. Modern Sofia boulevard at blue hour, contemporary petrol station in the middle distance, cars moving through the city, realistic European urban atmosphere, polished business-news photography, natural light, no logos, no readable text, no prices, no typography, landscape composition.")
-    generate_ai_image(street,"Editorial documentary-style image for an article about fuel prices in Sofia, Bulgaria. Urban traffic on a recognizably Southeast European city boulevard with a fuel station context, realistic cars and road environment, professional economic-news visual language, daylight, no brand logos, no signs with readable text, no prices, landscape composition.")
+    generate_ai_image(
+        hero,
+        "Premium editorial photograph for a Bulgarian fuel-price news article about Sofia. "
+        f"{daylight_prompt(date_str, 'sofia-hero')} "
+        "Modern Sofia boulevard and a contemporary petrol station in the middle distance, cars moving through the city, "
+        "realistic European urban atmosphere, polished business-news photography, no logos, no readable text, no prices, "
+        "no typography, landscape composition.",
+    )
+    generate_ai_image(
+        street,
+        "Editorial documentary-style image for an article about fuel prices in Sofia, Bulgaria. "
+        f"{daylight_prompt(date_str, 'sofia-street')} "
+        "Urban traffic on a recognizably Southeast European city boulevard with a fuel station context, realistic cars and road environment, "
+        "professional economic-news visual language, no brand logos, no signs with readable text, no prices, landscape composition.",
+    )
 
     # Replace the minimal generated header with the real site header and navigation.
     text=re.sub(r'<header class="site-header">.*?</header>',site_header(),text,count=1,flags=re.I|re.S)

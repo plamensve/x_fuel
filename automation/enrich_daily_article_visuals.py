@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import html
 import json
 import os
@@ -11,6 +12,8 @@ from pathlib import Path
 from openai import OpenAI
 
 import automation.generate_daily_article_bg as base
+from automation.image_prompt_variants import daylight_prompt
+
 
 ROOT = Path(__file__).resolve().parents[1]
 IMAGE_MODEL = os.getenv("OPENAI_IMAGE_MODEL", "gpt-image-2")
@@ -227,8 +230,10 @@ def generate_inline_ai_image(date_str: str, slug: str, heading: str, context: st
         return None
     prompt = (
         f"Create a realistic editorial image for a Bulgarian fuel-market article section. Section: {heading}. "
-        f"Context: {context[:900]}. Use a credible Bulgarian/European setting. No text, prices, numbers, logos, "
-        "station brands, watermarks or fake UI. Landscape, natural light, business-news quality."
+        f"Context: {context[:900]}. Use a credible Bulgarian/European setting. "
+        f"{daylight_prompt(date_str, 'daily-inline-' + slug)} "
+        "No text, prices, numbers, logos, station brands, watermarks or fake UI. "
+        "Landscape, natural light, business-news quality."
     )
     try:
         response = OpenAI(api_key=api_key).images.generate(
