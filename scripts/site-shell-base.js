@@ -52,7 +52,6 @@
             {match: /(^|\/)index\.html$|^\/$/, label: "Начало", symbol: "⌂"},
             {match: /useful\.html$/, label: "Полезно", symbol: "✦"},
             {match: /trends\.html$/, label: "История", symbol: "↗"},
-            {match: /weather\.html$/, label: "Времето", symbol: "☼"},
             {match: /business-clients\.html$/, label: "За бизнеса", symbol: "◆"},
             {match: /news\.html$/, label: "Новини", symbol: "▤"},
             {match: /rules\.html$/, label: "Условия", symbol: "✓"}

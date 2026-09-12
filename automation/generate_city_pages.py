@@ -317,7 +317,7 @@ def render_page(slug: str, city: str, summary: dict) -> str:
     </section>
   </main>
   <script defer src="/scripts/city-prices.js?v=20260909-slider-v3"></script>
-  <script defer src="/scripts/global-nav.js?v=20260911-privacy-banner1"></script>
+  <script defer src="/scripts/global-nav.js?v=20260912-weather-nav1"></script>
 </body>
 </html>
 '''

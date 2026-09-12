@@ -1,5 +1,5 @@
 (() => {
-    const navSrc = "/scripts/global-nav.js?v=20260911-privacy-banner1";
+    const navSrc = "/scripts/global-nav.js?v=20260912-weather-nav1";
     if (!window.__GORIVA_GLOBAL_NAV_LOADER__) {
         window.__GORIVA_GLOBAL_NAV_LOADER__ = true;
         const navScript = document.createElement("script");

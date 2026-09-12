@@ -148,7 +148,7 @@ def generate_ai_image(path: Path, prompt: str) -> bool:
 def site_header() -> str:
     return '''<div class="background"></div>
 <header class="header-bar sofia-site-header"><div class="header-container"><a href="/" class="sofia-logo-link"><img src="/media/2logo.png" alt="goriva.online logo" class="header-logo"></a><div class="header-text"><strong>Цени на горивата в София</strong><span>Актуални данни, сравнения и анализи за шофьори.</span></div><a class="facebook-button" href="https://www.facebook.com/groups/960591129738525" target="_blank" rel="noopener noreferrer">Facebook група</a></div></header>
-<nav class="main-nav"><button id="menu-toggle" class="menu-toggle" type="button" aria-label="Отвори менюто">☰</button><div id="nav-menu" class="nav-container"><a href="/">Начало</a><a href="/pages/useful.html">Полезно</a><a href="/pages/trends.html">История на цените</a><a href="/pages/weather.html">Прогноза за времето</a><a href="/pages/business-clients.html">Бизнес клиенти</a><a href="/pages/news.html">Новини</a><a href="/pages/rules.html">Общи условия</a></div></nav>'''
+<nav class="main-nav"><button id="menu-toggle" class="menu-toggle" type="button" aria-label="Отвори менюто">☰</button><div id="nav-menu" class="nav-container"><a href="/">Начало</a><a href="/pages/useful.html">Полезно</a><a href="/pages/trends.html">История на цените</a><a href="/pages/business-clients.html">Бизнес клиенти</a><a href="/pages/news.html">Новини</a><a href="/pages/rules.html">Общи условия</a></div></nav>'''
 
 
 def site_footer() -> str:

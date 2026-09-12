@@ -205,7 +205,7 @@ def render(items: list[dict]) -> str:
 </head>
 <body id="top" class="news-page"><div class="background"></div>
 <header class="header-bar"><div class="header-container"><a href="../index.html" class="news-brand-link"><img src="../media/2logo.png" alt="goriva.online logo" class="header-logo"></a><div class="header-text"><strong>Новини и анализи</strong><span>Актуални цени, пазарни тенденции и практични анализи.</span></div><a class="facebook-button" href="https://www.facebook.com/groups/960591129738525" target="_blank" rel="noopener noreferrer">Facebook група</a></div></header>
-<nav class="main-nav"><button id="menu-toggle" class="menu-toggle" aria-label="Отвори менюто">☰</button><div id="nav-menu" class="nav-container"><a href="../index.html">Начало</a><a href="useful.html">Полезно</a><a href="trends.html">История на цените</a><a href="weather.html">Прогноза за времето</a><a href="business-clients.html">Бизнес клиенти</a><a href="news.html" aria-current="page">Новини</a><a href="rules.html">Общи условия</a></div></nav>
+<nav class="main-nav"><button id="menu-toggle" class="menu-toggle" aria-label="Отвори менюто">☰</button><div id="nav-menu" class="nav-container"><a href="../index.html">Начало</a><a href="useful.html">Полезно</a><a href="trends.html">История на цените</a><a href="business-clients.html">Бизнес клиенти</a><a href="news.html" aria-current="page">Новини</a><a href="rules.html">Общи условия</a></div></nav>
 
 <main class="news-shell">
 <section class="news-masthead">
