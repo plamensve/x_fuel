@@ -102,7 +102,7 @@
     }
 })();
 
-// Use the unused space in the #1 Top 4 card as a tasteful advertising placement teaser.
+// Use the unused space in the #1 Top 4 card for the Ardes affiliate offer.
 (() => {
     if (!document.getElementById("home-top4-ad-style")) {
         const style = document.createElement("style");
@@ -130,16 +130,24 @@
                 left: 58%;
                 right: auto;
                 transform: translate(-50%, -50%);
-                width: min(54%, 760px);
+                width: min(54%, 700px);
                 min-width: 430px;
-                padding: 22px 26px;
-                border: 1px solid rgba(96,165,250,.20);
+                padding: 18px 21px;
+                border: 1px solid rgba(196,16,52,.30);
                 border-radius: 18px;
                 background:
-                    radial-gradient(circle at 100% 0%, rgba(59,130,246,.15), transparent 42%),
+                    radial-gradient(circle at 100% 0%, rgba(196,16,52,.18), transparent 42%),
                     linear-gradient(145deg, rgba(15,29,47,.90), rgba(10,22,38,.95));
                 box-shadow: 0 16px 34px rgba(2,6,23,.20), inset 0 1px 0 rgba(255,255,255,.03);
                 text-align: left;
+            }
+
+            .home-top4-ad-topline {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                margin-bottom: 10px;
             }
 
             .home-top4-ad-banner .home-top4-ad-label {
@@ -159,11 +167,28 @@
                 text-transform: uppercase;
             }
 
+            .home-top4-ad-brand {
+                display: inline-flex;
+                align-items: center;
+                max-width: 166px;
+                padding: 4px 8px;
+                border-radius: 8px;
+                background: #fff;
+                box-shadow: 0 4px 12px rgba(2,6,23,.16);
+            }
+
+            .home-top4-ad-brand img {
+                display: block;
+                width: 150px;
+                height: auto;
+                max-width: 100%;
+            }
+
             .home-top4-ad-banner strong {
                 display: block;
-                margin: 0 0 8px;
+                margin: 0 0 7px;
                 color: #f8fafc;
-                font-size: clamp(21px, 2vw, 26px);
+                font-size: clamp(19px, 2vw, 25px);
                 line-height: 1.18;
                 letter-spacing: -.02em;
             }
@@ -172,38 +197,102 @@
                 max-width: none;
                 margin: 0;
                 color: #a8b8ca;
-                font-size: 13px;
-                line-height: 1.6;
+                font-size: 12px;
+                line-height: 1.5;
             }
 
-            .home-top4-ad-banner .home-top4-ad-contact {
+            .home-top4-ad-offer {
                 display: flex;
                 flex-wrap: wrap;
                 align-items: center;
-                gap: 8px 18px;
-                margin-top: 14px;
-                padding-top: 12px;
-                border-top: 1px solid rgba(148,163,184,.12);
+                gap: 8px;
+                margin-top: 12px;
+                padding: 9px 10px;
+                border: 1px solid rgba(196,16,52,.20);
+                border-radius: 12px;
+                background: rgba(255,255,255,.035);
             }
 
-            .home-top4-ad-contact a,
-            .home-top4-ad-contact span {
-                color: #f8fafc;
+            .home-top4-ad-offer > span {
+                color: #cbd5e1;
+                font-size: 10px;
+                font-weight: 800;
+                letter-spacing: .04em;
+                text-transform: uppercase;
+            }
+
+            .home-top4-ad-offer code {
+                color: #fecaca;
+                font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
                 font-size: 12px;
+                font-weight: 900;
+                letter-spacing: .02em;
+                word-break: break-word;
+            }
+
+            .home-top4-ad-copy {
+                min-height: 26px;
+                margin-left: auto;
+                padding: 0 9px;
+                border: 1px solid rgba(196,16,52,.34);
+                border-radius: 7px;
+                color: #fecaca;
+                background: rgba(196,16,52,.10);
+                cursor: pointer;
+                font: inherit;
+                font-size: 10px;
                 font-weight: 850;
-                letter-spacing: .005em;
+            }
+
+            .home-top4-ad-copy:hover,
+            .home-top4-ad-copy.is-copied {
+                color: #fff;
+                border-color: rgba(196,16,52,.58);
+                background: rgba(196,16,52,.22);
+            }
+
+            .home-top4-ad-actions {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                gap: 9px 12px;
+                margin-top: 12px;
+            }
+
+            .home-top4-ad-cta {
+                min-height: 32px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 7px;
+                padding: 0 12px;
+                border-radius: 8px;
+                color: #fff;
+                background: #c41034;
+                box-shadow: 0 7px 16px rgba(196,16,52,.24);
+                font-size: 11px;
+                font-weight: 900;
                 text-decoration: none;
             }
 
-            .home-top4-ad-contact a:hover {
-                color: #93c5fd;
+            .home-top4-ad-cta:hover {
+                background: #b00b2d;
+                color: #fff;
+                transform: translateY(-1px);
+            }
+
+            .home-top4-ad-note {
+                color: #a8b8ca;
+                font-size: 10px;
+                line-height: 1.35;
             }
 
             .home-top4-ad-banner .home-top4-ad-accent {
-                display: inline-block;
-                margin-top: 11px;
-                color: #93c5fd;
-                font-size: 11px;
+                display: block;
+                margin-top: 10px;
+                color: #93a4b8;
+                font-size: 10px;
+                line-height: 1.35;
                 font-weight: 850;
             }
 
@@ -301,9 +390,9 @@
             @media (max-width: 1180px) {
                 .home-top10-card.rank-1 .home-top4-ad-banner {
                     left: 59%;
-                    width: min(52%, 650px);
-                    min-width: 390px;
-                    padding: 20px 22px;
+                    width: min(52%, 620px);
+                    min-width: 400px;
+                    padding: 17px 19px;
                 }
 
                 .home-top4-ad-banner strong { font-size: 20px; }
@@ -345,21 +434,42 @@
 
             @media (max-width: 560px) {
                 .home-top10-card.rank-1 .home-top4-ad-banner {
-                    padding: 16px;
+                    padding: 15px;
                     border-radius: 14px;
                 }
 
                 .home-top4-ad-banner strong { font-size: 18px; }
                 .home-top4-ad-banner p { font-size: 12px; }
 
-                .home-top4-ad-contact {
-                    flex-direction: column;
-                    align-items: flex-start !important;
-                    gap: 6px !important;
+                .home-top4-ad-topline {
+                    align-items: flex-start;
                 }
 
-                .home-top4-ad-contact a,
-                .home-top4-ad-contact span { font-size: 11px; }
+                .home-top4-ad-brand {
+                    max-width: 126px;
+                    padding: 3px 6px;
+                }
+
+                .home-top4-ad-brand img {
+                    width: 114px;
+                }
+
+                .home-top4-ad-offer {
+                    align-items: flex-start;
+                    flex-direction: column;
+                }
+
+                .home-top4-ad-copy {
+                    margin-left: 0;
+                }
+
+                .home-top4-ad-actions {
+                    flex-direction: column;
+                    align-items: flex-start !important;
+                    gap: 8px !important;
+                }
+
+                .home-top4-ad-offer code { font-size: 11px; }
 
                 .home-top10-card .home-top10-card-price {
                     gap: 7px !important;
@@ -394,17 +504,41 @@
 
         const banner = document.createElement("aside");
         banner.className = "home-top4-ad-banner";
-        banner.setAttribute("aria-label", "Място за реклама и продуктово позициониране");
+        banner.setAttribute("aria-label", "Реклама на Ardes.bg с промо код за 1 процент отстъпка");
         banner.innerHTML = `
-            <span class="home-top4-ad-label">Реклама</span>
-            <strong>Място за Вашата реклама</strong>
-            <p>Предлагаме продуктово позициониране и брандирано присъствие пред аудитория, която активно сравнява цени и услуги за автомобили.</p>
-            <div class="home-top4-ad-contact">
-                <a href="mailto:svetoslavov.plamen@gmail.com">svetoslavov.plamen@gmail.com</a>
-                <a href="tel:+359883427273">(+359) 883 42 72 73</a>
+            <div class="home-top4-ad-topline">
+                <span class="home-top4-ad-label">Реклама</span>
+                <span class="home-top4-ad-brand"><img src="media/ardes-affiliate-logo.png" alt="Ardes.bg" width="150" height="36" loading="lazy" decoding="async"></span>
             </div>
-            <span class="home-top4-ad-accent">Продуктово позициониране · Бранд присъствие</span>
+            <strong>Техника с 1% отстъпка</strong>
+            <p>Използвай промо кода при онлайн поръчка на продукти на стандартна цена в Ardes.bg.</p>
+            <div class="home-top4-ad-offer">
+                <span>Промо код</span>
+                <code>1876-1938-2844-1239</code>
+                <button class="home-top4-ad-copy" type="button" data-copy-code="1876-1938-2844-1239">Копирай</button>
+            </div>
+            <div class="home-top4-ad-actions">
+                <a class="home-top4-ad-cta" href="https://ardes.bg/?utm_source=goriva.online&amp;utm_medium=affiliate&amp;utm_campaign=promo_code" target="_blank" rel="sponsored noopener noreferrer">Пазарувай в Ardes.bg <span aria-hidden="true">→</span></a>
+                <span class="home-top4-ad-note">1% важи за стандартни цени; не важи за „онлайн цена“.</span>
+            </div>
+            <span class="home-top4-ad-accent">Партньорска оферта от „Ардес Информационни Технологии“ ЕООД.</span>
         `;
+
+        const copyButton = banner.querySelector(".home-top4-ad-copy");
+        copyButton?.addEventListener("click", async () => {
+            const code = copyButton.dataset.copyCode || "";
+            try {
+                await navigator.clipboard.writeText(code);
+                copyButton.textContent = "Копирано";
+                copyButton.classList.add("is-copied");
+                window.setTimeout(() => {
+                    copyButton.textContent = "Копирай";
+                    copyButton.classList.remove("is-copied");
+                }, 1800);
+            } catch (error) {
+                window.prompt("Копирай промо кода:", code);
+            }
+        });
 
         const footer = winner.querySelector(".home-top10-card-footer");
         if (footer) winner.insertBefore(banner, footer);
