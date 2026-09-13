@@ -31,8 +31,10 @@ HEADERS = {
 
 STATION_RE = re.compile(r"^(?:EKO|ЕКО)\s*(\d{4})\s*(.+?)\s*$", re.I)
 # Match EKO as a complete Unicode word, not as a substring of another brand
-# such as ЕКОТРАНС or ЕКОПЕТРОЛ.
+# such as ЕКОТРАНС or ЕКОПЕТРОЛ. EKO OIL is a separate chain and must not be
+# treated as an official EKO feature either.
 EKO_TOKEN_RE = re.compile(r"(?<!\w)(?:EKO|ЕКО)(?!\w)", re.I)
+EKO_OIL_RE = re.compile(r"(?:^|[^\w])(?:EKO|ЕКО)[\s\-–—_.\/]*(?:OIL|ОЙЛ)(?!\w)", re.I)
 PHONE_RE = re.compile(r"(?:(?:\+|00)?359|0)\s*[\d\s()./-]{7,}", re.I)
 COORD_PATTERNS = [
     re.compile(r"@(-?\d{1,2}\.\d+),(-?\d{1,3}\.\d+)"),
@@ -283,7 +285,9 @@ def haversine_m(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
 def is_eko_feature(feature: dict[str, Any]) -> bool:
     props = feature.get("properties") or {}
     values = " ".join(norm(props.get(key)) for key in ("brand", "brand:bg", "brand:en", "name", "name:bg", "operator", "brand:wikidata")).casefold()
-    return "q111603199" in values or EKO_TOKEN_RE.search(values) is not None
+    return EKO_OIL_RE.search(values) is None and (
+        "q111603199" in values or EKO_TOKEN_RE.search(values) is not None
+    )
 
 
 def feature_point(feature: dict[str, Any]) -> tuple[float, float] | None:
