@@ -817,6 +817,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function renderTicker(data) {
 
+    if (window.__GORIVA_GLOBAL_TICKER_OWNER__) return
+
     let container = document.getElementById("ticker-content")
     if (!container) return
 

@@ -375,3 +375,36 @@ body > .main-nav::before,
     margin-left: auto;
   }
 }
+
+
+/* The daily price ticker is part of the sticky global navigation on every page. */
+.goriva-global-header > .goriva-global-ticker {
+    display: block;
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 900px) {
+    .goriva-global-header.has-goriva-ticker .goriva-global-menu {
+        top: 118px !important;
+    }
+}
+
+body.has-goriva-global-nav .article-news-side,
+body.has-goriva-global-nav .car-detail-summary,
+body.has-goriva-global-nav .legal-toc {
+    top: 134px;
+}
+
+body.has-goriva-global-nav .useful-jumpbar {
+    top: 130px;
+}
+
+body.has-goriva-global-nav .news-library-head {
+    top: 122px;
+}
+
+body.has-goriva-global-nav .legal-section,
+body.has-goriva-global-nav .legal-sources {
+    scroll-margin-top: 134px;
+}
