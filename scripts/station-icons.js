@@ -1,6 +1,8 @@
 function getStationIcon(name) {
 
-    const hasStandaloneEkoToken = /(^|[^\p{L}\p{N}])(?:eko|еко)(?=$|[^\p{L}\p{N}])/iu.test(String(name || ""));
+    const stationName = String(name || "");
+    const isEkoOilName = /(?:^|[^\p{L}\p{N}])(?:eko|еко)[\s\-–—_.\/]*(?:oil|ойл)(?=$|[^\p{L}\p{N}])/iu.test(stationName);
+    const hasStandaloneEkoToken = !isEkoOilName && /(^|[^\p{L}\p{N}])(?:eko|еко)(?=$|[^\p{L}\p{N}])/iu.test(stationName);
 
     let lower = (name || "")
         .toLowerCase()
