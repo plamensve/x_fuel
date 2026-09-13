@@ -48,6 +48,7 @@ const HOME_FUEL_ORDER = ["A95", "Дизел", "LPG", "A100", "Дизел +", "М
 const HOME_TOP10_CITIES = ["София", "Пловдив", "Варна", "Бургас", "Русе", "Стара Загора"];
 const HOME_GENERIC_STATION_LOGO = "images/station_logos/generic-fuel-pump.png";
 const HOME_EKO_TOKEN_RE = /(^|[^\p{L}\p{N}])(?:eko|еко)(?=$|[^\p{L}\p{N}])/iu;
+const HOME_EKO_OIL_RE = /(?:^|[^\p{L}\p{N}])(?:eko|еко)[\s\-–—_.\/]*(?:oil|ойл)(?=$|[^\p{L}\p{N}])/iu;
 
 const HOME_STATION_LOGOS = [
     {match: ["еко петрол", "екопетрол", "ecopetrol"], src: "images/station_logos/ecopetrol.svg"},
@@ -80,7 +81,10 @@ function homeStationLogo(name) {
 
     const config = HOME_STATION_LOGOS.find(item => item.match.some(token => normalized.includes(token)));
     if (config) return config.src;
-    return HOME_EKO_TOKEN_RE.test(String(name || "")) ? "images/station_logos/eko-card-logo.png" : HOME_GENERIC_STATION_LOGO;
+    const stationName = String(name || "");
+    return HOME_EKO_TOKEN_RE.test(stationName) && !HOME_EKO_OIL_RE.test(stationName)
+        ? "images/station_logos/eko-card-logo.png"
+        : HOME_GENERIC_STATION_LOGO;
 }
 
 let homeTop10Rows = [];

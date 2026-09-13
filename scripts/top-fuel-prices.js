@@ -18,6 +18,7 @@ const SHARE_CITIES = ["София", "Пловдив", "Варна", "Бурга�
 const SHARE_FUELS = ["A95", "Дизел", "LPG", "A100", "Дизел +", "Метан"];
 const SHARE_GENERIC_STATION_LOGO = "../images/station_logos/generic-fuel-pump.png";
 const SHARE_EKO_TOKEN_RE = /(^|[^\p{L}\p{N}])(?:eko|еко)(?=$|[^\p{L}\p{N}])/iu;
+const SHARE_EKO_OIL_RE = /(?:^|[^\p{L}\p{N}])(?:eko|еко)[\s\-–—_.\/]*(?:oil|ойл)(?=$|[^\p{L}\p{N}])/iu;
 
 const SHARE_STATION_LOGOS = [
     {match: ["еко петрол", "екопетрол", "ecopetrol"], src: "../images/station_logos/ecopetrol.svg"},
@@ -47,7 +48,10 @@ function shareStationLogo(name) {
 
     const config = SHARE_STATION_LOGOS.find(item => item.match.some(token => normalized.includes(token)));
     if (config) return config.src;
-    return SHARE_EKO_TOKEN_RE.test(String(name || "")) ? "../images/station_logos/eko-card-logo.png" : SHARE_GENERIC_STATION_LOGO;
+    const stationName = String(name || "");
+    return SHARE_EKO_TOKEN_RE.test(stationName) && !SHARE_EKO_OIL_RE.test(stationName)
+        ? "../images/station_logos/eko-card-logo.png"
+        : SHARE_GENERIC_STATION_LOGO;
 }
 
 function shareEscapeHtml(value) {

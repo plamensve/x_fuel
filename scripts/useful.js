@@ -158,7 +158,9 @@ function getDistance(lat1, lon1, lat2, lon2) {
 
 function getStationLogo(name) {
     const lower = String(name || "").toLowerCase()
-    const hasStandaloneEkoToken = /(^|[^\p{L}\p{N}])(?:eko|еко)(?=$|[^\p{L}\p{N}])/iu.test(String(name || ""))
+    const stationName = String(name || "")
+    const isEkoOilName = /(?:^|[^\p{L}\p{N}])(?:eko|еко)[\s\-–—_.\/]*(?:oil|ойл)(?=$|[^\p{L}\p{N}])/iu.test(stationName)
+    const hasStandaloneEkoToken = !isEkoOilName && /(^|[^\p{L}\p{N}])(?:eko|еко)(?=$|[^\p{L}\p{N}])/iu.test(stationName)
 
     if (lower.includes("еко петрол") || lower.includes("ecopetrol")) return "../images/station_logos/ecopetrol.svg"
     if (lower.includes("бенита") || lower.includes("benita")) return "../images/station_logos/benita.svg"

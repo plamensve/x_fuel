@@ -430,6 +430,7 @@
         .trim();
 
     const EKO_TOKEN_RE = /(^|[^\p{L}\p{N}])(?:eko|еко)(?=$|[^\p{L}\p{N}])/iu;
+    const EKO_OIL_RE = /(?:^|[^\p{L}\p{N}])(?:eko|еко)[\s\-–—_.\/]*(?:oil|ойл)(?=$|[^\p{L}\p{N}])/iu;
 
     const resolveStationLogo = name => {
         const normalized = normalizeStationName(name);
@@ -440,7 +441,8 @@
             item.match.some(alias => normalized.includes(normalizeStationName(alias)))
         );
 
-        return rule?.src || (EKO_TOKEN_RE.test(String(name || "")) ? "/images/station_logos/eko-card-logo.png" : GENERIC_STATION_LOGO);
+        const stationName = String(name || "");
+        return rule?.src || (EKO_TOKEN_RE.test(stationName) && !EKO_OIL_RE.test(stationName) ? "/images/station_logos/eko-card-logo.png" : GENERIC_STATION_LOGO);
     };
 
     const installStationLogoResolver = () => {
