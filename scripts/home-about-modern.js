@@ -5,10 +5,33 @@
         if (!document.querySelector('link[data-home-about-modern]')) {
             const style = document.createElement('link');
             style.rel = 'stylesheet';
-            style.href = '/pages/styles/home-about-modern.css?v=20260829-1123';
+            style.href = '/pages/styles/home-about-modern.css?v=20260913-ardes-sides1';
             style.dataset.homeAboutModern = 'true';
             document.head.appendChild(style);
         }
+
+        const bindAffiliateCopyButtons = () => {
+            document.querySelectorAll('.home-affiliate-ad-copy:not([data-copy-bound])').forEach(button => {
+                button.dataset.copyBound = 'true';
+                button.addEventListener('click', async () => {
+                    const code = button.dataset.copyCode || '';
+                    if (!code) return;
+
+                    try {
+                        if (!navigator.clipboard?.writeText) throw new Error('Clipboard API unavailable');
+                        await navigator.clipboard.writeText(code);
+                        button.textContent = 'Копирано';
+                        button.classList.add('is-copied');
+                        window.setTimeout(() => {
+                            button.textContent = 'Копирай';
+                            button.classList.remove('is-copied');
+                        }, 1800);
+                    } catch (_) {
+                        window.prompt('Копирай промо кода:', code);
+                    }
+                });
+            });
+        };
 
         const how = document.querySelector('.how-it-works');
         if (how) {
@@ -55,6 +78,19 @@
                             <a href="https://www.linkedin.com/in/plamen-svetoslavov/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
                             <a href="https://www.facebook.com/groups/960591129738525" target="_blank" rel="noopener noreferrer">Facebook общност</a>
                         </div>
+                        <aside class="home-affiliate-ad home-affiliate-ad--founder" aria-label="Реклама на Ardes.bg с промо код">
+                            <div class="home-affiliate-ad-topline">
+                                <span class="home-affiliate-ad-label">ОФЕРТА ЗА ТЕХНИКА</span>
+                                <span class="home-affiliate-ad-brand"><img src="/media/ardes-affiliate-logo.png" alt="Ardes.bg" width="150" height="36" loading="lazy" decoding="async"></span>
+                            </div>
+                            <strong>Пазарувай по-изгодно</strong>
+                            <p>Въведи промо кода при онлайн поръчка в Ardes.bg.</p>
+                            <div class="home-affiliate-ad-code-row">
+                                <code>1876-1938-2844-1239</code>
+                                <button class="home-affiliate-ad-copy" type="button" data-copy-code="1876-1938-2844-1239">Копирай</button>
+                            </div>
+                            <a class="home-affiliate-ad-cta" href="https://ardes.bg/?utm_source=goriva.online&amp;utm_medium=affiliate&amp;utm_campaign=promo_code" target="_blank" rel="sponsored noopener noreferrer">Пазарувай в Ardes.bg <span aria-hidden="true">→</span></a>
+                        </aside>
                     </aside>
 
                     <div class="founder-right">
@@ -96,6 +132,8 @@
                     </div>
                 </div>`;
         }
+
+        bindAffiliateCopyButtons();
     };
 
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, {once:true});

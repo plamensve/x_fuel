@@ -13,7 +13,7 @@
         if (!document.getElementById('goriva-consent-js')) {
             const script = document.createElement('script');
             script.id = 'goriva-consent-js';
-            script.src = '/scripts/consent-manager.js?v=20260911-privacy-banner1';
+            script.src = '/scripts/consent-manager.js?v=20260913-privacy-quiet1';
             script.defer = true;
             document.head.appendChild(script);
         }

@@ -133,10 +133,10 @@
                 width: min(54%, 700px);
                 min-width: 430px;
                 padding: 18px 21px;
-                border: 1px solid rgba(196,16,52,.30);
+                border: 1px solid rgba(45,212,191,.30);
                 border-radius: 18px;
                 background:
-                    radial-gradient(circle at 100% 0%, rgba(196,16,52,.18), transparent 42%),
+                    radial-gradient(circle at 100% 0%, rgba(20,184,166,.20), transparent 42%),
                     linear-gradient(145deg, rgba(15,29,47,.90), rgba(10,22,38,.95));
                 box-shadow: 0 16px 34px rgba(2,6,23,.20), inset 0 1px 0 rgba(255,255,255,.03);
                 text-align: left;
@@ -208,7 +208,7 @@
                 gap: 8px;
                 margin-top: 12px;
                 padding: 9px 10px;
-                border: 1px solid rgba(196,16,52,.20);
+                border: 1px solid rgba(34,197,94,.24);
                 border-radius: 12px;
                 background: rgba(255,255,255,.035);
             }
@@ -222,7 +222,7 @@
             }
 
             .home-top4-ad-offer code {
-                color: #fecaca;
+                color: #bbf7d0;
                 font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
                 font-size: 12px;
                 font-weight: 900;
@@ -234,10 +234,10 @@
                 min-height: 26px;
                 margin-left: auto;
                 padding: 0 9px;
-                border: 1px solid rgba(196,16,52,.34);
+                border: 1px solid rgba(34,197,94,.34);
                 border-radius: 7px;
-                color: #fecaca;
-                background: rgba(196,16,52,.10);
+                color: #bbf7d0;
+                background: rgba(34,197,94,.10);
                 cursor: pointer;
                 font: inherit;
                 font-size: 10px;
@@ -247,8 +247,8 @@
             .home-top4-ad-copy:hover,
             .home-top4-ad-copy.is-copied {
                 color: #fff;
-                border-color: rgba(196,16,52,.58);
-                background: rgba(196,16,52,.22);
+                border-color: rgba(34,197,94,.60);
+                background: rgba(34,197,94,.22);
             }
 
             .home-top4-ad-actions {
@@ -268,15 +268,15 @@
                 padding: 0 12px;
                 border-radius: 8px;
                 color: #fff;
-                background: #c41034;
-                box-shadow: 0 7px 16px rgba(196,16,52,.24);
+                background: #16a34a;
+                box-shadow: 0 7px 16px rgba(22,163,74,.24);
                 font-size: 11px;
                 font-weight: 900;
                 text-decoration: none;
             }
 
             .home-top4-ad-cta:hover {
-                background: #b00b2d;
+                background: #15803d;
                 color: #fff;
                 transform: translateY(-1px);
             }

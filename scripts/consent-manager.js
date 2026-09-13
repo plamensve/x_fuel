@@ -316,8 +316,10 @@
       scheduleGrantedServices(stored);
       wrapper.setAttribute('aria-hidden', 'true');
     } else {
+      // Keep the first visit unobstructed. Optional services remain denied
+      // until the visitor explicitly changes them from the footer settings link.
       updateGoogleConsent(defaults);
-      window.requestAnimationFrame(() => open(false, false));
+      wrapper.setAttribute('aria-hidden', 'true');
     }
   }
 
