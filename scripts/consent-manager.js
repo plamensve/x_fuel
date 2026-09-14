@@ -8,7 +8,7 @@
   const ADSENSE_CLIENT = 'ca-pub-3478773231642095';
   const defaults = {
     necessary: true,
-    analytics: false,
+    analytics: true,
     ads: false,
     functional: false,
     version: VERSION
@@ -32,6 +32,7 @@
   };
 
   function updateGoogleConsent(state) {
+    window[`ga-disable-${GA_ID}`] = !state.analytics;
     ensureGtag();
     window.gtag('consent', 'update', {
       analytics_storage: state.analytics ? 'granted' : 'denied',
@@ -251,13 +252,8 @@
     };
 
     const closeWithoutOptionalConsent = () => {
-      const stored = loadStored();
-      if (stored) {
-        close();
-        return;
-      }
-
-      apply({ necessary: true, analytics: false, ads: false, functional: false });
+      // Closing the footer settings without saving keeps the current/default choice.
+      close();
     };
 
     const open = (settingsMode = false, shouldFocus = false) => {
@@ -316,9 +312,10 @@
       scheduleGrantedServices(stored);
       wrapper.setAttribute('aria-hidden', 'true');
     } else {
-      // Keep the first visit unobstructed. Optional services remain denied
-      // until the visitor explicitly changes them from the footer settings link.
+      // Keep the first visit unobstructed while measuring analytics by default.
+      // Visitors can explicitly opt out at any time from the footer settings.
       updateGoogleConsent(defaults);
+      scheduleGrantedServices(defaults);
       wrapper.setAttribute('aria-hidden', 'true');
     }
   }
