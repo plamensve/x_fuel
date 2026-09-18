@@ -370,10 +370,20 @@
     gap: 10px;
 }
 
-.station-logo {
+.nearest-stations-list .station-logo {
+    position: static;
+    inset: auto;
+    display: block;
     width: 34px;
     height: 34px;
+    flex: 0 0 34px;
+    margin: 0;
+    padding: 3px;
+    box-sizing: border-box;
+    border-radius: 8px;
+    background: #fff;
     object-fit: contain;
+    opacity: 1;
 }
 
 .station-name {
