@@ -37,8 +37,7 @@
 
             const response = await window.fetch(url, {
                 headers: {
-                    apikey: apiKey,
-                    Authorization: "Bearer " + apiKey
+                    apikey: apiKey
                 }
             });
             if (!response.ok) throw new Error("Prices request failed: " + response.status);

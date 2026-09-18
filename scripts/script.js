@@ -195,7 +195,7 @@ const gorivaLoadScript = (src, { id = "", defer = true } = {}) => {
     window.__GORIVA_GLOBAL_TICKER_OWNER__ = true;
     if (window.__GORIVA_GLOBAL_NAV_LOADER__) return;
     window.__GORIVA_GLOBAL_NAV_LOADER__ = true;
-    gorivaLoadScript("/scripts/global-nav.js?v=20260913-ticker1", { id: "goriva-global-nav-script" })
+    gorivaLoadScript("/scripts/global-nav.js?v=20260918-ticker-authfix1", { id: "goriva-global-nav-script" })
         .catch(error => console.error("Failed to load global navigation", error));
 })();
 
