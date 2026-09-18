@@ -10,27 +10,26 @@
     let tickerAnimationId = null;
     let tickerOffset = 0;
 
+    const sofiaDateFormatter = new Intl.DateTimeFormat("sv-SE", {
+        timeZone: "Europe/Sofia",
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit"
+    });
+
     const dateOnly = value => {
         const date = value instanceof Date ? value : new Date(value);
-        if (Number.isNaN(date.getTime())) return "";
-        return date.getFullYear() + "-" +
-            String(date.getMonth() + 1).padStart(2, "0") + "-" +
-            String(date.getDate()).padStart(2, "0");
+        return Number.isNaN(date.getTime()) ? "" : sofiaDateFormatter.format(date);
     };
 
-    async function loadTodayPrices() {
-        const now = new Date();
-        const todayISO = dateOnly(now);
-        const start = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
-        const end = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 0, 0, 0, 0);
+    async function loadLatestPrices() {
         const loaded = [];
+        let latestDate = "";
         let offset = 0;
 
         while (true) {
             const url = apiUrl +
                 "?select=*" +
-                "&created_at=gte." + encodeURIComponent(start.toISOString()) +
-                "&created_at=lt." + encodeURIComponent(end.toISOString()) +
                 "&order=created_at.desc" +
                 "&limit=" + pageSize +
                 "&offset=" + offset;
@@ -44,12 +43,19 @@
 
             const batch = await response.json();
             if (!Array.isArray(batch)) throw new Error("Prices response was not an array");
-            loaded.push(...batch);
-            if (batch.length < pageSize) break;
+
+            if (!latestDate && batch.length > 0) {
+                latestDate = dateOnly(batch[0].created_at);
+            }
+
+            loaded.push(...batch.filter(row => dateOnly(row.created_at) === latestDate));
+
+            const reachedOlderDate = batch.some(row => dateOnly(row.created_at) !== latestDate);
+            if (batch.length < pageSize || reachedOlderDate) break;
             offset += pageSize;
         }
 
-        return loaded.filter(row => dateOnly(row.created_at) === todayISO);
+        return loaded;
     }
 
     function renderTicker(data) {
@@ -106,7 +112,7 @@
 
     function initGlobalTicker() {
         if (!document.getElementById("ticker-content")) return;
-        loadTodayPrices()
+        loadLatestPrices()
             .then(renderTicker)
             .catch(error => {
                 console.error("Failed to load global daily fuel ticker", error);

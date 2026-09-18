@@ -69,7 +69,7 @@
         if (document.getElementById("goriva-global-ticker-script")) return;
         const script = document.createElement("script");
         script.id = "goriva-global-ticker-script";
-        script.src = "/scripts/global-ticker.js?v=20260918-ticker-authfix1";
+        script.src = "/scripts/global-ticker.js?v=20260919-ticker-latest1";
         script.async = false;
         document.head.appendChild(script);
     }
