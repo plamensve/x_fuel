@@ -511,6 +511,8 @@ def main() -> None:
     out_dir = ROOT / "pages" / "articles" / "sofia" / target
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_dir / "index.html").write_text(render_article(target, article, facts), encoding="utf-8")
+    from automation.rebuild_article_navigation import rebuild_article_navigation
+    rebuild_article_navigation()
     update_sitemap(target)
 
     print(json.dumps({
