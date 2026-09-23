@@ -6,6 +6,8 @@ import re
 from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 
+from automation.article_content import content_span
+
 ROOT = Path(__file__).resolve().parents[1]
 
 
@@ -216,11 +218,9 @@ def enhance_article(date_str: str) -> None:
     if engagement_css not in text:
         text = text.replace("</head>", f'  <link rel="stylesheet" href="{engagement_css}">\n</head>', 1)
 
-    content_pattern = re.compile(r'(<div\b[^>]*class="[^"]*article-content-full[^"]*"[^>]*>)(.*?)(</div>\s*</article>)', re.I | re.S)
-    match = content_pattern.search(text)
-    if match:
-        reshaped = reshape_content(match.group(2), date_str)
-        text = text[:match.start(2)] + reshaped + text[match.end(2):]
+    body_start, body_end = content_span(text)
+    reshaped = reshape_content(text[body_start:body_end], date_str)
+    text = text[:body_start] + reshaped + text[body_end:]
 
     text = inject_engagement(text)
 
