@@ -333,7 +333,7 @@ def enrich_article(date_str: str, facts: dict, charts: list[dict]) -> tuple[str,
     if 'class="article-snapshot"' not in text:
         text = text.replace('</figure>\n      <div class="article-content-full">', '</figure>\n      ' + build_snapshot(facts) + '\n      <div class="article-content-full">', 1)
 
-    content_match = re.search(r'(<div class="article-content-full">)(.*?)(</div>\s*</article>)', text, flags=re.S)
+    content_match = re.search(r'(<div class="article-content-full">)(.*)(</div>\s*</article>)', text, flags=re.S)
     if content_match:
         content = content_match.group(2)
         fallback_blocks = []
