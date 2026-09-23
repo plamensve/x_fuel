@@ -433,7 +433,28 @@
 
         initCityShortcutSlider(hero);
 
-        hero.querySelector(".eko-map-promo")?.addEventListener("click", event => {
+        // Show the extension only in desktop Google Chrome. Other browsers keep the EKO map.
+        const ua = navigator.userAgent;
+        const brands = navigator.userAgentData?.brands || [];
+        const isDesktop = !navigator.userAgentData?.mobile && !/Android|iPhone|iPad|iPod|Mobile/i.test(ua);
+        const isGoogleChrome = brands.length
+            ? brands.some(brand => brand.brand === "Google Chrome")
+            : /Chrome\//.test(ua) && !/Edg\/|OPR\/|Opera|Vivaldi|SamsungBrowser|Brave\//.test(ua);
+        const isChromeExtensionPromo = isDesktop && isGoogleChrome;
+        const promo = hero.querySelector(".eko-map-promo");
+        if (isChromeExtensionPromo && promo) {
+            promo.href = "https://chromewebstore.google.com/detail/gorivaonline-%E2%80%93-%D0%B0%D0%BA%D1%82%D1%83%D0%B0%D0%BB%D0%BD%D0%B8-%D1%86/kglfljgeoocfilngmfnenmcimgamfhep";
+            promo.target = "_blank";
+            promo.rel = "noopener noreferrer";
+            promo.setAttribute("aria-label", "Инсталирай разширението goriva.online за Google Chrome");
+            promo.querySelector(".eko-map-promo-icon").textContent = "✦";
+            promo.querySelector(".eko-map-promo-copy strong").textContent = "Цените на горивата директно в Chrome";
+            promo.querySelector(".eko-map-promo-copy small").textContent = "Сравнявай цени по град, гориво и бензиностанция с разширението goriva.online.";
+            promo.querySelector(".eko-map-promo-action").innerHTML = 'Виж разширението <span aria-hidden="true">→</span>';
+        }
+
+        promo?.addEventListener("click", event => {
+            if (isChromeExtensionPromo) return;
             event.preventDefault();
             const section = document.querySelector(".station-map-section");
             if (!section) return;
