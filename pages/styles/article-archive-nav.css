@@ -59,3 +59,24 @@
   .article-archive-nav__item--next{text-align:left;padding:19px 44px 19px 20px}
   .article-archive-nav__item--next::after{right:17px;left:auto}
 }
+
+/* Keep archive text readable even when the article theme applies important text colors. */
+body:has(.article-page) .article-page .article-archive-nav .article-archive-nav__heading h2,
+body.article-modern-page .article-page .article-archive-nav .article-archive-nav__heading h2{
+  color:#fff!important
+}
+body:has(.article-page) .article-page .article-archive-nav .article-archive-nav__item strong,
+body.article-modern-page .article-page .article-archive-nav .article-archive-nav__item strong{
+  color:#f7fbff!important
+}
+body:has(.article-page) .article-page .article-archive-nav .article-archive-nav__heading>a,
+body.article-modern-page .article-page .article-archive-nav .article-archive-nav__heading>a{
+  color:#eaf4ff!important
+}
+body:has(.article-page) .article-page .article-archive-nav .article-archive-nav__item span,
+body.article-modern-page .article-page .article-archive-nav .article-archive-nav__item span{
+  color:#ffcf70!important
+}
+.article-archive-nav__links>.article-archive-nav__item:only-child{
+  grid-column:1/-1;min-height:86px
+}
