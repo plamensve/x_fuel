@@ -61,7 +61,7 @@ def rebuild_series(series: str, label: str) -> int:
         head_block = (
             "\n  <!-- ARTICLE_SERIES_HEAD_START -->\n"
             + "\n".join(head_links)
-            + "\n  <link rel=\"stylesheet\" href=\"/pages/styles/article-archive-nav.css?v=20260923-3\">\n"
+            + "\n  <link rel=\"stylesheet\" href=\"/pages/styles/article-archive-nav.css?v=20260923-4\">\n"
             + "  <!-- ARTICLE_SERIES_HEAD_END -->"
         )
         source = source.replace("</head>", head_block + "\n</head>", 1)
