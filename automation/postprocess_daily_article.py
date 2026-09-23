@@ -14,6 +14,7 @@ from zoneinfo import ZoneInfo
 from openai import OpenAI
 
 import automation.generate_daily_article_bg as base
+from automation.article_content import content_span
 from automation.image_prompt_variants import daylight_prompt
 
 
@@ -333,9 +334,9 @@ def enrich_article(date_str: str, facts: dict, charts: list[dict]) -> tuple[str,
     if 'class="article-snapshot"' not in text:
         text = text.replace('</figure>\n      <div class="article-content-full">', '</figure>\n      ' + build_snapshot(facts) + '\n      <div class="article-content-full">', 1)
 
-    content_match = re.search(r'(<div class="article-content-full">)(.*)(</div>\s*</article>)', text, flags=re.S)
-    if content_match:
-        content = content_match.group(2)
+    body_start, body_end = content_span(text)
+    if body_start < body_end:
+        content = text[body_start:body_end]
         fallback_blocks = []
         for chart in charts:
             block = chart_figure(chart)
@@ -351,7 +352,7 @@ def enrich_article(date_str: str, facts: dict, charts: list[dict]) -> tuple[str,
             content = ''.join(fallback_blocks) + content
         cta = '''<section class="article-modern-end"><div><strong>Провери актуалните цени</strong><p>Разгледай текущите данни по град, гориво и бензиностанция в goriva.online.</p></div><a href="/">Към актуалните цени →</a></section>'''
         content += cta
-        text = text[:content_match.start(2)] + content + text[content_match.end(2):]
+        text = text[:body_start] + content + text[body_end:]
 
     if '"image"' in text:
         text = re.sub(r'"image"\s*:\s*"[^"]*"', f'"image": "{image_abs}"', text, count=1)
