@@ -276,7 +276,7 @@ def enrich_article(date_str: str, by_day: dict[str, list[dict]]) -> None:
     comparison = comparison_spec(summaries)
     trend = trend_spec(by_day, date_str)
 
-    match = re.search(r'(<div\b[^>]*class="[^"]*article-content-full[^"]*"[^>]*>)(.*?)(</div>\s*</article>)', text, re.I | re.S)
+    match = re.search(r'(<div\b[^>]*class="[^"]*article-content-full[^"]*"[^>]*>)(.*)(</div>\s*</article>)', text, re.I | re.S)
     if not match:
         raise RuntimeError("article-content-full not found")
     body = remove_old_charts(match.group(2))
