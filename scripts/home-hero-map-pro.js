@@ -52,7 +52,7 @@
     moveWeatherToFooter();
 
     const core = document.createElement('script');
-    core.src = '/scripts/home-hero-map-pro-core.js?v=20260912-map-polish1';
+    core.src = '/scripts/home-hero-map-pro-core.js?v=20260923-extension1';
     core.defer = true;
     core.onload = () => {
         polishEkoMap();
