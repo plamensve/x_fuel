@@ -12,6 +12,7 @@ from pathlib import Path
 from openai import OpenAI
 
 import automation.generate_daily_article_bg as base
+from automation.article_content import content_span
 from automation.image_prompt_variants import daylight_prompt
 
 
@@ -276,10 +277,8 @@ def enrich_article(date_str: str, by_day: dict[str, list[dict]]) -> None:
     comparison = comparison_spec(summaries)
     trend = trend_spec(by_day, date_str)
 
-    match = re.search(r'(<div\b[^>]*class="[^"]*article-content-full[^"]*"[^>]*>)(.*)(</div>\s*</article>)', text, re.I | re.S)
-    if not match:
-        raise RuntimeError("article-content-full not found")
-    body = remove_old_charts(match.group(2))
+    body_start, body_end = content_span(text)
+    body = remove_old_charts(text[body_start:body_end])
     body = ensure_city_sections(body, summaries, city_charts)
 
     if comparison:
@@ -314,7 +313,7 @@ def enrich_article(date_str: str, by_day: dict[str, list[dict]]) -> None:
     if market_img:
         body, _ = insert_after_heading(body, "Пазарен контекст", inline_image(market_img, "Редакционна илюстрация към пазарния контекст."))
 
-    text = text[:match.start(2)] + body + text[match.end(2):]
+    text = text[:body_start] + body + text[body_end:]
     module_src = '/scripts/daily-article-charts.js?v=20260830-1'
     if module_src not in text:
         text = text.replace('</body>', f'  <script type="module" src="{module_src}"></script>\n</body>', 1)
