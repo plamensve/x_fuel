@@ -20,6 +20,7 @@ FUEL_CONTEXT = {
     'lpg': 'LPG означава пропан-бутан за автомобили. На сайта категорията включва и записи, обозначени като „Пропан Бутан“.',
     'metan': 'Метанът се отчита като отделен вид гориво. При сравнение с бензин или дизел имай предвид, че единиците за продажба и разходът на автомобила може да са различни.',
 }
+TITLE_FUEL = {'dizel-plus': 'дизел +'}
 PERIOD_CONTEXT = {
     'week': 'Седмичният изглед е подходящ за проверка на последните промени. При резки движения виж и колко обекта участват във всяка дневна средна стойност.',
     'month': 'Месечният изглед помага да различиш еднодневните колебания от по-устойчива промяна. Графиката показва само дни, за които има действително публикувани цени.',
@@ -35,8 +36,12 @@ PERIODS = {
 for slug, (fuel, normalized, natural) in FUELS.items():
     for period, (period_text, period_label) in PERIODS.items():
         url = f'https://goriva.online/pages/history/{slug}/{period}/'
-        title = f'История на цената на {fuel} за {period_text} | goriva.online'
-        description = f'Виж движението на цената на {natural} в България за {period_text}: графика, средни стойности по дни и брой наблюдавани обекти.'
+        title_fuel = TITLE_FUEL.get(slug, natural)
+        title = f'Цена на {title_fuel} през {period_text} | goriva.online'
+        description = (
+            f'Проследи цената на {natural} в България през {period_text}. '
+            'Виж графика на средните публикувани цени по дни, промяната за периода и броя наблюдавани обекти.'
+        )
         period_links = ''.join(f'<a href="/pages/history/{slug}/{key}/" {"aria-current=\"page\"" if key == period else ""}>{label}</a>' for key, (_, label) in PERIODS.items())
         fuel_links = ''.join(f'<a href="/pages/history/{key}/{period}/" {"aria-current=\"page\"" if key == slug else ""}>{label}</a>' for key, (label, _, _) in FUELS.items())
         schema = {'@context': 'https://schema.org', '@graph': [
@@ -65,7 +70,7 @@ for slug, (fuel, normalized, natural) in FUELS.items():
 <nav class="history-breadcrumbs" aria-label="Път на страницата"><a href="/">Начало</a><span>›</span><a href="/pages/trends.html">История на цените</a><span>›</span><span>{escape(fuel)} · {escape(period_label)}</span></nav>
 <section class="history-hero" aria-labelledby="history-title"><div class="history-hero-copy">
 <div class="hero-label"><span class="history-spark" aria-hidden="true">✦</span> Анализ на пазара · {escape(period_label)}</div>
-<h1 id="history-title">История на цената на {escape(fuel)} за {escape(period_text)}</h1>
+<h1 id="history-title">Цена на {escape(title_fuel)} през {escape(period_text)}</h1>
 <p class="history-lead">Проследи средната публикувана цена на {escape(natural)} в България по дни. Графиката и обобщението използват наличните записи от наблюдаваните бензиностанции за избрания период.</p>
 <div class="hero-actions"><a class="history-primary-action" href="#history-chart">Виж графиката</a><a class="history-secondary-action" href="/pages/trends.html">Календар на всички горива</a></div>
 </div><aside class="hero-guide-card"><div class="guide-card-header"><div><span>Как да четеш данните</span><strong>Сравнявай равни периоди</strong></div></div>
