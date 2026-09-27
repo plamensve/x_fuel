@@ -76,9 +76,18 @@
             }
             const first = data[0], last = data[data.length - 1];
             const difference = last.average - first.average;
+            const roundedDifference = Math.round(difference * 1000) / 1000;
+            const direction = roundedDifference > 0 ? 'up' : roundedDifference < 0 ? 'down' : 'flat';
+            const changeCard = document.getElementById('history-change-card');
+            changeCard.classList.add(`history-change-${direction}`);
+            const directionIcon = changeCard.querySelector('.history-direction-icon');
+            directionIcon.innerHTML = direction === 'flat'
+                ? '<svg viewBox="0 0 24 24"><path d="M4 12h16"/></svg>'
+                : '<svg viewBox="0 0 24 24"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+            setText('history-direction-label', `${direction === 'up' ? 'Поскъпване' : direction === 'down' ? 'Поевтиняване' : 'Без промяна'} спрямо първия ден`);
             setText('history-latest', formatPrice(last.average));
             setText('history-date', `към ${formatDate(last.date)}`);
-            setText('history-change', `${difference > 0 ? '+' : ''}${difference.toFixed(3)} €`);
+            setText('history-change', `${roundedDifference > 0 ? '+' : ''}${roundedDifference.toFixed(3)} €`);
             setText('history-days', String(data.length));
             setText('history-stations', String(last.count));
             status.textContent = `Показани ${data.length} дни с данни от ${formatDate(first.date)} до ${formatDate(last.date)}.`;

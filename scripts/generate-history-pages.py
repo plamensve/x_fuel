@@ -64,7 +64,7 @@ for slug, (fuel, normalized, natural) in FUELS.items():
 <main class="container trends-page fuel-history-page">
 <nav class="history-breadcrumbs" aria-label="Път на страницата"><a href="/">Начало</a><span>›</span><a href="/pages/trends.html">История на цените</a><span>›</span><span>{escape(fuel)} · {escape(period_label)}</span></nav>
 <section class="history-hero" aria-labelledby="history-title"><div class="history-hero-copy">
-<div class="hero-label">Анализ на пазара · {escape(period_label)}</div>
+<div class="hero-label"><span class="history-spark" aria-hidden="true">✦</span> Анализ на пазара · {escape(period_label)}</div>
 <h1 id="history-title">История на цената на {escape(fuel)} за {escape(period_text)}</h1>
 <p class="history-lead">Проследи средната публикувана цена на {escape(natural)} в България по дни. Графиката и обобщението използват наличните записи от наблюдаваните бензиностанции за избрания период.</p>
 <div class="hero-actions"><a class="history-primary-action" href="#history-chart">Виж графиката</a><a class="history-secondary-action" href="/pages/trends.html">Календар на всички горива</a></div>
@@ -73,10 +73,10 @@ for slug, (fuel, normalized, natural) in FUELS.items():
 <nav class="history-switches" aria-label="Избери гориво"><strong>Гориво</strong><div>{fuel_links}</div></nav>
 <nav class="history-switches" aria-label="Избери период"><strong>Период</strong><div>{period_links}</div></nav>
 <section class="overview-grid" aria-label="Обобщение за периода">
-<article class="overview-card overview-blue"><div><span>Последна средна цена</span><strong id="history-latest">—</strong><small id="history-date">Изчакване на данните</small></div></article>
-<article class="overview-card overview-green"><div><span>Промяна в периода</span><strong id="history-change">—</strong><small>спрямо първия наличен ден</small></div></article>
-<article class="overview-card overview-violet"><div><span>Дни с данни</span><strong id="history-days">—</strong><small>от избрания период</small></div></article>
-<article class="overview-card overview-amber"><div><span>Наблюдавани обекти</span><strong id="history-stations">—</strong><small>на последната дата</small></div></article></section>
+<article class="overview-card overview-blue"><span class="overview-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 18h18M5 15l5-5 4 3 5-7"/></svg></span><div><span>Последна средна цена</span><strong id="history-latest">—</strong><small id="history-date">Изчакване на данните</small></div></article>
+<article id="history-change-card" class="overview-card overview-violet"><span class="overview-icon history-direction-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M4 12h16"/></svg></span><div><span>Промяна в периода</span><strong id="history-change">—</strong><small id="history-direction-label">спрямо първия наличен ден</small></div></article>
+<article class="overview-card overview-violet"><span class="overview-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/></svg></span><div><span>Дни с данни</span><strong id="history-days">—</strong><small>от избрания период</small></div></article>
+<article class="overview-card overview-amber"><span class="overview-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 21h18M6 21V8l6-4 6 4v13M9 12h6M9 16h6"/></svg></span><div><span>Наблюдавани обекти</span><strong id="history-stations">—</strong><small>на последната дата</small></div></article></section>
 <section id="history-chart" class="chart-section dashboard-panel" aria-labelledby="chart-heading"><div class="chart-header-layout"><div class="chart-copy"><span class="section-eyebrow">Исторически данни</span><h2 id="chart-heading" class="chart-title">Средна цена на {escape(fuel)} · {escape(period_label)}</h2><p class="chart-description">Средна цена в евро за литър от последната публикувана стойност за всеки обект за деня. Дните без данни не се свързват с измислени стойности.</p></div></div>
 <p id="history-status" role="status">Зареждане на цените…</p><div class="chart-container"><canvas id="history-canvas" role="img" aria-label="Графика на средната цена на {escape(fuel)} за {escape(period_text)}"></canvas></div></section>
 <section class="history-explainer dashboard-panel"><h2>Как се изчислява историята на {escape(natural)}?</h2>

@@ -20,3 +20,19 @@
 .history-fuel-grid a span{color:#93c5fd;font-size:12px;font-weight:600}
 .history-fuel-grid a:hover{border-color:#60a5fa;background:rgba(59,130,246,.18)}
 @media(max-width:680px){.history-fuel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.fuel-history-page .history-hero::before{content:"";position:absolute;right:9%;bottom:-42px;width:160px;height:110px;border:1px solid rgba(96,165,250,.13);border-radius:24px;transform:rotate(-18deg);pointer-events:none}
+.fuel-history-page .history-spark{color:#fbbf24;font-size:17px;line-height:1}
+.fuel-history-page .overview-card{transition:transform .2s ease,border-color .2s ease}
+.fuel-history-page .overview-card:hover{transform:translateY(-3px);border-color:rgba(148,163,184,.32)}
+.fuel-history-page .overview-icon svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.fuel-history-page .history-change-up{color:#fb7185;border-color:rgba(251,113,133,.32)}
+.fuel-history-page .history-change-down{color:#4ade80;border-color:rgba(74,222,128,.32)}
+.fuel-history-page .history-change-flat{color:#a78bfa}
+.fuel-history-page .history-change-down .history-direction-icon svg{transform:rotate(180deg)}
+.fuel-history-page .history-change-up strong{color:#fda4af}
+.fuel-history-page .history-change-down strong{color:#86efac}
+.fuel-history-page .history-change-flat strong{color:#c4b5fd}
+.fuel-history-page .chart-section{position:relative;overflow:hidden}
+.fuel-history-page .chart-section::after{content:"";position:absolute;top:0;right:0;width:190px;height:3px;background:linear-gradient(90deg,transparent,#3b82f6,#22c55e);pointer-events:none}
+.fuel-history-page .history-explainer{position:relative;overflow:hidden}
+.fuel-history-page .history-explainer::before{content:"";position:absolute;left:0;top:24px;bottom:24px;width:3px;border-radius:3px;background:linear-gradient(#3b82f6,#22c55e)}
