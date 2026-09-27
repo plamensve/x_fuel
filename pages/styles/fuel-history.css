@@ -1,0 +1,22 @@
+.fuel-history-page{padding-bottom:55px}
+.history-breadcrumbs{display:flex;flex-wrap:wrap;gap:9px;color:#9fb0c5;font-size:13px;margin:3px 0 23px}
+.history-breadcrumbs a,.history-explainer a{color:#93c5fd}
+.history-switches{margin:0 0 17px;padding:17px 21px;border:1px solid rgba(148,163,184,.15);border-radius:18px;background:linear-gradient(145deg,#18273a,#0f1b2c);color:#dbeafe}
+.history-switches strong{display:block;margin-bottom:12px;font-size:13px}
+.history-switches div{display:flex;flex-wrap:wrap;gap:9px}
+.history-switches a{display:inline-flex;padding:10px 15px;border-radius:10px;border:1px solid rgba(148,163,184,.22);color:#dbeafe;text-decoration:none;font-weight:650;font-size:13px}
+.history-switches a:hover,.history-switches a:focus-visible{border-color:#60a5fa;background:rgba(59,130,246,.17)}
+.history-switches a[aria-current="page"]{background:#2563eb;border-color:#60a5fa;color:white}
+.fuel-history-page .overview-grid{margin:24px 0}
+.fuel-history-page .chart-container{min-height:350px;height:min(48vw,450px)}
+#history-status{color:#b8c8db;margin:14px 0}
+.history-explainer{padding:clamp(22px,4vw,40px);border-radius:20px;margin-top:25px;color:#cbd5e1;line-height:1.75}
+.history-explainer h2{color:#fff;margin-top:0}.history-explainer p:last-child{margin-bottom:0}
+@media(max-width:600px){.fuel-history-page .chart-container{height:320px}.history-switches a{padding:9px 11px}}
+.history-fuel-directory{border-radius:20px;padding:clamp(22px,3vw,34px);margin:0 0 23px;color:#b8c8db}
+.history-fuel-directory h2{margin:8px 0;color:#fff}
+.history-fuel-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px}
+.history-fuel-grid a{display:flex;flex-direction:column;gap:9px;padding:18px;border:1px solid rgba(148,163,184,.2);border-radius:12px;color:#fff;text-decoration:none;background:rgba(59,130,246,.08);font-weight:750}
+.history-fuel-grid a span{color:#93c5fd;font-size:12px;font-weight:600}
+.history-fuel-grid a:hover{border-color:#60a5fa;background:rgba(59,130,246,.18)}
+@media(max-width:680px){.history-fuel-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}

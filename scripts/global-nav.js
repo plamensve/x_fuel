@@ -25,7 +25,6 @@
         { href: "/", label: "Начало", symbol: "⌂", match: ["/", "/index.html"] },
         { href: "/cars/", label: "Автомобили", symbol: "▰", match: ["/cars", "/cars/"] },
         { href: "/pages/business-clients.html", label: "За бизнеса", symbol: "◆", match: ["/pages/business-clients.html"] },
-        { href: "/pages/trends.html", label: "История на цените", symbol: "↗", match: ["/pages/trends.html"] },
         { href: "/pages/useful.html", label: "Полезно", symbol: "✦", match: ["/pages/useful.html"] },
         { href: "/pages/news.html", label: "Новини", symbol: "▤", match: ["/pages/news.html", "/pages/articles/"] },
     ];
@@ -39,8 +38,11 @@
     const insaIcon=`<img class="goriva-stations-nav-brand-logo" src="/images/station_logos/insa-oil.png?v=20260909-1" alt="" width="28" height="28" decoding="async">`;
     const lukoilIcon=`<img class="goriva-stations-nav-brand-logo" src="/images/station_logos/lukoil-card-logo.jpg?v=20260909-1" alt="" width="28" height="28" decoding="async">`;
     const stationsNavMarkup=`<div class="goriva-stations-nav-item${stationsCurrent?" is-current":""}"><button class="goriva-stations-nav-toggle" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="goriva-stations-dropdown"><span class="goriva-nav-symbol" aria-hidden="true">⛽</span><span>Бензиностанции</span><span class="goriva-stations-nav-caret" aria-hidden="true">▾</span></button><div id="goriva-stations-dropdown" class="goriva-stations-nav-dropdown" role="menu" aria-label="Бензиностанции"><button class="goriva-stations-nav-option" type="button" role="menuitem" aria-disabled="true"><span>Всички бензиностанции</span><small>скоро</small></button><a class="goriva-stations-nav-option${ekoCurrent?" is-current":""}" href="/stations/eko/" role="menuitem"${ekoCurrent?' aria-current="page"':""}><span class="goriva-stations-nav-brand">${ekoIcon}<span class="goriva-stations-nav-brand-label">EKO</span></span><small>цени и обекти</small></a><a class="goriva-stations-nav-option${insaCurrent?" is-current":""}" href="/stations/insa-oil/" role="menuitem"${insaCurrent?' aria-current="page"':""}><span class="goriva-stations-nav-brand">${insaIcon}<span class="goriva-stations-nav-brand-label">Insa Oil</span></span><small>цени и обекти</small></a><a class="goriva-stations-nav-option${lukoilCurrent?" is-current":""}" href="/stations/lukoil/" role="menuitem"${lukoilCurrent?' aria-current="page"':""}><span class="goriva-stations-nav-brand">${lukoilIcon}<span class="goriva-stations-nav-brand-label">Lukoil</span></span><small>цени и обекти</small></a></div></div>`;
+    const historyFuels = [["benzin-a95","Бензин А95"],["dizel","Дизел"],["benzin-a100","Бензин А100"],["dizel-plus","Дизел +"],["lpg","LPG"],["metan","Метан"]];
+    const historyCurrent = currentPath === "/pages/trends.html" || currentPath.startsWith("/pages/history/");
+    const historyMarkup = `<div class="goriva-stations-nav-item goriva-history-nav-item${historyCurrent ? " is-current" : ""}"><button class="goriva-stations-nav-toggle" type="button" aria-expanded="false" aria-controls="goriva-history-dropdown"><span class="goriva-nav-symbol" aria-hidden="true">↗</span><span>История на цените</span><span class="goriva-stations-nav-caret" aria-hidden="true">▾</span></button><div id="goriva-history-dropdown" class="goriva-stations-nav-dropdown" aria-label="История по гориво"><a class="goriva-stations-nav-option" href="/pages/trends.html">Общ преглед</a>${historyFuels.map(([slug,label]) => `<a class="goriva-stations-nav-option${currentPath.startsWith(`/pages/history/${slug}/`) ? " is-current" : ""}" href="/pages/history/${slug}/week/">${label}</a>`).join("")}</div></div>`;
     const isActive=item=>item.match.some(match=>match.endsWith("/")?currentPath.startsWith(match):currentPath===normalizePath(match));
-    function renderNavigationItems(){return navItems.map((item,index)=>{const link=`<a href="${item.href}" data-symbol="${item.symbol}" ${isActive(item)?'class="is-active" aria-current="page"':""}><span class="goriva-nav-symbol" aria-hidden="true">${item.symbol}</span><span>${item.label}</span></a>`;return index===0?link+stationsNavMarkup:link;}).join("");}
+    function renderNavigationItems(){return navItems.map((item,index)=>{const link=`<a href="${item.href}" data-symbol="${item.symbol}" ${isActive(item)?'class="is-active" aria-current="page"':""}><span class="goriva-nav-symbol" aria-hidden="true">${item.symbol}</span><span>${item.label}</span></a>`;return (index===0?link+stationsNavMarkup:link)+(index===2?historyMarkup:"");}).join("");}
 
     function ensureStyles() {
         const existing = document.getElementById("goriva-global-progress-css");
@@ -108,9 +110,13 @@
         const menu = header.querySelector(".goriva-global-menu");
         const stationsItem = header.querySelector(".goriva-stations-nav-item");
         const stationsToggle = header.querySelector(".goriva-stations-nav-toggle");
+        const historyItem = header.querySelector(".goriva-history-nav-item");
+        const historyToggle = historyItem?.querySelector(".goriva-stations-nav-toggle");
         const closeStations = () => {
             stationsItem?.classList.remove("is-open");
             stationsToggle?.setAttribute("aria-expanded", "false");
+            historyItem?.classList.remove("is-open");
+            historyToggle?.setAttribute("aria-expanded", "false");
         };
         const closeMenu = () => {
             closeStations();
@@ -131,12 +137,23 @@
             event.stopPropagation();
             const open = stationsItem.classList.toggle("is-open");
             stationsToggle.setAttribute("aria-expanded", String(open));
+            historyItem?.classList.remove("is-open");
+            historyToggle?.setAttribute("aria-expanded", "false");
+        });
+        historyToggle?.addEventListener("click", event => {
+            event.preventDefault();
+            event.stopPropagation();
+            const open = historyItem.classList.toggle("is-open");
+            historyToggle.setAttribute("aria-expanded", String(open));
+            stationsItem?.classList.remove("is-open");
+            stationsToggle?.setAttribute("aria-expanded", "false");
         });
         menu?.addEventListener("click", event => {
             if (event.target.closest("a")) closeMenu();
         });
         document.addEventListener("click", event => {
             if (stationsItem?.classList.contains("is-open") && !stationsItem.contains(event.target)) closeStations();
+            if (historyItem?.classList.contains("is-open") && !historyItem.contains(event.target)) closeStations();
             if (menu?.classList.contains("is-open") && !menu.contains(event.target) && !toggle?.contains(event.target)) closeMenu();
         });
         document.addEventListener("keydown", event => {

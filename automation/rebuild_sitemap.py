@@ -111,6 +111,10 @@ def public_html_files() -> list[Path]:
     if articles_root.exists():
         files.extend(sorted(articles_root.rglob("*.html")))
 
+    history_root = ROOT / "pages" / "history"
+    if history_root.exists():
+        files.extend(sorted(history_root.rglob("index.html")))
+
     stations_root = ROOT / "stations"
     if stations_root.exists():
         files.extend(sorted(stations_root.rglob("*.html")))
