@@ -41,6 +41,15 @@
 .goriva-stations-nav-brand-logo{display:block!important;grid-column:1;width:28px!important;height:28px!important;object-fit:contain}
 .goriva-stations-nav-brand::before{display:none!important}
 .goriva-stations-nav-brand-label{grid-column:2;white-space:nowrap}
+.goriva-history-option-content{display:flex;align-items:center;gap:10px;min-width:0}
+.goriva-history-fuel-icon{display:inline-flex;align-items:center;justify-content:center;flex:none;width:28px;height:28px;border-radius:9px;background:#173c57;color:#a8e3ff;font-size:11px;font-weight:800;letter-spacing:-.04em}
+.goriva-history-fuel-icon.overview{background:#263957;color:#a9c8ff;font-size:17px}
+.goriva-history-fuel-icon.benzin-a95{background:#144d44;color:#8bf0ce}
+.goriva-history-fuel-icon.benzin-a100{background:#474028;color:#ffe08c}
+.goriva-history-fuel-icon.dizel{background:#24446a;color:#a8d3ff}
+.goriva-history-fuel-icon.dizel-plus{background:#49345d;color:#e2b5ff}
+.goriva-history-fuel-icon.lpg{background:#603b30;color:#ffc2a8;font-size:9px}
+.goriva-history-fuel-icon.metan{background:#23555b;color:#9deaf0}
 @media(min-width:901px){.goriva-global-menu{gap:4px!important}.goriva-global-menu>a{margin:0 2px!important}.goriva-stations-nav-item{margin:0 8px 0 2px}.goriva-stations-nav-item:hover .goriva-stations-nav-dropdown,.goriva-stations-nav-item:focus-within .goriva-stations-nav-dropdown{opacity:1;visibility:visible;pointer-events:auto;transform:translateY(0)}}
 @media(min-width:1200px){
   .goriva-global-nav-shell{width:min(1480px,calc(100% - 32px))!important;max-width:1480px!important;gap:18px!important;padding-left:8px!important;padding-right:8px!important}
