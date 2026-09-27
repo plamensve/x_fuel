@@ -1,0 +1,33 @@
+# goriva.online
+
+> goriva.online е български сайт за сравнение на цени на горивата по бензиностанции и градове в България. Показва наличните цени за дизел, бензин A95, бензин A100, пропан-бутан (LPG), метан и премиум дизел.
+
+Сайтът е полезен при търсене на актуални цени на горивата, сравнение на бензиностанции или проверка на цени в конкретен град. Информацията е на български, а цените се представят в евро за литър, когато е приложимо. За точната цена проверете датата на записа и страницата на съответния обект: цените могат да се променят, а покритието зависи от наличните данни. Историческите статии описват посочената дата и не са текущи цени.
+
+## Основни страници
+
+- [Цени на горивата в България](https://goriva.online/): начална страница с налични цени и сравнение.
+- [Топ 4 най-ниски цени](https://goriva.online/pages/top-fuel-prices.html): сравнение по град и вид гориво.
+- [История на цените](https://goriva.online/pages/trends.html): исторически тенденции.
+- [Новини за горивата](https://goriva.online/pages/news.html): публикации и новини.
+
+## Цени по градове
+
+- [София](https://goriva.online/cities/sofia/)
+- [Пловдив](https://goriva.online/cities/plovdiv/)
+- [Варна](https://goriva.online/cities/varna/)
+- [Бургас](https://goriva.online/cities/burgas/)
+- [Русе](https://goriva.online/cities/ruse/)
+- [Стара Загора](https://goriva.online/cities/stara-zagora/)
+
+## Страници на вериги
+
+- [ЕКО](https://goriva.online/stations/eko/)
+- [Инса Ойл](https://goriva.online/stations/insa-oil/)
+- [Лукойл](https://goriva.online/stations/lukoil/)
+
+## Данни и контекст
+
+- [Методология на данните](https://goriva.online/pages/methodology.html): източници, изчисления, актуалност и ограничения.
+- [За goriva.online](https://goriva.online/pages/about.html): информация за проекта.
+- [Карта на сайта](https://goriva.online/sitemap.xml): пълен списък на публикуваните страници.
