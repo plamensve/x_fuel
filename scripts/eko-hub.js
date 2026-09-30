@@ -2,7 +2,7 @@
   const SUPABASE_URL = 'https://eaqvhxfvozhzatrnbkvx.supabase.co';
   const SUPABASE_KEY = 'sb_publishable_u4ymkO5tFBauze0rVOkf-Q_kvbiIdwH';
   const PAGE_SIZE = 9;
-  const PRICE_LIMIT = 1600;
+  const PRICE_LIMIT = 1000;
   const EKO_CARD_ICON = '/images/station_logos/eko-card-logo.png?v=20260909-1';
 
   const state = {
@@ -86,16 +86,27 @@
       order: 'created_at.desc',
       limit: String(PRICE_LIMIT)
     });
-    const response = await fetch(`${SUPABASE_URL}/rest/v1/fuel_prices?${query.toString()}`, {
-      headers: { apikey: SUPABASE_KEY }, cache: 'no-store'
-    });
-    if (!response.ok) throw new Error(`Supabase prices returned ${response.status}`);
-    const rows = await response.json();
-    if (!Array.isArray(rows) || rows.length === 0) return [];
-
-    const latestDate = priceDateKey(rows[0].created_at);
-    state.latestDate = latestDate;
-    return rows.filter(row => priceDateKey(row.created_at) === latestDate);
+    const selected = new Map();
+    let offset = 0;
+    while (true) {
+      query.set('offset', String(offset));
+      const response = await fetch(`${SUPABASE_URL}/rest/v1/fuel_prices?${query.toString()}`, {
+        headers: { apikey: SUPABASE_KEY }, cache: 'no-store'
+      });
+      if (!response.ok) throw new Error(`Supabase prices returned ${response.status}`);
+      const rows = await response.json();
+      if (!Array.isArray(rows)) throw new Error('Invalid EKO prices response');
+      if (offset === 0) state.latestDate = rows.length ? priceDateKey(rows[0].created_at) : null;
+      for (const row of rows) {
+        const id = stationIdFromRow(row);
+        if (!id) continue;
+        const key = `${id}|${fuelLabel(row.fuel)}`;
+        if (!selected.has(key)) selected.set(key, row);
+      }
+      if (rows.length < PRICE_LIMIT) break;
+      offset += PRICE_LIMIT;
+    }
+    return [...selected.values()];
   }
 
   function indexPrices(rows) {

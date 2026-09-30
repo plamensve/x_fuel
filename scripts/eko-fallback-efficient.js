@@ -31,7 +31,6 @@
     });
 
     const normalize = value => (value || "").toString().trim().toLocaleUpperCase("bg-BG");
-    const isEkoRow = row => ["ЕКО", "EKO"].includes(normalize(row?.station));
     const ekoStationKey = row => normalize(row?.location) || `${normalize(row?.city)}|${normalize(row?.station)}`;
     const ekoFuelKey = row => `${ekoStationKey(row)}|${normalize(row?.fuel)}`;
 
@@ -142,27 +141,36 @@
         }
     }
 
-    async function hasCurrentDayEkoRows(requestUrl, apiKey, dayWindow) {
+    async function fetchCurrentDayEkoStations(requestUrl, apiKey, dayWindow) {
         if (currentDayEkoChecks.has(dayWindow.key)) {
             return currentDayEkoChecks.get(dayWindow.key);
         }
 
         const promise = (async () => {
             const checkUrl = new URL(requestUrl.origin + requestUrl.pathname);
-            checkUrl.searchParams.set("select", "created_at");
+            checkUrl.searchParams.set("select", "station,city,location");
             checkUrl.searchParams.set("station", `eq.${EKO_NAME}`);
             checkUrl.searchParams.append("created_at", `gte.${dayWindow.start}`);
             checkUrl.searchParams.append("created_at", `lt.${dayWindow.end}`);
-            checkUrl.searchParams.set("limit", "1");
+            checkUrl.searchParams.set("limit", String(EKO_HISTORY_PAGE_SIZE));
+            const stations = new Set();
+            let offset = 0;
+            while (true) {
+                checkUrl.searchParams.set("offset", String(offset));
 
-            const response = await nativeFetch(checkUrl.toString(), {
-                headers: { apikey: apiKey },
-                cache: "no-store"
-            });
-            if (!response.ok) throw new Error(`EKO current-day check failed: ${response.status}`);
+                const response = await nativeFetch(checkUrl.toString(), {
+                    headers: { apikey: apiKey },
+                    cache: "no-store"
+                });
+                if (!response.ok) throw new Error(`EKO current-day check failed: ${response.status}`);
 
-            const rows = await response.json();
-            return Array.isArray(rows) && rows.length > 0;
+                const rows = await response.json();
+                if (!Array.isArray(rows)) throw new Error("Invalid EKO current-day response");
+                rows.forEach(row => stations.add(ekoStationKey(row)));
+                if (rows.length < EKO_HISTORY_PAGE_SIZE) break;
+                offset += EKO_HISTORY_PAGE_SIZE;
+            }
+            return stations;
         })();
 
         currentDayEkoChecks.set(dayWindow.key, promise);
@@ -173,20 +181,9 @@
         }
     }
 
-    function latestRowPerStationFuel(rows) {
-        const selected = new Map();
-        for (const row of rows) {
-            const key = ekoFuelKey(row);
-            if (!key || key.startsWith("|")) continue;
-            if (!selected.has(key)) selected.set(key, row);
-        }
-        return [...selected.values()];
-    }
-
     async function fetchLatestHistoricalEkoRows(requestUrl, apiKey, todayStartIso) {
-        const rows = [];
+        const rows = new Map();
         let offset = 0;
-        let latestDateKey = null;
 
         while (true) {
             const historyUrl = new URL(requestUrl.origin + requestUrl.pathname);
@@ -207,21 +204,15 @@
             if (!Array.isArray(batch) || batch.length === 0) break;
 
             for (const row of batch) {
-                const rowDateKey = sofiaDateKey(row.created_at);
-                if (!rowDateKey) continue;
-
-                if (!latestDateKey) latestDateKey = rowDateKey;
-                if (rowDateKey !== latestDateKey) {
-                    return { rows: latestRowPerStationFuel(rows), dateKey: latestDateKey };
-                }
-                rows.push(row);
+                const key = ekoFuelKey(row);
+                if (!rows.has(key)) rows.set(key, row);
             }
 
             if (batch.length < EKO_HISTORY_PAGE_SIZE) break;
             offset += EKO_HISTORY_PAGE_SIZE;
         }
 
-        return { rows: latestRowPerStationFuel(rows), dateKey: latestDateKey };
+        return { rows: [...rows.values()] };
     }
 
     async function enrichFinalTodayPageWithLatestEko(canonicalUrl, snapshot, safeInit) {
@@ -233,15 +224,14 @@
 
             const requestUrl = asUrl(canonicalUrl);
             if (!requestUrl || !isFinalPage(requestUrl, todayRows.length)) return snapshot;
-            if (todayRows.some(isEkoRow)) return snapshot;
 
             const dayWindow = getDayWindow(requestUrl);
             const apiKey = readApiKey(safeInit);
             if (!dayWindow || !apiKey) return snapshot;
 
-            // The final page can contain no EKO rows even when an earlier page did.
-            // Verify the whole current-day window before using yesterday's import.
-            if (await hasCurrentDayEkoRows(requestUrl, apiKey, dayWindow)) return snapshot;
+            // Check every page: an object with today's prices must never be
+            // overwritten by older rows appended to the final response page.
+            const currentStations = await fetchCurrentDayEkoStations(requestUrl, apiKey, dayWindow);
 
             const latestEko = await fetchLatestHistoricalEkoRows(requestUrl, apiKey, dayWindow.start);
             if (!latestEko.rows.length) return snapshot;
@@ -251,11 +241,13 @@
                 ? new Date(startMs + 12 * 60 * 60 * 1000).toISOString()
                 : new Date().toISOString();
 
-            const fallbackRows = latestEko.rows.map(row => ({
+            const fallbackRows = latestEko.rows
+                .filter(row => !currentStations.has(ekoStationKey(row)))
+                .map(row => ({
                 ...row,
                 _eko_fallback: true,
                 _source_created_at: row.created_at,
-                _eko_fallback_date: latestEko.dateKey,
+                _eko_fallback_date: sofiaDateKey(row.created_at),
                 created_at: displayTimestamp
             }));
 

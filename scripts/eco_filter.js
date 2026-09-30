@@ -301,7 +301,7 @@ async function fetchHomeTodayPrices() {
 
         const batch = await response.json();
         rows.push(...batch);
-        if (batch.length < pageSize) break;
+        if (batch.filter(row => !row._eko_fallback).length < pageSize) break;
         offset += pageSize;
     }
 

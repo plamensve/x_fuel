@@ -169,7 +169,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     })
                     .then(batch => {
                         loaded.push(...batch)
-                        if (batch.length === pageSize) {
+                        if (batch.filter(row => !row._eko_fallback).length === pageSize) {
                             offset += pageSize
                             return fetchNextPage()
                         }
