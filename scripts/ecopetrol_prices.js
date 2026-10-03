@@ -77,7 +77,7 @@
     };
 
     async function fetchLatestAvailableEkoPrices() {
-        const rows = [];
+        const selected = new Map();
         let offset = 0;
         let latestDateKey = null;
 
@@ -105,20 +105,22 @@
             for (const row of batch) {
                 const rowDateKey = sofiaDateKey(row.created_at);
                 if (!rowDateKey) continue;
-
                 if (!latestDateKey) latestDateKey = rowDateKey;
-                if (rowDateKey !== latestDateKey) {
-                    return { rows, dateKey: latestDateKey };
-                }
 
-                rows.push(row);
+                const stationId = extractStationId(row.location);
+                const fuel = canonicalFuel(row.fuel);
+                const price = Number(row.price);
+                if (!stationId || !fuel || !Number.isFinite(price) || price <= 0.1) continue;
+
+                const key = `${stationId}|${fuel}`;
+                if (!selected.has(key)) selected.set(key, row);
             }
 
             if (batch.length < PAGE_SIZE) break;
             offset += PAGE_SIZE;
         }
 
-        return { rows, dateKey: latestDateKey };
+        return { rows: [...selected.values()], dateKey: latestDateKey };
     }
 
     function buildLivePricesByStation(rows) {
