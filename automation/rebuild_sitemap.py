@@ -43,7 +43,7 @@ def previous_sitemap_lastmods() -> dict[str, str]:
     return {
         html.unescape(url): date
         for url, date in re.findall(
-            r"<loc>([^<]+)</loc>\\s*<lastmod>(\\d{4}-\\d{2}-\\d{2})</lastmod>",
+            r"<loc>([^<]+)</loc>\s*<lastmod>(\d{4}-\d{2}-\d{2})</lastmod>",
             source,
         )
     }
