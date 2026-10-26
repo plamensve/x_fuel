@@ -4,6 +4,7 @@ import html
 import re
 import subprocess
 from datetime import datetime
+from functools import lru_cache
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -31,6 +32,21 @@ ROBOTS_RE = re.compile(r'<meta\s+name=["\']robots["\']\s+content=["\']([^"\']+)[
 SCHEMA_DATE_RE = re.compile(r'"dateModified"\s*:\s*"(\d{4}-\d{2}-\d{2})', re.I)
 PUBLISHED_DATE_RE = re.compile(r'"datePublished"\s*:\s*"(\d{4}-\d{2}-\d{2})', re.I)
 PATH_DATE_RE = re.compile(r'/(\d{4}-\d{2}-\d{2})/(?:index\.html)?$')
+
+
+@lru_cache(maxsize=1)
+def previous_sitemap_lastmods() -> dict[str, str]:
+    """Preserve truthful lastmod dates if CI has only a shallow Git history."""
+    if not SITEMAP.exists():
+        return {}
+    source = SITEMAP.read_text(encoding="utf-8")
+    return {
+        html.unescape(url): date
+        for url, date in re.findall(
+            r"<loc>([^<]+)</loc>\s*<lastmod>(\d{4}-\d{2}-\d{2})</lastmod>",
+            source,
+        )
+    }
 
 
 def read_text(path: Path) -> str:
@@ -101,7 +117,13 @@ def lastmod_for(path: Path, source: str) -> str:
     if match:
         return match.group(1)
 
-    return git_lastmod(path) or today
+    commit_date = git_lastmod(path)
+    if commit_date:
+        return commit_date
+
+    # CI jobs frequently use a shallow checkout, so older unchanged files have
+    # no visible commit date. Never present them as modified today on that basis.
+    return previous_sitemap_lastmods().get(canonical_for(path, source), today)
 
 
 def public_html_files() -> list[Path]:
