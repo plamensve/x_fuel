@@ -1,0 +1,32 @@
+name: Validate history SEO metadata
+
+on:
+  pull_request:
+    paths:
+      - 'pages/history/**'
+      - 'sitemap.xml'
+      - 'automation/rebuild_sitemap.py'
+      - 'tests/test_history_sitemap.py'
+  push:
+    branches: [main]
+    paths:
+      - 'pages/history/**'
+      - 'sitemap.xml'
+      - 'automation/rebuild_sitemap.py'
+      - 'tests/test_history_sitemap.py'
+
+permissions:
+  contents: read
+
+jobs:
+  history-seo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify sitemap and historical pages
+        run: PYTHONPATH=. python -m unittest discover -s tests -p 'test_history_sitemap.py'
