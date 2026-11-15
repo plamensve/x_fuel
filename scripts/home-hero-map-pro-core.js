@@ -419,6 +419,24 @@
                 <div class="about-cta">
                     <a href="#fuel-form" class="cta-primary">⛽ Сподели цена</a>
                 </div>
+
+                <aside class="site-sale-banner" aria-label="goriva.online се продава">
+                    <div class="site-sale-inner">
+                        <span class="site-sale-icon" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13 12 21 3 12V4a1 1 0 0 1 1-1h8l8 8a1.4 1.4 0 0 1 0 2Z"/><circle cx="8" cy="8" r="1.4"/></svg>
+                        </span>
+                        <div class="site-sale-copy">
+                            <span class="site-sale-eyebrow">ПРОЕКТ ЗА ПРОДАЖБА</span>
+                            <strong class="site-sale-title">goriva.online <span>се продава</span></strong>
+                            <span class="site-sale-description">С покупката получавате сайта и Chrome разширението.</span>
+                        </div>
+                        <div class="site-sale-contact">
+                            <span>За запитвания:</span>
+                            <a href="mailto:svetoslavov.dev@gmail.com?subject=Запитване%20за%20покупка%20на%20goriva.online">svetoslavov.dev@gmail.com</a>
+                        </div>
+                        <a class="site-sale-action" href="mailto:svetoslavov.dev@gmail.com?subject=Запитване%20за%20покупка%20на%20goriva.online" aria-label="Изпрати запитване за покупка на goriva.online">Свържи се <span aria-hidden="true">→</span></a>
+                    </div>
+                </aside>
                 <a class="eko-map-promo" href="#station-map" aria-label="Разгледай картата на бензиностанциите EKO">
                     <span class="eko-map-promo-inner">
                         <span class="eko-map-promo-icon" aria-hidden="true">⌖</span>
