@@ -434,7 +434,6 @@
                             <span>За запитвания:</span>
                             <a href="mailto:svetoslavov.dev@gmail.com?subject=Запитване%20за%20покупка%20на%20goriva.online">svetoslavov.dev@gmail.com</a>
                         </div>
-                        <a class="site-sale-action" href="mailto:svetoslavov.dev@gmail.com?subject=Запитване%20за%20покупка%20на%20goriva.online" aria-label="Изпрати запитване за покупка на goriva.online">Свържи се <span aria-hidden="true">→</span></a>
                     </div>
                 </aside>
                 <a class="eko-map-promo" href="#station-map" aria-label="Разгледай картата на бензиностанциите EKO">
