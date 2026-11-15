@@ -1,0 +1,136 @@
+/* Homepage sale banner — same blue/green visual language as the hero, no external assets. */
+.about-project .site-sale-banner {
+    box-sizing: border-box;
+    display: block;
+    width: min(100%, 850px);
+    max-width: 850px;
+    margin: 18px auto 0;
+    padding: 2px;
+    border-radius: 18px;
+    background: linear-gradient(105deg, #3b82f6 0%, #0ea5e9 42%, #16a34a 100%);
+    box-shadow: 0 14px 34px rgba(29, 78, 216, .13);
+    text-align: left;
+}
+.about-project .site-sale-inner {
+    display: grid;
+    grid-template-columns: 46px minmax(0, 1fr) minmax(180px, .62fr) auto;
+    align-items: center;
+    gap: 12px;
+    box-sizing: border-box;
+    min-height: 82px;
+    padding: 12px 15px;
+    border-radius: 16px;
+    background:
+        radial-gradient(circle at 100% 50%, rgba(34, 197, 94, .08), transparent 40%),
+        rgba(255, 255, 255, .98);
+    color: #172033;
+}
+.site-sale-icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 13px;
+    background: linear-gradient(135deg, #60a5fa, #10b981);
+    box-shadow: 0 7px 17px rgba(16, 185, 129, .17);
+    color: #fff;
+}
+.site-sale-icon svg { width: 23px; height: 23px; }
+.site-sale-copy { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-width: 0; }
+.site-sale-eyebrow {
+    display: inline-block;
+    margin-bottom: 2px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: #e7f0ff;
+    color: #1d5bc1;
+    font-size: 9px;
+    font-weight: 850;
+    line-height: 1.1;
+    letter-spacing: .055em;
+}
+.about-project .site-sale-title {
+    display: block;
+    font-size: 17px;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: -.025em;
+    color: #12305a;
+}
+.site-sale-title span { color: #15945f; }
+.site-sale-description {
+    display: block;
+    color: #526174;
+    font-size: 11px;
+    line-height: 1.5;
+}
+.site-sale-contact {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-width: 0;
+    padding-left: 14px;
+    border-left: 1px solid #dae5ef;
+    gap: 3px;
+}
+.site-sale-contact > span { color: #607289; font-size: 10px; font-weight: 650; }
+.about-project .site-sale-contact a {
+    color: #123e8a;
+    font-size: 11px;
+    font-weight: 800;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+}
+.about-project .site-sale-contact a:hover { text-decoration: underline; }
+.about-project .site-sale-action {
+    box-sizing: border-box;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    gap: 9px;
+    min-height: 42px;
+    padding: 0 15px;
+    border: 0;
+    border-radius: 11px;
+    background: linear-gradient(110deg, #2563eb, #10a968);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 850;
+    text-decoration: none;
+    white-space: nowrap;
+    box-shadow: 0 8px 19px rgba(37, 99, 235, .17);
+    transition: transform .18s ease, box-shadow .18s ease;
+}
+.about-project .site-sale-action:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 11px 22px rgba(37, 99, 235, .24);
+}
+.about-project .site-sale-action:focus-visible,
+.about-project .site-sale-contact a:focus-visible {
+    outline: 2px solid #2563eb;
+    outline-offset: 4px;
+}
+@media (max-width: 760px) {
+    .about-project .site-sale-banner { width: 100%; max-width: none; margin-left: auto; margin-right: auto; }
+    .about-project .site-sale-inner {
+        grid-template-columns: 46px minmax(0, 1fr) auto;
+        gap: 10px 13px;
+    }
+    .site-sale-contact {
+        grid-column: 2 / 3;
+        border-left: 0;
+        padding-left: 0;
+    }
+    .about-project .site-sale-action { grid-column: 3; grid-row: 1 / 3; }
+}
+@media (max-width: 560px) {
+    .about-project .site-sale-inner { grid-template-columns: 42px minmax(0,1fr); padding: 14px; }
+    .site-sale-icon { width: 42px; height: 42px; }
+    .site-sale-icon svg { width: 21px; height: 21px; }
+    .site-sale-contact { grid-column: 2; }
+    .about-project .site-sale-action { grid-column: 1 / -1; grid-row: auto; width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .about-project .site-sale-action { transition: none; }
+}
