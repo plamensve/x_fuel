@@ -329,7 +329,9 @@
                 attribution: "&copy; OpenStreetMap contributors"
             }).addTo(stationMap);
 
-            const markers = L.markerClusterGroup();
+            const markers = typeof L.markerClusterGroup === "function"
+                ? L.markerClusterGroup()
+                : L.layerGroup();
 
             stations.forEach(station => {
                 const stationId = String(station.station_id || "").trim();
