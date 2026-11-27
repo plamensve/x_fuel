@@ -901,6 +901,7 @@ function startTickerLoop() {
 document.addEventListener("DOMContentLoaded", () => {
 
     let dateElement = document.getElementById("eco-date");
+    if (!dateElement) return;
 
     let today = new Date();
 
